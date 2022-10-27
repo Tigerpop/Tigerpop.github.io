@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>newbook</title>
+    <url>/2022/10/28/newbook/</url>
+    <content><![CDATA[]]></content>
+      <categories>
+        <category>mysql</category>
+      </categories>
+  </entry>
+  <entry>
     <title>kafkaandflume</title>
     <url>/2022/10/27/kafkaandflume/</url>
     <content><![CDATA[<pre><code>    先说一下，为什么要使用 Flume + Kafka？
@@ -74,14 +82,6 @@
         <tag>bash</tag>
         <tag>zsh</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>newbook</title>
-    <url>/2022/10/28/newbook/</url>
-    <content><![CDATA[]]></content>
-      <categories>
-        <category>mysql</category>
-      </categories>
   </entry>
   <entry>
     <title>试试post中图片能不能显示</title>
