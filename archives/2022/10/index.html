@@ -245,15 +245,15 @@
                     
                         <a
                             class="link-unstyled"
-                            href="/2022/10/28/newbook/"
-                            aria-label=": newbook"
+                            href="/2022/10/28/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0/c%E8%AF%AD%E8%A8%80/"
+                            aria-label=": c语言"
                         >
-                            newbook
+                            c语言
                         </a>
                     
                 </h1>
                 <div class="postShorten-meta">
-    <time datetime="2022-10-28T00:05:33+08:00">
+    <time datetime="2022-10-28T20:09:40+08:00">
 	
 		    Oct 28, 2022
     	
@@ -261,7 +261,7 @@
     
         <span>in </span>
         
-    <a class="category-link" href="/categories/mysql/">mysql</a>
+    <a class="category-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0/">操作系统学习</a>
 
 
     
@@ -270,7 +270,42 @@
             </div>
             
                 <div class="postShorten-content">
-                    
+                    <span id="more"></span>
+<p>​		对于程序员来说内存可以简化成这样一种东西：</p>
+<p><img src="/2022/10/28/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0/c%E8%AF%AD%E8%A8%80/4d060c3f67c22cd4b07273db00f64708_1440w-6959095.jpg" alt="img"></p>
+<p>​		你可以把它想象成一条无限长的纸带。纸带上边有一个个的小格子，每个小格子正好是一字节，里边能够存放一个数字。计算机的工作就是对这些小格子里的数字做处理。虽然你在电脑上能够看视频、听音乐，但这些东西本质上都是存在内存这条纸带上的数字。</p>
+<p>​		对于纸带上的每个小格子来说能够采取的操作只有两种「读取」和「写入」。每次执行操作时都必须要指明对于哪一个格子进行操作，为了方便起见人们就给这些格子编了号。如上图所示，第一个就是0号，第二个是1号以此类推（前边的0x代表是16进制的意思）。而这些编号就是我们所说的指针的内容，指针变量里边所记载的就是这些编号。但为什么我们平时看到的指针值都是类似于0xa2cf23c3d这种呢？这是因为，内存非常之大，作为编号的数字也非常大。所以看是来就像是神秘代码一样。</p>
+<p>举个例子：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">unsigned</span> <span class="type">char</span> a = <span class="number">1</span>; <span class="comment">// unsigned char 类型占一个字节 </span></span><br><span class="line"><span class="type">unsigned</span> <span class="type">char</span>* b = &amp;a; <span class="comment">// &amp;a 代表的就是得到变量a所存储的那个小格子的编号。             											// 赋值给变量b后，b格子里存的就是a格子的编号。 </span></span><br><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;%d&quot;</span>, *b);  <span class="comment">//输出1，*b代表的是看看b格子里存储的编号所代表的格子里存的数是什											么。</span></span><br></pre></td></tr></table></figure>
+
+<p>​		上边代码中的内容变成纸带就是：</p>
+<p><img src="/2022/10/28/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0/c%E8%AF%AD%E8%A8%80/26702ad72a395403ce4c7d02ccd167e4_1440w.jpg" alt="img"></p>
+<p>​		ok，如果你觉得这个太简单，我们现在可以深入到一些更加复杂的概念——指针的指针。例如下边的代码：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">unsigned</span> <span class="type">char</span> a = <span class="number">1</span>;</span><br><span class="line"><span class="type">unsigned</span> <span class="type">char</span>* b = &amp;a;</span><br><span class="line"><span class="type">unsigned</span> <span class="type">char</span>** c = &amp;b;</span><br></pre></td></tr></table></figure>
+
+<p>​		上文中我们提到指针就是格子的编号，那么指针的指针是什么呢？就是指针变量所在格子的编号。如图：</p>
+<p><img src="/2022/10/28/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0/c%E8%AF%AD%E8%A8%80/0b6ca6a620fd381b4c2395e134137ae6_1440w.jpg" alt="img"></p>
+<p>​		至于什么指针的指针的指针，以此类推。有 时候人们会把这种关系视作是一种指向关系。所以当人们说一个指针指向某个变量时，他们指的是这个指针变量的值是某个变量的格子编号。</p>
+<p>​		但是这里有个问题，前文说到 ，每个格子只有一个字节。有些类型的变量需要多个字节来存储，比如int型就需要4个字节（不同平台长度不一致，这里假定是4个）。如果我有一个int型的变量a存在0x01号地址，我必须有方法告诉程序后边的三个格子也是这个变量值的一部分。</p>
+<p>​		为了解决这个问题人们引入了指针类型的概念，对于int型的指针他表示的是从当前格子开始共4个格子都是该变量的值，而对于unsigned char型则只表示当前的格子。例如：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">unsigned</span> <span class="type">int</span> c = <span class="number">257</span>;</span><br><span class="line"><span class="type">unsigned</span> <span class="type">int</span>* a = &amp;c;</span><br><span class="line"><span class="type">unsigned</span> <span class="type">char</span>* b = (<span class="type">unsigned</span> <span class="type">char</span>*)&amp;c;  <span class="comment">//必须强制转换一下</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;%d&quot;</span>, *a); <span class="comment">// 输出 257</span></span><br><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;%d&quot;</span>, *b); <span class="comment">// 输出 1</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><img src="/2022/10/28/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0/c%E8%AF%AD%E8%A8%80/f18c1c1a62294bc5c45682ea69776e7e_1440w.jpg" alt="img"></p>
+<p>​		有的同学可能会奇怪为什么*b的值是1。要解决这个问题我们先要了解一个概念，大小端。</p>
+<p>​		计算机使用二进制来表示数字。对于所有unsigned的整数类型变量来说，二进制的值本身就代表了他自己的数值，257转换成二进制是多少？「100000001」。8位是一个字节，int型就是4个字节32位。补齐前边的0后257可以写作「00000000 00000000 00000001 00000001」。8个位8个位的转换成10进制，上边的数字就是「0 0 1 1」。</p>
+<p>​		OK，现在给你编号为1-4的四个格子和四个数字，让你按顺序存进去，请问有几种方法？</p>
+<p>​		答案是2种，一种是1号放0，2号放0， 3号放1， 4号放1。另外一种是，4号放0，3号放0， 2号放1， 1号放1。我们把第一种方式叫小端，第二种叫大端，这里写反了，应该是第一种叫做大端。由于没有什么人来规定怎么在内存里存多个字节的数字，所以人们就随便来了。碰巧在我的机器上，内存里是大端存储的。所以就变成了上图中所示的样子。</p>
+<p>此时计算机看到*a，于是找到了编号0x00的格子，因为是int型的指针，于是顺手把后边3个也读了出来，得到「1 1 0 0」。因为我的机器是大端，所以调整成人类的书写格式（低位在最右边）就是「0 0 1 1」，然后「00000000 00000000 00000001 00000001」，再然后「257」。</p>
+<p>之后计算机又看了 *b，因为是unsigned char型的指针所以只拿0x00格子里的内容。于是就是1了。</p>
+<p>​		ok，如果你还有兴趣看下去的话，我们来讨论一下指针运算的问题。</p>
+<p>​		假设有一个指针a，那么a+1代表什么呢？就存储a的格子编号，加上a的类型所占的字节数所得到的的新地址。如图：</p>
+<p><img src="/2022/10/28/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0/c%E8%AF%AD%E8%A8%80/04789934874fc4f8c8d8d742d8fa447e_1440w.jpg" alt="img"></p>
+<p>​		减法也是一个意思。两个指针相减就是他们之间差了几个格子。比如0x04-0x00 &#x3D;&#x3D;&gt;4之类的。课本上一般会说两个指针相加没有意义，或者指针不能相加。现在知道为什么了吧，因为0x00+0x04之类的运算是没有实际含义的，算倒是可以算。你知道为什么C语言中的数组下表从0开始吗？因为arr[n]的形式事实上等价于*(arr+n)。数组名其实就是数组的首地址，也就是数组的第一个格子的地址。作为数组中的第一个元素当然得加0啦。关于数组我多说两句，数组就是一段连续的小格子。数组名代表的就是第一个小格所在编号。因此数组名就是指针，只不过这个指针变量的值是无法改变的。对于二维数组int [3][4] a来说，唯一的区别就是指针+1后移动过的格子数不同。感兴趣的同学可以自己查查为什么。至于什么指针数组、数组的指针之类的等等概念，都是基于上述简单概念的组合，以此类推就可以了。ok，理解到这一步其实基本上就算是可以了。不过为了稍微严谨一点我再多说几句。实际中的计算机可没有这么简单。这个纸带不一定是一条，有可能一条是内存，一条是硬盘上的虚拟内存。纸带还会被分成多个区域，像什么堆栈之类的，并不是每个地址都可以访问，纸带也不一定是连续的。但是你在写程序的时候操作系统帮你把内存抽象成了一条连续的纸带。很多时候我们并不关心具体的值是什么。此外有的时候这种格子编号，不一定都指的是内存中的小格子。也有可能是某个硬件设备之类的。不过这就是另外一个话题了。PS：上文中格子编号一律可以替换为内存地址。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 注意一下三者的理解。</span></span><br><span class="line"><span class="comment">// 一、</span></span><br><span class="line"><span class="type">int</span> *p;<span class="comment">// int *p 虽然*p是一起写着的，但是变量名是p，类型是int*。p存的是地址，			  //p是一个指针。</span></span><br><span class="line">p = &amp;a;<span class="comment">//p存的是a的地址。</span></span><br><span class="line"><span class="type">int</span>** p;<span class="comment">//变量名为p，类型为int** int**表示存放的是int类型地址的地址。</span></span><br><span class="line"><span class="comment">// 二、</span></span><br><span class="line">*p;    <span class="comment">// 这是一个取值操作；p格子内存放的是地址，*p就是取此地址对应的值。</span></span><br><span class="line">**p;   <span class="comment">// 两次取值操作。可以视作 *（*p），一个 * 就是一次取值操作。</span></span><br><span class="line"><span class="comment">// 三、</span></span><br><span class="line">p    <span class="comment">// 单纯就是p格子内的东西 </span></span><br></pre></td></tr></table></figure>
+
+
+
+
                     
                         
 
@@ -279,7 +314,7 @@
                     
                         <p>
                             <a
-                                href="/2022/10/28/newbook/#post-footer"
+                                href="/2022/10/28/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0/c%E8%AF%AD%E8%A8%80/#post-footer"
                                 class="postShorten-excerpt_link link"
                                 aria-label=""
                             >
@@ -294,7 +329,7 @@
     </article>
     
     
-    <article class="postShorten postShorten--thumbnailimg-right">
+    <article class="postShorten postShorten--thumbnailimg-bottom">
         <div class="postShorten-wrap">
             
             <div class="postShorten-header">
@@ -302,23 +337,23 @@
                     
                         <a
                             class="link-unstyled"
-                            href="/2022/10/27/kafkaandflume/"
-                            aria-label=": kafkaandflume"
+                            href="/2022/10/28/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0/%E4%BF%A1%E5%8F%B7%E9%87%8F%E8%A7%A3%E5%86%B3%E5%93%B2%E5%AD%A6%E5%AE%B6%E5%90%83%E9%A5%AD%E9%97%AE%E9%A2%98/"
+                            aria-label=": 信号量解决哲学家吃饭问题"
                         >
-                            kafkaandflume
+                            信号量解决哲学家吃饭问题
                         </a>
                     
                 </h1>
                 <div class="postShorten-meta">
-    <time datetime="2022-10-27T23:51:29+08:00">
+    <time datetime="2022-10-28T20:02:01+08:00">
 	
-		    Oct 27, 2022
+		    Oct 28, 2022
     	
     </time>
     
         <span>in </span>
         
-    <a class="category-link" href="/categories/python/">python</a>
+    <a class="category-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0/">操作系统学习</a>
 
 
     
@@ -326,19 +361,68 @@
 
             </div>
             
-                <div class="postShorten-excerpt">
-                    <pre><code>    先说一下，为什么要使用 Flume + Kafka？
-</code></pre>
-<p>​		以实时流处理项目为例，由于采集的数据量可能存在峰值和峰谷，假设是一个电商项目，那么峰值通常出现在秒杀时，这时如果直接将 Flume 聚合后的数据输入到 Storm 等分布式计算框架中，可能就会超过集群的处理能力，这时采用 Kafka 就可以起到削峰的作用。Kafka 天生为大数据场景而设计，具有高吞吐的特性，能很好地抗住峰值数据的冲击。</p>
+                <div class="postShorten-content">
+                    <span id="more"></span>
+<h1 id="问题介绍"><a href="#问题介绍" class="headerlink" title="问题介绍"></a>问题介绍</h1><p><img src="/2022/10/28/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0/%E4%BF%A1%E5%8F%B7%E9%87%8F%E8%A7%A3%E5%86%B3%E5%93%B2%E5%AD%A6%E5%AE%B6%E5%90%83%E9%A5%AD%E9%97%AE%E9%A2%98/%E6%9C%AA%E5%91%BD%E5%90%8D%E6%96%87%E4%BB%B6.png" alt="未命名文件"></p>
+<p>前提假设：</p>
+<p>​		一个哲学家吃饭要同时用到左右两个叉子；</p>
+<p>​		哲学家的行为有：吃、思考。</p>
+<p>要求：</p>
+<p>​		合理的安排大家就餐。</p>
+<h1 id="最初级的方案"><a href="#最初级的方案" class="headerlink" title="最初级的方案"></a>最初级的方案</h1><!--more-->
+<p>用一组p()\v()信号量 来实现哲学家吃饭的互斥。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">semaphore mutex</span><br><span class="line"><span class="type">void</span> <span class="title function_">philosopher</span><span class="params">(<span class="type">int</span> i)</span></span><br><span class="line">	<span class="title function_">while</span><span class="params">(TRUE)</span>&#123;</span><br><span class="line">    think();									 <span class="comment">//哲学家思考</span></span><br><span class="line">    P(mutex);     				     <span class="comment">//拿到mutex资源。</span></span><br><span class="line">    	</span><br><span class="line">    	take_fork(i);						 <span class="comment">//拿左边叉子		</span></span><br><span class="line">    	take_fork((i+<span class="number">1</span>)mod N);	 <span class="comment">//拿右边叉子</span></span><br><span class="line">    	eat();									 <span class="comment">// 吃</span></span><br><span class="line">    	put_fork(i);             <span class="comment">//放下左边叉子</span></span><br><span class="line">    	put_fork((i+<span class="number">1</span>) mod N);   <span class="comment">//放下右边叉子</span></span><br><span class="line">    	</span><br><span class="line">    V(mutex);                  <span class="comment">// 释放mutex资源。</span></span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+
+<p>分析：</p>
+<p>​		每个哲学家互斥了，但是每次只允许一个人进餐。而理论上，5个人，可以同时2人吃饭。把就餐人员看成了“必须互斥的临界资源”（而不是叉子），造成了（叉子）资源的浪费。下面改进方案其实就是用一个 “状态”来代替哲学家作为临界资源，而“状态”是包括【哲学家、叉子】信息组合而成的集合体，包括了叉子资源，因此减少了叉子资源的浪费。</p>
+<h1 id="改进方案"><a href="#改进方案" class="headerlink" title="改进方案"></a>改进方案</h1><p>基本思想：</p>
+<p>​		要么不拿，要么拿左右2个叉子。</p>
+<p>​		不浪费CPU时间，进程间相互通信，让5个进程并发执行。</p>
+<p>步骤：</p>
+<p>​		s1 思考</p>
+<p>​		s2 进入饥饿</p>
+<p>​		s3 如果左右邻居都在进餐，进程进入阻塞状态，否则 s4。</p>
+<p>​		s4 拿起左右两个叉子</p>
+<p>​		s5 eating</p>
+<p>​		s6 放下左边的叉子，看看左边的邻居能否就餐，若能就唤醒</p>
+<p>​		s7 放下右边的叉子，看看右边的邻居能否就餐，若能就唤醒</p>
+<p>​		s8 回到 s1</p>
+<p>程序设计：</p>
+<p>​		1、因为哲学家有吃和思考两种行为，而吃有约束条件思考没有，所以哲学家一定有3种状态——吃、饥饿、思考。</p>
+<p>​		2、用数据结构描述哲学家当前状态。</p>
+<p>​		3、把 状态 视为临界资源，哲学家对它的访问需要  ”互斥“ 。</p>
+<p>​		4、一个人吃饱后，需要唤醒其左右他人，相邻的人之间存在  ”同步”  关系。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">N = <span class="number">5</span>   <span class="comment">//5个哲学家</span></span><br><span class="line">LEFT = （i<span class="number">-1</span>) mod N  <span class="comment">// 第i个哲学家左邻居</span></span><br><span class="line">RIGHT = (i+<span class="number">1</span>) mod N  <span class="comment">// 第i个哲学家右邻居</span></span><br><span class="line">THINKING = <span class="number">0</span>         <span class="comment">// 枚举 制定 的三种状态</span></span><br><span class="line">HUNGRY = <span class="number">1</span></span><br><span class="line">EATING = <span class="number">2</span></span><br><span class="line"><span class="type">int</span> state[N]         <span class="comment">// 记录每一个人的状态</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// “状态” 是一种 临界资源，对其访问需要互斥，设定一个相应的信号量实现 互斥 功能。</span></span><br><span class="line">mutex = <span class="number">1</span></span><br><span class="line">semaphore mutex;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 一个哲学家吃饱后，有可能 唤醒 邻居，存在着同步关系，用一个信号量实现 同步唤醒 功能。</span></span><br><span class="line">s[i] = <span class="number">0</span></span><br><span class="line">semaphore s[N];</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">philosopher</span><span class="params">(<span class="type">int</span> i)</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="keyword">while</span>(TRUE)</span><br><span class="line">  &#123;</span><br><span class="line">    think(i);</span><br><span class="line">    take_forks(i);          <span class="comment">//拿两把叉子或者阻塞</span></span><br><span class="line">    eat();</span><br><span class="line">    put_forks(i);					  <span class="comment">//放回两把叉子，试着唤醒邻居。</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">take_forks</span><span class="params">(<span class="type">int</span> i)</span>           <span class="comment">//第i个哲学家</span></span><br><span class="line">&#123;</span><br><span class="line">  P(mutex);											 <span class="comment">//获取临界区资源</span></span><br><span class="line">  state[i] = HUNGRY;             <span class="comment">//饿了</span></span><br><span class="line">  test_take_left_right_forks(i); <span class="comment">//测试能否吃饭。</span></span><br><span class="line">  V(mutex);											 <span class="comment">//释放临界区资源</span></span><br><span class="line">  </span><br><span class="line">  P(s[i]);											 <span class="comment">// 测试不通过，第一次就阻塞。</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 因为state和 test_take_left_right_forks都可能改变 state的状态，所以都被mutex 包在了互斥 空间内。</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">test_take_left_right_forks</span><span class="params">(<span class="type">int</span> i)</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="keyword">if</span>(state[i]==HUNGRY &amp;&amp; state[LEFT]!=EATING &amp;&amp; state[RIGHT]!=EATING)      <span class="comment">// i自己饿了，而左右邻居都没在吃。</span></span><br><span class="line">  &#123;</span><br><span class="line">    state[i] = EATING;     <span class="comment">//满足吃饭条件，状态。</span></span><br><span class="line">    V(s[i]);							 <span class="comment">//发出信号，让自己通过阻塞。自我唤醒 take_forks 下的P(s[i]) 通过。</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">put_forks</span><span class="params">(<span class="type">int</span> i)</span></span><br><span class="line">&#123;</span><br><span class="line">  p(mutex)												<span class="comment">// 进入临界区，保护住可能修改state变量的代码区。</span></span><br><span class="line">  state[i] = THINKING;    				<span class="comment">//吃完了，进入思考时间</span></span><br><span class="line">  test_take_left_right_forks(LEFT);  <span class="comment">//测试左邻居能否吃饭</span></span><br><span class="line">  test_take_left_right_forks(RIGHT); <span class="comment">//测试右邻居能否吃饭 </span></span><br><span class="line">  V(mutex)												<span class="comment">// 退出临界区</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">think</span><span class="params">(<span class="type">int</span> i)</span></span><br><span class="line">&#123;</span><br><span class="line">  P(mutex)                <span class="comment">// 因为有state变量的修改，所以用mutex保护起来。</span></span><br><span class="line">    state[i] = THINKING;</span><br><span class="line">  V(mutex)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>以上用信号量实现了5个进程并发执行，可以2个进程一起执行。不会死锁。</p>
+
                     
-                        <a
-                            href="/2022/10/27/kafkaandflume/"
-                            class="postShorten-excerpt_link link"
-                            aria-label=": kafkaandflume"
-                        >
-                            Continue reading
-                        </a>
                         
+
+
+                    
+                    
+                        <p>
+                            <a
+                                href="/2022/10/28/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0/%E4%BF%A1%E5%8F%B7%E9%87%8F%E8%A7%A3%E5%86%B3%E5%93%B2%E5%AD%A6%E5%AE%B6%E5%90%83%E9%A5%AD%E9%97%AE%E9%A2%98/#post-footer"
+                                class="postShorten-excerpt_link link"
+                                aria-label=""
+                            >
+                                Comment and share
+                            </a>
+                        </p>
                     
                 </div>
             
@@ -347,7 +431,7 @@
     </article>
     
     
-    <article class="postShorten postShorten--thumbnailimg-right">
+    <article class="postShorten postShorten--thumbnailimg-bottom">
         <div class="postShorten-wrap">
             
             <div class="postShorten-header">
@@ -355,23 +439,23 @@
                     
                         <a
                             class="link-unstyled"
-                            href="/2022/10/27/study/%E8%AF%95%E8%AF%95post%E4%B8%AD%E5%9B%BE%E7%89%87%E8%83%BD%E4%B8%8D%E8%83%BD%E6%98%BE%E7%A4%BA/"
-                            aria-label=": 试试post中图片能不能显示"
+                            href="/2022/10/28/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0/%E7%AE%A1%E7%A8%8B%E5%AE%9E%E7%8E%B0%E8%AF%BB%E8%80%85%E4%BC%98%E5%85%88and%E5%86%99%E8%80%85%E4%BC%98%E5%85%88/"
+                            aria-label=": 管程实现读者优先and写者优先"
                         >
-                            试试post中图片能不能显示
+                            管程实现读者优先and写者优先
                         </a>
                     
                 </h1>
                 <div class="postShorten-meta">
-    <time datetime="2022-10-27T18:15:28+08:00">
+    <time datetime="2022-10-28T19:56:52+08:00">
 	
-		    Oct 27, 2022
+		    Oct 28, 2022
     	
     </time>
     
         <span>in </span>
         
-    <a class="category-link" href="/categories/python/">python</a>
+    <a class="category-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0/">操作系统学习</a>
 
 
     
@@ -379,19 +463,200 @@
 
             </div>
             
-                <div class="postShorten-excerpt">
-                    <h1 id="python实现"><a href="#python实现" class="headerlink" title="python实现"></a>python实现</h1><p>​		网上有很多kafka的java 操作的教程、文档，但是我这里想要把学习笔记统一成python的，简单易读人生苦短嘛。</p>
-<p>​		用python操作kafka 有两个选择，一个是pykafka，另一个是kafka- python，pykafka 很久没有更新了，所以咱们用 kafka- python。</p>
-<p>​		以下是 kafka- python的文档，看起来满屏的英文其实还是挺好读的。</p>
+                <div class="postShorten-content">
+                    <span id="more"></span>
+<h1 id="前提条件"><a href="#前提条件" class="headerlink" title="前提条件"></a>前提条件</h1><ol>
+<li>允许多个读者可以同时对文件执行读操作；</li>
+<li>只允许一个写者往文件中写信息；</li>
+<li>任一写者在完成写操作之前不允许其他读者或写者工作；</li>
+</ol>
+<h3 id="信号量的实现"><a href="#信号量的实现" class="headerlink" title="信号量的实现"></a>信号量的实现</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Semaphore</span>&#123;</span></span><br><span class="line">	<span class="type">int</span> sem</span><br><span class="line">  WaitQueue q </span><br><span class="line">&#125;</span><br><span class="line">Semaphore::P()&#123;</span><br><span class="line">	sem--</span><br><span class="line">  <span class="keyword">if</span> (sem &lt; <span class="number">0</span> )&#123;</span><br><span class="line">    Add this thread t to q</span><br><span class="line">    <span class="title function_">block</span><span class="params">(t)</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="title function_">Semaphore::V</span><span class="params">()</span>&#123;</span><br><span class="line">  sem++</span><br><span class="line">  <span class="keyword">if</span> (sem &lt;= <span class="number">0</span> )&#123;</span><br><span class="line">    Remove a thread t from q</span><br><span class="line">    <span class="title function_">wakeup</span><span class="params">(t)</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="《读者优先》读者可以插队"><a href="#《读者优先》读者可以插队" class="headerlink" title="《读者优先》读者可以插队"></a>《读者优先》读者可以插队</h1><ul>
+<li><code>semaphore rw = 1;</code>　　　 实现读、写进程对文件的<strong>互斥</strong>访问</li>
+<li><code>semaphore mutex = 1;</code>　　 实现<strong>互斥</strong>修改变量</li>
+<li><code>int readcnt = 0;</code>　　　　 记录当前有几个读者在读</li>
+</ul>
+<h3 id="写者进程"><a href="#写者进程" class="headerlink" title="写者进程"></a>写者进程</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span>(<span class="literal">true</span>):</span><br><span class="line">	P(rw) <span class="comment">// 写之前占用临界区资源，实现写操作的互斥。</span></span><br><span class="line">    <span class="comment">/** 临界区写文件 **/</span></span><br><span class="line">  V(rw) <span class="comment">// 写完后释放临界区资源</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="读者进程"><a href="#读者进程" class="headerlink" title="读者进程"></a>读者进程</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span>(<span class="literal">true</span>):</span><br><span class="line">	P(mutex)</span><br><span class="line">    	<span class="keyword">if</span>(readcnt==<span class="number">0</span>) <span class="comment">// 第一个读者进程负责占用临界区资源，第一个到最后一个读操作被框定在一个锁的空间内，可以实现多个读者一起执行。</span></span><br><span class="line">            P(rw)</span><br><span class="line">      readcnt+=<span class="number">1</span> <span class="comment">// 访问临界区的读者进程数+1</span></span><br><span class="line">  V(mutex)</span><br><span class="line">    <span class="comment">/** 临界区读文件 **/</span>  <span class="comment">//注意这里读操作是不互斥的，可以多个读者一起执行。/</span></span><br><span class="line">	P(mutex)</span><br><span class="line">      readcnt-=<span class="number">1</span> <span class="comment">// 访问临界区的读者进程数-1</span></span><br><span class="line">    	<span class="keyword">if</span>(readcnt==<span class="number">0</span>) <span class="comment">// 最后一个读者进程负责释放临界区资源</span></span><br><span class="line">            V(rw)</span><br><span class="line">  V(mutex)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>分析：</p>
+<p>第一个读者进程 就锁住了 之后所有的写操作，直到最后一个读者进程执行完毕才释放这个锁rw，此时才能进行写的操作。</p>
+<h1 id="《读写公平》"><a href="#《读写公平》" class="headerlink" title="《读写公平》"></a>《读写公平》</h1><p>semaphore rw &#x3D; 1;　　实现读、写进程对文件的互斥访问<br>semaphore w &#x3D; 1;　　 实现写进程之间对文件的互斥访问<br>semaphore mutex1 &#x3D; 1, mutex2 &#x3D; 1;　实现互斥修改变量<br>int readcnt &#x3D; 0, writecnt &#x3D; 0;　 分别记录当前有几个读、写进程想访问临界区</p>
+<h3 id="写者进程-1"><a href="#写者进程-1" class="headerlink" title="写者进程"></a>写者进程</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span>(<span class="literal">true</span>):</span><br><span class="line">    P(mutex1)</span><br><span class="line">        <span class="keyword">if</span>(writecnt==<span class="number">0</span>) <span class="comment">// 第一个写者进程负责占用临界区资源</span></span><br><span class="line">            P(rw)</span><br><span class="line">        writecnt+=<span class="number">1</span> <span class="comment">// 访问临界区的写者进程数+1</span></span><br><span class="line">    V(mutex1)</span><br><span class="line">    P(w) <span class="comment">// 写之前占用临界区资源，实现写操作的互斥。</span></span><br><span class="line">    <span class="comment">/** 临界区写文件 **/</span></span><br><span class="line">    V(w) <span class="comment">// 写完后释放临界区资源</span></span><br><span class="line">    P(mutex1)</span><br><span class="line">        writecnt-=<span class="number">1</span> <span class="comment">// 访问临界区的写者进程数-1</span></span><br><span class="line">        <span class="keyword">if</span>(writecnt==<span class="number">0</span>) <span class="comment">// 最后一个写者进程负责释放临界区资源</span></span><br><span class="line">            V(rw)</span><br><span class="line">    V(mutex1) </span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="读者进程-1"><a href="#读者进程-1" class="headerlink" title="读者进程"></a>读者进程</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span>(<span class="literal">true</span>):</span><br><span class="line">    P(mutex2)</span><br><span class="line">        <span class="keyword">if</span>(readcnt==<span class="number">0</span>) <span class="comment">// 第一个读者进程负责占用临界区资源</span></span><br><span class="line">            P(rw)</span><br><span class="line">        readcnt+=<span class="number">1</span> <span class="comment">// 访问临界区的读者进程数+1</span></span><br><span class="line">    V(mutex2)</span><br><span class="line">    <span class="comment">/** 临界区读文件 **/</span></span><br><span class="line">    P(mutex2)</span><br><span class="line">        readcnt-=<span class="number">1</span> <span class="comment">// 访问临界区的读者进程数-1</span></span><br><span class="line">        <span class="keyword">if</span>(readcnt==<span class="number">0</span>) <span class="comment">// 最后一个读者进程负责释放临界区资源</span></span><br><span class="line">            V(rw)</span><br><span class="line">    V(mutex2)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>分析：</p>
+<p>当写者拿到rw锁时，后来的写者都可以直接等待在P(w)处（在临界区外排队等待进入），而后来的读者中有一个会阻塞在P(rw)，剩余的阻塞在P(mutex2)，这样一来读者也需要等待多个写者了，而方案二中读者最多只需要等一个写者。</p>
+<p>这时的情况像是读、写进程是两个派别，谁先第一个拿到rw锁，其派别的 “兄弟们” 都能跟着他一起上。没拿到锁的一方只能等对方所有人完成后才能执行。</p>
+<p>因此有多个读者访问临界区时，写者也只能等待，而我们希望的是写者能够抢占读者进程，不需要等后来的读者。所以这种方案也只能说是再一步提高了写进程的优先级。</p>
+<h1 id="《写者优先》写者可以插队"><a href="#《写者优先》写者可以插队" class="headerlink" title="《写者优先》写者可以插队"></a>《写者优先》写者可以插队</h1><p>思路：</p>
+<p>在保证写者互斥、读写互斥、可多个读者同时执行的前提下，额外加一个变量记录执行中写者的数量，再加一个信号量实现只要【读读写写读读读写写读】中有写者还没执行完，读者就要等待。</p>
+<p>semaphore rw &#x3D; 1;　 　                         实现对文件的互斥访问<br>semaphore mutex &#x3D; 1, mutex1 &#x3D; 1, mutex2 &#x3D; 1;　实现互斥修改变量<br>semaphore mutex3 &#x3D; 1;　　　　　保证只有一个写者，读者进程会被卡在 P( read )<br>semaphore read &#x3D; 0;　 　　　　　 　 同步锁：读进程必须在没有写进程时才能访问临界区<br>int readcnt &#x3D; 0, writecnt &#x3D; 0;　　 分别记录当前有几个读进程在读、有几个写进程想写<br>bool waiting &#x3D; false;　　　　　 　 表示当有写进程在写文件时，有没有读进程来到</p>
+<h3 id="写者进程-2"><a href="#写者进程-2" class="headerlink" title="写者进程"></a>写者进程</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span>(<span class="literal">true</span>):</span><br><span class="line">    P(mutex)</span><br><span class="line">        writecnt+=<span class="number">1</span> <span class="comment">// 只要有读进程来了，writecnt+1</span></span><br><span class="line">    V(mutex)</span><br><span class="line">    P(rw) <span class="comment">// 写之前占用临界区资源</span></span><br><span class="line">    <span class="comment">/** 临界区进行写 **/</span></span><br><span class="line">    V(rw) <span class="comment">// 写完后释放临界区资源</span></span><br><span class="line">    P(mutex1)</span><br><span class="line">        writecnt-=<span class="number">1</span> <span class="comment">// 写完了writecnt-1</span></span><br><span class="line">        <span class="comment">// 没有写者想写 且 有读者正阻塞在P(read) 就释放read让读者读文件</span></span><br><span class="line">        <span class="keyword">if</span>(writecnt==<span class="number">0</span> &amp;&amp; waiting):</span><br><span class="line">            V(read)           </span><br><span class="line">            waiting = <span class="literal">false</span>   <span class="comment">// 考虑到第二批要进入临界区的【读写读写读读】，要及时复原。</span></span><br><span class="line">            <span class="comment">// 如果没有waiting，可能导致没有读者时写者会V(read)导致read资源变多</span></span><br><span class="line">    V(mutex1)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="读者进行"><a href="#读者进行" class="headerlink" title="读者进行"></a>读者进行</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span>(<span class="literal">true</span>):</span><br><span class="line">   P(mutex3)  <span class="comment">// 如果没有mutex3，可能造成多个读进程阻塞在P(read)，而p(read)的锁需要 写者 的v(read)来释放，可能多个阻塞在 P(read)的读操作，只被写者释放了一次。 但是有了 P(mutex3) 就可以把这个主动权抓在 读者手中了，只要写着释放完一次 锁，读者可以自发 释放后续的锁。</span></span><br><span class="line">       <span class="keyword">if</span>(writecnt!=<span class="number">0</span>): <span class="comment">// 一旦有写者来了，后来的读者就要等待写者写完</span></span><br><span class="line">           waiting = <span class="literal">true</span> <span class="comment">// 表明现在有读者在等写者</span></span><br><span class="line">           P(read) <span class="comment">// 要等写者写完才可以继续, 注意：这里read初始值为0，第一个读就是p(0)，直接给锁了。</span></span><br><span class="line">   V(mutex3)</span><br><span class="line">   P(mutex2)</span><br><span class="line">       <span class="keyword">if</span>(readcnt==<span class="number">0</span>): <span class="comment">// 第一个读者进程负责占用临界区资源</span></span><br><span class="line">           p(rw)</span><br><span class="line">       readcnt+=<span class="number">1</span></span><br><span class="line">   V(mutex2)</span><br><span class="line">   <span class="comment">/** 临界区进行读 **/</span></span><br><span class="line">   P(mutex2)</span><br><span class="line">       readcnt-=<span class="number">1</span></span><br><span class="line">       <span class="keyword">if</span>(readcnt==<span class="number">0</span>): <span class="comment">// 最后一个读者进程负责释放临界区资源</span></span><br><span class="line">           V(rw)</span><br><span class="line">   V(mutex2)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>分析：</p>
+<p>读者1 → 写者 → 读者2：假设读者1占有rw资源，写者来到阻塞在P(rw)处，此时 writecnt已经不是 0。所以读者2 再来时会被阻塞在P(read)处。当读者1 完成读操作释放rw锁，然后写者立即会占有rw，此时一直有写者来的话都是可以直接在临界区外排队的。等所有写操作完成了，writecnt 就变为 0，读者才能获得read锁进行读。</p>
+<p>在读者先于写者来到的情况下，写者总是会获得rw锁，因为当有写者在等待rw时，其它后来的读者中的第一个会阻塞在P(read)，剩余的阻塞在P(mutex3)。而前面已经在临界区的读者，写完后就会有readcnt&#x3D;&#x3D;0然后释放rw锁，写者立刻就可以访问临界区了。但是在上一个方案的话，因为后来的读者不会进行 “检查”，只要它们中有一个读者持有rw锁，即使已经有写者正在等待，读者们依然可以直接进入临界区，但在本方案中却会被阻塞在P(mutex3)或P(read)。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//（自己重写一下）</span></span><br><span class="line"><span class="comment">//记录写者数量，当写者还有的时候，读者就得等着。读者的钥匙要拿在写者手中。写者全部完成后才会给读者们释放锁，但是要注意不能让读者全部阻塞在一个锁上，因为写者只释放一次，所以为了避免多个阻塞进程和一个释放操作，我们引入信号量mutex3来让 原阻塞只阻塞一个进程，后续的阻塞由读者自行完成，也由读者自行释放。这样在写者全部执行完后，多个阻塞的读者能不依赖写者的释放锁 全部执行完。</span></span><br><span class="line"><span class="comment">//另外注意一下，read == 0 这个信号量的初始值是0，第一个进来p-- 就直接被锁住了，不同于 平时初始值是 1的信号量，第二个进入的进程才被锁住。</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//信号量read == 0 ;readcnt ==0;writecnt==0;信号量(mutex.)初始值均为1;wait==false;</span></span><br><span class="line"><span class="comment">// 修改的变量只要不同，就要用不同的信号量来锁住修改变量的操作。</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//读者</span></span><br><span class="line"><span class="keyword">while</span>(<span class="number">1</span>):</span><br><span class="line">	P(mutex3)</span><br><span class="line">    <span class="keyword">if</span> (writecnt != <span class="number">0</span>):</span><br><span class="line">      wait = <span class="literal">true</span></span><br><span class="line">      P(read)</span><br><span class="line">  V(mutex3)</span><br><span class="line">      </span><br><span class="line">  P(mutex4)</span><br><span class="line">  	<span class="keyword">if</span> (readcnt == <span class="number">0</span>):</span><br><span class="line">      P(rw)</span><br><span class="line">    readcnt++</span><br><span class="line">  V(mutex4)</span><br><span class="line">  	<span class="comment">//** 临界区 **//</span></span><br><span class="line">  P(mutex4)</span><br><span class="line">    readcnt--</span><br><span class="line">  	<span class="keyword">if</span> (readcnt == <span class="number">0</span>):</span><br><span class="line">      V(rw)</span><br><span class="line">  V(mutex4)</span><br><span class="line">      </span><br><span class="line"><span class="comment">//写者</span></span><br><span class="line"><span class="keyword">while</span>(<span class="number">1</span>):</span><br><span class="line">	P(mutex1)</span><br><span class="line">    writecnt++</span><br><span class="line">  V(mutex1)</span><br><span class="line">  P(rw)</span><br><span class="line">    <span class="comment">//** 临界区 **//</span></span><br><span class="line">  V(rw)</span><br><span class="line">  P(mutex2)</span><br><span class="line">    writecnt--</span><br><span class="line">    <span class="keyword">if</span> (writecnt==<span class="number">0</span>&amp;&amp;wait==<span class="literal">true</span>):  <span class="comment">//没有wait 会让写者结尾的情况，无意义释放一个V(read)锁。</span></span><br><span class="line">      V(read)</span><br><span class="line">      wait = <span class="literal">false</span>     <span class="comment">//下一轮时复原状态。</span></span><br><span class="line">  V(mutex2)</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+
+
+
+<p>参考原文：<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_43280818/article/details/105788767">https://blog.csdn.net/qq_43280818/article/details/105788767</a></p>
+
+                    
+                        
+
+
+                    
+                    
+                        <p>
+                            <a
+                                href="/2022/10/28/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0/%E7%AE%A1%E7%A8%8B%E5%AE%9E%E7%8E%B0%E8%AF%BB%E8%80%85%E4%BC%98%E5%85%88and%E5%86%99%E8%80%85%E4%BC%98%E5%85%88/#post-footer"
+                                class="postShorten-excerpt_link link"
+                                aria-label=""
+                            >
+                                Comment and share
+                            </a>
+                        </p>
+                    
+                </div>
+            
+        </div>
+        
+    </article>
+    
+    
+    <article class="postShorten postShorten--thumbnailimg-bottom">
+        <div class="postShorten-wrap">
+            
+            <div class="postShorten-header">
+                <h1 class="postShorten-title">
                     
                         <a
-                            href="/2022/10/27/study/%E8%AF%95%E8%AF%95post%E4%B8%AD%E5%9B%BE%E7%89%87%E8%83%BD%E4%B8%8D%E8%83%BD%E6%98%BE%E7%A4%BA/"
-                            class="postShorten-excerpt_link link"
-                            aria-label=": 试试post中图片能不能显示"
+                            class="link-unstyled"
+                            href="/2022/10/28/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0/%E7%AE%A1%E7%A8%8B%E5%AE%9E%E7%8E%B0%E8%AF%BB%E8%80%85%E4%BC%98%E5%85%88/"
+                            aria-label=": 管程实现读者优先"
                         >
-                            Continue reading
+                            管程实现读者优先
                         </a>
+                    
+                </h1>
+                <div class="postShorten-meta">
+    <time datetime="2022-10-28T19:31:51+08:00">
+	
+		    Oct 28, 2022
+    	
+    </time>
+    
+        <span>in </span>
+        
+    <a class="category-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0/">操作系统学习</a>
+
+
+    
+</div>
+
+            </div>
+            
+                <div class="postShorten-content">
+                    <span id="more"></span>
+<p>Public Database::Read(){<br>  startRead()<br>    read<br>  doneRead()<br>}</p>
+<!--more-->
+<p>Public Database::Write(){<br>    startWrite()<br>    write<br>  doneWrite()<br>}</p>
+<p>Private Database::startRead(){<br>  lock.Acquire()<br>    while((AW+WW)&gt;0){<br>      WR++<br>        okToRead.wait(lock)     &#x2F;&#x2F;不同于信号量，管程相当于手动控制了阻塞的位置。<br>      WR–<br>    }<br>  AR++<br>  lock.Release()<br>}<br>Private Database::doneRead(){<br>  lock.Acquire()<br>      AR–<br>    if (AR&#x3D;&#x3D;0&amp;&amp;WW&gt;0 ){<br>      okToWrite.signal()<br>    }<br>  lock.Release()<br>}</p>
+<p>Private Database::startWrite(){<br>  lock.Acquire()<br>    while((AR+AW)&gt;0){<br>      WW++<br>      okToWrite.wait(lock)<br>      WW–<br>    }<br>  AW++<br>  lock.Release()<br>}<br>Private Database::doneWrite(){<br>  lock.Acquire()<br>    AW–<br>    if (WW&gt;0){<br>      okToWrite.signal()<br>    }<br>      else if (WR&gt;0){<br>      okToRead.broadcast()    &#x2F;&#x2F; 全部唤醒。因为此时写者没了，多个读者可以一起醒来执行。<br>    }<br>  lock.Release()<br>}</p>
+
+                    
                         
+
+
+                    
+                    
+                        <p>
+                            <a
+                                href="/2022/10/28/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0/%E7%AE%A1%E7%A8%8B%E5%AE%9E%E7%8E%B0%E8%AF%BB%E8%80%85%E4%BC%98%E5%85%88/#post-footer"
+                                class="postShorten-excerpt_link link"
+                                aria-label=""
+                            >
+                                Comment and share
+                            </a>
+                        </p>
+                    
+                </div>
+            
+        </div>
+        
+    </article>
+    
+    
+    <article class="postShorten postShorten--thumbnailimg-bottom">
+        <div class="postShorten-wrap">
+            
+            <div class="postShorten-header">
+                <h1 class="postShorten-title">
+                    
+                        <a
+                            class="link-unstyled"
+                            href="/2022/10/28/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0/%E2%80%9Ccpu32%E4%BD%8D%E2%80%9D%E5%A6%82%E4%BD%95%E7%90%86%E8%A7%A3%E8%BF%99%E4%B8%AA32%E4%BD%8D/"
+                            aria-label=": “cpu32位”如何理解这个32位"
+                        >
+                            “cpu32位”如何理解这个32位
+                        </a>
+                    
+                </h1>
+                <div class="postShorten-meta">
+    <time datetime="2022-10-28T19:28:23+08:00">
+	
+		    Oct 28, 2022
+    	
+    </time>
+    
+        <span>in </span>
+        
+    <a class="category-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0/">操作系统学习</a>
+
+
+    
+</div>
+
+            </div>
+            
+                <div class="postShorten-content">
+                    <p>​		如果cpu 是32位，就是32bit。</p>
+<p>​		虽然32bit空间上是4byte，但是我们要的其实是看它能代表多少个寻址空间，</p>
+<p>​		32bit 可以有 2^32个寻址空间，就是2^22kb,  2^12M,  2^2G,  4G  的寻址空间。</p>
+<p>至于每个寻址空间内是int这样的元素还是 float，去内存中按照空间换算比例分配就好了。</p>
+
+                    
+                        
+
+
+                    
+                    
+                        <p>
+                            <a
+                                href="/2022/10/28/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0/%E2%80%9Ccpu32%E4%BD%8D%E2%80%9D%E5%A6%82%E4%BD%95%E7%90%86%E8%A7%A3%E8%BF%99%E4%B8%AA32%E4%BD%8D/#post-footer"
+                                class="postShorten-excerpt_link link"
+                                aria-label=""
+                            >
+                                Comment and share
+                            </a>
+                        </p>
                     
                 </div>
             
