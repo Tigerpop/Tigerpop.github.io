@@ -1,0 +1,596 @@
+
+<!DOCTYPE html>
+<html lang="en">
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Tiger_pop&#39;s Blog">
+    <title>14二叉搜索树 - Tiger_pop&#39;s Blog</title>
+    <meta name="author" content="陈宇韶chenyushao">
+    
+    
+    
+        
+            <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
+        
+    
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"陈宇韶chenyushao","sameAs":["https://github.com/","https://www.linkedin.com/profile/","mailto"]},"articleBody":"123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384858687888990919293949596979899100101102103104105106107108109110111112113114115116117118119120121122123124125126127128129130131132133134135136137138139140141142143144145146147148149&#x27;&#x27;&#x27;二叉搜索树非空左子树的值&lt;根结点的值。非空右子树的值&gt;根结点的值。左右子树都是二叉搜索树。&#x27;&#x27;&#x27;class Node():    def __init__(self,data,left=None,right=None ):        self.data = data        self.left = left        self.right = right# 尾递归 实现二叉搜索树的查找。def find_(x,BinTree):    if BinTree == None:        return None    if x &gt; BinTree.data:        return find_(x,BinTree.right)        # 这样的 return 同一方法的递归，叫&quot;尾递归&quot;，理论上&quot;尾递归&quot;都可以用循环实现。    if x &lt; BinTree.data:        return find_(x,BinTree.left)    elif x == BinTree.data:        return BinTree# 循环 实现二叉搜索树的查找。def find(x,BinTree):  #使用查找指针    while BinTree:        if x &gt; BinTree.data:            BinTree = BinTree.right        if x &lt; BinTree.data:            BinTree = BinTree.left        else:            return BinTree    return &#x27;没找着&#x27;&#x27;&#x27;&#x27;# 循环实现的二叉搜索树查找，效率与树的结构有关，# 树如果都是只有左结点或者都是只有右结点，查找效率会很低。# 因为：# 查找次数就是树的高度，# 如果只有左子树一边倒，就会变成一个链表，# n个结点高度是n，查找效率不高，达不到lg(N)。&#x27;&#x27;&#x27;# 尾递归实现找最小def findmin(BT):    if BT==None:        return None    if BT.left == None:                 # 基线条件        return BT    else:        return findmin(BT.left)# 循环实现找最大def findmax(BT):    if BT:        while BT.right:            BT = BT.right    return BT# 递归实现插入,和递归实现查找类似。查找return即可，而插入要改变树的结构。# 等于是把相关的路径重新构建了一遍，等于相关的指针重新指了一遍，# 没有定义的路径，则保留原样。def insert(x,BT):    if BT == None:  # 基线条件。        BT = Node(x)        BT.left = None        BT.right = None    else:        if x &lt; BT.data:            BT.left = insert(x,BT.left)  # 可以回顾以下链表的插入，两个步骤。        if x &gt;= BT.data:            BT.right = insert(x,BT.right)        # else:        #     raise importError    return BT# 这里提示以下，写这种递归方法的套路。# 首先要明确insert(x,BT)方法返回的是就是BT，用BT左子树右子树指向BT的左子树右子树，保证树的结构，在出现空位置可以插入时，再完成插入。def preorder(BT,list_=[]):    if BT:        list_.append(BT.data)        print(list_)        preorder(BT.left)        preorder(BT.right)    return list_&#x27;&#x27;&#x27;二叉搜索树的删除。我们可以分三种情况：一、删除结点为叶子结点，直接删除。二、删除结点只有一个子结点，将父结点直接指向其子结点  (其实二情况包含了一情况)。三、删除结点有两个子结点，（删除此结点后，要么从左边找一个最大的、要么从右边找一个最小的，补上这个结点的位置）（这样有一个好处，左最大和右最小都一定是叶子结点或者单一子结点，相当于又转为了问题一和问题二。）&#x27;&#x27;&#x27;def delete( x,BT ): # 删除类似插入，也相当于重新构建的树的结构。    if BT == None:        print(&#x27;未找到相应元素&#x27;)    elif x &lt; BT.data:        BT.left = delete(x,BT.left)    elif x &gt; BT.data:        BT.right = delete(x,BT.right)    elif x == BT.data: # 找到删除结点位置，按照上面三种情况讨论。        if BT.left and BT.right :            temp = findmin(BT.right)      # 此处也可以换成 从左子树中找最大的,下面跟着变。            BT.data = temp.data         # 替换data 而没有选择插入删除，因为这样更简单。            BT.right = delete(temp.data,BT.right) # 删除右子树中最小的结点。这里直接转化为了叶子结点或者一个子结点情况。        else:   # 删除结点为一个或0个子结点。(注意：此处的删除不需要在这个位置完成经典的链表删除，而是考虑到return BT ，会在前面的树的构建过程，完成跳过结点的删除操作。)            if BT.left == None:   # 有右孩子或者无孩子。                BT = BT.right    # 只需要改变return 的结果，回溯到上面树的构建，就完成了跳过结点的删除操作。            elif BT.right == None:                BT = BT.left    return BTif __name__ == &#x27;__main__&#x27;:    tree = Node(6,Node(3,Node(1),Node(4)),Node(10,None,Node(12)))    fmin = findmin(tree)    fmax = findmax(tree)    fx = find(10,tree)    fx_ = find_(3,tree)    fsert = insert(5,tree)    insert_x = preorder(fsert)    print(fmin.data,fmax.data,fx.data,fx_.data)    print(insert_x,&#x27;\\n\\n&#x27;)        tree = Node(30,Node(15),Node(41,Node(33,None,Node(35,Node(34),None)),Node(50)))\n\n","dateCreated":"2021-09-27T20:00:36+08:00","dateModified":"2022-10-28T23:40:26+08:00","datePublished":"2021-09-27T20:00:36+08:00","description":"","headline":"14二叉搜索树","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/14%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91/"},"publisher":{"@type":"Organization","name":"陈宇韶chenyushao","sameAs":["https://github.com/","https://www.linkedin.com/profile/","mailto"]},"url":"http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/14%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91/","keywords":"搜索树"}</script>
+    <meta name="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="14二叉搜索树">
+<meta property="og:url" content="http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/14%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91/index.html">
+<meta property="og:site_name" content="Tiger_pop&#39;s Blog">
+<meta property="og:description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2021-09-27T12:00:36.000Z">
+<meta property="article:modified_time" content="2022-10-28T15:40:26.315Z">
+<meta property="article:author" content="陈宇韶chenyushao">
+<meta property="article:tag" content="搜索树">
+<meta name="twitter:card" content="summary">
+    
+    
+        
+    
+    
+    
+    
+    
+    <!--STYLES-->
+    
+<link rel="stylesheet" href="/assets/css/style-yrbj4x87sme2npnaj5hmxl88fi8ktzpa1hwzrvan2almcpvu5niegj13ryff.min.css">
+
+    <!--STYLES END-->
+    
+
+    
+
+    
+        
+    
+</head>
+
+    <body>
+        <div id="blog">
+            <!-- Define author's picture -->
+
+
+    
+
+<header id="header" data-behavior="4">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <div class="header-title">
+        <a
+            class="header-title-link"
+            href="/"
+            aria-label=""
+        >
+            Tiger_pop&#39;s Blog
+        </a>
+    </div>
+    
+        
+            <a
+                class="header-right-picture "
+                href="#about"
+                aria-label="Open the link: /#about"
+            >
+        
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+<nav id="sidebar" data-behavior="4">
+    <div class="sidebar-container">
+        
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/"
+                            
+                            rel="noopener"
+                            title="Home"
+                        >
+                        <i class="sidebar-button-icon fa fa-home" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Home</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-categories"
+                            
+                            rel="noopener"
+                            title="Categories"
+                        >
+                        <i class="sidebar-button-icon fa fa-bookmark" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Categories</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-tags"
+                            
+                            rel="noopener"
+                            title="Tags"
+                        >
+                        <i class="sidebar-button-icon fa fa-tags" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Tags</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-archives"
+                            
+                            rel="noopener"
+                            title="Archives"
+                        >
+                        <i class="sidebar-button-icon fa fa-archive" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Archives</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="#about"
+                            
+                            rel="noopener"
+                            title="About"
+                        >
+                        <i class="sidebar-button-icon fa fa-question" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">About</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://github.com/"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="GitHub"
+                        >
+                        <i class="sidebar-button-icon fab fa-github" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">GitHub</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://www.linkedin.com/profile/"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="LinkedIn"
+                        >
+                        <i class="sidebar-button-icon fab fa-linkedin" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">LinkedIn</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/mailto"
+                            
+                            rel="noopener"
+                            title="Mail"
+                        >
+                        <i class="sidebar-button-icon fa fa-envelope" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Mail</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/atom.xml"
+                            
+                            rel="noopener"
+                            title="RSS"
+                        >
+                        <i class="sidebar-button-icon fa fa-rss" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">RSS</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+    </div>
+</nav>
+
+            
+            <div id="main" data-behavior="4"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post">
+    
+    
+        <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title">
+            14二叉搜索树
+        </h1>
+    
+    
+        <div class="post-meta">
+    <time datetime="2021-09-27T20:00:36+08:00">
+	
+		    Sep 27, 2021
+    	
+    </time>
+    
+        <span>in </span>
+        
+    <a class="category-link" href="/categories/%E6%B5%99%E5%A4%A7%E7%AE%97%E6%B3%95%E4%B8%8E%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B-python%E5%AE%9E%E7%8E%B0/">浙大算法与数据结构课程(python实现)</a>
+
+
+    
+</div>
+
+    
+</div>
+
+    
+    <div class="post-content markdown">
+        <div class="main-content-wrap">
+            <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">二叉搜索树</span></span><br><span class="line"><span class="string">非空左子树的值&lt;根结点的值。</span></span><br><span class="line"><span class="string">非空右子树的值&gt;根结点的值。</span></span><br><span class="line"><span class="string">左右子树都是二叉搜索树。</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Node</span>():</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self,data,left=<span class="literal">None</span>,right=<span class="literal">None</span> </span>):</span><br><span class="line">        self.data = data</span><br><span class="line">        self.left = left</span><br><span class="line">        self.right = right</span><br><span class="line"></span><br><span class="line"><span class="comment"># 尾递归 实现二叉搜索树的查找。</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">find_</span>(<span class="params">x,BinTree</span>):</span><br><span class="line">    <span class="keyword">if</span> BinTree == <span class="literal">None</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">None</span></span><br><span class="line">    <span class="keyword">if</span> x &gt; BinTree.data:</span><br><span class="line">        <span class="keyword">return</span> find_(x,BinTree.right)</span><br><span class="line">        <span class="comment"># 这样的 return 同一方法的递归，叫&quot;尾递归&quot;，理论上&quot;尾递归&quot;都可以用循环实现。</span></span><br><span class="line">    <span class="keyword">if</span> x &lt; BinTree.data:</span><br><span class="line">        <span class="keyword">return</span> find_(x,BinTree.left)</span><br><span class="line">    <span class="keyword">elif</span> x == BinTree.data:</span><br><span class="line">        <span class="keyword">return</span> BinTree</span><br><span class="line"></span><br><span class="line"><span class="comment"># 循环 实现二叉搜索树的查找。</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">find</span>(<span class="params">x,BinTree</span>):  <span class="comment">#使用查找指针</span></span><br><span class="line">    <span class="keyword">while</span> BinTree:</span><br><span class="line">        <span class="keyword">if</span> x &gt; BinTree.data:</span><br><span class="line">            BinTree = BinTree.right</span><br><span class="line">        <span class="keyword">if</span> x &lt; BinTree.data:</span><br><span class="line">            BinTree = BinTree.left</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">return</span> BinTree</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&#x27;没找着&#x27;</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string"># 循环实现的二叉搜索树查找，效率与树的结构有关，</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string"># 树如果都是只有左结点或者都是只有右结点，查找效率会很低。</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string"># 因为：</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string"># 查找次数就是树的高度，</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string"># 如果只有左子树一边倒，就会变成一个链表，</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string"># n个结点高度是n，查找效率不高，达不到lg(N)。</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 尾递归实现找最小</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">findmin</span>(<span class="params">BT</span>):</span><br><span class="line">    <span class="keyword">if</span> BT==<span class="literal">None</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">None</span></span><br><span class="line">    <span class="keyword">if</span> BT.left == <span class="literal">None</span>:                 <span class="comment"># 基线条件</span></span><br><span class="line">        <span class="keyword">return</span> BT</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">return</span> findmin(BT.left)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 循环实现找最大</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">findmax</span>(<span class="params">BT</span>):</span><br><span class="line">    <span class="keyword">if</span> BT:</span><br><span class="line">        <span class="keyword">while</span> BT.right:</span><br><span class="line">            BT = BT.right</span><br><span class="line">    <span class="keyword">return</span> BT</span><br><span class="line"></span><br><span class="line"><span class="comment"># 递归实现插入,和递归实现查找类似。查找return即可，而插入要改变树的结构。</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 等于是把相关的路径重新构建了一遍，等于相关的指针重新指了一遍，</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 没有定义的路径，则保留原样。</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">insert</span>(<span class="params">x,BT</span>):</span><br><span class="line">    <span class="keyword">if</span> BT == <span class="literal">None</span>:  <span class="comment"># 基线条件。</span></span><br><span class="line">        BT = Node(x)</span><br><span class="line">        BT.left = <span class="literal">None</span></span><br><span class="line">        BT.right = <span class="literal">None</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">if</span> x &lt; BT.data:</span><br><span class="line">            BT.left = insert(x,BT.left)  <span class="comment"># 可以回顾以下链表的插入，两个步骤。</span></span><br><span class="line">        <span class="keyword">if</span> x &gt;= BT.data:</span><br><span class="line">            BT.right = insert(x,BT.right)</span><br><span class="line">        <span class="comment"># else:</span></span><br><span class="line">        <span class="comment">#     raise importError</span></span><br><span class="line">    <span class="keyword">return</span> BT</span><br><span class="line"></span><br><span class="line"><span class="comment"># 这里提示以下，写这种递归方法的套路。</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 首先要明确insert(x,BT)方法返回的是就是BT，用BT左子树右子树指向BT的左子树右子树，保证树的结构，在出现空位置可以插入时，再完成插入。</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">preorder</span>(<span class="params">BT,list_=[]</span>):</span><br><span class="line">    <span class="keyword">if</span> BT:</span><br><span class="line">        list_.append(BT.data)</span><br><span class="line">        <span class="built_in">print</span>(list_)</span><br><span class="line">        preorder(BT.left)</span><br><span class="line">        preorder(BT.right)</span><br><span class="line">    <span class="keyword">return</span> list_</span><br><span class="line"></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">二叉搜索树的删除。</span></span><br><span class="line"><span class="string">我们可以分三种情况：</span></span><br><span class="line"><span class="string">一、删除结点为叶子结点，直接删除。</span></span><br><span class="line"><span class="string">二、删除结点只有一个子结点，将父结点直接指向其子结点  (其实二情况包含了一情况)。</span></span><br><span class="line"><span class="string">三、删除结点有两个子结点，</span></span><br><span class="line"><span class="string">（删除此结点后，要么从左边找一个最大的、要么从右边找一个最小的，补上这个结点的位置）</span></span><br><span class="line"><span class="string">（这样有一个好处，左最大和右最小都一定是叶子结点或者单一子结点，相当于又转为了问题一和问题二。）</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">delete</span>(<span class="params"> x,BT </span>): <span class="comment"># 删除类似插入，也相当于重新构建的树的结构。</span></span><br><span class="line">    <span class="keyword">if</span> BT == <span class="literal">None</span>:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&#x27;未找到相应元素&#x27;</span>)</span><br><span class="line">    <span class="keyword">elif</span> x &lt; BT.data:</span><br><span class="line">        BT.left = delete(x,BT.left)</span><br><span class="line">    <span class="keyword">elif</span> x &gt; BT.data:</span><br><span class="line">        BT.right = delete(x,BT.right)</span><br><span class="line">    <span class="keyword">elif</span> x == BT.data: <span class="comment"># 找到删除结点位置，按照上面三种情况讨论。</span></span><br><span class="line">        <span class="keyword">if</span> BT.left <span class="keyword">and</span> BT.right :</span><br><span class="line">            temp = findmin(BT.right)      <span class="comment"># 此处也可以换成 从左子树中找最大的,下面跟着变。</span></span><br><span class="line">            BT.data = temp.data         <span class="comment"># 替换data 而没有选择插入删除，因为这样更简单。</span></span><br><span class="line">            BT.right = delete(temp.data,BT.right) <span class="comment"># 删除右子树中最小的结点。这里直接转化为了叶子结点或者一个子结点情况。</span></span><br><span class="line">        <span class="keyword">else</span>:   <span class="comment"># 删除结点为一个或0个子结点。(注意：此处的删除不需要在这个位置完成经典的链表删除，而是考虑到return BT ，会在前面的树的构建过程，完成跳过结点的删除操作。)</span></span><br><span class="line">            <span class="keyword">if</span> BT.left == <span class="literal">None</span>:   <span class="comment"># 有右孩子或者无孩子。</span></span><br><span class="line">                BT = BT.right    <span class="comment"># 只需要改变return 的结果，回溯到上面树的构建，就完成了跳过结点的删除操作。</span></span><br><span class="line">            <span class="keyword">elif</span> BT.right == <span class="literal">None</span>:</span><br><span class="line">                BT = BT.left</span><br><span class="line">    <span class="keyword">return</span> BT</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    tree = Node(<span class="number">6</span>,Node(<span class="number">3</span>,Node(<span class="number">1</span>),Node(<span class="number">4</span>)),Node(<span class="number">10</span>,<span class="literal">None</span>,Node(<span class="number">12</span>)))</span><br><span class="line"></span><br><span class="line">    fmin = findmin(tree)</span><br><span class="line">    fmax = findmax(tree)</span><br><span class="line">    fx = find(<span class="number">10</span>,tree)</span><br><span class="line">    fx_ = find_(<span class="number">3</span>,tree)</span><br><span class="line">    fsert = insert(<span class="number">5</span>,tree)</span><br><span class="line">    insert_x = preorder(fsert)</span><br><span class="line">    <span class="built_in">print</span>(fmin.data,fmax.data,fx.data,fx_.data)</span><br><span class="line">    <span class="built_in">print</span>(insert_x,<span class="string">&#x27;\n\n&#x27;</span>)</span><br><span class="line">    </span><br><span class="line">    tree = Node(<span class="number">30</span>,Node(<span class="number">15</span>),Node(<span class="number">41</span>,Node(<span class="number">33</span>,<span class="literal">None</span>,Node(<span class="number">35</span>,Node(<span class="number">34</span>),<span class="literal">None</span>)),Node(<span class="number">50</span>)))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+            
+
+
+        </div>
+    </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
+        
+            <div class="post-footer-tags">
+                <span class="text-color-light text-small">TAGGED IN</span><br/>
+                
+    <a class="tag tag--primary tag--small t-none-link" href="/tags/%E6%90%9C%E7%B4%A2%E6%A0%91/" rel="tag">搜索树</a>
+
+            </div>
+        
+        
+            <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/13%E4%BA%8C%E5%8F%89%E6%A0%91%E5%90%8C%E6%9E%84/"
+                    data-tooltip="13二叉树同构"
+                    aria-label="PREVIOUS: 13二叉树同构"
+                >
+                    
+                        <i class="fa fa-angle-left" aria-hidden="true"></i>
+                        <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+                    </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/15%E4%BA%8C%E5%8F%89%E5%B9%B3%E8%A1%A1%E6%A0%91/"
+                    data-tooltip="15二叉平衡树"
+                    aria-label="NEXT: 15二叉平衡树"
+                >
+                    
+                        <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                    </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a
+                class="post-action-btn btn btn--default btn-open-shareoptions"
+                href="#btn-open-shareoptions"
+                aria-label="Share this post"
+            >
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/14%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91/"
+                    title="Share on Facebook"
+                    aria-label="Share on Facebook"
+                >
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://twitter.com/intent/tweet?text=http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/14%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91/"
+                    title="Share on Twitter"
+                    aria-label="Share on Twitter"
+                >
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://plus.google.com/share?url=http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/14%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91/"
+                    title="Share on Google+"
+                    aria-label="Share on Google+"
+                >
+                    <i class="fab fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+        
+        
+            
+        
+    </div>
+</article>
+
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2022 陈宇韶chenyushao. All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/13%E4%BA%8C%E5%8F%89%E6%A0%91%E5%90%8C%E6%9E%84/"
+                    data-tooltip="13二叉树同构"
+                    aria-label="PREVIOUS: 13二叉树同构"
+                >
+                    
+                        <i class="fa fa-angle-left" aria-hidden="true"></i>
+                        <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+                    </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/15%E4%BA%8C%E5%8F%89%E5%B9%B3%E8%A1%A1%E6%A0%91/"
+                    data-tooltip="15二叉平衡树"
+                    aria-label="NEXT: 15二叉平衡树"
+                >
+                    
+                        <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                    </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a
+                class="post-action-btn btn btn--default btn-open-shareoptions"
+                href="#btn-open-shareoptions"
+                aria-label="Share this post"
+            >
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/14%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91/"
+                    title="Share on Facebook"
+                    aria-label="Share on Facebook"
+                >
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://twitter.com/intent/tweet?text=http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/14%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91/"
+                    title="Share on Twitter"
+                    aria-label="Share on Twitter"
+                >
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://plus.google.com/share?url=http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/14%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91/"
+                    title="Share on Google+"
+                    aria-label="Share on Google+"
+                >
+                    <i class="fab fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+                </div>
+                
+    <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+        <i id="btn-close-shareoptions" class="fa fa-times"></i>
+        <ul class="share-options">
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="https://www.facebook.com/sharer/sharer.php?u=http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/14%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91/"
+                        aria-label="Share on Facebook"
+                    >
+                        <i class="fab fa-facebook" aria-hidden="true"></i><span>Share on Facebook</span>
+                    </a>
+                </li>
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="https://twitter.com/intent/tweet?text=http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/14%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91/"
+                        aria-label="Share on Twitter"
+                    >
+                        <i class="fab fa-twitter" aria-hidden="true"></i><span>Share on Twitter</span>
+                    </a>
+                </li>
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="https://plus.google.com/share?url=http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/14%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91/"
+                        aria-label="Share on Google+"
+                    >
+                        <i class="fab fa-google-plus" aria-hidden="true"></i><span>Share on Google+</span>
+                    </a>
+                </li>
+            
+        </ul>
+    </div>
+
+
+            
+        </div>
+        
+
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-times"></i>
+        </div>
+        
+            <h4 id="about-card-name">陈宇韶chenyushao</h4>
+        
+            <div id="about-card-bio"><p>author.bio</p>
+</div>
+        
+        
+            <div id="about-card-job">
+                <i class="fa fa-briefcase"></i>
+                <br/>
+                <p>author.job</p>
+
+            </div>
+        
+        
+    </div>
+</div>
+
+        
+        
+<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
+        <!--SCRIPTS-->
+
+<script src="/assets/js/script-sbgpeqyl6jw5qe60mnfuzifzwky5la4ftiuwmschcdzx2pg5tfpl1pfp13e3.min.js"></script>
+
+<!--SCRIPTS END-->
+
+
+    
+
+
+
+
+    </body>
+</html>

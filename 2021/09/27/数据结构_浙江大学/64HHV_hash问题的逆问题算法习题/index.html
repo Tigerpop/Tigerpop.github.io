@@ -1,0 +1,598 @@
+
+<!DOCTYPE html>
+<html lang="en">
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Tiger_pop&#39;s Blog">
+    <title>64HHV_hash问题的逆问题算法习题 - Tiger_pop&#39;s Blog</title>
+    <meta name="author" content="陈宇韶chenyushao">
+    
+    
+    
+        
+            <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
+        
+    
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"陈宇韶chenyushao","sameAs":["https://github.com/","https://www.linkedin.com/profile/","mailto"]},"articleBody":"123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384858687888990919293949596979899100101102103104105106107108109110111112113114115116117118119120121122123124125126127128129&#x27;&#x27;&#x27;hash问题的逆问题    题目：    已知 h(x) = x % N 以及用线性探测解决冲突。    先给出散列映射的结果，    反求输入的顺序。    关键：当处理的元素之间有非常明确的 前后顺序关系时，要联想到&quot;拓扑排序&quot;。        分析：        x 被映射到了h(x)位置，发现这个位置已经有了y，则 y 一定是在 x 之前被输入的。        比如如下散列表的存储情况：        h(key) = key mod 11        --------------------------------------------------------        下标    0   1   2   3   4    5    6    7    8    9    10        h(key) 33  1   13   12  34   38   27   22   32   _    21        --------------------------------------------------------        我们可以看出33 有可能是第一个输入的，1 有可能是第一个输入的，13可能是第一个输入的，        38、21 也可能是第一个输入，            但是 12 原本应该放进1号位置，而实际上被放进了3号位置，说明12一定是在1 后面输入的。        用线性探测的方式处理位置冲突，找下一个位置，        此时 12 原本应该放进2号位置，但是2号位置已经放了13，说明12一定在13之后输入。        (1-&gt;3,2-&gt;3)            34原本应该放在1号位置，同以上推理，34 一定在1、13、12之后输入。        (1-&gt;4,2-&gt;4,3-&gt;4)            27 一定在38之后输入(5-&gt;6)            22 一定在33、1、13、12、34、38、27、之后输入 (0,1,2,3,4,5,6 -&gt; 7)            32 一定在其它所有元素 之后输入 (去掉None以后看，0,1,2,3,4,5,6,7,9 -&gt;8)            以上关系可以用结点的链表形式表现出来。            但是有一点需要注意：        如果按从小到大的输入，第一个是1 第二个是13， 第三个不是在深度为0的结点找，        在确定1 和 13 为前两位输入之后， 应该从&quot;入度&quot;为0 角度考虑，接下来的一位是从33 12 38 21 这四个之中找。        考虑的是结点的入度而不是深度。            回顾之前学习过的知识，        在构建完结点的链表关系以后，按照结点的指针关系排好输入的顺序，以上的排序过程，就是《拓扑排序》，可以回顾《41拓扑排序》。程序框架def main():    根据已有的哈希表构建图    根据图拓扑排序&#x27;&#x27;&#x27;class Graph():  # 邻接表表示的图，用一个数组存储入度信息。    def __init__(self,n_vertices,data):        self._n_vertices = n_vertices        self.G = [[] for _ in range(self._n_vertices)]        self.data = data(n_vertices)    def add_edge(self,pro_vertices,new_vertices,edge_weight):        self.G[pro_vertices].append(&#123;new_vertices:edge_weight&#125;)        self.data.indegree[new_vertices] += 1    def show_Graph(self):        for i in range(self._n_vertices):            print(self.G[i])        print(&#x27;入度的list为：\\n&#x27;,self.data.indegree)class data():    def __init__(self,n_vertices):        self.indegree = [0 for _ in range(n_vertices)]def hash(key):    return key%11def CreatGraph(hash_table):    node_input = [x for x in hash_table if x != None]    # 去除空位置，方便图结点与输入的元素一一对应。    # 为了方便后面入度都为0时按照值的大小从小到大输出，这里提前把输入顺序按值从小到大排好。    node_input = sorted(node_input)    graph = Graph(len(node_input),data)                        # 非空的就做成结点。    for key_i in range(len(node_input)):        key = node_input[key_i]        shoud_i = hash(key)        di = 1                                                 # 线性探测 的di 从1到tablesize。        while hash_table[shoud_i] != key:                     # 找适合的位置，并完善图的构建。            # hash_table[shoud_i] 映射在node_input 中的编号,有可能有多个一样的数。            shoud_i_change = [i for i in range(len(node_input)) if node_input[i]==hash_table[shoud_i]]            graph.add_edge(shoud_i_change.pop(),key_i,1)            shoud_i = (di+shoud_i)%len(hash_table)            di = +1    graph.show_Graph()    return graph,node_inputdef TopSort(graph,node_input):    def near_Node(v,list_key=[]):        if graph.G[v] != []:            list_key = [key for dic in graph.G[v] for key in dic.keys()]        return list_key    Q = []    out = []    count = 0    for v in range(len(graph.G)):        if graph.data.indegree[v] == 0:            Enqueue(v,Q)    print(Q)    while IsEmpty(Q) == False:        v = Dequeue(Q)        out.append(v)        print(v,&#x27;结点正在处理&#x27;)        count += 1        for w in near_Node(v):            graph.data.indegree[w] -= 1            if graph.data.indegree[w] == 0:                Enqueue(w,Q)    if count != len(graph.G):        return &#x27;图中有回路，无法拓扑序。&#x27;    print(out)    out_list = []    for i in out:        out_list.append(node_input[i])    print(&#x27;反推出来的输入顺序是：\\n&#x27;,out_list)def Enqueue(v,Q):    Q.append(v)def Dequeue(Q):    return Q.pop(0)def IsEmpty(Q):    return len(Q) == 0def main():    hash_table = [33, 1, 13, 12, 34, 38, 27, 22, 32, None, 21]    g,n = CreatGraph(hash_table)    TopSort(g,n)if __name__ == &#x27;__main__&#x27;:    main()\n\n","dateCreated":"2021-09-27T20:00:36+08:00","dateModified":"2022-10-29T00:09:01+08:00","datePublished":"2021-09-27T20:00:36+08:00","description":"","headline":"64HHV_hash问题的逆问题算法习题","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/64HHV_hash%E9%97%AE%E9%A2%98%E7%9A%84%E9%80%86%E9%97%AE%E9%A2%98%E7%AE%97%E6%B3%95%E4%B9%A0%E9%A2%98/"},"publisher":{"@type":"Organization","name":"陈宇韶chenyushao","sameAs":["https://github.com/","https://www.linkedin.com/profile/","mailto"]},"url":"http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/64HHV_hash%E9%97%AE%E9%A2%98%E7%9A%84%E9%80%86%E9%97%AE%E9%A2%98%E7%AE%97%E6%B3%95%E4%B9%A0%E9%A2%98/","keywords":"图, 排序, 哈希"}</script>
+    <meta name="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="64HHV_hash问题的逆问题算法习题">
+<meta property="og:url" content="http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/64HHV_hash%E9%97%AE%E9%A2%98%E7%9A%84%E9%80%86%E9%97%AE%E9%A2%98%E7%AE%97%E6%B3%95%E4%B9%A0%E9%A2%98/index.html">
+<meta property="og:site_name" content="Tiger_pop&#39;s Blog">
+<meta property="og:description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2021-09-27T12:00:36.000Z">
+<meta property="article:modified_time" content="2022-10-28T16:09:01.456Z">
+<meta property="article:author" content="陈宇韶chenyushao">
+<meta property="article:tag" content="图">
+<meta property="article:tag" content="排序">
+<meta property="article:tag" content="哈希">
+<meta name="twitter:card" content="summary">
+    
+    
+        
+    
+    
+    
+    
+    
+    <!--STYLES-->
+    
+<link rel="stylesheet" href="/assets/css/style-yrbj4x87sme2npnaj5hmxl88fi8ktzpa1hwzrvan2almcpvu5niegj13ryff.min.css">
+
+    <!--STYLES END-->
+    
+
+    
+
+    
+        
+    
+</head>
+
+    <body>
+        <div id="blog">
+            <!-- Define author's picture -->
+
+
+    
+
+<header id="header" data-behavior="4">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <div class="header-title">
+        <a
+            class="header-title-link"
+            href="/"
+            aria-label=""
+        >
+            Tiger_pop&#39;s Blog
+        </a>
+    </div>
+    
+        
+            <a
+                class="header-right-picture "
+                href="#about"
+                aria-label="Open the link: /#about"
+            >
+        
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+<nav id="sidebar" data-behavior="4">
+    <div class="sidebar-container">
+        
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/"
+                            
+                            rel="noopener"
+                            title="Home"
+                        >
+                        <i class="sidebar-button-icon fa fa-home" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Home</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-categories"
+                            
+                            rel="noopener"
+                            title="Categories"
+                        >
+                        <i class="sidebar-button-icon fa fa-bookmark" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Categories</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-tags"
+                            
+                            rel="noopener"
+                            title="Tags"
+                        >
+                        <i class="sidebar-button-icon fa fa-tags" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Tags</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-archives"
+                            
+                            rel="noopener"
+                            title="Archives"
+                        >
+                        <i class="sidebar-button-icon fa fa-archive" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Archives</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="#about"
+                            
+                            rel="noopener"
+                            title="About"
+                        >
+                        <i class="sidebar-button-icon fa fa-question" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">About</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://github.com/"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="GitHub"
+                        >
+                        <i class="sidebar-button-icon fab fa-github" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">GitHub</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://www.linkedin.com/profile/"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="LinkedIn"
+                        >
+                        <i class="sidebar-button-icon fab fa-linkedin" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">LinkedIn</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/mailto"
+                            
+                            rel="noopener"
+                            title="Mail"
+                        >
+                        <i class="sidebar-button-icon fa fa-envelope" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Mail</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/atom.xml"
+                            
+                            rel="noopener"
+                            title="RSS"
+                        >
+                        <i class="sidebar-button-icon fa fa-rss" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">RSS</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+    </div>
+</nav>
+
+            
+            <div id="main" data-behavior="4"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post">
+    
+    
+        <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title">
+            64HHV_hash问题的逆问题算法习题
+        </h1>
+    
+    
+        <div class="post-meta">
+    <time datetime="2021-09-27T20:00:36+08:00">
+	
+		    Sep 27, 2021
+    	
+    </time>
+    
+        <span>in </span>
+        
+    <a class="category-link" href="/categories/%E6%B5%99%E5%A4%A7%E7%AE%97%E6%B3%95%E4%B8%8E%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B-python%E5%AE%9E%E7%8E%B0/">浙大算法与数据结构课程(python实现)</a>
+
+
+    
+</div>
+
+    
+</div>
+
+    
+    <div class="post-content markdown">
+        <div class="main-content-wrap">
+            <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">hash问题的逆问题</span></span><br><span class="line"><span class="string">    题目：</span></span><br><span class="line"><span class="string">    已知 h(x) = x % N 以及用线性探测解决冲突。</span></span><br><span class="line"><span class="string">    先给出散列映射的结果，</span></span><br><span class="line"><span class="string">    反求输入的顺序。</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    关键：当处理的元素之间有非常明确的 前后顺序关系时，要联想到&quot;拓扑排序&quot;。</span></span><br><span class="line"><span class="string">    </span></span><br><span class="line"><span class="string">    分析：</span></span><br><span class="line"><span class="string">        x 被映射到了h(x)位置，发现这个位置已经有了y，则 y 一定是在 x 之前被输入的。</span></span><br><span class="line"><span class="string">        比如如下散列表的存储情况：</span></span><br><span class="line"><span class="string">        h(key) = key mod 11</span></span><br><span class="line"><span class="string">        --------------------------------------------------------</span></span><br><span class="line"><span class="string">        下标    0   1   2   3   4    5    6    7    8    9    10</span></span><br><span class="line"><span class="string">        h(key) 33  1   13   12  34   38   27   22   32   _    21</span></span><br><span class="line"><span class="string">        --------------------------------------------------------</span></span><br><span class="line"><span class="string">        我们可以看出33 有可能是第一个输入的，1 有可能是第一个输入的，13可能是第一个输入的，</span></span><br><span class="line"><span class="string">        38、21 也可能是第一个输入，</span></span><br><span class="line"><span class="string">    </span></span><br><span class="line"><span class="string">        但是 12 原本应该放进1号位置，而实际上被放进了3号位置，说明12一定是在1 后面输入的。</span></span><br><span class="line"><span class="string">        用线性探测的方式处理位置冲突，找下一个位置，</span></span><br><span class="line"><span class="string">        此时 12 原本应该放进2号位置，但是2号位置已经放了13，说明12一定在13之后输入。</span></span><br><span class="line"><span class="string">        (1-&gt;3,2-&gt;3)</span></span><br><span class="line"><span class="string">    </span></span><br><span class="line"><span class="string">        34原本应该放在1号位置，同以上推理，34 一定在1、13、12之后输入。</span></span><br><span class="line"><span class="string">        (1-&gt;4,2-&gt;4,3-&gt;4)</span></span><br><span class="line"><span class="string">    </span></span><br><span class="line"><span class="string">        27 一定在38之后输入(5-&gt;6)</span></span><br><span class="line"><span class="string">    </span></span><br><span class="line"><span class="string">        22 一定在33、1、13、12、34、38、27、之后输入 (0,1,2,3,4,5,6 -&gt; 7)</span></span><br><span class="line"><span class="string">    </span></span><br><span class="line"><span class="string">        32 一定在其它所有元素 之后输入 (去掉None以后看，0,1,2,3,4,5,6,7,9 -&gt;8)</span></span><br><span class="line"><span class="string">    </span></span><br><span class="line"><span class="string">        以上关系可以用结点的链表形式表现出来。</span></span><br><span class="line"><span class="string">    </span></span><br><span class="line"><span class="string">        但是有一点需要注意：</span></span><br><span class="line"><span class="string">        如果按从小到大的输入，第一个是1 第二个是13， 第三个不是在深度为0的结点找，</span></span><br><span class="line"><span class="string">        在确定1 和 13 为前两位输入之后， 应该从&quot;入度&quot;为0 角度考虑，接下来的一位是从33 12 38 21 这四个之中找。</span></span><br><span class="line"><span class="string">        考虑的是结点的入度而不是深度。</span></span><br><span class="line"><span class="string">    </span></span><br><span class="line"><span class="string">        回顾之前学习过的知识，</span></span><br><span class="line"><span class="string">        在构建完结点的链表关系以后，按照结点的指针关系排好输入的顺序，以上的排序过程，就是《拓扑排序》，可以回顾《41拓扑排序》。</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">程序框架</span></span><br><span class="line"><span class="string">def main():</span></span><br><span class="line"><span class="string">    根据已有的哈希表构建图</span></span><br><span class="line"><span class="string">    根据图拓扑排序</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Graph</span>():  <span class="comment"># 邻接表表示的图，用一个数组存储入度信息。</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self,n_vertices,data</span>):</span><br><span class="line">        self._n_vertices = n_vertices</span><br><span class="line">        self.G = [[] <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(self._n_vertices)]</span><br><span class="line">        self.data = data(n_vertices)</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">add_edge</span>(<span class="params">self,pro_vertices,new_vertices,edge_weight</span>):</span><br><span class="line">        self.G[pro_vertices].append(&#123;new_vertices:edge_weight&#125;)</span><br><span class="line">        self.data.indegree[new_vertices] += <span class="number">1</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">show_Graph</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(self._n_vertices):</span><br><span class="line">            <span class="built_in">print</span>(self.G[i])</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&#x27;入度的list为：\n&#x27;</span>,self.data.indegree)</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">data</span>():</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self,n_vertices</span>):</span><br><span class="line">        self.indegree = [<span class="number">0</span> <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(n_vertices)]</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">hash</span>(<span class="params">key</span>):</span><br><span class="line">    <span class="keyword">return</span> key%<span class="number">11</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">CreatGraph</span>(<span class="params">hash_table</span>):</span><br><span class="line">    node_input = [x <span class="keyword">for</span> x <span class="keyword">in</span> hash_table <span class="keyword">if</span> x != <span class="literal">None</span>]    <span class="comment"># 去除空位置，方便图结点与输入的元素一一对应。</span></span><br><span class="line">    <span class="comment"># 为了方便后面入度都为0时按照值的大小从小到大输出，这里提前把输入顺序按值从小到大排好。</span></span><br><span class="line">    node_input = <span class="built_in">sorted</span>(node_input)</span><br><span class="line">    graph = Graph(<span class="built_in">len</span>(node_input),data)                        <span class="comment"># 非空的就做成结点。</span></span><br><span class="line">    <span class="keyword">for</span> key_i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(node_input)):</span><br><span class="line">        key = node_input[key_i]</span><br><span class="line">        shoud_i = <span class="built_in">hash</span>(key)</span><br><span class="line">        di = <span class="number">1</span>                                                 <span class="comment"># 线性探测 的di 从1到tablesize。</span></span><br><span class="line">        <span class="keyword">while</span> hash_table[shoud_i] != key:                     <span class="comment"># 找适合的位置，并完善图的构建。</span></span><br><span class="line">            <span class="comment"># hash_table[shoud_i] 映射在node_input 中的编号,有可能有多个一样的数。</span></span><br><span class="line">            shoud_i_change = [i <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(node_input)) <span class="keyword">if</span> node_input[i]==hash_table[shoud_i]]</span><br><span class="line">            graph.add_edge(shoud_i_change.pop(),key_i,<span class="number">1</span>)</span><br><span class="line">            shoud_i = (di+shoud_i)%<span class="built_in">len</span>(hash_table)</span><br><span class="line">            di = +<span class="number">1</span></span><br><span class="line">    graph.show_Graph()</span><br><span class="line">    <span class="keyword">return</span> graph,node_input</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">TopSort</span>(<span class="params">graph,node_input</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">near_Node</span>(<span class="params">v,list_key=[]</span>):</span><br><span class="line">        <span class="keyword">if</span> graph.G[v] != []:</span><br><span class="line">            list_key = [key <span class="keyword">for</span> dic <span class="keyword">in</span> graph.G[v] <span class="keyword">for</span> key <span class="keyword">in</span> dic.keys()]</span><br><span class="line">        <span class="keyword">return</span> list_key</span><br><span class="line">    Q = []</span><br><span class="line">    out = []</span><br><span class="line">    count = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> v <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(graph.G)):</span><br><span class="line">        <span class="keyword">if</span> graph.data.indegree[v] == <span class="number">0</span>:</span><br><span class="line">            Enqueue(v,Q)</span><br><span class="line">    <span class="built_in">print</span>(Q)</span><br><span class="line">    <span class="keyword">while</span> IsEmpty(Q) == <span class="literal">False</span>:</span><br><span class="line">        v = Dequeue(Q)</span><br><span class="line">        out.append(v)</span><br><span class="line">        <span class="built_in">print</span>(v,<span class="string">&#x27;结点正在处理&#x27;</span>)</span><br><span class="line">        count += <span class="number">1</span></span><br><span class="line">        <span class="keyword">for</span> w <span class="keyword">in</span> near_Node(v):</span><br><span class="line">            graph.data.indegree[w] -= <span class="number">1</span></span><br><span class="line">            <span class="keyword">if</span> graph.data.indegree[w] == <span class="number">0</span>:</span><br><span class="line">                Enqueue(w,Q)</span><br><span class="line">    <span class="keyword">if</span> count != <span class="built_in">len</span>(graph.G):</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&#x27;图中有回路，无法拓扑序。&#x27;</span></span><br><span class="line">    <span class="built_in">print</span>(out)</span><br><span class="line">    out_list = []</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> out:</span><br><span class="line">        out_list.append(node_input[i])</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;反推出来的输入顺序是：\n&#x27;</span>,out_list)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">Enqueue</span>(<span class="params">v,Q</span>):</span><br><span class="line">    Q.append(v)</span><br><span class="line"><span class="keyword">def</span> <span class="title function_">Dequeue</span>(<span class="params">Q</span>):</span><br><span class="line">    <span class="keyword">return</span> Q.pop(<span class="number">0</span>)</span><br><span class="line"><span class="keyword">def</span> <span class="title function_">IsEmpty</span>(<span class="params">Q</span>):</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">len</span>(Q) == <span class="number">0</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">main</span>():</span><br><span class="line">    hash_table = [<span class="number">33</span>, <span class="number">1</span>, <span class="number">13</span>, <span class="number">12</span>, <span class="number">34</span>, <span class="number">38</span>, <span class="number">27</span>, <span class="number">22</span>, <span class="number">32</span>, <span class="literal">None</span>, <span class="number">21</span>]</span><br><span class="line">    g,n = CreatGraph(hash_table)</span><br><span class="line">    TopSort(g,n)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
+
+
+            
+
+
+        </div>
+    </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
+        
+            <div class="post-footer-tags">
+                <span class="text-color-light text-small">TAGGED IN</span><br/>
+                
+    <a class="tag tag--primary tag--small t-none-link" href="/tags/%E5%93%88%E5%B8%8C/" rel="tag">哈希</a> <a class="tag tag--primary tag--small t-none-link" href="/tags/%E5%9B%BE/" rel="tag">图</a> <a class="tag tag--primary tag--small t-none-link" href="/tags/%E6%8E%92%E5%BA%8F/" rel="tag">排序</a>
+
+            </div>
+        
+        
+            <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/63%E7%94%B5%E8%AF%9D%E8%81%8A%E5%A4%A9%E7%8B%82%E4%BA%BA%E5%B0%8F%E7%99%BDPM1/"
+                    data-tooltip="63电话聊天狂人小白PM1"
+                    aria-label="PREVIOUS: 63电话聊天狂人小白PM1"
+                >
+                    
+                        <i class="fa fa-angle-left" aria-hidden="true"></i>
+                        <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+                    </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/65%E6%8F%92%E5%85%A5%E6%8E%92%E5%BA%8F%E7%9A%84%E5%88%A4%E6%96%AD/"
+                    data-tooltip="65插入排序的判断"
+                    aria-label="NEXT: 65插入排序的判断"
+                >
+                    
+                        <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                    </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a
+                class="post-action-btn btn btn--default btn-open-shareoptions"
+                href="#btn-open-shareoptions"
+                aria-label="Share this post"
+            >
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/64HHV_hash%E9%97%AE%E9%A2%98%E7%9A%84%E9%80%86%E9%97%AE%E9%A2%98%E7%AE%97%E6%B3%95%E4%B9%A0%E9%A2%98/"
+                    title="Share on Facebook"
+                    aria-label="Share on Facebook"
+                >
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://twitter.com/intent/tweet?text=http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/64HHV_hash%E9%97%AE%E9%A2%98%E7%9A%84%E9%80%86%E9%97%AE%E9%A2%98%E7%AE%97%E6%B3%95%E4%B9%A0%E9%A2%98/"
+                    title="Share on Twitter"
+                    aria-label="Share on Twitter"
+                >
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://plus.google.com/share?url=http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/64HHV_hash%E9%97%AE%E9%A2%98%E7%9A%84%E9%80%86%E9%97%AE%E9%A2%98%E7%AE%97%E6%B3%95%E4%B9%A0%E9%A2%98/"
+                    title="Share on Google+"
+                    aria-label="Share on Google+"
+                >
+                    <i class="fab fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+        
+        
+            
+        
+    </div>
+</article>
+
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2022 陈宇韶chenyushao. All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/63%E7%94%B5%E8%AF%9D%E8%81%8A%E5%A4%A9%E7%8B%82%E4%BA%BA%E5%B0%8F%E7%99%BDPM1/"
+                    data-tooltip="63电话聊天狂人小白PM1"
+                    aria-label="PREVIOUS: 63电话聊天狂人小白PM1"
+                >
+                    
+                        <i class="fa fa-angle-left" aria-hidden="true"></i>
+                        <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+                    </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/65%E6%8F%92%E5%85%A5%E6%8E%92%E5%BA%8F%E7%9A%84%E5%88%A4%E6%96%AD/"
+                    data-tooltip="65插入排序的判断"
+                    aria-label="NEXT: 65插入排序的判断"
+                >
+                    
+                        <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                    </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a
+                class="post-action-btn btn btn--default btn-open-shareoptions"
+                href="#btn-open-shareoptions"
+                aria-label="Share this post"
+            >
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/64HHV_hash%E9%97%AE%E9%A2%98%E7%9A%84%E9%80%86%E9%97%AE%E9%A2%98%E7%AE%97%E6%B3%95%E4%B9%A0%E9%A2%98/"
+                    title="Share on Facebook"
+                    aria-label="Share on Facebook"
+                >
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://twitter.com/intent/tweet?text=http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/64HHV_hash%E9%97%AE%E9%A2%98%E7%9A%84%E9%80%86%E9%97%AE%E9%A2%98%E7%AE%97%E6%B3%95%E4%B9%A0%E9%A2%98/"
+                    title="Share on Twitter"
+                    aria-label="Share on Twitter"
+                >
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://plus.google.com/share?url=http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/64HHV_hash%E9%97%AE%E9%A2%98%E7%9A%84%E9%80%86%E9%97%AE%E9%A2%98%E7%AE%97%E6%B3%95%E4%B9%A0%E9%A2%98/"
+                    title="Share on Google+"
+                    aria-label="Share on Google+"
+                >
+                    <i class="fab fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+                </div>
+                
+    <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+        <i id="btn-close-shareoptions" class="fa fa-times"></i>
+        <ul class="share-options">
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="https://www.facebook.com/sharer/sharer.php?u=http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/64HHV_hash%E9%97%AE%E9%A2%98%E7%9A%84%E9%80%86%E9%97%AE%E9%A2%98%E7%AE%97%E6%B3%95%E4%B9%A0%E9%A2%98/"
+                        aria-label="Share on Facebook"
+                    >
+                        <i class="fab fa-facebook" aria-hidden="true"></i><span>Share on Facebook</span>
+                    </a>
+                </li>
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="https://twitter.com/intent/tweet?text=http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/64HHV_hash%E9%97%AE%E9%A2%98%E7%9A%84%E9%80%86%E9%97%AE%E9%A2%98%E7%AE%97%E6%B3%95%E4%B9%A0%E9%A2%98/"
+                        aria-label="Share on Twitter"
+                    >
+                        <i class="fab fa-twitter" aria-hidden="true"></i><span>Share on Twitter</span>
+                    </a>
+                </li>
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="https://plus.google.com/share?url=http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/64HHV_hash%E9%97%AE%E9%A2%98%E7%9A%84%E9%80%86%E9%97%AE%E9%A2%98%E7%AE%97%E6%B3%95%E4%B9%A0%E9%A2%98/"
+                        aria-label="Share on Google+"
+                    >
+                        <i class="fab fa-google-plus" aria-hidden="true"></i><span>Share on Google+</span>
+                    </a>
+                </li>
+            
+        </ul>
+    </div>
+
+
+            
+        </div>
+        
+
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-times"></i>
+        </div>
+        
+            <h4 id="about-card-name">陈宇韶chenyushao</h4>
+        
+            <div id="about-card-bio"><p>author.bio</p>
+</div>
+        
+        
+            <div id="about-card-job">
+                <i class="fa fa-briefcase"></i>
+                <br/>
+                <p>author.job</p>
+
+            </div>
+        
+        
+    </div>
+</div>
+
+        
+        
+<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
+        <!--SCRIPTS-->
+
+<script src="/assets/js/script-sbgpeqyl6jw5qe60mnfuzifzwky5la4ftiuwmschcdzx2pg5tfpl1pfp13e3.min.js"></script>
+
+<!--SCRIPTS END-->
+
+
+    
+
+
+
+
+    </body>
+</html>

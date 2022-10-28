@@ -1,0 +1,596 @@
+
+<!DOCTYPE html>
+<html lang="en">
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Tiger_pop&#39;s Blog">
+    <title>6队列 - Tiger_pop&#39;s Blog</title>
+    <meta name="author" content="陈宇韶chenyushao">
+    
+    
+    
+        
+            <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
+        
+    
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"陈宇韶chenyushao","sameAs":["https://github.com/","https://www.linkedin.com/profile/","mailto"]},"articleBody":"123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384858687888990919293949596979899100101102103104105106107108109110111112113114115116117118119120121122123124125126127128129130131132133134135136137138139140141142143144145146147148149150151152153154155156157158159160161162163164165166167168169170171172173174175176177178179180181182183184185186187188189190191192193194195196197198199200201202203204205206207208209210211212213214215216217218219220221222223224225226227228229230231232233234235236237238239240241242243244245246247248249250251252253254255256257258259260261262263264265266267268269270271272273274275276277278# 队列的顺序结构存储实现# 队列尾巴rear入，队列头front出，# front默认在-1位置，也就是说front没有进入队列。# 可以想象成一个可以打开底部的栈，# 但是出队列一个元素，已有队列元素不会自动往下掉。（一个水平放置的管子）&#x27;&#x27;&#x27;class Q():    Data[MaxSize]    rear    front&#x27;&#x27;&#x27;# 循环队列，# 循环队列其实也是一管子，但是会智能填空。# front和rear都指向同一个位置，像一个环。# 两种方案判断满：null时头尾都在同一位置。# 1、只装n-1个元素，（rear+1）% maxsize = front 时算满。注意front其实没有进入队列。# 2、装n个元素，环空间塞满，用额外的size变量不断自加，size==maxsize为满。# 以下为方法 1实现循环队列 的例子：class Queue():    def __init__(self,MaxSize):        self.size = MaxSize        self.rear = 0        self.front = 0        self.Data = [None] * self.size    def add(self,item):        if (self.rear+1)%self.size == self.front:            print(&#x27;队列已经满了,添加%s失败&#x27;%item)            return        self.rear += 1        self.Data[self.rear] = item    def out(self):        if self.rear == self.front:            print(&#x27;队列为空&#x27;)        self.front = (self.front+1)%self.size        out_item = self.Data[self.front]        self.Data[self.front] = None        return out_itemq = Queue(3)q.add(9)q.add(10)q.add(11)print(q.Data)print(q.out())print(q.Data)# 链式存储实现队列# 因为链表的尾部删除操作不方便（因为不知道前一个是什么），# 所以链尾作rear（指向最后一个元素）。链头作front(指向第一个元素)。class Node():    def __init__(self,data):        self.data = data        self.next = Noneclass Qlinckedlist():    def __init__(self):        self.rear = None        self.front = None # 实际上front就是head。    def out(self):        if self.front == None:            print(&#x27;队列为空。&#x27;)        # 这里注意：rear指向最后一个元素，与此元素实体绑定，        # 若链只有一个元素，此元素被删除，rear需要与元素脱离。重定向。        if self.front == self.rear:            self.rear = None  # 删除的只剩下一个元素，虽rear不指向元素，但front依然指向它，所以还是可以操作。        temp = self.front        self.front = temp.next        return temp.data    def add(self,item):        node = Node(item)        if self.front == None:            self.front = node            self.rear = node        else:            self.rear.next = node   # 不能省略，要指定next的指向。            self.rear = self.rear.next    def show(self):        linckedlist = []        temp = self.front        while temp:            (linckedlist.append(temp.data))            temp = temp.next        print(linckedlist)queue = Qlinckedlist()queue.add(12)queue.add(&#x27;x&#x27;)queue.add(&#x27;y&#x27;)queue.add(88)queue.add(99)queue.show()queue.out()queue.out()queue.show()# 用链式存储结构的队列实现多项式加法运算。# 两个多项式按指数下降排列。# 算法思路：&#x27;&#x27;&#x27;# p1\\p2分别指向两个多项式的第一个节点，若：p1.expon==p2.expon,系数相加，若结果！=0，作为结果多项式的系数，p1、p2都向后移动一项。若：p1.expon&gt;p2.expon,p1结果放进结果多项式，p1后移一位。若：p1.expon&lt;p2.expon,p2结果放进结果多项式，p2后移一位。某一边的多项式挪完了，将另一个多项式剩余节点依次放进结果多项式中。&#x27;&#x27;&#x27;class PolyNode():    def __init__(self,coef,expon):        self.coef = coef        self.expon = expon        self.next = None# a = [[1, 2], [3, 4], [5, 14], [8, 3],[9,11]]# b = [[2,1],[3,4],[2,5],[4,8],[12,3]]a = [[5,2],[10,3],[2,-2],[9,4]]b = [[3,4],[5,7],[-10,2]]class Creat_linkedlist():    def __init__(self,multlist):        self.front = None        self.rear = None        self.multlist = sorted(multlist,key=lambda x:x[1],reverse=True)        self.multadd()        self.show()    def add(self,c,e):  # 添加节点。        node = PolyNode(c,e)        if self.front == None:            self.front = node            self.rear = node        else:            self.rear.next = node  # 不能省略，要指定next的指向。            self.rear = self.rear.next    def show(self):        linckedlist = []        temp = self.front        while temp:            (linckedlist.append([temp.coef,temp.expon]))            temp = temp.next        print(linckedlist)    def multadd(self):        for data in self.multlist:            self.add(data[0],data[1])def add_computing(a_linkedlist,b_linkedlist): # 一元多项式加法。    c_linkedlist = Creat_linkedlist([[0, 0]])    p1 = a_linkedlist.front    p2 = b_linkedlist.front    while(p1 and p2):        if p1.expon == p2.expon:            sum = p1.coef + p2.coef            if sum: # 和非零。                Attach(sum,p1.expon,c_linkedlist)            p1 = p1.next            p2 = p2.next            continue        elif p1.expon &lt; p2.expon:            Attach(p2.coef,p2.expon,c_linkedlist)            p2 = p2.next            continue        else:            Attach(p1.coef,p1.expon,c_linkedlist)            p1 = p1.next            continue    while p1:   # 一条链处理完，把另一条加入新链。        Attach(p1.coef,p1.expon,c_linkedlist)        p1 = p1.next    while p2:        Attach(p2.coef, p2.expon, c_linkedlist)        p2 = p2.next    # 把第一个[0,0] 节点删除。    c_linkedlist.front = c_linkedlist.front.next    return c_linkedlistdef Attach(c,e,linkedlist): # 把一个node续到一个链表的尾部。    p = PolyNode(c,e)    linkedlist.rear.next = p    linkedlist.rear = linkedlist.rear.nexta_linkedlist = Creat_linkedlist(a)b_linkedlist = Creat_linkedlist(b)c_linkedlist = add_computing(a_linkedlist,b_linkedlist)c_linkedlist.show()# 多项式求积# 仅表示非零项，# 用数组实现编程容易调试容易，但是要事先确定数组大小。# 链表实现，动态小强，但是编程相对复杂，调试困难。# 上面例子已经实现了两个一元多项式求和，在上面基础上添加求积方法。&#x27;&#x27;&#x27;多项式求积算法思路：逐项插入p1的第一项乘p2的第一项，指数相加，系数相乘，，插入新链表，以此类推关键在于如何降序插入。可以用左插入和右插入方法，也可以用 一个移动的游标。利用游标逐个比较找到插入点。重新回顾以下链表的基本遍历框架while p:    balaba...labala    p = p.next尤其需要注意，链表的递归嵌套易错点：正确案例如下：t1 = a_linkedlist.frontwhile t1:    t2 = b_linkedlist.front    # 让t2 循环一次后 ，能复位到t2 头指针位置。    while t2:        print(t1.expon,t2.expon)        t2 = t2.next    t1 = t1.next易错写成：t1 = a_linkedlist.frontt2 = b_linkedlist.front      # 这样嵌套的循环一次结束后，无法复位到t2 的头指针位置。while t1:    while t2:        print(t1.expon,t2.expon)        t2 = t2.next    t1 = t1.next&#x27;&#x27;&#x27;def mult(alinkedlist,blinkedlist):    t1 = alinkedlist.front    new_linkedlist = Creat_linkedlist([[0, 0]])    while t1:        t2 = blinkedlist.front        while t2:            c = t1.coef*t2.coef            e = t1.expon+t2.expon            temp = new_linkedlist.front            # 每次插入操作，都要从头利用游标temp遍历new_linkedlist链表，跳过不适合的插入点。            # 注意： 要先判断temp的next是否为空，再比指数大小，为空可直接插入，            # 不为空则在指数比插入值指数小的位置前插入。            while temp.next and temp.next.expon &gt; e:                temp = temp.next         #（跳过不适合的插入点）            # 插入前判断指数相等的特殊情况：            if temp.next and temp.next.expon == e:                if (temp.next.coef + c) == 0:                    temp.next = temp.next.next    #系数和为0，直接删除。                else:                    temp.next.coef =  temp.next.coef + c  # 指数相同改系数即可，不用插入。                    print(temp.next.coef,c)            else: #理想位置temp已经出现，开始插入：                p = PolyNode(c,e)                p.next = temp.next                temp.next = p            t2 = t2.next        t1 = t1.next    new_linkedlist.front = new_linkedlist.front.next    return new_linkedlistd_linkedlist = mult(a_linkedlist,b_linkedlist)d_linkedlist.show()\n\n","dateCreated":"2021-09-27T20:00:36+08:00","dateModified":"2022-10-28T23:32:44+08:00","datePublished":"2021-09-27T20:00:36+08:00","description":"","headline":"6队列","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/6%E9%98%9F%E5%88%97/"},"publisher":{"@type":"Organization","name":"陈宇韶chenyushao","sameAs":["https://github.com/","https://www.linkedin.com/profile/","mailto"]},"url":"http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/6%E9%98%9F%E5%88%97/","keywords":"队列"}</script>
+    <meta name="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="6队列">
+<meta property="og:url" content="http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/6%E9%98%9F%E5%88%97/index.html">
+<meta property="og:site_name" content="Tiger_pop&#39;s Blog">
+<meta property="og:description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2021-09-27T12:00:36.000Z">
+<meta property="article:modified_time" content="2022-10-28T15:32:44.141Z">
+<meta property="article:author" content="陈宇韶chenyushao">
+<meta property="article:tag" content="队列">
+<meta name="twitter:card" content="summary">
+    
+    
+        
+    
+    
+    
+    
+    
+    <!--STYLES-->
+    
+<link rel="stylesheet" href="/assets/css/style-yrbj4x87sme2npnaj5hmxl88fi8ktzpa1hwzrvan2almcpvu5niegj13ryff.min.css">
+
+    <!--STYLES END-->
+    
+
+    
+
+    
+        
+    
+</head>
+
+    <body>
+        <div id="blog">
+            <!-- Define author's picture -->
+
+
+    
+
+<header id="header" data-behavior="4">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <div class="header-title">
+        <a
+            class="header-title-link"
+            href="/"
+            aria-label=""
+        >
+            Tiger_pop&#39;s Blog
+        </a>
+    </div>
+    
+        
+            <a
+                class="header-right-picture "
+                href="#about"
+                aria-label="Open the link: /#about"
+            >
+        
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+<nav id="sidebar" data-behavior="4">
+    <div class="sidebar-container">
+        
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/"
+                            
+                            rel="noopener"
+                            title="Home"
+                        >
+                        <i class="sidebar-button-icon fa fa-home" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Home</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-categories"
+                            
+                            rel="noopener"
+                            title="Categories"
+                        >
+                        <i class="sidebar-button-icon fa fa-bookmark" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Categories</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-tags"
+                            
+                            rel="noopener"
+                            title="Tags"
+                        >
+                        <i class="sidebar-button-icon fa fa-tags" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Tags</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-archives"
+                            
+                            rel="noopener"
+                            title="Archives"
+                        >
+                        <i class="sidebar-button-icon fa fa-archive" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Archives</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="#about"
+                            
+                            rel="noopener"
+                            title="About"
+                        >
+                        <i class="sidebar-button-icon fa fa-question" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">About</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://github.com/"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="GitHub"
+                        >
+                        <i class="sidebar-button-icon fab fa-github" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">GitHub</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://www.linkedin.com/profile/"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="LinkedIn"
+                        >
+                        <i class="sidebar-button-icon fab fa-linkedin" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">LinkedIn</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/mailto"
+                            
+                            rel="noopener"
+                            title="Mail"
+                        >
+                        <i class="sidebar-button-icon fa fa-envelope" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Mail</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/atom.xml"
+                            
+                            rel="noopener"
+                            title="RSS"
+                        >
+                        <i class="sidebar-button-icon fa fa-rss" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">RSS</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+    </div>
+</nav>
+
+            
+            <div id="main" data-behavior="4"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post">
+    
+    
+        <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title">
+            6队列
+        </h1>
+    
+    
+        <div class="post-meta">
+    <time datetime="2021-09-27T20:00:36+08:00">
+	
+		    Sep 27, 2021
+    	
+    </time>
+    
+        <span>in </span>
+        
+    <a class="category-link" href="/categories/%E6%B5%99%E5%A4%A7%E7%AE%97%E6%B3%95%E4%B8%8E%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B-python%E5%AE%9E%E7%8E%B0/">浙大算法与数据结构课程(python实现)</a>
+
+
+    
+</div>
+
+    
+</div>
+
+    
+    <div class="post-content markdown">
+        <div class="main-content-wrap">
+            <figure class="highlight python"><figcaption><span><span id="more"></span></span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br><span class="line">267</span><br><span class="line">268</span><br><span class="line">269</span><br><span class="line">270</span><br><span class="line">271</span><br><span class="line">272</span><br><span class="line">273</span><br><span class="line">274</span><br><span class="line">275</span><br><span class="line">276</span><br><span class="line">277</span><br><span class="line">278</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 队列的顺序结构存储实现</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 队列尾巴rear入，队列头front出，</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># front默认在-1位置，也就是说front没有进入队列。</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 可以想象成一个可以打开底部的栈，</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 但是出队列一个元素，已有队列元素不会自动往下掉。（一个水平放置的管子）</span></span><br><span class="line"></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">class Q():</span></span><br><span class="line"><span class="string">    Data[MaxSize]</span></span><br><span class="line"><span class="string">    rear</span></span><br><span class="line"><span class="string">    front</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 循环队列，</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 循环队列其实也是一管子，但是会智能填空。</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># front和rear都指向同一个位置，像一个环。</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 两种方案判断满：null时头尾都在同一位置。</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 1、只装n-1个元素，（rear+1）% maxsize = front 时算满。注意front其实没有进入队列。</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 2、装n个元素，环空间塞满，用额外的size变量不断自加，size==maxsize为满。</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 以下为方法 1实现循环队列 的例子：</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Queue</span>():</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self,MaxSize</span>):</span><br><span class="line">        self.size = MaxSize</span><br><span class="line">        self.rear = <span class="number">0</span></span><br><span class="line">        self.front = <span class="number">0</span></span><br><span class="line">        self.Data = [<span class="literal">None</span>] * self.size</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">add</span>(<span class="params">self,item</span>):</span><br><span class="line">        <span class="keyword">if</span> (self.rear+<span class="number">1</span>)%self.size == self.front:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&#x27;队列已经满了,添加%s失败&#x27;</span>%item)</span><br><span class="line">            <span class="keyword">return</span></span><br><span class="line">        self.rear += <span class="number">1</span></span><br><span class="line">        self.Data[self.rear] = item</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">out</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">if</span> self.rear == self.front:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&#x27;队列为空&#x27;</span>)</span><br><span class="line">        self.front = (self.front+<span class="number">1</span>)%self.size</span><br><span class="line">        out_item = self.Data[self.front]</span><br><span class="line">        self.Data[self.front] = <span class="literal">None</span></span><br><span class="line">        <span class="keyword">return</span> out_item</span><br><span class="line"></span><br><span class="line">q = Queue(<span class="number">3</span>)</span><br><span class="line">q.add(<span class="number">9</span>)</span><br><span class="line">q.add(<span class="number">10</span>)</span><br><span class="line">q.add(<span class="number">11</span>)</span><br><span class="line"><span class="built_in">print</span>(q.Data)</span><br><span class="line"><span class="built_in">print</span>(q.out())</span><br><span class="line"><span class="built_in">print</span>(q.Data)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 链式存储实现队列</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 因为链表的尾部删除操作不方便（因为不知道前一个是什么），</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 所以链尾作rear（指向最后一个元素）。链头作front(指向第一个元素)。</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Node</span>():</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self,data</span>):</span><br><span class="line">        self.data = data</span><br><span class="line">        self.<span class="built_in">next</span> = <span class="literal">None</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Qlinckedlist</span>():</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>):</span><br><span class="line">        self.rear = <span class="literal">None</span></span><br><span class="line">        self.front = <span class="literal">None</span> <span class="comment"># 实际上front就是head。</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">out</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">if</span> self.front == <span class="literal">None</span>:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&#x27;队列为空。&#x27;</span>)</span><br><span class="line">        <span class="comment"># 这里注意：rear指向最后一个元素，与此元素实体绑定，</span></span><br><span class="line">        <span class="comment"># 若链只有一个元素，此元素被删除，rear需要与元素脱离。重定向。</span></span><br><span class="line">        <span class="keyword">if</span> self.front == self.rear:</span><br><span class="line">            self.rear = <span class="literal">None</span>  <span class="comment"># 删除的只剩下一个元素，虽rear不指向元素，但front依然指向它，所以还是可以操作。</span></span><br><span class="line">        temp = self.front</span><br><span class="line">        self.front = temp.<span class="built_in">next</span></span><br><span class="line">        <span class="keyword">return</span> temp.data</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">add</span>(<span class="params">self,item</span>):</span><br><span class="line">        node = Node(item)</span><br><span class="line">        <span class="keyword">if</span> self.front == <span class="literal">None</span>:</span><br><span class="line">            self.front = node</span><br><span class="line">            self.rear = node</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            self.rear.<span class="built_in">next</span> = node   <span class="comment"># 不能省略，要指定next的指向。</span></span><br><span class="line">            self.rear = self.rear.<span class="built_in">next</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">show</span>(<span class="params">self</span>):</span><br><span class="line">        linckedlist = []</span><br><span class="line">        temp = self.front</span><br><span class="line">        <span class="keyword">while</span> temp:</span><br><span class="line">            (linckedlist.append(temp.data))</span><br><span class="line">            temp = temp.<span class="built_in">next</span></span><br><span class="line">        <span class="built_in">print</span>(linckedlist)</span><br><span class="line">queue = Qlinckedlist()</span><br><span class="line">queue.add(<span class="number">12</span>)</span><br><span class="line">queue.add(<span class="string">&#x27;x&#x27;</span>)</span><br><span class="line">queue.add(<span class="string">&#x27;y&#x27;</span>)</span><br><span class="line">queue.add(<span class="number">88</span>)</span><br><span class="line">queue.add(<span class="number">99</span>)</span><br><span class="line">queue.show()</span><br><span class="line">queue.out()</span><br><span class="line">queue.out()</span><br><span class="line">queue.show()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 用链式存储结构的队列实现多项式加法运算。</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 两个多项式按指数下降排列。</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 算法思路：</span></span><br><span class="line"></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string"># p1\p2分别指向两个多项式的第一个节点，</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">若：p1.expon==p2.expon,系数相加，若结果！=0，作为结果多项式的系数，</span></span><br><span class="line"><span class="string">p1、p2都向后移动一项。</span></span><br><span class="line"><span class="string">若：p1.expon&gt;p2.expon,p1结果放进结果多项式，p1后移一位。</span></span><br><span class="line"><span class="string">若：p1.expon&lt;p2.expon,p2结果放进结果多项式，p2后移一位。</span></span><br><span class="line"><span class="string">某一边的多项式挪完了，将另一个多项式剩余节点依次放进结果多项式中。</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">PolyNode</span>():</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self,coef,expon</span>):</span><br><span class="line">        self.coef = coef</span><br><span class="line">        self.expon = expon</span><br><span class="line">        self.<span class="built_in">next</span> = <span class="literal">None</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># a = [[1, 2], [3, 4], [5, 14], [8, 3],[9,11]]</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># b = [[2,1],[3,4],[2,5],[4,8],[12,3]]</span></span><br><span class="line"></span><br><span class="line">a = [[<span class="number">5</span>,<span class="number">2</span>],[<span class="number">10</span>,<span class="number">3</span>],[<span class="number">2</span>,-<span class="number">2</span>],[<span class="number">9</span>,<span class="number">4</span>]]</span><br><span class="line">b = [[<span class="number">3</span>,<span class="number">4</span>],[<span class="number">5</span>,<span class="number">7</span>],[-<span class="number">10</span>,<span class="number">2</span>]]</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Creat_linkedlist</span>():</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self,multlist</span>):</span><br><span class="line">        self.front = <span class="literal">None</span></span><br><span class="line">        self.rear = <span class="literal">None</span></span><br><span class="line">        self.multlist = <span class="built_in">sorted</span>(multlist,key=<span class="keyword">lambda</span> x:x[<span class="number">1</span>],reverse=<span class="literal">True</span>)</span><br><span class="line">        self.multadd()</span><br><span class="line">        self.show()</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">add</span>(<span class="params">self,c,e</span>):  <span class="comment"># 添加节点。</span></span><br><span class="line">        node = PolyNode(c,e)</span><br><span class="line">        <span class="keyword">if</span> self.front == <span class="literal">None</span>:</span><br><span class="line">            self.front = node</span><br><span class="line">            self.rear = node</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            self.rear.<span class="built_in">next</span> = node  <span class="comment"># 不能省略，要指定next的指向。</span></span><br><span class="line">            self.rear = self.rear.<span class="built_in">next</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">show</span>(<span class="params">self</span>):</span><br><span class="line">        linckedlist = []</span><br><span class="line">        temp = self.front</span><br><span class="line">        <span class="keyword">while</span> temp:</span><br><span class="line">            (linckedlist.append([temp.coef,temp.expon]))</span><br><span class="line">            temp = temp.<span class="built_in">next</span></span><br><span class="line">        <span class="built_in">print</span>(linckedlist)</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">multadd</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">for</span> data <span class="keyword">in</span> self.multlist:</span><br><span class="line">            self.add(data[<span class="number">0</span>],data[<span class="number">1</span>])</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">add_computing</span>(<span class="params">a_linkedlist,b_linkedlist</span>): <span class="comment"># 一元多项式加法。</span></span><br><span class="line">    c_linkedlist = Creat_linkedlist([[<span class="number">0</span>, <span class="number">0</span>]])</span><br><span class="line">    p1 = a_linkedlist.front</span><br><span class="line">    p2 = b_linkedlist.front</span><br><span class="line">    <span class="keyword">while</span>(p1 <span class="keyword">and</span> p2):</span><br><span class="line">        <span class="keyword">if</span> p1.expon == p2.expon:</span><br><span class="line">            <span class="built_in">sum</span> = p1.coef + p2.coef</span><br><span class="line">            <span class="keyword">if</span> <span class="built_in">sum</span>: <span class="comment"># 和非零。</span></span><br><span class="line">                Attach(<span class="built_in">sum</span>,p1.expon,c_linkedlist)</span><br><span class="line">            p1 = p1.<span class="built_in">next</span></span><br><span class="line">            p2 = p2.<span class="built_in">next</span></span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line">        <span class="keyword">elif</span> p1.expon &lt; p2.expon:</span><br><span class="line">            Attach(p2.coef,p2.expon,c_linkedlist)</span><br><span class="line">            p2 = p2.<span class="built_in">next</span></span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            Attach(p1.coef,p1.expon,c_linkedlist)</span><br><span class="line">            p1 = p1.<span class="built_in">next</span></span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line">    <span class="keyword">while</span> p1:   <span class="comment"># 一条链处理完，把另一条加入新链。</span></span><br><span class="line">        Attach(p1.coef,p1.expon,c_linkedlist)</span><br><span class="line">        p1 = p1.<span class="built_in">next</span></span><br><span class="line">    <span class="keyword">while</span> p2:</span><br><span class="line">        Attach(p2.coef, p2.expon, c_linkedlist)</span><br><span class="line">        p2 = p2.<span class="built_in">next</span></span><br><span class="line">    <span class="comment"># 把第一个[0,0] 节点删除。</span></span><br><span class="line">    c_linkedlist.front = c_linkedlist.front.<span class="built_in">next</span></span><br><span class="line">    <span class="keyword">return</span> c_linkedlist</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">Attach</span>(<span class="params">c,e,linkedlist</span>): <span class="comment"># 把一个node续到一个链表的尾部。</span></span><br><span class="line">    p = PolyNode(c,e)</span><br><span class="line">    linkedlist.rear.<span class="built_in">next</span> = p</span><br><span class="line">    linkedlist.rear = linkedlist.rear.<span class="built_in">next</span></span><br><span class="line"></span><br><span class="line">a_linkedlist = Creat_linkedlist(a)</span><br><span class="line">b_linkedlist = Creat_linkedlist(b)</span><br><span class="line">c_linkedlist = add_computing(a_linkedlist,b_linkedlist)</span><br><span class="line">c_linkedlist.show()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 多项式求积</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 仅表示非零项，</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 用数组实现编程容易调试容易，但是要事先确定数组大小。</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 链表实现，动态小强，但是编程相对复杂，调试困难。</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 上面例子已经实现了两个一元多项式求和，在上面基础上添加求积方法。</span></span><br><span class="line"></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">多项式求积算法思路：</span></span><br><span class="line"><span class="string">逐项插入</span></span><br><span class="line"><span class="string">p1的第一项乘p2的第一项，指数相加，系数相乘，，插入新链表，以此类推</span></span><br><span class="line"><span class="string">关键在于如何降序插入。可以用左插入和右插入方法，</span></span><br><span class="line"><span class="string">也可以用 一个移动的游标。利用游标逐个比较找到插入点。</span></span><br><span class="line"><span class="string">重新回顾以下链表的基本遍历框架</span></span><br><span class="line"><span class="string">while p:</span></span><br><span class="line"><span class="string">    balaba...labala</span></span><br><span class="line"><span class="string">    p = p.next</span></span><br><span class="line"><span class="string">尤其需要注意，链表的递归嵌套易错点：</span></span><br><span class="line"><span class="string">正确案例如下：</span></span><br><span class="line"><span class="string">t1 = a_linkedlist.front</span></span><br><span class="line"><span class="string">while t1:</span></span><br><span class="line"><span class="string">    t2 = b_linkedlist.front    # 让t2 循环一次后 ，能复位到t2 头指针位置。</span></span><br><span class="line"><span class="string">    while t2:</span></span><br><span class="line"><span class="string">        print(t1.expon,t2.expon)</span></span><br><span class="line"><span class="string">        t2 = t2.next</span></span><br><span class="line"><span class="string">    t1 = t1.next</span></span><br><span class="line"><span class="string">易错写成：</span></span><br><span class="line"><span class="string">t1 = a_linkedlist.front</span></span><br><span class="line"><span class="string">t2 = b_linkedlist.front      # 这样嵌套的循环一次结束后，无法复位到t2 的头指针位置。</span></span><br><span class="line"><span class="string">while t1:</span></span><br><span class="line"><span class="string">    while t2:</span></span><br><span class="line"><span class="string">        print(t1.expon,t2.expon)</span></span><br><span class="line"><span class="string">        t2 = t2.next</span></span><br><span class="line"><span class="string">    t1 = t1.next</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">mult</span>(<span class="params">alinkedlist,blinkedlist</span>):</span><br><span class="line">    t1 = alinkedlist.front</span><br><span class="line">    new_linkedlist = Creat_linkedlist([[<span class="number">0</span>, <span class="number">0</span>]])</span><br><span class="line">    <span class="keyword">while</span> t1:</span><br><span class="line">        t2 = blinkedlist.front</span><br><span class="line">        <span class="keyword">while</span> t2:</span><br><span class="line">            c = t1.coef*t2.coef</span><br><span class="line">            e = t1.expon+t2.expon</span><br><span class="line">            temp = new_linkedlist.front</span><br><span class="line">            <span class="comment"># 每次插入操作，都要从头利用游标temp遍历new_linkedlist链表，跳过不适合的插入点。</span></span><br><span class="line">            <span class="comment"># 注意： 要先判断temp的next是否为空，再比指数大小，为空可直接插入，</span></span><br><span class="line">            <span class="comment"># 不为空则在指数比插入值指数小的位置前插入。</span></span><br><span class="line">            <span class="keyword">while</span> temp.<span class="built_in">next</span> <span class="keyword">and</span> temp.<span class="built_in">next</span>.expon &gt; e:</span><br><span class="line">                temp = temp.<span class="built_in">next</span>         <span class="comment">#（跳过不适合的插入点）</span></span><br><span class="line">            <span class="comment"># 插入前判断指数相等的特殊情况：</span></span><br><span class="line">            <span class="keyword">if</span> temp.<span class="built_in">next</span> <span class="keyword">and</span> temp.<span class="built_in">next</span>.expon == e:</span><br><span class="line">                <span class="keyword">if</span> (temp.<span class="built_in">next</span>.coef + c) == <span class="number">0</span>:</span><br><span class="line">                    temp.<span class="built_in">next</span> = temp.<span class="built_in">next</span>.<span class="built_in">next</span>    <span class="comment">#系数和为0，直接删除。</span></span><br><span class="line">                <span class="keyword">else</span>:</span><br><span class="line">                    temp.<span class="built_in">next</span>.coef =  temp.<span class="built_in">next</span>.coef + c  <span class="comment"># 指数相同改系数即可，不用插入。</span></span><br><span class="line">                    <span class="built_in">print</span>(temp.<span class="built_in">next</span>.coef,c)</span><br><span class="line">            <span class="keyword">else</span>: <span class="comment">#理想位置temp已经出现，开始插入：</span></span><br><span class="line">                p = PolyNode(c,e)</span><br><span class="line">                p.<span class="built_in">next</span> = temp.<span class="built_in">next</span></span><br><span class="line">                temp.<span class="built_in">next</span> = p</span><br><span class="line">            t2 = t2.<span class="built_in">next</span></span><br><span class="line">        t1 = t1.<span class="built_in">next</span></span><br><span class="line">    new_linkedlist.front = new_linkedlist.front.<span class="built_in">next</span></span><br><span class="line">    <span class="keyword">return</span> new_linkedlist</span><br><span class="line"></span><br><span class="line">d_linkedlist = mult(a_linkedlist,b_linkedlist)</span><br><span class="line">d_linkedlist.show()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+            
+
+
+        </div>
+    </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
+        
+            <div class="post-footer-tags">
+                <span class="text-color-light text-small">TAGGED IN</span><br/>
+                
+    <a class="tag tag--primary tag--small t-none-link" href="/tags/%E9%98%9F%E5%88%97/" rel="tag">队列</a>
+
+            </div>
+        
+        
+            <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/66sort_with_swap/"
+                    data-tooltip="66sort_with_swap"
+                    aria-label="PREVIOUS: 66sort_with_swap"
+                >
+                    
+                        <i class="fa fa-angle-left" aria-hidden="true"></i>
+                        <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+                    </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/8.2%E4%B8%A4%E7%A7%8D%E6%89%93%E5%8D%B0%E4%BA%8C%E5%8F%89%E6%A0%91%E6%A0%B9%E5%88%B0%E5%8F%B6%E5%AD%90%E7%BB%93%E7%82%B9%E8%B7%AF%E5%BE%84/"
+                    data-tooltip="8.2两种打印二叉树根到叶子结点路径"
+                    aria-label="NEXT: 8.2两种打印二叉树根到叶子结点路径"
+                >
+                    
+                        <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                    </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a
+                class="post-action-btn btn btn--default btn-open-shareoptions"
+                href="#btn-open-shareoptions"
+                aria-label="Share this post"
+            >
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/6%E9%98%9F%E5%88%97/"
+                    title="Share on Facebook"
+                    aria-label="Share on Facebook"
+                >
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://twitter.com/intent/tweet?text=http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/6%E9%98%9F%E5%88%97/"
+                    title="Share on Twitter"
+                    aria-label="Share on Twitter"
+                >
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://plus.google.com/share?url=http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/6%E9%98%9F%E5%88%97/"
+                    title="Share on Google+"
+                    aria-label="Share on Google+"
+                >
+                    <i class="fab fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+        
+        
+            
+        
+    </div>
+</article>
+
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2022 陈宇韶chenyushao. All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/66sort_with_swap/"
+                    data-tooltip="66sort_with_swap"
+                    aria-label="PREVIOUS: 66sort_with_swap"
+                >
+                    
+                        <i class="fa fa-angle-left" aria-hidden="true"></i>
+                        <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+                    </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/8.2%E4%B8%A4%E7%A7%8D%E6%89%93%E5%8D%B0%E4%BA%8C%E5%8F%89%E6%A0%91%E6%A0%B9%E5%88%B0%E5%8F%B6%E5%AD%90%E7%BB%93%E7%82%B9%E8%B7%AF%E5%BE%84/"
+                    data-tooltip="8.2两种打印二叉树根到叶子结点路径"
+                    aria-label="NEXT: 8.2两种打印二叉树根到叶子结点路径"
+                >
+                    
+                        <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                    </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a
+                class="post-action-btn btn btn--default btn-open-shareoptions"
+                href="#btn-open-shareoptions"
+                aria-label="Share this post"
+            >
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/6%E9%98%9F%E5%88%97/"
+                    title="Share on Facebook"
+                    aria-label="Share on Facebook"
+                >
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://twitter.com/intent/tweet?text=http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/6%E9%98%9F%E5%88%97/"
+                    title="Share on Twitter"
+                    aria-label="Share on Twitter"
+                >
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://plus.google.com/share?url=http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/6%E9%98%9F%E5%88%97/"
+                    title="Share on Google+"
+                    aria-label="Share on Google+"
+                >
+                    <i class="fab fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+                </div>
+                
+    <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+        <i id="btn-close-shareoptions" class="fa fa-times"></i>
+        <ul class="share-options">
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="https://www.facebook.com/sharer/sharer.php?u=http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/6%E9%98%9F%E5%88%97/"
+                        aria-label="Share on Facebook"
+                    >
+                        <i class="fab fa-facebook" aria-hidden="true"></i><span>Share on Facebook</span>
+                    </a>
+                </li>
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="https://twitter.com/intent/tweet?text=http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/6%E9%98%9F%E5%88%97/"
+                        aria-label="Share on Twitter"
+                    >
+                        <i class="fab fa-twitter" aria-hidden="true"></i><span>Share on Twitter</span>
+                    </a>
+                </li>
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="https://plus.google.com/share?url=http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/6%E9%98%9F%E5%88%97/"
+                        aria-label="Share on Google+"
+                    >
+                        <i class="fab fa-google-plus" aria-hidden="true"></i><span>Share on Google+</span>
+                    </a>
+                </li>
+            
+        </ul>
+    </div>
+
+
+            
+        </div>
+        
+
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-times"></i>
+        </div>
+        
+            <h4 id="about-card-name">陈宇韶chenyushao</h4>
+        
+            <div id="about-card-bio"><p>author.bio</p>
+</div>
+        
+        
+            <div id="about-card-job">
+                <i class="fa fa-briefcase"></i>
+                <br/>
+                <p>author.job</p>
+
+            </div>
+        
+        
+    </div>
+</div>
+
+        
+        
+<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
+        <!--SCRIPTS-->
+
+<script src="/assets/js/script-sbgpeqyl6jw5qe60mnfuzifzwky5la4ftiuwmschcdzx2pg5tfpl1pfp13e3.min.js"></script>
+
+<!--SCRIPTS END-->
+
+
+    
+
+
+
+
+    </body>
+</html>

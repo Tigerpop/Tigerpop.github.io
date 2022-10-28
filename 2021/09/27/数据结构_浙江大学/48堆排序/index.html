@@ -1,0 +1,597 @@
+
+<!DOCTYPE html>
+<html lang="en">
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Tiger_pop&#39;s Blog">
+    <title>48堆排序 - Tiger_pop&#39;s Blog</title>
+    <meta name="author" content="陈宇韶chenyushao">
+    
+    
+    
+        
+            <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
+        
+    
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"陈宇韶chenyushao","sameAs":["https://github.com/","https://www.linkedin.com/profile/","mailto"]},"articleBody":"123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384858687888990919293949596979899100101102103104105106107108109110111112113114115116117118119120121122123124125126127128129130131132133134135136137138139140141142143144145146147148149150151152153154155156157&#x27;&#x27;&#x27;堆排序算法    堆排序算法是在选择排序的基础上发展而来的。&#x27;&#x27;&#x27;# ****************************************************************************************************# 利用最小堆，原始版本堆排序。class HeapStruct_2():    def __init__(self,elements=[None],addre=0,capacity=0):        self.elements = elements        self.addre = addre # addre 相当于指针，表明堆中最大的那个位置。        self.capacity = capacity    def MinHeapCreate(self,Capacity_Size):        print(&#x27; 若插入数值，请确保插入数值在 0 以上 。结点容量为%d&#x27;%Capacity_Size)        self.elements = [None] * (Capacity_Size+1) # 因为有&quot;哨兵&quot;。        self.capacity = Capacity_Size        self.elements[0] = self.MinData() # 定义哨兵，其值小于堆中最小值，便于以后更快操作。        print(&#x27;self capacity = %s&#x27;%self.capacity)    def MinData(self):        return 0    def Insert(self,item):        if self.IsFull():            print(&#x27;最小堆已满&#x27;)            return        i = self.addre + 1        if self.elements[0] &gt;= item:            print(&#x27;插入数值大小小于下限&#x27;)            return        while self.elements[i//2] &gt; item: # i/2 address是父结点的位置。加入值比父类结点小就往上走。这个循环是找到插入位置，并为插入点腾开位置。            print(self.elements[i//2],item)            self.elements[i] = self.elements[i//2] # 值得一提：树结构中移动，有的可变动值，而不动结点结构。            i //= 2        self.elements[i] = item        self.addre += 1    def IsFull(self):        if self.addre == self.capacity:            print( self.addre,self.capacity)            return 1        return 0    def IsEmpty(self):        if self.addre == 0:            return 1        return    def DeleteMin(self):        if self.IsEmpty():            print(&#x27;最小堆已空。&#x27;)            return        minitem = self.elements[1]        temp = self.elements[self.addre]        self.elements[self.addre] = None        self.addre -= 1 # 拿掉最后一个结点。        parent = 1        # 保证比最小的儿子还要小，就向上走。        while parent*2 &lt;= self.addre: # 保证有儿子（必有左儿子）（可能有右儿子）            left_child = parent * 2            if self.addre != left_child and self.elements[left_child+1] &lt; self.elements[left_child]:                child = left_child + 1            else:                child = left_child            if self.elements[child] &lt;= temp: # 假定temp在根位置。                self.elements[parent] = self.elements[child]                parent = child  # 沿着最小儿子的路径往下走。            elif self.elements[child] &gt; temp:                self.elements[parent] = temp # 找到适合位置。                return minitem        self.elements[parent] = temp  # 在有儿子的情况到循环结束，没有temp的落脚点，此时叶子结点parent那个位置适合temp。        return minitem&#x27;&#x27;&#x27;原始的堆排序算法。&#x27;&#x27;&#x27;# 原始的堆排序算法（多浪费O(N)的空间）总的时间复杂度 T = O(Nlog(N))。def Heap_Sort(A):   # 目的是改A , 但是堆中实际上是又开辟了一个A一样大小的空间，（多浪费O(N)的空间）。    N = len(A)    h = HeapStruct_2()    h.MinHeapCreate(12)    BuildHeap(A,h)                   #  O(NlogN) 因为我是用最傻的硬插的方法造新堆。    for i in range(N):               #  O(N)        A[i] = h.DeleteMin()         #  O(log（N))def BuildHeap(A,h):    for a in A:        h.Insert(a)# def DeleteMin(A):A_ = [1,5,6,2,4,3,8,9,7]Heap_Sort(A_)print(&#x27;原始的堆排序 时间复杂度O(NlogN）、空间复杂度 2N,结构如下：\\n&#x27;,A_,&#x27;\\n&#x27;)# ****************************************************************************************************# 不利用最小堆而利用最大堆，改进版本堆排序。# 步骤一：把数组（i ～ N）部分调整为最大堆。# 步骤二：把最大堆根元素和最后一个元素换一个位置，固定最大值到数组末尾N-1位置。# 步骤一：把数组（i ～ N-1）部分调整为最大堆。# 步骤二：把最大堆根元素和倒数第二个元素换一个位置，固定最大值到数组N-2位置。# ...# 注释：所谓的结点下沉 shiftdown，# 就是前面学过的# 假定temp在根位置，从根往下找位置并调整树结构的过程。# 正式发行版 堆排序。def Heap_Sort_new(A):                # 默认有&quot;哨兵&quot;在0位置，所以后序都在1位置往后变动。    N = len(A)    for i in range(int(N/2),0,-1):   # BuildHeap，在有&quot;哨兵&quot;时，其倒数第一个子结点为叶子结点的位置就在N/2处。        PercDown(A,i,N-1)            # i 对应的是每次shiftdown的根位置，N-1对应最后一个元素的位置。    for i in range(N-1,0,-1):        # DeleteMax        Swap(A,1,i)        PercDown(A,1,i-1)            # 每次下沉，都会有一个最大的数补充到root位置，还是最大堆。# PercDown就是 shiftdown，时间复杂度为 O(logN)。# 在有&quot;哨兵&quot;时，其倒数第一个子结点为叶子结点的位置就在N/2处。def PercDown(A,i,num):    parent = i    temp = A[i]    while parent * 2 &lt;= num:         # 保证有儿子（必有左儿子）（可能有右儿子）        left_child = parent * 2        if num != left_child and A[left_child + 1] &gt; A[left_child]:            child = left_child + 1        else:            child = left_child        if A[child] &gt;= temp:         # 假定temp在根位置。            A[parent] = A[child]            parent = child           # 沿着最大儿子的路径往下走。        elif A[child] &lt; temp:            A[parent] = temp         # 找到适合位置。            return    A[parent] = temp  # 在有儿子的情况到循环结束，没有temp的落脚点，此时叶子结点parent那个位置适合temp。def Swap(A,a,b):    temp = A[a]    A[a] = A[b]    A[b] = temp    # print(A[a],A[b],&#x27;!!!&#x27;)A = [1,5,6,2,4,3,8,9,7]A.insert(0,-1)  # 加个&quot;哨兵&quot;Heap_Sort_new(A)A.pop(0)       # 不看&quot;哨兵&quot;print(&#x27;用heapify堆化的堆排序 平均时间复杂度O( 2NlogN - O(NloglogN) ）、空间复杂度 N,结构如下：\\n&#x27;,A,&#x27;\\n&#x27;)\n\n","dateCreated":"2021-09-27T20:00:36+08:00","dateModified":"2022-10-29T00:00:40+08:00","datePublished":"2021-09-27T20:00:36+08:00","description":"","headline":"48堆排序","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/48%E5%A0%86%E6%8E%92%E5%BA%8F/"},"publisher":{"@type":"Organization","name":"陈宇韶chenyushao","sameAs":["https://github.com/","https://www.linkedin.com/profile/","mailto"]},"url":"http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/48%E5%A0%86%E6%8E%92%E5%BA%8F/","keywords":"堆, 排序"}</script>
+    <meta name="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="48堆排序">
+<meta property="og:url" content="http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/48%E5%A0%86%E6%8E%92%E5%BA%8F/index.html">
+<meta property="og:site_name" content="Tiger_pop&#39;s Blog">
+<meta property="og:description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2021-09-27T12:00:36.000Z">
+<meta property="article:modified_time" content="2022-10-28T16:00:40.440Z">
+<meta property="article:author" content="陈宇韶chenyushao">
+<meta property="article:tag" content="堆">
+<meta property="article:tag" content="排序">
+<meta name="twitter:card" content="summary">
+    
+    
+        
+    
+    
+    
+    
+    
+    <!--STYLES-->
+    
+<link rel="stylesheet" href="/assets/css/style-yrbj4x87sme2npnaj5hmxl88fi8ktzpa1hwzrvan2almcpvu5niegj13ryff.min.css">
+
+    <!--STYLES END-->
+    
+
+    
+
+    
+        
+    
+</head>
+
+    <body>
+        <div id="blog">
+            <!-- Define author's picture -->
+
+
+    
+
+<header id="header" data-behavior="4">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <div class="header-title">
+        <a
+            class="header-title-link"
+            href="/"
+            aria-label=""
+        >
+            Tiger_pop&#39;s Blog
+        </a>
+    </div>
+    
+        
+            <a
+                class="header-right-picture "
+                href="#about"
+                aria-label="Open the link: /#about"
+            >
+        
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+<nav id="sidebar" data-behavior="4">
+    <div class="sidebar-container">
+        
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/"
+                            
+                            rel="noopener"
+                            title="Home"
+                        >
+                        <i class="sidebar-button-icon fa fa-home" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Home</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-categories"
+                            
+                            rel="noopener"
+                            title="Categories"
+                        >
+                        <i class="sidebar-button-icon fa fa-bookmark" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Categories</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-tags"
+                            
+                            rel="noopener"
+                            title="Tags"
+                        >
+                        <i class="sidebar-button-icon fa fa-tags" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Tags</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-archives"
+                            
+                            rel="noopener"
+                            title="Archives"
+                        >
+                        <i class="sidebar-button-icon fa fa-archive" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Archives</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="#about"
+                            
+                            rel="noopener"
+                            title="About"
+                        >
+                        <i class="sidebar-button-icon fa fa-question" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">About</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://github.com/"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="GitHub"
+                        >
+                        <i class="sidebar-button-icon fab fa-github" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">GitHub</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://www.linkedin.com/profile/"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="LinkedIn"
+                        >
+                        <i class="sidebar-button-icon fab fa-linkedin" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">LinkedIn</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/mailto"
+                            
+                            rel="noopener"
+                            title="Mail"
+                        >
+                        <i class="sidebar-button-icon fa fa-envelope" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Mail</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/atom.xml"
+                            
+                            rel="noopener"
+                            title="RSS"
+                        >
+                        <i class="sidebar-button-icon fa fa-rss" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">RSS</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+    </div>
+</nav>
+
+            
+            <div id="main" data-behavior="4"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post">
+    
+    
+        <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title">
+            48堆排序
+        </h1>
+    
+    
+        <div class="post-meta">
+    <time datetime="2021-09-27T20:00:36+08:00">
+	
+		    Sep 27, 2021
+    	
+    </time>
+    
+        <span>in </span>
+        
+    <a class="category-link" href="/categories/%E6%B5%99%E5%A4%A7%E7%AE%97%E6%B3%95%E4%B8%8E%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B-python%E5%AE%9E%E7%8E%B0/">浙大算法与数据结构课程(python实现)</a>
+
+
+    
+</div>
+
+    
+</div>
+
+    
+    <div class="post-content markdown">
+        <div class="main-content-wrap">
+            <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">堆排序算法</span></span><br><span class="line"><span class="string">    堆排序算法是在选择排序的基础上发展而来的。</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># ****************************************************************************************************</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 利用最小堆，原始版本堆排序。</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">HeapStruct_2</span>():</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self,elements=[<span class="literal">None</span>],addre=<span class="number">0</span>,capacity=<span class="number">0</span></span>):</span><br><span class="line">        self.elements = elements</span><br><span class="line">        self.addre = addre <span class="comment"># addre 相当于指针，表明堆中最大的那个位置。</span></span><br><span class="line">        self.capacity = capacity</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">MinHeapCreate</span>(<span class="params">self,Capacity_Size</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&#x27; 若插入数值，请确保插入数值在 0 以上 。结点容量为%d&#x27;</span>%Capacity_Size)</span><br><span class="line">        self.elements = [<span class="literal">None</span>] * (Capacity_Size+<span class="number">1</span>) <span class="comment"># 因为有&quot;哨兵&quot;。</span></span><br><span class="line">        self.capacity = Capacity_Size</span><br><span class="line">        self.elements[<span class="number">0</span>] = self.MinData() <span class="comment"># 定义哨兵，其值小于堆中最小值，便于以后更快操作。</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&#x27;self capacity = %s&#x27;</span>%self.capacity)</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">MinData</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">Insert</span>(<span class="params">self,item</span>):</span><br><span class="line">        <span class="keyword">if</span> self.IsFull():</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&#x27;最小堆已满&#x27;</span>)</span><br><span class="line">            <span class="keyword">return</span></span><br><span class="line">        i = self.addre + <span class="number">1</span></span><br><span class="line">        <span class="keyword">if</span> self.elements[<span class="number">0</span>] &gt;= item:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&#x27;插入数值大小小于下限&#x27;</span>)</span><br><span class="line">            <span class="keyword">return</span></span><br><span class="line">        <span class="keyword">while</span> self.elements[i//<span class="number">2</span>] &gt; item: <span class="comment"># i/2 address是父结点的位置。加入值比父类结点小就往上走。这个循环是找到插入位置，并为插入点腾开位置。</span></span><br><span class="line">            <span class="built_in">print</span>(self.elements[i//<span class="number">2</span>],item)</span><br><span class="line">            self.elements[i] = self.elements[i//<span class="number">2</span>] <span class="comment"># 值得一提：树结构中移动，有的可变动值，而不动结点结构。</span></span><br><span class="line">            i //= <span class="number">2</span></span><br><span class="line">        self.elements[i] = item</span><br><span class="line">        self.addre += <span class="number">1</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">IsFull</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">if</span> self.addre == self.capacity:</span><br><span class="line">            <span class="built_in">print</span>( self.addre,self.capacity)</span><br><span class="line">            <span class="keyword">return</span> <span class="number">1</span></span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">IsEmpty</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">if</span> self.addre == <span class="number">0</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="number">1</span></span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">DeleteMin</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">if</span> self.IsEmpty():</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&#x27;最小堆已空。&#x27;</span>)</span><br><span class="line">            <span class="keyword">return</span></span><br><span class="line">        minitem = self.elements[<span class="number">1</span>]</span><br><span class="line">        temp = self.elements[self.addre]</span><br><span class="line">        self.elements[self.addre] = <span class="literal">None</span></span><br><span class="line">        self.addre -= <span class="number">1</span> <span class="comment"># 拿掉最后一个结点。</span></span><br><span class="line">        parent = <span class="number">1</span></span><br><span class="line">        <span class="comment"># 保证比最小的儿子还要小，就向上走。</span></span><br><span class="line">        <span class="keyword">while</span> parent*<span class="number">2</span> &lt;= self.addre: <span class="comment"># 保证有儿子（必有左儿子）（可能有右儿子）</span></span><br><span class="line">            left_child = parent * <span class="number">2</span></span><br><span class="line">            <span class="keyword">if</span> self.addre != left_child <span class="keyword">and</span> self.elements[left_child+<span class="number">1</span>] &lt; self.elements[left_child]:</span><br><span class="line">                child = left_child + <span class="number">1</span></span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                child = left_child</span><br><span class="line">            <span class="keyword">if</span> self.elements[child] &lt;= temp: <span class="comment"># 假定temp在根位置。</span></span><br><span class="line">                self.elements[parent] = self.elements[child]</span><br><span class="line">                parent = child  <span class="comment"># 沿着最小儿子的路径往下走。</span></span><br><span class="line">            <span class="keyword">elif</span> self.elements[child] &gt; temp:</span><br><span class="line">                self.elements[parent] = temp <span class="comment"># 找到适合位置。</span></span><br><span class="line">                <span class="keyword">return</span> minitem</span><br><span class="line">        self.elements[parent] = temp  <span class="comment"># 在有儿子的情况到循环结束，没有temp的落脚点，此时叶子结点parent那个位置适合temp。</span></span><br><span class="line">        <span class="keyword">return</span> minitem</span><br><span class="line"></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">原始的堆排序算法。</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 原始的堆排序算法（多浪费O(N)的空间）总的时间复杂度 T = O(Nlog(N))。</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">Heap_Sort</span>(<span class="params">A</span>):   <span class="comment"># 目的是改A , 但是堆中实际上是又开辟了一个A一样大小的空间，（多浪费O(N)的空间）。</span></span><br><span class="line">    N = <span class="built_in">len</span>(A)</span><br><span class="line">    h = HeapStruct_2()</span><br><span class="line">    h.MinHeapCreate(<span class="number">12</span>)</span><br><span class="line">    BuildHeap(A,h)                   <span class="comment">#  O(NlogN) 因为我是用最傻的硬插的方法造新堆。</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(N):               <span class="comment">#  O(N)</span></span><br><span class="line">        A[i] = h.DeleteMin()         <span class="comment">#  O(log（N))</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">BuildHeap</span>(<span class="params">A,h</span>):</span><br><span class="line">    <span class="keyword">for</span> a <span class="keyword">in</span> A:</span><br><span class="line">        h.Insert(a)</span><br><span class="line"></span><br><span class="line"><span class="comment"># def DeleteMin(A):</span></span><br><span class="line"></span><br><span class="line">A_ = [<span class="number">1</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">2</span>,<span class="number">4</span>,<span class="number">3</span>,<span class="number">8</span>,<span class="number">9</span>,<span class="number">7</span>]</span><br><span class="line">Heap_Sort(A_)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;原始的堆排序 时间复杂度O(NlogN）、空间复杂度 2N,结构如下：\n&#x27;</span>,A_,<span class="string">&#x27;\n&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># ****************************************************************************************************</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 不利用最小堆而利用最大堆，改进版本堆排序。</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 步骤一：把数组（i ～ N）部分调整为最大堆。</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 步骤二：把最大堆根元素和最后一个元素换一个位置，固定最大值到数组末尾N-1位置。</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 步骤一：把数组（i ～ N-1）部分调整为最大堆。</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 步骤二：把最大堆根元素和倒数第二个元素换一个位置，固定最大值到数组N-2位置。</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># ...</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 注释：所谓的结点下沉 shiftdown，</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 就是前面学过的</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 假定temp在根位置，从根往下找位置并调整树结构的过程。</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 正式发行版 堆排序。</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">Heap_Sort_new</span>(<span class="params">A</span>):                <span class="comment"># 默认有&quot;哨兵&quot;在0位置，所以后序都在1位置往后变动。</span></span><br><span class="line">    N = <span class="built_in">len</span>(A)</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">int</span>(N/<span class="number">2</span>),<span class="number">0</span>,-<span class="number">1</span>):   <span class="comment"># BuildHeap，在有&quot;哨兵&quot;时，其倒数第一个子结点为叶子结点的位置就在N/2处。</span></span><br><span class="line">        PercDown(A,i,N-<span class="number">1</span>)            <span class="comment"># i 对应的是每次shiftdown的根位置，N-1对应最后一个元素的位置。</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(N-<span class="number">1</span>,<span class="number">0</span>,-<span class="number">1</span>):        <span class="comment"># DeleteMax</span></span><br><span class="line">        Swap(A,<span class="number">1</span>,i)</span><br><span class="line">        PercDown(A,<span class="number">1</span>,i-<span class="number">1</span>)            <span class="comment"># 每次下沉，都会有一个最大的数补充到root位置，还是最大堆。</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># PercDown就是 shiftdown，时间复杂度为 O(logN)。</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 在有&quot;哨兵&quot;时，其倒数第一个子结点为叶子结点的位置就在N/2处。</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">PercDown</span>(<span class="params">A,i,num</span>):</span><br><span class="line">    parent = i</span><br><span class="line">    temp = A[i]</span><br><span class="line">    <span class="keyword">while</span> parent * <span class="number">2</span> &lt;= num:         <span class="comment"># 保证有儿子（必有左儿子）（可能有右儿子）</span></span><br><span class="line">        left_child = parent * <span class="number">2</span></span><br><span class="line">        <span class="keyword">if</span> num != left_child <span class="keyword">and</span> A[left_child + <span class="number">1</span>] &gt; A[left_child]:</span><br><span class="line">            child = left_child + <span class="number">1</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            child = left_child</span><br><span class="line">        <span class="keyword">if</span> A[child] &gt;= temp:         <span class="comment"># 假定temp在根位置。</span></span><br><span class="line">            A[parent] = A[child]</span><br><span class="line">            parent = child           <span class="comment"># 沿着最大儿子的路径往下走。</span></span><br><span class="line">        <span class="keyword">elif</span> A[child] &lt; temp:</span><br><span class="line">            A[parent] = temp         <span class="comment"># 找到适合位置。</span></span><br><span class="line">            <span class="keyword">return</span></span><br><span class="line">    A[parent] = temp  <span class="comment"># 在有儿子的情况到循环结束，没有temp的落脚点，此时叶子结点parent那个位置适合temp。</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">Swap</span>(<span class="params">A,a,b</span>):</span><br><span class="line">    temp = A[a]</span><br><span class="line">    A[a] = A[b]</span><br><span class="line">    A[b] = temp</span><br><span class="line">    <span class="comment"># print(A[a],A[b],&#x27;!!!&#x27;)</span></span><br><span class="line"></span><br><span class="line">A = [<span class="number">1</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">2</span>,<span class="number">4</span>,<span class="number">3</span>,<span class="number">8</span>,<span class="number">9</span>,<span class="number">7</span>]</span><br><span class="line">A.insert(<span class="number">0</span>,-<span class="number">1</span>)  <span class="comment"># 加个&quot;哨兵&quot;</span></span><br><span class="line">Heap_Sort_new(A)</span><br><span class="line">A.pop(<span class="number">0</span>)       <span class="comment"># 不看&quot;哨兵&quot;</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;用heapify堆化的堆排序 平均时间复杂度O( 2NlogN - O(NloglogN) ）、空间复杂度 N,结构如下：\n&#x27;</span>,A,<span class="string">&#x27;\n&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+
+            
+
+
+        </div>
+    </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
+        
+            <div class="post-footer-tags">
+                <span class="text-color-light text-small">TAGGED IN</span><br/>
+                
+    <a class="tag tag--primary tag--small t-none-link" href="/tags/%E5%A0%86/" rel="tag">堆</a> <a class="tag tag--primary tag--small t-none-link" href="/tags/%E6%8E%92%E5%BA%8F/" rel="tag">排序</a>
+
+            </div>
+        
+        
+            <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/47%E9%80%89%E6%8B%A9%E6%8E%92%E5%BA%8F/"
+                    data-tooltip="47选择排序"
+                    aria-label="PREVIOUS: 47选择排序"
+                >
+                    
+                        <i class="fa fa-angle-left" aria-hidden="true"></i>
+                        <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+                    </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/49%E6%9C%89%E5%BA%8F%E5%AD%90%E5%88%97%E5%BD%92%E5%B9%B6/"
+                    data-tooltip="49有序子列归并"
+                    aria-label="NEXT: 49有序子列归并"
+                >
+                    
+                        <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                    </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a
+                class="post-action-btn btn btn--default btn-open-shareoptions"
+                href="#btn-open-shareoptions"
+                aria-label="Share this post"
+            >
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/48%E5%A0%86%E6%8E%92%E5%BA%8F/"
+                    title="Share on Facebook"
+                    aria-label="Share on Facebook"
+                >
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://twitter.com/intent/tweet?text=http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/48%E5%A0%86%E6%8E%92%E5%BA%8F/"
+                    title="Share on Twitter"
+                    aria-label="Share on Twitter"
+                >
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://plus.google.com/share?url=http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/48%E5%A0%86%E6%8E%92%E5%BA%8F/"
+                    title="Share on Google+"
+                    aria-label="Share on Google+"
+                >
+                    <i class="fab fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+        
+        
+            
+        
+    </div>
+</article>
+
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2022 陈宇韶chenyushao. All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/47%E9%80%89%E6%8B%A9%E6%8E%92%E5%BA%8F/"
+                    data-tooltip="47选择排序"
+                    aria-label="PREVIOUS: 47选择排序"
+                >
+                    
+                        <i class="fa fa-angle-left" aria-hidden="true"></i>
+                        <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+                    </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/49%E6%9C%89%E5%BA%8F%E5%AD%90%E5%88%97%E5%BD%92%E5%B9%B6/"
+                    data-tooltip="49有序子列归并"
+                    aria-label="NEXT: 49有序子列归并"
+                >
+                    
+                        <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                    </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a
+                class="post-action-btn btn btn--default btn-open-shareoptions"
+                href="#btn-open-shareoptions"
+                aria-label="Share this post"
+            >
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/48%E5%A0%86%E6%8E%92%E5%BA%8F/"
+                    title="Share on Facebook"
+                    aria-label="Share on Facebook"
+                >
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://twitter.com/intent/tweet?text=http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/48%E5%A0%86%E6%8E%92%E5%BA%8F/"
+                    title="Share on Twitter"
+                    aria-label="Share on Twitter"
+                >
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://plus.google.com/share?url=http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/48%E5%A0%86%E6%8E%92%E5%BA%8F/"
+                    title="Share on Google+"
+                    aria-label="Share on Google+"
+                >
+                    <i class="fab fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+                </div>
+                
+    <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+        <i id="btn-close-shareoptions" class="fa fa-times"></i>
+        <ul class="share-options">
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="https://www.facebook.com/sharer/sharer.php?u=http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/48%E5%A0%86%E6%8E%92%E5%BA%8F/"
+                        aria-label="Share on Facebook"
+                    >
+                        <i class="fab fa-facebook" aria-hidden="true"></i><span>Share on Facebook</span>
+                    </a>
+                </li>
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="https://twitter.com/intent/tweet?text=http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/48%E5%A0%86%E6%8E%92%E5%BA%8F/"
+                        aria-label="Share on Twitter"
+                    >
+                        <i class="fab fa-twitter" aria-hidden="true"></i><span>Share on Twitter</span>
+                    </a>
+                </li>
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="https://plus.google.com/share?url=http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/48%E5%A0%86%E6%8E%92%E5%BA%8F/"
+                        aria-label="Share on Google+"
+                    >
+                        <i class="fab fa-google-plus" aria-hidden="true"></i><span>Share on Google+</span>
+                    </a>
+                </li>
+            
+        </ul>
+    </div>
+
+
+            
+        </div>
+        
+
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-times"></i>
+        </div>
+        
+            <h4 id="about-card-name">陈宇韶chenyushao</h4>
+        
+            <div id="about-card-bio"><p>author.bio</p>
+</div>
+        
+        
+            <div id="about-card-job">
+                <i class="fa fa-briefcase"></i>
+                <br/>
+                <p>author.job</p>
+
+            </div>
+        
+        
+    </div>
+</div>
+
+        
+        
+<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
+        <!--SCRIPTS-->
+
+<script src="/assets/js/script-sbgpeqyl6jw5qe60mnfuzifzwky5la4ftiuwmschcdzx2pg5tfpl1pfp13e3.min.js"></script>
+
+<!--SCRIPTS END-->
+
+
+    
+
+
+
+
+    </body>
+</html>

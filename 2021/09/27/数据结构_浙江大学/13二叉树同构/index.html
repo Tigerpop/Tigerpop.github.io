@@ -1,0 +1,596 @@
+
+<!DOCTYPE html>
+<html lang="en">
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Tiger_pop&#39;s Blog">
+    <title>13二叉树同构 - Tiger_pop&#39;s Blog</title>
+    <meta name="author" content="陈宇韶chenyushao">
+    
+    
+    
+        
+            <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
+        
+    
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"陈宇韶chenyushao","sameAs":["https://github.com/","https://www.linkedin.com/profile/","mailto"]},"articleBody":"123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384858687888990919293949596979899100101102103104105106107108&#x27;&#x27;&#x27;给定两颗树，t1、t2，如果t1可以通过若干次左右孩子交换变成t2， 两颗树就是&quot;同构&quot;的。这里是二叉树的新的表示方式，不一定从根结点开始，只表示左右孩子的结点编号，而结点编号不一定是按照根结点开始层序遍历排的。&#x27;&#x27;&#x27;&#x27;&#x27;&#x27;之前我们都是用链表表示二叉树，这里我们用顺序结构list 表示二叉树。结构数组表示二叉树：(静态链表)。-1表示为None       A| B | C | Dleft  -1| 2 | -1| -1right  1| 3 | -1| -1编号： 0   1   2   3等价于：       B| A |   | D | Cleft   4| -1|   | -1| -1right  3| 0 |   | -1| -1编号： 0   1   2   3  4&quot; left 和 right 中没有出现的编号，就是根结点的编号 。 &quot;（静态链表）有链表的灵活性，又存放在顺序存储结构的数组中。并非指针指向下一个结点。&#x27;&#x27;&#x27;&#x27;&#x27;&#x27;思路：1、二叉树的表示。2、建立二叉树。(静态链表构建二叉树就是找出根结点。)3、同构判别。     程序框架搭建：main:    r1 = buildtree(t1)    r2 = buildtree(t2)    if isomorphic(r1,r2):        print(&#x27;true&#x27;)&#x27;&#x27;&#x27;class Node():    def __init__(self,element,left=None,right=None):        self.element = element        self.left = left        self.right = rightdef buildtree(BTlist):  # 找根。    check = [None] * len(BTlist)    for i in range(len(BTlist)):        check[i] = 0    for i in range(len(BTlist)):        if BTlist[i] == None:            check[i] = 1            print(&#x27;这里是： 空&#x27;,i)            continue        element = BTlist[i].element        left = BTlist[i].left        print(left,&#x27;第多少次&#x27;,i)        right = BTlist[i].right        if left[0]!=&#x27;-&#x27;:            BTlist[i].left = int(left)            check[BTlist[i].left] = 1     # 有被当成左孩子，就给这个位置打标记1。        else:            BTlist[i].left = None        if right[0]!=&#x27;-&#x27;:            BTlist[i].right = int(right)            check[BTlist[i].right] = 1    #有被当成右孩子，就给这个位置打标记1。        else:            BTlist[i].right = None    for i in range(len(BTlist)): # 根结点不会被当作孩子，所以标记还是0。        if check[i] == 0:            root = i    return rootdef isomorphic(t1,t2,r1,r2):    if r1==None and r2 == None:  #both empty        return 1    if ((r1==None and r2!=None) or (r1!=None and r2 ==None)):        return 0    # one of them is empty    if t1[r1].element!=t2[r2].element:        return 0    # root are different    if t1[r1].left == None and t2[r2].left == None: # both have no left subtree        return isomorphic(t1,t2,t1[r1].right,t2[r2].right)    #  no need to swap the left and the right    if (t1[r1].left!=None and t2[r2].left!=None) and (t1[t1[r1].left].element == t2[t2[r2].left].element):        return (isomorphic(t1,t2,t1[r1].left,t2[r2].left) and isomorphic(t1,t2,t1[r1].right,t2[r2].right))    #  need to swap the left and zhe right    else:        return isomorphic(t1,t2,t1[r1].left,t2[r2].right) and isomorphic(t1,t2,t1[r1].right,t2[r2].left)bt_list = []bt_list.append(Node(&#x27;B&#x27;,&#x27;4&#x27;,&#x27;3&#x27;))bt_list.append(Node(&#x27;A&#x27;,&#x27;-1&#x27;,&#x27;0&#x27;))bt_list.append(None)bt_list.append(Node(&#x27;D&#x27;,&#x27;-1&#x27;,&#x27;-1&#x27;))bt_list.append(Node(&#x27;C&#x27;,&#x27;-1&#x27;,&#x27;-1&#x27;))bt_list_2 = []bt_list_2.append(Node(&#x27;B&#x27;,&#x27;4&#x27;,&#x27;3&#x27;))bt_list_2.append(Node(&#x27;A&#x27;,&#x27;-1&#x27;,&#x27;0&#x27;))bt_list_2.append(None)bt_list_2.append(Node(&#x27;D&#x27;,&#x27;-1&#x27;,&#x27;-1&#x27;))bt_list_2.append(Node(&#x27;C&#x27;,&#x27;-1&#x27;,&#x27;-1&#x27;))r1 = buildtree(bt_list)r2 = buildtree(bt_list_2)if isomorphic(bt_list,bt_list_2,r1, r2):    print(&#x27;两颗树为同构。&#x27;)\n\n","dateCreated":"2021-09-27T20:00:36+08:00","dateModified":"2022-10-28T23:39:36+08:00","datePublished":"2021-09-27T20:00:36+08:00","description":"","headline":"13二叉树同构","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/13%E4%BA%8C%E5%8F%89%E6%A0%91%E5%90%8C%E6%9E%84/"},"publisher":{"@type":"Organization","name":"陈宇韶chenyushao","sameAs":["https://github.com/","https://www.linkedin.com/profile/","mailto"]},"url":"http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/13%E4%BA%8C%E5%8F%89%E6%A0%91%E5%90%8C%E6%9E%84/","keywords":"二叉树"}</script>
+    <meta name="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="13二叉树同构">
+<meta property="og:url" content="http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/13%E4%BA%8C%E5%8F%89%E6%A0%91%E5%90%8C%E6%9E%84/index.html">
+<meta property="og:site_name" content="Tiger_pop&#39;s Blog">
+<meta property="og:description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2021-09-27T12:00:36.000Z">
+<meta property="article:modified_time" content="2022-10-28T15:39:36.522Z">
+<meta property="article:author" content="陈宇韶chenyushao">
+<meta property="article:tag" content="二叉树">
+<meta name="twitter:card" content="summary">
+    
+    
+        
+    
+    
+    
+    
+    
+    <!--STYLES-->
+    
+<link rel="stylesheet" href="/assets/css/style-yrbj4x87sme2npnaj5hmxl88fi8ktzpa1hwzrvan2almcpvu5niegj13ryff.min.css">
+
+    <!--STYLES END-->
+    
+
+    
+
+    
+        
+    
+</head>
+
+    <body>
+        <div id="blog">
+            <!-- Define author's picture -->
+
+
+    
+
+<header id="header" data-behavior="4">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <div class="header-title">
+        <a
+            class="header-title-link"
+            href="/"
+            aria-label=""
+        >
+            Tiger_pop&#39;s Blog
+        </a>
+    </div>
+    
+        
+            <a
+                class="header-right-picture "
+                href="#about"
+                aria-label="Open the link: /#about"
+            >
+        
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+<nav id="sidebar" data-behavior="4">
+    <div class="sidebar-container">
+        
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/"
+                            
+                            rel="noopener"
+                            title="Home"
+                        >
+                        <i class="sidebar-button-icon fa fa-home" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Home</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-categories"
+                            
+                            rel="noopener"
+                            title="Categories"
+                        >
+                        <i class="sidebar-button-icon fa fa-bookmark" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Categories</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-tags"
+                            
+                            rel="noopener"
+                            title="Tags"
+                        >
+                        <i class="sidebar-button-icon fa fa-tags" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Tags</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-archives"
+                            
+                            rel="noopener"
+                            title="Archives"
+                        >
+                        <i class="sidebar-button-icon fa fa-archive" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Archives</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="#about"
+                            
+                            rel="noopener"
+                            title="About"
+                        >
+                        <i class="sidebar-button-icon fa fa-question" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">About</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://github.com/"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="GitHub"
+                        >
+                        <i class="sidebar-button-icon fab fa-github" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">GitHub</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://www.linkedin.com/profile/"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="LinkedIn"
+                        >
+                        <i class="sidebar-button-icon fab fa-linkedin" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">LinkedIn</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/mailto"
+                            
+                            rel="noopener"
+                            title="Mail"
+                        >
+                        <i class="sidebar-button-icon fa fa-envelope" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Mail</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/atom.xml"
+                            
+                            rel="noopener"
+                            title="RSS"
+                        >
+                        <i class="sidebar-button-icon fa fa-rss" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">RSS</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+    </div>
+</nav>
+
+            
+            <div id="main" data-behavior="4"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post">
+    
+    
+        <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title">
+            13二叉树同构
+        </h1>
+    
+    
+        <div class="post-meta">
+    <time datetime="2021-09-27T20:00:36+08:00">
+	
+		    Sep 27, 2021
+    	
+    </time>
+    
+        <span>in </span>
+        
+    <a class="category-link" href="/categories/%E6%B5%99%E5%A4%A7%E7%AE%97%E6%B3%95%E4%B8%8E%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B-python%E5%AE%9E%E7%8E%B0/">浙大算法与数据结构课程(python实现)</a>
+
+
+    
+</div>
+
+    
+</div>
+
+    
+    <div class="post-content markdown">
+        <div class="main-content-wrap">
+            <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">给定两颗树，t1、t2，如果t1可以通过若干次左右孩子交换变成t2， 两颗树就是&quot;同构&quot;的。</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">这里是二叉树的新的表示方式，不一定从根结点开始，</span></span><br><span class="line"><span class="string">只表示左右孩子的结点编号，</span></span><br><span class="line"><span class="string">而结点编号不一定是按照根结点开始层序遍历排的。</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">之前我们都是用链表表示二叉树，这里我们用顺序结构list 表示二叉树。</span></span><br><span class="line"><span class="string">结构数组表示二叉树：(静态链表)。-1表示为None</span></span><br><span class="line"><span class="string">       A| B | C | D</span></span><br><span class="line"><span class="string">left  -1| 2 | -1| -1</span></span><br><span class="line"><span class="string">right  1| 3 | -1| -1</span></span><br><span class="line"><span class="string">编号： 0   1   2   3</span></span><br><span class="line"><span class="string">等价于：</span></span><br><span class="line"><span class="string">       B| A |   | D | C</span></span><br><span class="line"><span class="string">left   4| -1|   | -1| -1</span></span><br><span class="line"><span class="string">right  3| 0 |   | -1| -1</span></span><br><span class="line"><span class="string">编号： 0   1   2   3  4</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">&quot; left 和 right 中没有出现的编号，就是根结点的编号 。 &quot;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">（静态链表）有链表的灵活性，又存放在顺序存储结构的数组中。并非指针指向下一个结点。</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">思路：</span></span><br><span class="line"><span class="string">1、二叉树的表示。</span></span><br><span class="line"><span class="string">2、建立二叉树。(静态链表构建二叉树就是找出根结点。)</span></span><br><span class="line"><span class="string">3、同构判别。</span></span><br><span class="line"><span class="string">     </span></span><br><span class="line"><span class="string">程序框架搭建：</span></span><br><span class="line"><span class="string">main:</span></span><br><span class="line"><span class="string">    r1 = buildtree(t1)</span></span><br><span class="line"><span class="string">    r2 = buildtree(t2)</span></span><br><span class="line"><span class="string">    if isomorphic(r1,r2):</span></span><br><span class="line"><span class="string">        print(&#x27;true&#x27;)</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Node</span>():</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self,element,left=<span class="literal">None</span>,right=<span class="literal">None</span></span>):</span><br><span class="line">        self.element = element</span><br><span class="line">        self.left = left</span><br><span class="line">        self.right = right</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">buildtree</span>(<span class="params">BTlist</span>):  <span class="comment"># 找根。</span></span><br><span class="line">    check = [<span class="literal">None</span>] * <span class="built_in">len</span>(BTlist)</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(BTlist)):</span><br><span class="line">        check[i] = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(BTlist)):</span><br><span class="line">        <span class="keyword">if</span> BTlist[i] == <span class="literal">None</span>:</span><br><span class="line">            check[i] = <span class="number">1</span></span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&#x27;这里是： 空&#x27;</span>,i)</span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line">        element = BTlist[i].element</span><br><span class="line">        left = BTlist[i].left</span><br><span class="line">        <span class="built_in">print</span>(left,<span class="string">&#x27;第多少次&#x27;</span>,i)</span><br><span class="line">        right = BTlist[i].right</span><br><span class="line">        <span class="keyword">if</span> left[<span class="number">0</span>]!=<span class="string">&#x27;-&#x27;</span>:</span><br><span class="line">            BTlist[i].left = <span class="built_in">int</span>(left)</span><br><span class="line">            check[BTlist[i].left] = <span class="number">1</span>     <span class="comment"># 有被当成左孩子，就给这个位置打标记1。</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            BTlist[i].left = <span class="literal">None</span></span><br><span class="line">        <span class="keyword">if</span> right[<span class="number">0</span>]!=<span class="string">&#x27;-&#x27;</span>:</span><br><span class="line">            BTlist[i].right = <span class="built_in">int</span>(right)</span><br><span class="line">            check[BTlist[i].right] = <span class="number">1</span>    <span class="comment">#有被当成右孩子，就给这个位置打标记1。</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            BTlist[i].right = <span class="literal">None</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(BTlist)): <span class="comment"># 根结点不会被当作孩子，所以标记还是0。</span></span><br><span class="line">        <span class="keyword">if</span> check[i] == <span class="number">0</span>:</span><br><span class="line">            root = i</span><br><span class="line">    <span class="keyword">return</span> root</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">isomorphic</span>(<span class="params">t1,t2,r1,r2</span>):</span><br><span class="line">    <span class="keyword">if</span> r1==<span class="literal">None</span> <span class="keyword">and</span> r2 == <span class="literal">None</span>:  <span class="comment">#both empty</span></span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span></span><br><span class="line">    <span class="keyword">if</span> ((r1==<span class="literal">None</span> <span class="keyword">and</span> r2!=<span class="literal">None</span>) <span class="keyword">or</span> (r1!=<span class="literal">None</span> <span class="keyword">and</span> r2 ==<span class="literal">None</span>)):</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>    <span class="comment"># one of them is empty</span></span><br><span class="line">    <span class="keyword">if</span> t1[r1].element!=t2[r2].element:</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>    <span class="comment"># root are different</span></span><br><span class="line">    <span class="keyword">if</span> t1[r1].left == <span class="literal">None</span> <span class="keyword">and</span> t2[r2].left == <span class="literal">None</span>: <span class="comment"># both have no left subtree</span></span><br><span class="line">        <span class="keyword">return</span> isomorphic(t1,t2,t1[r1].right,t2[r2].right)</span><br><span class="line"></span><br><span class="line">    <span class="comment">#  no need to swap the left and the right</span></span><br><span class="line">    <span class="keyword">if</span> (t1[r1].left!=<span class="literal">None</span> <span class="keyword">and</span> t2[r2].left!=<span class="literal">None</span>) <span class="keyword">and</span> (t1[t1[r1].left].element == t2[t2[r2].left].element):</span><br><span class="line">        <span class="keyword">return</span> (isomorphic(t1,t2,t1[r1].left,t2[r2].left) <span class="keyword">and</span> isomorphic(t1,t2,t1[r1].right,t2[r2].right))</span><br><span class="line">    <span class="comment">#  need to swap the left and zhe right</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">return</span> isomorphic(t1,t2,t1[r1].left,t2[r2].right) <span class="keyword">and</span> isomorphic(t1,t2,t1[r1].right,t2[r2].left)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">bt_list = []</span><br><span class="line">bt_list.append(Node(<span class="string">&#x27;B&#x27;</span>,<span class="string">&#x27;4&#x27;</span>,<span class="string">&#x27;3&#x27;</span>))</span><br><span class="line">bt_list.append(Node(<span class="string">&#x27;A&#x27;</span>,<span class="string">&#x27;-1&#x27;</span>,<span class="string">&#x27;0&#x27;</span>))</span><br><span class="line">bt_list.append(<span class="literal">None</span>)</span><br><span class="line">bt_list.append(Node(<span class="string">&#x27;D&#x27;</span>,<span class="string">&#x27;-1&#x27;</span>,<span class="string">&#x27;-1&#x27;</span>))</span><br><span class="line">bt_list.append(Node(<span class="string">&#x27;C&#x27;</span>,<span class="string">&#x27;-1&#x27;</span>,<span class="string">&#x27;-1&#x27;</span>))</span><br><span class="line">bt_list_2 = []</span><br><span class="line">bt_list_2.append(Node(<span class="string">&#x27;B&#x27;</span>,<span class="string">&#x27;4&#x27;</span>,<span class="string">&#x27;3&#x27;</span>))</span><br><span class="line">bt_list_2.append(Node(<span class="string">&#x27;A&#x27;</span>,<span class="string">&#x27;-1&#x27;</span>,<span class="string">&#x27;0&#x27;</span>))</span><br><span class="line">bt_list_2.append(<span class="literal">None</span>)</span><br><span class="line">bt_list_2.append(Node(<span class="string">&#x27;D&#x27;</span>,<span class="string">&#x27;-1&#x27;</span>,<span class="string">&#x27;-1&#x27;</span>))</span><br><span class="line">bt_list_2.append(Node(<span class="string">&#x27;C&#x27;</span>,<span class="string">&#x27;-1&#x27;</span>,<span class="string">&#x27;-1&#x27;</span>))</span><br><span class="line"></span><br><span class="line">r1 = buildtree(bt_list)</span><br><span class="line">r2 = buildtree(bt_list_2)</span><br><span class="line"><span class="keyword">if</span> isomorphic(bt_list,bt_list_2,r1, r2):</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;两颗树为同构。&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+
+            
+
+
+        </div>
+    </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
+        
+            <div class="post-footer-tags">
+                <span class="text-color-light text-small">TAGGED IN</span><br/>
+                
+    <a class="tag tag--primary tag--small t-none-link" href="/tags/%E4%BA%8C%E5%8F%89%E6%A0%91/" rel="tag">二叉树</a>
+
+            </div>
+        
+        
+            <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/12%E4%BA%8C%E5%8F%89%E6%A0%91%E5%BA%94%E7%94%A8%E4%BE%8B%E5%AD%90/"
+                    data-tooltip="12二叉树应用例子"
+                    aria-label="PREVIOUS: 12二叉树应用例子"
+                >
+                    
+                        <i class="fa fa-angle-left" aria-hidden="true"></i>
+                        <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+                    </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/14%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91/"
+                    data-tooltip="14二叉搜索树"
+                    aria-label="NEXT: 14二叉搜索树"
+                >
+                    
+                        <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                    </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a
+                class="post-action-btn btn btn--default btn-open-shareoptions"
+                href="#btn-open-shareoptions"
+                aria-label="Share this post"
+            >
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/13%E4%BA%8C%E5%8F%89%E6%A0%91%E5%90%8C%E6%9E%84/"
+                    title="Share on Facebook"
+                    aria-label="Share on Facebook"
+                >
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://twitter.com/intent/tweet?text=http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/13%E4%BA%8C%E5%8F%89%E6%A0%91%E5%90%8C%E6%9E%84/"
+                    title="Share on Twitter"
+                    aria-label="Share on Twitter"
+                >
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://plus.google.com/share?url=http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/13%E4%BA%8C%E5%8F%89%E6%A0%91%E5%90%8C%E6%9E%84/"
+                    title="Share on Google+"
+                    aria-label="Share on Google+"
+                >
+                    <i class="fab fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+        
+        
+            
+        
+    </div>
+</article>
+
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2022 陈宇韶chenyushao. All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/12%E4%BA%8C%E5%8F%89%E6%A0%91%E5%BA%94%E7%94%A8%E4%BE%8B%E5%AD%90/"
+                    data-tooltip="12二叉树应用例子"
+                    aria-label="PREVIOUS: 12二叉树应用例子"
+                >
+                    
+                        <i class="fa fa-angle-left" aria-hidden="true"></i>
+                        <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+                    </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/14%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91/"
+                    data-tooltip="14二叉搜索树"
+                    aria-label="NEXT: 14二叉搜索树"
+                >
+                    
+                        <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                    </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a
+                class="post-action-btn btn btn--default btn-open-shareoptions"
+                href="#btn-open-shareoptions"
+                aria-label="Share this post"
+            >
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/13%E4%BA%8C%E5%8F%89%E6%A0%91%E5%90%8C%E6%9E%84/"
+                    title="Share on Facebook"
+                    aria-label="Share on Facebook"
+                >
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://twitter.com/intent/tweet?text=http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/13%E4%BA%8C%E5%8F%89%E6%A0%91%E5%90%8C%E6%9E%84/"
+                    title="Share on Twitter"
+                    aria-label="Share on Twitter"
+                >
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://plus.google.com/share?url=http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/13%E4%BA%8C%E5%8F%89%E6%A0%91%E5%90%8C%E6%9E%84/"
+                    title="Share on Google+"
+                    aria-label="Share on Google+"
+                >
+                    <i class="fab fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+                </div>
+                
+    <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+        <i id="btn-close-shareoptions" class="fa fa-times"></i>
+        <ul class="share-options">
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="https://www.facebook.com/sharer/sharer.php?u=http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/13%E4%BA%8C%E5%8F%89%E6%A0%91%E5%90%8C%E6%9E%84/"
+                        aria-label="Share on Facebook"
+                    >
+                        <i class="fab fa-facebook" aria-hidden="true"></i><span>Share on Facebook</span>
+                    </a>
+                </li>
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="https://twitter.com/intent/tweet?text=http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/13%E4%BA%8C%E5%8F%89%E6%A0%91%E5%90%8C%E6%9E%84/"
+                        aria-label="Share on Twitter"
+                    >
+                        <i class="fab fa-twitter" aria-hidden="true"></i><span>Share on Twitter</span>
+                    </a>
+                </li>
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="https://plus.google.com/share?url=http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/13%E4%BA%8C%E5%8F%89%E6%A0%91%E5%90%8C%E6%9E%84/"
+                        aria-label="Share on Google+"
+                    >
+                        <i class="fab fa-google-plus" aria-hidden="true"></i><span>Share on Google+</span>
+                    </a>
+                </li>
+            
+        </ul>
+    </div>
+
+
+            
+        </div>
+        
+
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-times"></i>
+        </div>
+        
+            <h4 id="about-card-name">陈宇韶chenyushao</h4>
+        
+            <div id="about-card-bio"><p>author.bio</p>
+</div>
+        
+        
+            <div id="about-card-job">
+                <i class="fa fa-briefcase"></i>
+                <br/>
+                <p>author.job</p>
+
+            </div>
+        
+        
+    </div>
+</div>
+
+        
+        
+<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
+        <!--SCRIPTS-->
+
+<script src="/assets/js/script-sbgpeqyl6jw5qe60mnfuzifzwky5la4ftiuwmschcdzx2pg5tfpl1pfp13e3.min.js"></script>
+
+<!--SCRIPTS END-->
+
+
+    
+
+
+
+
+    </body>
+</html>

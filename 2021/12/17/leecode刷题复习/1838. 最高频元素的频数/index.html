@@ -1,0 +1,588 @@
+
+<!DOCTYPE html>
+<html lang="en">
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Tiger_pop&#39;s Blog">
+    <title>1838. 最高频元素的频数 - Tiger_pop&#39;s Blog</title>
+    <meta name="author" content="陈宇韶chenyushao">
+    
+    
+    
+        
+            <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
+        
+    
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"陈宇韶chenyushao","sameAs":["https://github.com/","https://www.linkedin.com/profile/","mailto"]},"articleBody":"1234567891011121314151617181920212223242526272829303132333435363738394041424344454647class Solution:    def maxFrequency(self, nums: List[int], k: int) -&gt; int:        # 以下是读题读错了，k看成了 每次都可以最多执行k次，题意中k像个水缸，总量有限。        # def search_II(check)-&gt;int:        #     left = 1        #     right = len(nums)        #     while left&lt;=right:        #         mid = (left+right)&gt;&gt;1        #         if check(mid):        #             left = mid+1        #         else:        #             right = mid-1        #     return right        # def check(x):  # 频数是x        #     nums.sort()        #     max_frequency = 0        #     for i in range(len(nums)):        #         #注意 bisect 查找是贪婪的        #         idx = bisect.bisect_right(nums,k+nums[i])        #         max_frequency = max(max_frequency, idx - i)        #     print(x,max_frequency,max_frequency &gt;= x)        #     return max_frequency &gt;= x        # return search_II(check)                # k 总量一定，我们用 滑动窗口来解决更简单。        # 滑动窗口模板        # left,right = 0, (0 or 1)        # ret = total = 0        # while right &lt; len(nums):        #    更新total值        #    while 窗口内数据不满足要求        #       1. 更新total值        #       2. 收缩左边界        #    更新ret最大值        # 返回 ret        nums.sort()        n = len(nums)        left = 0        diff = 0        ans = 1        for right in range(1,n):            diff += (nums[right]-nums[right-1])*(right-left)            while diff&gt;k:                diff -= nums[right] - nums[left]                 left += 1            ans = max(ans,right-left+1)        return ans\n\n","dateCreated":"2021-12-17T13:02:10+08:00","dateModified":"2022-10-29T01:58:34+08:00","datePublished":"2021-12-17T13:02:10+08:00","description":"","headline":"1838. 最高频元素的频数","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"http://example.com/2021/12/17/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/1838.%20%E6%9C%80%E9%AB%98%E9%A2%91%E5%85%83%E7%B4%A0%E7%9A%84%E9%A2%91%E6%95%B0/"},"publisher":{"@type":"Organization","name":"陈宇韶chenyushao","sameAs":["https://github.com/","https://www.linkedin.com/profile/","mailto"]},"url":"http://example.com/2021/12/17/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/1838.%20%E6%9C%80%E9%AB%98%E9%A2%91%E5%85%83%E7%B4%A0%E7%9A%84%E9%A2%91%E6%95%B0/"}</script>
+    <meta name="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="1838. 最高频元素的频数">
+<meta property="og:url" content="http://example.com/2021/12/17/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/1838.%20%E6%9C%80%E9%AB%98%E9%A2%91%E5%85%83%E7%B4%A0%E7%9A%84%E9%A2%91%E6%95%B0/index.html">
+<meta property="og:site_name" content="Tiger_pop&#39;s Blog">
+<meta property="og:description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2021-12-17T05:02:10.000Z">
+<meta property="article:modified_time" content="2022-10-28T17:58:34.126Z">
+<meta property="article:author" content="陈宇韶chenyushao">
+<meta name="twitter:card" content="summary">
+    
+    
+        
+    
+    
+    
+    
+    
+    <!--STYLES-->
+    
+<link rel="stylesheet" href="/assets/css/style-yrbj4x87sme2npnaj5hmxl88fi8ktzpa1hwzrvan2almcpvu5niegj13ryff.min.css">
+
+    <!--STYLES END-->
+    
+
+    
+
+    
+        
+    
+</head>
+
+    <body>
+        <div id="blog">
+            <!-- Define author's picture -->
+
+
+    
+
+<header id="header" data-behavior="4">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <div class="header-title">
+        <a
+            class="header-title-link"
+            href="/"
+            aria-label=""
+        >
+            Tiger_pop&#39;s Blog
+        </a>
+    </div>
+    
+        
+            <a
+                class="header-right-picture "
+                href="#about"
+                aria-label="Open the link: /#about"
+            >
+        
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+<nav id="sidebar" data-behavior="4">
+    <div class="sidebar-container">
+        
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/"
+                            
+                            rel="noopener"
+                            title="Home"
+                        >
+                        <i class="sidebar-button-icon fa fa-home" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Home</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-categories"
+                            
+                            rel="noopener"
+                            title="Categories"
+                        >
+                        <i class="sidebar-button-icon fa fa-bookmark" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Categories</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-tags"
+                            
+                            rel="noopener"
+                            title="Tags"
+                        >
+                        <i class="sidebar-button-icon fa fa-tags" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Tags</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-archives"
+                            
+                            rel="noopener"
+                            title="Archives"
+                        >
+                        <i class="sidebar-button-icon fa fa-archive" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Archives</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="#about"
+                            
+                            rel="noopener"
+                            title="About"
+                        >
+                        <i class="sidebar-button-icon fa fa-question" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">About</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://github.com/"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="GitHub"
+                        >
+                        <i class="sidebar-button-icon fab fa-github" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">GitHub</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://www.linkedin.com/profile/"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="LinkedIn"
+                        >
+                        <i class="sidebar-button-icon fab fa-linkedin" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">LinkedIn</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/mailto"
+                            
+                            rel="noopener"
+                            title="Mail"
+                        >
+                        <i class="sidebar-button-icon fa fa-envelope" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Mail</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/atom.xml"
+                            
+                            rel="noopener"
+                            title="RSS"
+                        >
+                        <i class="sidebar-button-icon fa fa-rss" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">RSS</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+    </div>
+</nav>
+
+            
+            <div id="main" data-behavior="4"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post">
+    
+    
+        <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title">
+            1838. 最高频元素的频数
+        </h1>
+    
+    
+        <div class="post-meta">
+    <time datetime="2021-12-17T13:02:10+08:00">
+	
+		    Dec 17, 2021
+    	
+    </time>
+    
+        <span>in </span>
+        
+    <a class="category-link" href="/categories/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/">leecode刷题复习</a>
+
+
+    
+</div>
+
+    
+</div>
+
+    
+    <div class="post-content markdown">
+        <div class="main-content-wrap">
+            <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">maxFrequency</span>(<span class="params">self, nums: <span class="type">List</span>[<span class="built_in">int</span>], k: <span class="built_in">int</span></span>) -&gt; <span class="built_in">int</span>:</span><br><span class="line">        <span class="comment"># 以下是读题读错了，k看成了 每次都可以最多执行k次，题意中k像个水缸，总量有限。</span></span><br><span class="line">        <span class="comment"># def search_II(check)-&gt;int:</span></span><br><span class="line">        <span class="comment">#     left = 1</span></span><br><span class="line">        <span class="comment">#     right = len(nums)</span></span><br><span class="line">        <span class="comment">#     while left&lt;=right:</span></span><br><span class="line">        <span class="comment">#         mid = (left+right)&gt;&gt;1</span></span><br><span class="line">        <span class="comment">#         if check(mid):</span></span><br><span class="line">        <span class="comment">#             left = mid+1</span></span><br><span class="line">        <span class="comment">#         else:</span></span><br><span class="line">        <span class="comment">#             right = mid-1</span></span><br><span class="line">        <span class="comment">#     return right</span></span><br><span class="line">        <span class="comment"># def check(x):  # 频数是x</span></span><br><span class="line">        <span class="comment">#     nums.sort()</span></span><br><span class="line">        <span class="comment">#     max_frequency = 0</span></span><br><span class="line">        <span class="comment">#     for i in range(len(nums)):</span></span><br><span class="line">        <span class="comment">#         #注意 bisect 查找是贪婪的</span></span><br><span class="line">        <span class="comment">#         idx = bisect.bisect_right(nums,k+nums[i])</span></span><br><span class="line">        <span class="comment">#         max_frequency = max(max_frequency, idx - i)</span></span><br><span class="line">        <span class="comment">#     print(x,max_frequency,max_frequency &gt;= x)</span></span><br><span class="line">        <span class="comment">#     return max_frequency &gt;= x</span></span><br><span class="line">        <span class="comment"># return search_II(check)</span></span><br><span class="line">        </span><br><span class="line">        <span class="comment"># k 总量一定，我们用 滑动窗口来解决更简单。</span></span><br><span class="line">        <span class="comment"># 滑动窗口模板</span></span><br><span class="line">        <span class="comment"># left,right = 0, (0 or 1)</span></span><br><span class="line">        <span class="comment"># ret = total = 0</span></span><br><span class="line">        <span class="comment"># while right &lt; len(nums):</span></span><br><span class="line">        <span class="comment">#    更新total值</span></span><br><span class="line">        <span class="comment">#    while 窗口内数据不满足要求</span></span><br><span class="line">        <span class="comment">#       1. 更新total值</span></span><br><span class="line">        <span class="comment">#       2. 收缩左边界</span></span><br><span class="line">        <span class="comment">#    更新ret最大值</span></span><br><span class="line">        <span class="comment"># 返回 ret</span></span><br><span class="line">        nums.sort()</span><br><span class="line">        n = <span class="built_in">len</span>(nums)</span><br><span class="line">        left = <span class="number">0</span></span><br><span class="line">        diff = <span class="number">0</span></span><br><span class="line">        ans = <span class="number">1</span></span><br><span class="line">        <span class="keyword">for</span> right <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>,n):</span><br><span class="line">            diff += (nums[right]-nums[right-<span class="number">1</span>])*(right-left)</span><br><span class="line">            <span class="keyword">while</span> diff&gt;k:</span><br><span class="line">                diff -= nums[right] - nums[left] </span><br><span class="line">                left += <span class="number">1</span></span><br><span class="line">            ans = <span class="built_in">max</span>(ans,right-left+<span class="number">1</span>)</span><br><span class="line">        <span class="keyword">return</span> ans</span><br></pre></td></tr></table></figure>
+
+
+            
+
+
+        </div>
+    </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
+        
+        
+            <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2021/12/17/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/1802.%20%E6%9C%89%E7%95%8C%E6%95%B0%E7%BB%84%E4%B8%AD%E6%8C%87%E5%AE%9A%E4%B8%8B%E6%A0%87%E5%A4%84%E7%9A%84%E6%9C%80%E5%A4%A7%E5%80%BC/"
+                    data-tooltip="1802. 有界数组中指定下标处的最大值"
+                    aria-label="PREVIOUS: 1802. 有界数组中指定下标处的最大值"
+                >
+                    
+                        <i class="fa fa-angle-left" aria-hidden="true"></i>
+                        <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+                    </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2021/12/17/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/1818.%20%E7%BB%9D%E5%AF%B9%E5%B7%AE%E5%80%BC%E5%92%8C/"
+                    data-tooltip="1818. 绝对差值和"
+                    aria-label="NEXT: 1818. 绝对差值和"
+                >
+                    
+                        <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                    </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a
+                class="post-action-btn btn btn--default btn-open-shareoptions"
+                href="#btn-open-shareoptions"
+                aria-label="Share this post"
+            >
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://example.com/2021/12/17/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/1838.%20%E6%9C%80%E9%AB%98%E9%A2%91%E5%85%83%E7%B4%A0%E7%9A%84%E9%A2%91%E6%95%B0/"
+                    title="Share on Facebook"
+                    aria-label="Share on Facebook"
+                >
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://twitter.com/intent/tweet?text=http://example.com/2021/12/17/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/1838.%20%E6%9C%80%E9%AB%98%E9%A2%91%E5%85%83%E7%B4%A0%E7%9A%84%E9%A2%91%E6%95%B0/"
+                    title="Share on Twitter"
+                    aria-label="Share on Twitter"
+                >
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://plus.google.com/share?url=http://example.com/2021/12/17/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/1838.%20%E6%9C%80%E9%AB%98%E9%A2%91%E5%85%83%E7%B4%A0%E7%9A%84%E9%A2%91%E6%95%B0/"
+                    title="Share on Google+"
+                    aria-label="Share on Google+"
+                >
+                    <i class="fab fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+        
+        
+            
+        
+    </div>
+</article>
+
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2022 陈宇韶chenyushao. All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2021/12/17/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/1802.%20%E6%9C%89%E7%95%8C%E6%95%B0%E7%BB%84%E4%B8%AD%E6%8C%87%E5%AE%9A%E4%B8%8B%E6%A0%87%E5%A4%84%E7%9A%84%E6%9C%80%E5%A4%A7%E5%80%BC/"
+                    data-tooltip="1802. 有界数组中指定下标处的最大值"
+                    aria-label="PREVIOUS: 1802. 有界数组中指定下标处的最大值"
+                >
+                    
+                        <i class="fa fa-angle-left" aria-hidden="true"></i>
+                        <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+                    </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2021/12/17/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/1818.%20%E7%BB%9D%E5%AF%B9%E5%B7%AE%E5%80%BC%E5%92%8C/"
+                    data-tooltip="1818. 绝对差值和"
+                    aria-label="NEXT: 1818. 绝对差值和"
+                >
+                    
+                        <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                    </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a
+                class="post-action-btn btn btn--default btn-open-shareoptions"
+                href="#btn-open-shareoptions"
+                aria-label="Share this post"
+            >
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://example.com/2021/12/17/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/1838.%20%E6%9C%80%E9%AB%98%E9%A2%91%E5%85%83%E7%B4%A0%E7%9A%84%E9%A2%91%E6%95%B0/"
+                    title="Share on Facebook"
+                    aria-label="Share on Facebook"
+                >
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://twitter.com/intent/tweet?text=http://example.com/2021/12/17/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/1838.%20%E6%9C%80%E9%AB%98%E9%A2%91%E5%85%83%E7%B4%A0%E7%9A%84%E9%A2%91%E6%95%B0/"
+                    title="Share on Twitter"
+                    aria-label="Share on Twitter"
+                >
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://plus.google.com/share?url=http://example.com/2021/12/17/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/1838.%20%E6%9C%80%E9%AB%98%E9%A2%91%E5%85%83%E7%B4%A0%E7%9A%84%E9%A2%91%E6%95%B0/"
+                    title="Share on Google+"
+                    aria-label="Share on Google+"
+                >
+                    <i class="fab fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+                </div>
+                
+    <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+        <i id="btn-close-shareoptions" class="fa fa-times"></i>
+        <ul class="share-options">
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="https://www.facebook.com/sharer/sharer.php?u=http://example.com/2021/12/17/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/1838.%20%E6%9C%80%E9%AB%98%E9%A2%91%E5%85%83%E7%B4%A0%E7%9A%84%E9%A2%91%E6%95%B0/"
+                        aria-label="Share on Facebook"
+                    >
+                        <i class="fab fa-facebook" aria-hidden="true"></i><span>Share on Facebook</span>
+                    </a>
+                </li>
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="https://twitter.com/intent/tweet?text=http://example.com/2021/12/17/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/1838.%20%E6%9C%80%E9%AB%98%E9%A2%91%E5%85%83%E7%B4%A0%E7%9A%84%E9%A2%91%E6%95%B0/"
+                        aria-label="Share on Twitter"
+                    >
+                        <i class="fab fa-twitter" aria-hidden="true"></i><span>Share on Twitter</span>
+                    </a>
+                </li>
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="https://plus.google.com/share?url=http://example.com/2021/12/17/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/1838.%20%E6%9C%80%E9%AB%98%E9%A2%91%E5%85%83%E7%B4%A0%E7%9A%84%E9%A2%91%E6%95%B0/"
+                        aria-label="Share on Google+"
+                    >
+                        <i class="fab fa-google-plus" aria-hidden="true"></i><span>Share on Google+</span>
+                    </a>
+                </li>
+            
+        </ul>
+    </div>
+
+
+            
+        </div>
+        
+
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-times"></i>
+        </div>
+        
+            <h4 id="about-card-name">陈宇韶chenyushao</h4>
+        
+            <div id="about-card-bio"><p>author.bio</p>
+</div>
+        
+        
+            <div id="about-card-job">
+                <i class="fa fa-briefcase"></i>
+                <br/>
+                <p>author.job</p>
+
+            </div>
+        
+        
+    </div>
+</div>
+
+        
+        
+<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
+        <!--SCRIPTS-->
+
+<script src="/assets/js/script-sbgpeqyl6jw5qe60mnfuzifzwky5la4ftiuwmschcdzx2pg5tfpl1pfp13e3.min.js"></script>
+
+<!--SCRIPTS END-->
+
+
+    
+
+
+
+
+    </body>
+</html>

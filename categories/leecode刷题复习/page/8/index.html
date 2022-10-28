@@ -1,0 +1,912 @@
+
+<!DOCTYPE html>
+<html lang="en">
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Tiger_pop&#39;s Blog">
+    <title>Category: leecode刷题复习 - Tiger_pop&#39;s Blog</title>
+    <meta name="author" content="陈宇韶chenyushao">
+    
+    
+    
+        
+            <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
+        
+    
+    <script type="application/ld+json">{}</script>
+    <meta name="description" content="爱学习、爱工作、爱生活">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="Tiger_pop&#39;s Blog">
+<meta property="og:url" content="http://example.com/categories/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/page/8/index.html">
+<meta property="og:site_name" content="Tiger_pop&#39;s Blog">
+<meta property="og:description" content="爱学习、爱工作、爱生活">
+<meta property="og:locale" content="en_US">
+<meta property="article:author" content="陈宇韶chenyushao">
+<meta name="twitter:card" content="summary">
+    
+    
+        
+    
+    
+    
+    
+    
+    <!--STYLES-->
+    
+<link rel="stylesheet" href="/assets/css/style-yrbj4x87sme2npnaj5hmxl88fi8ktzpa1hwzrvan2almcpvu5niegj13ryff.min.css">
+
+    <!--STYLES END-->
+    
+
+    
+
+    
+</head>
+
+    <body>
+        <div id="blog">
+            <!-- Define author's picture -->
+
+
+    
+
+<header id="header" data-behavior="1">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <div class="header-title">
+        <a
+            class="header-title-link"
+            href="/"
+            aria-label=""
+        >
+            Tiger_pop&#39;s Blog
+        </a>
+    </div>
+    
+        
+            <a
+                class="header-right-picture "
+                href="#about"
+                aria-label="Open the link: /#about"
+            >
+        
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+<nav id="sidebar" data-behavior="1">
+    <div class="sidebar-container">
+        
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/"
+                            
+                            rel="noopener"
+                            title="Home"
+                        >
+                        <i class="sidebar-button-icon fa fa-home" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Home</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-categories"
+                            
+                            rel="noopener"
+                            title="Categories"
+                        >
+                        <i class="sidebar-button-icon fa fa-bookmark" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Categories</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-tags"
+                            
+                            rel="noopener"
+                            title="Tags"
+                        >
+                        <i class="sidebar-button-icon fa fa-tags" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Tags</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-archives"
+                            
+                            rel="noopener"
+                            title="Archives"
+                        >
+                        <i class="sidebar-button-icon fa fa-archive" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Archives</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="#about"
+                            
+                            rel="noopener"
+                            title="About"
+                        >
+                        <i class="sidebar-button-icon fa fa-question" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">About</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://github.com/"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="GitHub"
+                        >
+                        <i class="sidebar-button-icon fab fa-github" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">GitHub</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://www.linkedin.com/profile/"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="LinkedIn"
+                        >
+                        <i class="sidebar-button-icon fab fa-linkedin" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">LinkedIn</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/mailto"
+                            
+                            rel="noopener"
+                            title="Mail"
+                        >
+                        <i class="sidebar-button-icon fa fa-envelope" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Mail</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/atom.xml"
+                            
+                            rel="noopener"
+                            title="RSS"
+                        >
+                        <i class="sidebar-button-icon fa fa-rss" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">RSS</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+    </div>
+</nav>
+
+            
+            <div id="main" data-behavior="1"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+    <section class="postShorten-group main-content-wrap">
+    
+    
+    <article class="postShorten postShorten--thumbnailimg-bottom">
+        <div class="postShorten-wrap">
+            
+            <div class="postShorten-header">
+                <h1 class="postShorten-title">
+                    
+                        <a
+                            class="link-unstyled"
+                            href="/2021/09/27/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/104.%20%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E6%9C%80%E5%A4%A7%E6%B7%B1%E5%BA%A6/"
+                            aria-label=": 104. 二叉树的最大深度.md"
+                        >
+                            104. 二叉树的最大深度.md
+                        </a>
+                    
+                </h1>
+                <div class="postShorten-meta">
+    <time datetime="2021-09-27T20:00:36+08:00">
+	
+		    Sep 27, 2021
+    	
+    </time>
+    
+        <span>in </span>
+        
+    <a class="category-link" href="/categories/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/">leecode刷题复习</a>
+
+
+    
+</div>
+
+            </div>
+            
+                <div class="postShorten-content">
+                    <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Definition for a binary tree node.</span></span><br><span class="line"><span class="comment"># class TreeNode:</span></span><br><span class="line"><span class="comment">#     def __init__(self, val=0, left=None, right=None):</span></span><br><span class="line"><span class="comment">#         self.val = val</span></span><br><span class="line"><span class="comment">#         self.left = left</span></span><br><span class="line"><span class="comment">#         self.right = right</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span>:</span><br><span class="line">    left_high,right_high = <span class="literal">None</span>,<span class="literal">None</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">maxDepth</span>(<span class="params">self, root: <span class="type">Optional</span>[TreeNode]</span>) -&gt; <span class="built_in">int</span>:</span><br><span class="line">        <span class="comment"># 用后序遍历 求 高度。</span></span><br><span class="line">        <span class="keyword">if</span> root==<span class="literal">None</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">        left_high = self.maxDepth(root.left)</span><br><span class="line">        right_high = self.maxDepth(root.right)</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">max</span>(left_high,right_high) + <span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+
+                    
+                        
+
+
+                    
+                    
+                        <p>
+                            <a
+                                href="/2021/09/27/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/104.%20%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E6%9C%80%E5%A4%A7%E6%B7%B1%E5%BA%A6/#post-footer"
+                                class="postShorten-excerpt_link link"
+                                aria-label=""
+                            >
+                                Comment and share
+                            </a>
+                        </p>
+                    
+                </div>
+            
+        </div>
+        
+    </article>
+    
+    
+    <article class="postShorten postShorten--thumbnailimg-bottom">
+        <div class="postShorten-wrap">
+            
+            <div class="postShorten-header">
+                <h1 class="postShorten-title">
+                    
+                        <a
+                            class="link-unstyled"
+                            href="/2021/09/27/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/108.%20%E5%B0%86%E6%9C%89%E5%BA%8F%E6%95%B0%E7%BB%84%E8%BD%AC%E6%8D%A2%E4%B8%BA%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91/"
+                            aria-label=": 108. 将有序数组转换为二叉搜索树"
+                        >
+                            108. 将有序数组转换为二叉搜索树
+                        </a>
+                    
+                </h1>
+                <div class="postShorten-meta">
+    <time datetime="2021-09-27T20:00:36+08:00">
+	
+		    Sep 27, 2021
+    	
+    </time>
+    
+        <span>in </span>
+        
+    <a class="category-link" href="/categories/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/">leecode刷题复习</a>
+
+
+    
+</div>
+
+            </div>
+            
+                <div class="postShorten-content">
+                    <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Definition for a binary tree node.</span></span><br><span class="line"><span class="comment"># class TreeNode:</span></span><br><span class="line"><span class="comment">#     def __init__(self, val=0, left=None, right=None):</span></span><br><span class="line"><span class="comment">#         self.val = val</span></span><br><span class="line"><span class="comment">#         self.left = left</span></span><br><span class="line"><span class="comment">#         self.right = right</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">sortedArrayToBST</span>(<span class="params">self, nums: <span class="type">List</span>[<span class="built_in">int</span>]</span>) -&gt; <span class="type">Optional</span>[TreeNode]:</span><br><span class="line">        <span class="comment"># optional[ arg ] 这个参数除了给定的默认值外还可以是None</span></span><br><span class="line">        <span class="comment"># 每次从中间 截断，差不多 会出现一个平衡的 bst。</span></span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">build_tree</span>(<span class="params">list_,left,right</span>) -&gt; <span class="type">Optional</span>[TreeNode]:</span><br><span class="line">            <span class="comment"># 基线条件</span></span><br><span class="line">            <span class="keyword">if</span> left &gt; right:  <span class="comment"># left==right时，有一个结点，还是要返回的。</span></span><br><span class="line">                <span class="keyword">return</span> <span class="literal">None</span> </span><br><span class="line">            mid = (left+right)&gt;&gt;<span class="number">1</span></span><br><span class="line">            root = TreeNode(list_[mid])</span><br><span class="line">            root.left = build_tree(list_,left,mid-<span class="number">1</span>)</span><br><span class="line">            root.right = build_tree(list_,mid+<span class="number">1</span>,right)</span><br><span class="line">            <span class="keyword">return</span> root </span><br><span class="line">        <span class="keyword">return</span> build_tree(nums,<span class="number">0</span>,<span class="built_in">len</span>(nums)-<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+
+
+                    
+                        
+
+
+                    
+                    
+                        <p>
+                            <a
+                                href="/2021/09/27/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/108.%20%E5%B0%86%E6%9C%89%E5%BA%8F%E6%95%B0%E7%BB%84%E8%BD%AC%E6%8D%A2%E4%B8%BA%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91/#post-footer"
+                                class="postShorten-excerpt_link link"
+                                aria-label=""
+                            >
+                                Comment and share
+                            </a>
+                        </p>
+                    
+                </div>
+            
+        </div>
+        
+    </article>
+    
+    
+    <article class="postShorten postShorten--thumbnailimg-bottom">
+        <div class="postShorten-wrap">
+            
+            <div class="postShorten-header">
+                <h1 class="postShorten-title">
+                    
+                        <a
+                            class="link-unstyled"
+                            href="/2021/09/27/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/112.%20%E8%B7%AF%E5%BE%84%E6%80%BB%E5%92%8C/"
+                            aria-label=": 112. 路径总和"
+                        >
+                            112. 路径总和
+                        </a>
+                    
+                </h1>
+                <div class="postShorten-meta">
+    <time datetime="2021-09-27T20:00:36+08:00">
+	
+		    Sep 27, 2021
+    	
+    </time>
+    
+        <span>in </span>
+        
+    <a class="category-link" href="/categories/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/">leecode刷题复习</a>
+
+
+    
+</div>
+
+            </div>
+            
+                <div class="postShorten-content">
+                    <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Definition for a binary tree node.</span></span><br><span class="line"><span class="comment"># class TreeNode:</span></span><br><span class="line"><span class="comment">#     def __init__(self, val=0, left=None, right=None):</span></span><br><span class="line"><span class="comment">#         self.val = val</span></span><br><span class="line"><span class="comment">#         self.left = left</span></span><br><span class="line"><span class="comment">#         self.right = right</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>):</span><br><span class="line">        self.first_vale = [] </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">hasPathSum</span>(<span class="params">self, root: <span class="type">Optional</span>[TreeNode], targetSum: <span class="built_in">int</span></span>) -&gt; <span class="built_in">bool</span>:</span><br><span class="line">        <span class="keyword">if</span> root==<span class="literal">None</span>: <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line">        self.first_vale.append(root.val)</span><br><span class="line">        <span class="built_in">print</span>(targetSum)</span><br><span class="line">        <span class="comment"># 基线条件</span></span><br><span class="line">        <span class="keyword">if</span> root.left==<span class="literal">None</span> <span class="keyword">and</span> root.right==<span class="literal">None</span> <span class="keyword">and</span> targetSum==self.first_vale[<span class="number">0</span>]:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&quot;--- &quot;</span>)</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">True</span> </span><br><span class="line">        <span class="keyword">if</span> root.left==<span class="literal">None</span> <span class="keyword">and</span> root.right==<span class="literal">None</span> <span class="keyword">and</span> targetSum!=self.first_vale[<span class="number">0</span>]:</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">False</span> </span><br><span class="line">        <span class="keyword">if</span> root.left:</span><br><span class="line">            targetSum -= root.left.val</span><br><span class="line">            <span class="keyword">if</span> self.hasPathSum(root.left,targetSum):</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">True</span> </span><br><span class="line">            targetSum += root.left.val</span><br><span class="line">        <span class="keyword">if</span> root.right:</span><br><span class="line">            targetSum -= root.right.val</span><br><span class="line">            <span class="keyword">if</span> self.hasPathSum(root.right,targetSum):</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">True</span> </span><br><span class="line">            targetSum += root.right.val</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">False</span></span><br></pre></td></tr></table></figure>
+
+
+                    
+                        
+
+
+                    
+                    
+                        <p>
+                            <a
+                                href="/2021/09/27/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/112.%20%E8%B7%AF%E5%BE%84%E6%80%BB%E5%92%8C/#post-footer"
+                                class="postShorten-excerpt_link link"
+                                aria-label=""
+                            >
+                                Comment and share
+                            </a>
+                        </p>
+                    
+                </div>
+            
+        </div>
+        
+    </article>
+    
+    
+    <article class="postShorten postShorten--thumbnailimg-bottom">
+        <div class="postShorten-wrap">
+            
+            <div class="postShorten-header">
+                <h1 class="postShorten-title">
+                    
+                        <a
+                            class="link-unstyled"
+                            href="/2021/09/27/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/111.%20%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E6%9C%80%E5%B0%8F%E6%B7%B1%E5%BA%A6/"
+                            aria-label=": 111. 二叉树的最小深度"
+                        >
+                            111. 二叉树的最小深度
+                        </a>
+                    
+                </h1>
+                <div class="postShorten-meta">
+    <time datetime="2021-09-27T20:00:36+08:00">
+	
+		    Sep 27, 2021
+    	
+    </time>
+    
+        <span>in </span>
+        
+    <a class="category-link" href="/categories/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/">leecode刷题复习</a>
+
+
+    
+</div>
+
+            </div>
+            
+                <div class="postShorten-content">
+                    <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Definition for a binary tree node.</span></span><br><span class="line"><span class="comment"># class TreeNode:</span></span><br><span class="line"><span class="comment">#     def __init__(self, val=0, left=None, right=None):</span></span><br><span class="line"><span class="comment">#         self.val = val</span></span><br><span class="line"><span class="comment">#         self.left = left</span></span><br><span class="line"><span class="comment">#         self.right = right</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">minDepth</span>(<span class="params">self, root: <span class="type">Optional</span>[TreeNode]</span>) -&gt; <span class="built_in">int</span>:</span><br><span class="line">        <span class="keyword">if</span> root==<span class="literal">None</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">        left_index = self.minDepth(root.left)</span><br><span class="line">        right_index = self.minDepth(root.right)</span><br><span class="line">        <span class="keyword">if</span> root.left==<span class="literal">None</span> <span class="keyword">and</span> root.right!=<span class="literal">None</span>:</span><br><span class="line">            <span class="keyword">return</span> right_index + <span class="number">1</span> </span><br><span class="line">        <span class="keyword">if</span> root.left!=<span class="literal">None</span> <span class="keyword">and</span> root.right==<span class="literal">None</span>:</span><br><span class="line">            <span class="keyword">return</span> left_index + <span class="number">1</span></span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">min</span>(left_index,right_index) + <span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+
+                    
+                        
+
+
+                    
+                    
+                        <p>
+                            <a
+                                href="/2021/09/27/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/111.%20%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E6%9C%80%E5%B0%8F%E6%B7%B1%E5%BA%A6/#post-footer"
+                                class="postShorten-excerpt_link link"
+                                aria-label=""
+                            >
+                                Comment and share
+                            </a>
+                        </p>
+                    
+                </div>
+            
+        </div>
+        
+    </article>
+    
+    
+    <article class="postShorten postShorten--thumbnailimg-bottom">
+        <div class="postShorten-wrap">
+            
+            <div class="postShorten-header">
+                <h1 class="postShorten-title">
+                    
+                        <a
+                            class="link-unstyled"
+                            href="/2021/09/27/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/11%E7%9B%9B%E6%B0%B4%E6%9C%80%E5%A4%9A%E7%9A%84%E5%AE%B9%E5%99%A8/"
+                            aria-label=": 11盛水最多的容器"
+                        >
+                            11盛水最多的容器
+                        </a>
+                    
+                </h1>
+                <div class="postShorten-meta">
+    <time datetime="2021-09-27T20:00:36+08:00">
+	
+		    Sep 27, 2021
+    	
+    </time>
+    
+        <span>in </span>
+        
+    <a class="category-link" href="/categories/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/">leecode刷题复习</a>
+
+
+    
+</div>
+
+            </div>
+            
+                <div class="postShorten-content">
+                    <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>):</span><br><span class="line">        self.max_value = <span class="number">0</span></span><br><span class="line">    <span class="comment"># def maxArea(self, height: List[int]) -&gt; int:</span></span><br><span class="line">    <span class="comment">#     for i in range(len(height)-1):</span></span><br><span class="line">    <span class="comment">#         for j in range(i+1,len(height)):</span></span><br><span class="line">    <span class="comment">#             lengh = j-i</span></span><br><span class="line">    <span class="comment">#             high = min([height[i],height[j]])</span></span><br><span class="line">    <span class="comment">#             print(lengh*high,i,j)</span></span><br><span class="line">    <span class="comment">#             if self.max_value &gt;= lengh*high :</span></span><br><span class="line">    <span class="comment">#                 continue </span></span><br><span class="line">    <span class="comment">#             else:</span></span><br><span class="line">    <span class="comment">#                 self.max_value = lengh*high</span></span><br><span class="line">    <span class="comment">#     return self.max_value</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">maxArea</span>(<span class="params">self, height: <span class="type">List</span>[<span class="built_in">int</span>]</span>) -&gt; <span class="built_in">int</span>:</span><br><span class="line">        left = <span class="number">0</span></span><br><span class="line">        right = <span class="built_in">len</span>(height)-<span class="number">1</span></span><br><span class="line">        max_value = <span class="number">0</span></span><br><span class="line">        <span class="keyword">while</span> left &lt; right: </span><br><span class="line">            min_left_right = <span class="built_in">min</span>(height[left],height[right])</span><br><span class="line">            max_value_undetermined = min_left_right*(right-left)</span><br><span class="line">            <span class="keyword">if</span> max_value &lt; max_value_undetermined:</span><br><span class="line">                max_value = max_value_undetermined</span><br><span class="line">            <span class="keyword">if</span> min_left_right == height[left]:</span><br><span class="line">                left += <span class="number">1</span></span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                right -= <span class="number">1</span></span><br><span class="line">        <span class="keyword">return</span> max_value</span><br></pre></td></tr></table></figure>
+
+
+                    
+                        
+
+
+                    
+                    
+                        <p>
+                            <a
+                                href="/2021/09/27/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/11%E7%9B%9B%E6%B0%B4%E6%9C%80%E5%A4%9A%E7%9A%84%E5%AE%B9%E5%99%A8/#post-footer"
+                                class="postShorten-excerpt_link link"
+                                aria-label=""
+                            >
+                                Comment and share
+                            </a>
+                        </p>
+                    
+                </div>
+            
+        </div>
+        
+    </article>
+    
+    
+    <article class="postShorten postShorten--thumbnailimg-bottom">
+        <div class="postShorten-wrap">
+            
+            <div class="postShorten-header">
+                <h1 class="postShorten-title">
+                    
+                        <a
+                            class="link-unstyled"
+                            href="/2021/09/27/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/131.%20%E5%88%86%E5%89%B2%E5%9B%9E%E6%96%87%E4%B8%B2/"
+                            aria-label=": 131. 分割回文串"
+                        >
+                            131. 分割回文串
+                        </a>
+                    
+                </h1>
+                <div class="postShorten-meta">
+    <time datetime="2021-09-27T20:00:36+08:00">
+	
+		    Sep 27, 2021
+    	
+    </time>
+    
+        <span>in </span>
+        
+    <a class="category-link" href="/categories/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/">leecode刷题复习</a>
+
+
+    
+</div>
+
+            </div>
+            
+                <div class="postShorten-content">
+                    <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">partition</span>(<span class="params">self, s: <span class="built_in">str</span></span>) -&gt; <span class="type">List</span>[<span class="type">List</span>[<span class="built_in">str</span>]]:</span><br><span class="line">        path,result = [],[] </span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">symmetric_str</span>(<span class="params">path</span>) -&gt; <span class="built_in">bool</span>:       <span class="comment"># 判断是否为回文串；</span></span><br><span class="line">            is_or_not = <span class="literal">True</span></span><br><span class="line">            <span class="keyword">for</span> num <span class="keyword">in</span> path:</span><br><span class="line">                left,right = <span class="number">0</span>,<span class="built_in">len</span>(num)-<span class="number">1</span></span><br><span class="line">                <span class="keyword">while</span> left&lt;=right <span class="keyword">and</span> num[left]==num[right]:</span><br><span class="line">                    left += <span class="number">1</span></span><br><span class="line">                    right -= <span class="number">1</span></span><br><span class="line">                <span class="keyword">if</span> left &lt;= right: </span><br><span class="line">                    is_or_not = is_or_not <span class="keyword">and</span> <span class="literal">False</span></span><br><span class="line">            <span class="keyword">return</span> is_or_not</span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">split_tree</span>(<span class="params">s,start_index</span>):       <span class="comment"># 用 分叉树的回溯，解决 组合、分割。</span></span><br><span class="line">            <span class="keyword">if</span> start_index&gt;=<span class="built_in">len</span>(s): </span><br><span class="line">                <span class="keyword">if</span> symmetric_str(path):                </span><br><span class="line">                    result.append(path.copy())</span><br><span class="line">                <span class="keyword">return</span> </span><br><span class="line">            <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(start_index,<span class="built_in">len</span>(s)):</span><br><span class="line">                path.append(s[start_index:i+<span class="number">1</span>])</span><br><span class="line">                split_tree(s,i+<span class="number">1</span>)</span><br><span class="line">                path.pop()</span><br><span class="line">            <span class="keyword">return</span> result </span><br><span class="line">        <span class="keyword">return</span> split_tree(s,<span class="number">0</span>)</span><br></pre></td></tr></table></figure>
+
+
+                    
+                        
+
+
+                    
+                    
+                        <p>
+                            <a
+                                href="/2021/09/27/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/131.%20%E5%88%86%E5%89%B2%E5%9B%9E%E6%96%87%E4%B8%B2/#post-footer"
+                                class="postShorten-excerpt_link link"
+                                aria-label=""
+                            >
+                                Comment and share
+                            </a>
+                        </p>
+                    
+                </div>
+            
+        </div>
+        
+    </article>
+    
+    
+    <article class="postShorten postShorten--thumbnailimg-bottom">
+        <div class="postShorten-wrap">
+            
+            <div class="postShorten-header">
+                <h1 class="postShorten-title">
+                    
+                        <a
+                            class="link-unstyled"
+                            href="/2021/09/27/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/153.%20%E5%AF%BB%E6%89%BE%E6%97%8B%E8%BD%AC%E6%8E%92%E5%BA%8F%E6%95%B0%E7%BB%84%E4%B8%AD%E7%9A%84%E6%9C%80%E5%B0%8F%E5%80%BC/"
+                            aria-label=": 153. 寻找旋转排序数组中的最小值"
+                        >
+                            153. 寻找旋转排序数组中的最小值
+                        </a>
+                    
+                </h1>
+                <div class="postShorten-meta">
+    <time datetime="2021-09-27T20:00:36+08:00">
+	
+		    Sep 27, 2021
+    	
+    </time>
+    
+        <span>in </span>
+        
+    <a class="category-link" href="/categories/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/">leecode刷题复习</a>
+
+
+    
+</div>
+
+            </div>
+            
+                <div class="postShorten-content">
+                    <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">findMin</span>(<span class="params">self, nums: <span class="type">List</span>[<span class="built_in">int</span>]</span>) -&gt; <span class="built_in">int</span>:</span><br><span class="line">        <span class="comment"># 1、复原方法</span></span><br><span class="line">        left = <span class="number">0</span></span><br><span class="line">        right = <span class="built_in">len</span>(nums)-<span class="number">1</span></span><br><span class="line">        <span class="comment"># def restore(nums):</span></span><br><span class="line">        <span class="comment">#     while nums[left] &gt; nums[right]:</span></span><br><span class="line">        <span class="comment">#         nums.insert(0,nums.pop())</span></span><br><span class="line">        <span class="comment">#     return nums</span></span><br><span class="line">        <span class="comment"># return restore(nums)[0]</span></span><br><span class="line">        <span class="comment"># 2、二分法</span></span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">search_II</span>(<span class="params">left,right</span>):</span><br><span class="line">            <span class="keyword">while</span> left&lt;right:</span><br><span class="line">                mid = (left+right)&gt;&gt;<span class="number">1</span></span><br><span class="line">                <span class="keyword">if</span> nums[mid]&lt;nums[right]: <span class="comment"># 一定不在右侧</span></span><br><span class="line">                    right = mid</span><br><span class="line">                <span class="keyword">else</span>:</span><br><span class="line">                    left = mid+<span class="number">1</span></span><br><span class="line">            <span class="keyword">return</span> left </span><br><span class="line">        <span class="keyword">return</span> nums[search_II(left,right)]</span><br></pre></td></tr></table></figure>
+
+
+                    
+                        
+
+
+                    
+                    
+                        <p>
+                            <a
+                                href="/2021/09/27/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/153.%20%E5%AF%BB%E6%89%BE%E6%97%8B%E8%BD%AC%E6%8E%92%E5%BA%8F%E6%95%B0%E7%BB%84%E4%B8%AD%E7%9A%84%E6%9C%80%E5%B0%8F%E5%80%BC/#post-footer"
+                                class="postShorten-excerpt_link link"
+                                aria-label=""
+                            >
+                                Comment and share
+                            </a>
+                        </p>
+                    
+                </div>
+            
+        </div>
+        
+    </article>
+    
+    
+    <article class="postShorten postShorten--thumbnailimg-bottom">
+        <div class="postShorten-wrap">
+            
+            <div class="postShorten-header">
+                <h1 class="postShorten-title">
+                    
+                        <a
+                            class="link-unstyled"
+                            href="/2021/09/27/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/154.%20%E5%AF%BB%E6%89%BE%E6%97%8B%E8%BD%AC%E6%8E%92%E5%BA%8F%E6%95%B0%E7%BB%84%E4%B8%AD%E7%9A%84%E6%9C%80%E5%B0%8F%E5%80%BC%20II/"
+                            aria-label=": 154. 寻找旋转排序数组中的最小值 II"
+                        >
+                            154. 寻找旋转排序数组中的最小值 II
+                        </a>
+                    
+                </h1>
+                <div class="postShorten-meta">
+    <time datetime="2021-09-27T20:00:36+08:00">
+	
+		    Sep 27, 2021
+    	
+    </time>
+    
+        <span>in </span>
+        
+    <a class="category-link" href="/categories/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/">leecode刷题复习</a>
+
+
+    
+</div>
+
+            </div>
+            
+                <div class="postShorten-content">
+                    <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">findMin</span>(<span class="params">self, nums: <span class="type">List</span>[<span class="built_in">int</span>]</span>) -&gt; <span class="built_in">int</span>:</span><br><span class="line">        <span class="comment"># 经典题目.(下面这个写复杂了,没必要比较三个点。)</span></span><br><span class="line">        <span class="comment"># 这个 二分法不是比较中间位置，而是比较两头和中间三个点。</span></span><br><span class="line">        <span class="comment"># def search_II():</span></span><br><span class="line">        <span class="comment">#     left = 0</span></span><br><span class="line">        <span class="comment">#     right = len(nums)-1</span></span><br><span class="line">        <span class="comment">#     while left&lt;right:</span></span><br><span class="line">        <span class="comment">#         mid = (left+right)&gt;&gt;1</span></span><br><span class="line">        <span class="comment">#         if nums[left]&gt;nums[right]:</span></span><br><span class="line">        <span class="comment">#             if nums[mid]&lt;=nums[right]:</span></span><br><span class="line">        <span class="comment">#                 right = mid # if mid!=right else mid-1</span></span><br><span class="line">        <span class="comment">#             elif nums[mid]&gt;nums[right]:</span></span><br><span class="line">        <span class="comment">#                 left = mid+1 # if mid!=left else mid+1  </span></span><br><span class="line">        <span class="comment">#         elif nums[left]==nums[right]:  </span></span><br><span class="line">        <span class="comment">#             left += 1</span></span><br><span class="line">        <span class="comment">#         elif nums[left]&lt;nums[right]:</span></span><br><span class="line">        <span class="comment">#             return nums[left]</span></span><br><span class="line">        <span class="comment">#     return nums[left]</span></span><br><span class="line">        <span class="comment"># return search_II()</span></span><br><span class="line">        left = <span class="number">0</span></span><br><span class="line">        right = <span class="built_in">len</span>(nums)-<span class="number">1</span></span><br><span class="line">        <span class="keyword">while</span> left&lt;right:</span><br><span class="line">            mid = (left+right)&gt;&gt;<span class="number">1</span></span><br><span class="line">            <span class="keyword">if</span> nums[mid]&gt;nums[right]:</span><br><span class="line">                left = mid+<span class="number">1</span></span><br><span class="line">            <span class="keyword">elif</span> nums[mid]&lt;nums[right]:</span><br><span class="line">                right = mid </span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                right -= <span class="number">1</span></span><br><span class="line">        <span class="keyword">return</span> nums[left]</span><br></pre></td></tr></table></figure>
+
+
+                    
+                        
+
+
+                    
+                    
+                        <p>
+                            <a
+                                href="/2021/09/27/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/154.%20%E5%AF%BB%E6%89%BE%E6%97%8B%E8%BD%AC%E6%8E%92%E5%BA%8F%E6%95%B0%E7%BB%84%E4%B8%AD%E7%9A%84%E6%9C%80%E5%B0%8F%E5%80%BC%20II/#post-footer"
+                                class="postShorten-excerpt_link link"
+                                aria-label=""
+                            >
+                                Comment and share
+                            </a>
+                        </p>
+                    
+                </div>
+            
+        </div>
+        
+    </article>
+    
+    
+    <article class="postShorten postShorten--thumbnailimg-bottom">
+        <div class="postShorten-wrap">
+            
+            <div class="postShorten-header">
+                <h1 class="postShorten-title">
+                    
+                        <a
+                            class="link-unstyled"
+                            href="/2021/09/27/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/17%E7%94%B5%E8%AF%9D%E5%8F%B7%E7%A0%81%E7%9A%84%E5%AD%97%E6%AF%8D%E7%BB%84%E5%90%88/"
+                            aria-label=": 17电话号码的字母组合"
+                        >
+                            17电话号码的字母组合
+                        </a>
+                    
+                </h1>
+                <div class="postShorten-meta">
+    <time datetime="2021-09-27T20:00:36+08:00">
+	
+		    Sep 27, 2021
+    	
+    </time>
+    
+        <span>in </span>
+        
+    <a class="category-link" href="/categories/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/">leecode刷题复习</a>
+
+
+    
+</div>
+
+            </div>
+            
+                <div class="postShorten-content">
+                    <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>):</span><br><span class="line">        self.path = <span class="string">&#x27;&#x27;</span></span><br><span class="line">        self.result = []</span><br><span class="line">        self.<span class="built_in">dict</span> = &#123;&#125;</span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">push_dict</span>():      <span class="comment"># 建立映射关系</span></span><br><span class="line">            self.<span class="built_in">dict</span>[<span class="number">2</span>] = <span class="string">&#x27;abc&#x27;</span></span><br><span class="line">            self.<span class="built_in">dict</span>[<span class="number">3</span>] = <span class="string">&#x27;def&#x27;</span></span><br><span class="line">            self.<span class="built_in">dict</span>[<span class="number">4</span>] = <span class="string">&#x27;ghi&#x27;</span></span><br><span class="line">            self.<span class="built_in">dict</span>[<span class="number">5</span>] = <span class="string">&#x27;jkl&#x27;</span></span><br><span class="line">            self.<span class="built_in">dict</span>[<span class="number">6</span>] = <span class="string">&#x27;mno&#x27;</span></span><br><span class="line">            self.<span class="built_in">dict</span>[<span class="number">7</span>] = <span class="string">&#x27;pqrs&#x27;</span></span><br><span class="line">            self.<span class="built_in">dict</span>[<span class="number">8</span>] = <span class="string">&#x27;tuv&#x27;</span></span><br><span class="line">            self.<span class="built_in">dict</span>[<span class="number">9</span>] = <span class="string">&#x27;wxyz&#x27;</span></span><br><span class="line">        push_dict()</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">letterCombinations</span>(<span class="params">self, digits: <span class="built_in">str</span></span>) -&gt; <span class="type">List</span>[<span class="built_in">str</span>]:</span><br><span class="line">        <span class="comment"># 先想到暴力解法， 用x 个for 循环 嵌套，但是这个x 的数量 没法控制。我们很快想到用树结构配合上回溯的思路解决；</span></span><br><span class="line">        <span class="comment"># 先需要 建立一个映射关系；</span></span><br><span class="line">        <span class="comment"># 因为这不是在一个区间内 找组合，不需要 startindex 来内部划分 避免重复，我们只需要能跳转到别的区间即可；</span></span><br><span class="line">        <span class="keyword">return</span> self.letterCombinations_(digits,<span class="number">0</span>)</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">letterCombinations_</span>(<span class="params">self,digits,index</span>) -&gt; <span class="type">List</span>[<span class="built_in">str</span>]:  <span class="comment"># index 来表明 用的是哪个区间。</span></span><br><span class="line">        <span class="keyword">if</span> index == <span class="built_in">len</span>(digits):        <span class="comment"># 这个是 树结构到底了的 返回触发。</span></span><br><span class="line">            <span class="keyword">return</span> self.result</span><br><span class="line">        target = self.<span class="built_in">dict</span>[<span class="built_in">int</span>(digits[index])]</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>,<span class="built_in">len</span>(target)):</span><br><span class="line">            self.path += target[i]</span><br><span class="line">            <span class="keyword">if</span> index == <span class="built_in">len</span>(digits)-<span class="number">1</span>:  <span class="comment"># 叶子结点</span></span><br><span class="line">                self.result.append(self.path)</span><br><span class="line">                <span class="built_in">print</span>(self.result)</span><br><span class="line">            self.letterCombinations_(digits,index+<span class="number">1</span>)</span><br><span class="line">            self.path = self.path[:-<span class="number">1</span>]</span><br><span class="line">        <span class="keyword">return</span> self.result</span><br></pre></td></tr></table></figure>
+
+
+                    
+                        
+
+
+                    
+                    
+                        <p>
+                            <a
+                                href="/2021/09/27/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/17%E7%94%B5%E8%AF%9D%E5%8F%B7%E7%A0%81%E7%9A%84%E5%AD%97%E6%AF%8D%E7%BB%84%E5%90%88/#post-footer"
+                                class="postShorten-excerpt_link link"
+                                aria-label=""
+                            >
+                                Comment and share
+                            </a>
+                        </p>
+                    
+                </div>
+            
+        </div>
+        
+    </article>
+    
+    
+    <article class="postShorten postShorten--thumbnailimg-bottom">
+        <div class="postShorten-wrap">
+            
+            <div class="postShorten-header">
+                <h1 class="postShorten-title">
+                    
+                        <a
+                            class="link-unstyled"
+                            href="/2021/09/27/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/20%20%E6%9C%89%E6%95%88%E7%9A%84%E6%8B%AC%E5%8F%B7/"
+                            aria-label=": 20 有效的括号"
+                        >
+                            20 有效的括号
+                        </a>
+                    
+                </h1>
+                <div class="postShorten-meta">
+    <time datetime="2021-09-27T20:00:36+08:00">
+	
+		    Sep 27, 2021
+    	
+    </time>
+    
+        <span>in </span>
+        
+    <a class="category-link" href="/categories/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/">leecode刷题复习</a>
+
+
+    
+</div>
+
+            </div>
+            
+                <div class="postShorten-content">
+                    <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">isValid</span>(<span class="params">self, s: <span class="built_in">str</span></span>) -&gt; <span class="built_in">bool</span>:</span><br><span class="line">        stack = [<span class="string">&quot;sentry&quot;</span>]  <span class="comment"># 添加哨兵</span></span><br><span class="line">        top = <span class="number">1</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> s:</span><br><span class="line">            <span class="keyword">if</span> stack[top-<span class="number">1</span>] == <span class="string">&quot;(&quot;</span> <span class="keyword">and</span> i == <span class="string">&quot;)&quot;</span>:</span><br><span class="line">                stack.pop()</span><br><span class="line">                top -= <span class="number">1</span></span><br><span class="line">                <span class="keyword">continue</span></span><br><span class="line">            <span class="keyword">elif</span> stack[top-<span class="number">1</span>] == <span class="string">&quot;[&quot;</span> <span class="keyword">and</span> i == <span class="string">&quot;]&quot;</span>:</span><br><span class="line">                stack.pop()</span><br><span class="line">                top -= <span class="number">1</span></span><br><span class="line">                <span class="keyword">continue</span></span><br><span class="line">            <span class="keyword">elif</span> stack[top-<span class="number">1</span>] == <span class="string">&quot;&#123;&quot;</span> <span class="keyword">and</span> i == <span class="string">&quot;&#125;&quot;</span>:</span><br><span class="line">                stack.pop()</span><br><span class="line">                top -= <span class="number">1</span></span><br><span class="line">                <span class="keyword">continue</span></span><br><span class="line">            stack.append(i)</span><br><span class="line">            top += <span class="number">1</span></span><br><span class="line">            <span class="built_in">print</span>(top, stack[top-<span class="number">2</span>],stack[top-<span class="number">1</span>])</span><br><span class="line">        <span class="keyword">if</span> top == <span class="number">1</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">False</span></span><br></pre></td></tr></table></figure>
+
+
+                    
+                        
+
+
+                    
+                    
+                        <p>
+                            <a
+                                href="/2021/09/27/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/20%20%E6%9C%89%E6%95%88%E7%9A%84%E6%8B%AC%E5%8F%B7/#post-footer"
+                                class="postShorten-excerpt_link link"
+                                aria-label=""
+                            >
+                                Comment and share
+                            </a>
+                        </p>
+                    
+                </div>
+            
+        </div>
+        
+    </article>
+    
+    <div class="pagination-bar">
+    <ul class="pagination">
+        
+          <li class="pagination-prev">
+            <a
+                class="btn btn--default btn--small"
+                href="/categories/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/page/7/"
+                aria-label="NEWER POSTS"
+            >
+              <i class="fa fa-angle-left text-base icon-mr"></i>
+              <span>NEWER POSTS</span>
+            </a>
+          </li>
+        
+        
+          <li class="pagination-next">
+            <a
+                class="btn btn--default btn--small"
+                href="/categories/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/page/9/"
+                aria-label="OLDER POSTS"
+            >
+              <span>OLDER POSTS</span>
+              <i class="fa fa-angle-right text-base icon-ml"></i>
+            </a>
+          </li>
+        
+        <li class="pagination-number">page 8 of 10</li>
+    </ul>
+</div>
+
+</section>
+
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2022 陈宇韶chenyushao. All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+        </div>
+        
+
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-times"></i>
+        </div>
+        
+            <h4 id="about-card-name">陈宇韶chenyushao</h4>
+        
+            <div id="about-card-bio"><p>author.bio</p>
+</div>
+        
+        
+            <div id="about-card-job">
+                <i class="fa fa-briefcase"></i>
+                <br/>
+                <p>author.job</p>
+
+            </div>
+        
+        
+    </div>
+</div>
+
+        
+        
+<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
+        <!--SCRIPTS-->
+
+<script src="/assets/js/script-sbgpeqyl6jw5qe60mnfuzifzwky5la4ftiuwmschcdzx2pg5tfpl1pfp13e3.min.js"></script>
+
+<!--SCRIPTS END-->
+
+
+
+
+
+    </body>
+</html>
