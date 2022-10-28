@@ -3,8 +3,7 @@
   <entry>
     <title>c语言</title>
     <url>/2022/10/28/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0/c%E8%AF%AD%E8%A8%80/</url>
-    <content><![CDATA[<span id="more"></span>
-<p>​		对于程序员来说内存可以简化成这样一种东西：</p>
+    <content><![CDATA[<p>​		对于程序员来说内存可以简化成这样一种东西：<span id="more"></span></p>
 <p><img src="/2022/10/28/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0/c%E8%AF%AD%E8%A8%80/4d060c3f67c22cd4b07273db00f64708_1440w-6959095.jpg" alt="img"></p>
 <p>​		你可以把它想象成一条无限长的纸带。纸带上边有一个个的小格子，每个小格子正好是一字节，里边能够存放一个数字。计算机的工作就是对这些小格子里的数字做处理。虽然你在电脑上能够看视频、听音乐，但这些东西本质上都是存在内存这条纸带上的数字。</p>
 <p>​		对于纸带上的每个小格子来说能够采取的操作只有两种「读取」和「写入」。每次执行操作时都必须要指明对于哪一个格子进行操作，为了方便起见人们就给这些格子编了号。如上图所示，第一个就是0号，第二个是1号以此类推（前边的0x代表是16进制的意思）。而这些编号就是我们所说的指针的内容，指针变量里边所记载的就是这些编号。但为什么我们平时看到的指针值都是类似于0xa2cf23c3d这种呢？这是因为，内存非常之大，作为编号的数字也非常大。所以看是来就像是神秘代码一样。</p>
@@ -62,10 +61,27 @@
       </tags>
   </entry>
   <entry>
+    <title>管程实现读者优先</title>
+    <url>/2022/10/28/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0/%E7%AE%A1%E7%A8%8B%E5%AE%9E%E7%8E%B0%E8%AF%BB%E8%80%85%E4%BC%98%E5%85%88/</url>
+    <content><![CDATA[<p>Public Database::Read(){<br>  startRead()<br>    read<br>  doneRead()<br>}</p>
+<span id="more"></span>
+<p>Public Database::Write(){<br>    startWrite()<br>    write<br>  doneWrite()<br>}</p>
+<p>Private Database::startRead(){<br>  lock.Acquire()<br>    while((AW+WW)&gt;0){<br>      WR++<br>        okToRead.wait(lock)     &#x2F;&#x2F;不同于信号量，管程相当于手动控制了阻塞的位置。<br>      WR–<br>    }<br>  AR++<br>  lock.Release()<br>}<br>Private Database::doneRead(){<br>  lock.Acquire()<br>      AR–<br>    if (AR&#x3D;&#x3D;0&amp;&amp;WW&gt;0 ){<br>      okToWrite.signal()<br>    }<br>  lock.Release()<br>}</p>
+<p>Private Database::startWrite(){<br>  lock.Acquire()<br>    while((AR+AW)&gt;0){<br>      WW++<br>      okToWrite.wait(lock)<br>      WW–<br>    }<br>  AW++<br>  lock.Release()<br>}<br>Private Database::doneWrite(){<br>  lock.Acquire()<br>    AW–<br>    if (WW&gt;0){<br>      okToWrite.signal()<br>    }<br>      else if (WR&gt;0){<br>      okToRead.broadcast()    &#x2F;&#x2F; 全部唤醒。因为此时写者没了，多个读者可以一起醒来执行。<br>    }<br>  lock.Release()<br>}</p>
+]]></content>
+      <categories>
+        <category>操作系统学习</category>
+      </categories>
+      <tags>
+        <tag>管程</tag>
+        <tag>读者优先</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>信号量解决哲学家吃饭问题</title>
     <url>/2022/10/28/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0/%E4%BF%A1%E5%8F%B7%E9%87%8F%E8%A7%A3%E5%86%B3%E5%93%B2%E5%AD%A6%E5%AE%B6%E5%90%83%E9%A5%AD%E9%97%AE%E9%A2%98/</url>
-    <content><![CDATA[<span id="more"></span>
-<h1 id="问题介绍"><a href="#问题介绍" class="headerlink" title="问题介绍"></a>问题介绍</h1><p><img src="/2022/10/28/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0/%E4%BF%A1%E5%8F%B7%E9%87%8F%E8%A7%A3%E5%86%B3%E5%93%B2%E5%AD%A6%E5%AE%B6%E5%90%83%E9%A5%AD%E9%97%AE%E9%A2%98/%E6%9C%AA%E5%91%BD%E5%90%8D%E6%96%87%E4%BB%B6.png" alt="未命名文件"></p>
+    <content><![CDATA[<p>问题介绍 <span id="more"></span></p>
+<p><img src="/2022/10/28/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0/%E4%BF%A1%E5%8F%B7%E9%87%8F%E8%A7%A3%E5%86%B3%E5%93%B2%E5%AD%A6%E5%AE%B6%E5%90%83%E9%A5%AD%E9%97%AE%E9%A2%98/%E6%9C%AA%E5%91%BD%E5%90%8D%E6%96%87%E4%BB%B6.png" alt="未命名文件"></p>
 <p>前提假设：</p>
 <p>​		一个哲学家吃饭要同时用到左右两个叉子；</p>
 <p>​		哲学家的行为有：吃、思考。</p>
@@ -120,8 +136,8 @@
   <entry>
     <title>管程实现读者优先and写者优先</title>
     <url>/2022/10/28/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0/%E7%AE%A1%E7%A8%8B%E5%AE%9E%E7%8E%B0%E8%AF%BB%E8%80%85%E4%BC%98%E5%85%88and%E5%86%99%E8%80%85%E4%BC%98%E5%85%88/</url>
-    <content><![CDATA[<span id="more"></span>
-<h1 id="前提条件"><a href="#前提条件" class="headerlink" title="前提条件"></a>前提条件</h1><ol>
+    <content><![CDATA[<p>前提条件 <span id="more"></span></p>
+<ol>
 <li>允许多个读者可以同时对文件执行读操作；</li>
 <li>只允许一个写者往文件中写信息；</li>
 <li>任一写者在完成写操作之前不允许其他读者或写者工作；</li>
@@ -181,24 +197,6 @@
         <tag>管程</tag>
         <tag>读者优先</tag>
         <tag>写者优先</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>管程实现读者优先</title>
-    <url>/2022/10/28/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0/%E7%AE%A1%E7%A8%8B%E5%AE%9E%E7%8E%B0%E8%AF%BB%E8%80%85%E4%BC%98%E5%85%88/</url>
-    <content><![CDATA[<span id="more"></span>
-<p>Public Database::Read(){<br>  startRead()<br>    read<br>  doneRead()<br>}</p>
-<!--more-->
-<p>Public Database::Write(){<br>    startWrite()<br>    write<br>  doneWrite()<br>}</p>
-<p>Private Database::startRead(){<br>  lock.Acquire()<br>    while((AW+WW)&gt;0){<br>      WR++<br>        okToRead.wait(lock)     &#x2F;&#x2F;不同于信号量，管程相当于手动控制了阻塞的位置。<br>      WR–<br>    }<br>  AR++<br>  lock.Release()<br>}<br>Private Database::doneRead(){<br>  lock.Acquire()<br>      AR–<br>    if (AR&#x3D;&#x3D;0&amp;&amp;WW&gt;0 ){<br>      okToWrite.signal()<br>    }<br>  lock.Release()<br>}</p>
-<p>Private Database::startWrite(){<br>  lock.Acquire()<br>    while((AR+AW)&gt;0){<br>      WW++<br>      okToWrite.wait(lock)<br>      WW–<br>    }<br>  AW++<br>  lock.Release()<br>}<br>Private Database::doneWrite(){<br>  lock.Acquire()<br>    AW–<br>    if (WW&gt;0){<br>      okToWrite.signal()<br>    }<br>      else if (WR&gt;0){<br>      okToRead.broadcast()    &#x2F;&#x2F; 全部唤醒。因为此时写者没了，多个读者可以一起醒来执行。<br>    }<br>  lock.Release()<br>}</p>
-]]></content>
-      <categories>
-        <category>操作系统学习</category>
-      </categories>
-      <tags>
-        <tag>管程</tag>
-        <tag>读者优先</tag>
       </tags>
   </entry>
 </search>
