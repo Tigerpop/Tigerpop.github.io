@@ -1,23 +1,26 @@
-
 <!DOCTYPE html>
 <html lang="en">
-    
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="generator" content="Tiger_pop&#39;s Blog">
-    <title>16单链表逆转 - Tiger_pop&#39;s Blog</title>
-    <meta name="author" content="陈宇韶chenyushao">
-    
-    
-    
-        
-            <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
-        
-    
-    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"陈宇韶chenyushao","sameAs":["https://github.com/","https://www.linkedin.com/profile/","mailto"]},"articleBody":"12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667686970717273747576777879808182838485868788899091&#x27;&#x27;&#x27;给了单链表的头结点，给了一个int K 。要求把每 K 个结点逆转一下，要求返回的是逆转以后头结点的指针。&#x27;&#x27;&#x27;class Node():    def __init__(self,data):        self.data = data        self.next = Noneclass linkedlist():    def __init__(self):        self.front = None        self.rear = None    def add(self,item):        node = Node(item)        if self.front==None and self.rear== None:            self.front = node            self.rear = node        else:            self.rear.next = node            self.rear = self.rear.next    def show(self):        list_ = []        temp = self.front        while temp:            list_.append(temp.data)            temp = temp.next        print(list_)        return list_ll = linkedlist()ll.add(&#x27;seat&#x27;)ll.add(1)ll.add(2)ll.add(3)ll.add(4)ll.add(5)ll.add(6)ll.show()&#x27;&#x27;&#x27;给了单链表的头结点，给了一个int K 。要求把每 K 个结点逆转一下，要求返回的是逆转以后头结点的指针。&#x27;&#x27;&#x27;&#x27;&#x27;&#x27;需要三个指针，new指向逆转好的，old指向还没有逆转好的，temp指向old后面的结点以防丢失后面的数据。三个指针连续的后移。&#x27;&#x27;&#x27;def reverse(head,k):    new = head.next    old = new.next    for i in range(k-1):        temp = old.next        old.next = new # 实现逆序操作。        new = old        old = temp    head.next.next = old       # 保证链表的完整性。                          # head的 next，这里可以体现出头部设置空结点的好处。                          # 这里的空结点用seat在链表里设定了。就没有写进reverse方法里面了。    head.next = new  #    return newresult = reverse(ll.front,6)print(result.data)ll.show()&#x27;&#x27;&#x27;注意：这里重点介绍一下设置头结点，在链表操作中的好处1、使头部的操作和中部尾部的操作一致；2、使非空链表与空链表的操作统一；3、在改变链表的顺序时，可以避免链表数据丢失。&#x27;&#x27;&#x27;&#x27;&#x27;&#x27;就比如上面这题，如果有一个头结点，可以说相当于有一个锚。方便和后面的几个新加入的new、old等指针配合使用。纠正一个我之前的错误认知，插入结点时，并不是说一定要保证链表的连贯不断，而是要保证 断开的结点还能 在书写上能够找回来，插入结点时之所以是&quot;先插再断&quot;，是因为这样可以在书写上实现找到后序结点。本题中，逆序的过程中，出现过断链的情况，但是借助new 、old 指针，可以找回结点，所以也没关系。&#x27;&#x27;&#x27;\n\n","dateCreated":"2021-09-27T20:00:36+08:00","dateModified":"2022-10-28T23:41:30+08:00","datePublished":"2021-09-27T20:00:36+08:00","description":"","headline":"16单链表逆转","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/16%E5%8D%95%E9%93%BE%E8%A1%A8%E9%80%86%E8%BD%AC/"},"publisher":{"@type":"Organization","name":"陈宇韶chenyushao","sameAs":["https://github.com/","https://www.linkedin.com/profile/","mailto"]},"url":"http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/16%E5%8D%95%E9%93%BE%E8%A1%A8%E9%80%86%E8%BD%AC/","keywords":"链表"}</script>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha256-AbA177XfpSnFEvgpYu1jMygiLabzPCJCRIBtR5jGc0k=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.13.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
     <meta name="description" content="这是文章开头，显示在主页面，详情请点击此处。">
-<meta property="og:type" content="blog">
+<meta property="og:type" content="article">
 <meta property="og:title" content="16单链表逆转">
 <meta property="og:url" content="http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/16%E5%8D%95%E9%93%BE%E8%A1%A8%E9%80%86%E8%BD%AC/index.html">
 <meta property="og:site_name" content="Tiger_pop&#39;s Blog">
@@ -28,569 +31,287 @@
 <meta property="article:author" content="陈宇韶chenyushao">
 <meta property="article:tag" content="链表">
 <meta name="twitter:card" content="summary">
-    
-    
-        
-    
-    
-    
-    
-    
-    <!--STYLES-->
-    
-<link rel="stylesheet" href="/assets/css/style-yrbj4x87sme2npnaj5hmxl88fi8ktzpa1hwzrvan2almcpvu5niegj13ryff.min.css">
 
-    <!--STYLES END-->
-    
 
-    
+<link rel="canonical" href="http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/16%E5%8D%95%E9%93%BE%E8%A1%A8%E9%80%86%E8%BD%AC/">
 
-    
-        
-    
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/16%E5%8D%95%E9%93%BE%E8%A1%A8%E9%80%86%E8%BD%AC/","path":"2021/09/27/数据结构_浙江大学/16单链表逆转/","title":"16单链表逆转"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>16单链表逆转 | Tiger_pop's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="Tiger_pop's Blog" type="application/atom+xml">
 </head>
 
-    <body>
-        <div id="blog">
-            <!-- Define author's picture -->
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
 
-
-    
-
-<header id="header" data-behavior="4">
-    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
-    <div class="header-title">
-        <a
-            class="header-title-link"
-            href="/"
-            aria-label=""
-        >
-            Tiger_pop&#39;s Blog
-        </a>
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
     </div>
-    
-        
-            <a
-                class="header-right-picture "
-                href="#about"
-                aria-label="Open the link: /#about"
-            >
-        
-        
-        </a>
-    
-</header>
+  </div>
 
-            <!-- Define author's picture -->
+  <div class="site-meta">
 
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Tiger_pop's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">tiger_pop 的博客</p>
+  </div>
 
-<nav id="sidebar" data-behavior="4">
-    <div class="sidebar-container">
-        
-        
-            <ul class="sidebar-buttons">
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="/"
-                            
-                            rel="noopener"
-                            title="Home"
-                        >
-                        <i class="sidebar-button-icon fa fa-home" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Home</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="/all-categories"
-                            
-                            rel="noopener"
-                            title="Categories"
-                        >
-                        <i class="sidebar-button-icon fa fa-bookmark" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Categories</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="/all-tags"
-                            
-                            rel="noopener"
-                            title="Tags"
-                        >
-                        <i class="sidebar-button-icon fa fa-tags" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Tags</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="/all-archives"
-                            
-                            rel="noopener"
-                            title="Archives"
-                        >
-                        <i class="sidebar-button-icon fa fa-archive" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Archives</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="#about"
-                            
-                            rel="noopener"
-                            title="About"
-                        >
-                        <i class="sidebar-button-icon fa fa-question" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">About</span>
-                    </a>
-            </li>
-            
-        </ul>
-        
-            <ul class="sidebar-buttons">
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="https://github.com/"
-                            
-                                target="_blank"
-                            
-                            rel="noopener"
-                            title="GitHub"
-                        >
-                        <i class="sidebar-button-icon fab fa-github" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">GitHub</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="https://www.linkedin.com/profile/"
-                            
-                                target="_blank"
-                            
-                            rel="noopener"
-                            title="LinkedIn"
-                        >
-                        <i class="sidebar-button-icon fab fa-linkedin" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">LinkedIn</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="/mailto"
-                            
-                            rel="noopener"
-                            title="Mail"
-                        >
-                        <i class="sidebar-button-icon fa fa-envelope" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Mail</span>
-                    </a>
-            </li>
-            
-        </ul>
-        
-            <ul class="sidebar-buttons">
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="/atom.xml"
-                            
-                            rel="noopener"
-                            title="RSS"
-                        >
-                        <i class="sidebar-button-icon fa fa-rss" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">RSS</span>
-                    </a>
-            </li>
-            
-        </ul>
-        
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
     </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+  </ul>
 </nav>
 
-            
-            <div id="main" data-behavior="4"
-                 class="
-                        hasCoverMetaIn
-                        ">
-                
-<article class="post">
-    
-    
-        <div class="post-header main-content-wrap text-left">
-    
-        <h1 class="post-title">
-            16单链表逆转
-        </h1>
-    
-    
-        <div class="post-meta">
-    <time datetime="2021-09-27T20:00:36+08:00">
-	
-		    Sep 27, 2021
-    	
-    </time>
-    
-        <span>in </span>
+
+
+
+</div>
         
-    <a class="category-link" href="/categories/%E6%B5%99%E5%A4%A7%E7%AE%97%E6%B3%95%E4%B8%8E%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B-python%E5%AE%9E%E7%8E%B0/">浙大算法与数据结构课程(python实现)</a>
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
 
+  <aside class="sidebar">
 
-    
+    <div class="sidebar-inner sidebar-overview-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">陈宇韶chenyushao</p>
+  <div class="site-description" itemprop="description">爱学习、爱工作、爱生活</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">303</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">19</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">95</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
 </div>
 
-    
-</div>
-
-    
-    <div class="post-content markdown">
-        <div class="main-content-wrap">
-            <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">给了单链表的头结点，</span></span><br><span class="line"><span class="string">给了一个int K 。</span></span><br><span class="line"><span class="string">要求把每 K 个结点逆转一下，</span></span><br><span class="line"><span class="string">要求返回的是逆转以后头结点的指针。</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Node</span>():</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self,data</span>):</span><br><span class="line">        self.data = data</span><br><span class="line">        self.<span class="built_in">next</span> = <span class="literal">None</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">linkedlist</span>():</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>):</span><br><span class="line">        self.front = <span class="literal">None</span></span><br><span class="line">        self.rear = <span class="literal">None</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">add</span>(<span class="params">self,item</span>):</span><br><span class="line">        node = Node(item)</span><br><span class="line">        <span class="keyword">if</span> self.front==<span class="literal">None</span> <span class="keyword">and</span> self.rear== <span class="literal">None</span>:</span><br><span class="line">            self.front = node</span><br><span class="line">            self.rear = node</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            self.rear.<span class="built_in">next</span> = node</span><br><span class="line">            self.rear = self.rear.<span class="built_in">next</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">show</span>(<span class="params">self</span>):</span><br><span class="line">        list_ = []</span><br><span class="line">        temp = self.front</span><br><span class="line">        <span class="keyword">while</span> temp:</span><br><span class="line">            list_.append(temp.data)</span><br><span class="line">            temp = temp.<span class="built_in">next</span></span><br><span class="line">        <span class="built_in">print</span>(list_)</span><br><span class="line">        <span class="keyword">return</span> list_</span><br><span class="line"></span><br><span class="line">ll = linkedlist()</span><br><span class="line">ll.add(<span class="string">&#x27;seat&#x27;</span>)</span><br><span class="line">ll.add(<span class="number">1</span>)</span><br><span class="line">ll.add(<span class="number">2</span>)</span><br><span class="line">ll.add(<span class="number">3</span>)</span><br><span class="line">ll.add(<span class="number">4</span>)</span><br><span class="line">ll.add(<span class="number">5</span>)</span><br><span class="line">ll.add(<span class="number">6</span>)</span><br><span class="line">ll.show()</span><br><span class="line"></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">给了单链表的头结点，</span></span><br><span class="line"><span class="string">给了一个int K 。</span></span><br><span class="line"><span class="string">要求把每 K 个结点逆转一下，</span></span><br><span class="line"><span class="string">要求返回的是逆转以后头结点的指针。</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">需要三个指针，new指向逆转好的，old指向还没有逆转好的，temp指向old后面的结点以防丢失后面的数据。</span></span><br><span class="line"><span class="string">三个指针连续的后移。</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">reverse</span>(<span class="params">head,k</span>):</span><br><span class="line">    new = head.<span class="built_in">next</span></span><br><span class="line">    old = new.<span class="built_in">next</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(k-<span class="number">1</span>):</span><br><span class="line">        temp = old.<span class="built_in">next</span></span><br><span class="line">        old.<span class="built_in">next</span> = new <span class="comment"># 实现逆序操作。</span></span><br><span class="line">        new = old</span><br><span class="line">        old = temp</span><br><span class="line">    head.<span class="built_in">next</span>.<span class="built_in">next</span> = old       <span class="comment"># 保证链表的完整性。</span></span><br><span class="line">                          <span class="comment"># head的 next，这里可以体现出头部设置空结点的好处。</span></span><br><span class="line">                          <span class="comment"># 这里的空结点用seat在链表里设定了。就没有写进reverse方法里面了。</span></span><br><span class="line">    head.<span class="built_in">next</span> = new  <span class="comment">#</span></span><br><span class="line">    <span class="keyword">return</span> new</span><br><span class="line"></span><br><span class="line">result = reverse(ll.front,<span class="number">6</span>)</span><br><span class="line"><span class="built_in">print</span>(result.data)</span><br><span class="line">ll.show()</span><br><span class="line"></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">注意：</span></span><br><span class="line"><span class="string">这里重点介绍一下设置头结点，在链表操作中的好处</span></span><br><span class="line"><span class="string">1、使头部的操作和中部尾部的操作一致；</span></span><br><span class="line"><span class="string">2、使非空链表与空链表的操作统一；</span></span><br><span class="line"><span class="string">3、在改变链表的顺序时，可以避免链表数据丢失。</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">就比如上面这题，如果有一个头结点，可以说相当于有一个锚。</span></span><br><span class="line"><span class="string">方便和后面的几个新加入的new、old等指针配合使用。</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">纠正一个我之前的错误认知，插入结点时，并不是说一定要保证链表的连贯不断，</span></span><br><span class="line"><span class="string">而是要保证 断开的结点还能 在书写上能够找回来，</span></span><br><span class="line"><span class="string">插入结点时之所以是&quot;先插再断&quot;，是因为这样可以在书写上实现找到后序结点。</span></span><br><span class="line"><span class="string">本题中，逆序的过程中，出现过断链的情况，但是借助new 、old 指针，</span></span><br><span class="line"><span class="string">可以找回结点，所以也没关系。</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-
-            
 
 
         </div>
+      </div>
     </div>
-    <div id="post-footer" class="post-footer main-content-wrap">
-        
-            <div class="post-footer-tags">
-                <span class="text-color-light text-small">TAGGED IN</span><br/>
-                
-    <a class="tag tag--primary tag--small t-none-link" href="/tags/%E9%93%BE%E8%A1%A8/" rel="tag">链表</a>
-
-            </div>
-        
-        
-            <div class="post-actions-wrap">
-    <nav>
-        <ul class="post-actions post-action-nav">
-            <li class="post-action">
-                
-                    
-                <a
-                    class="post-action-btn btn btn--default tooltip--top"
-                    href="/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/15%E4%BA%8C%E5%8F%89%E5%B9%B3%E8%A1%A1%E6%A0%91/"
-                    data-tooltip="15二叉平衡树"
-                    aria-label="PREVIOUS: 15二叉平衡树"
-                >
-                    
-                        <i class="fa fa-angle-left" aria-hidden="true"></i>
-                        <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
-                    </a>
-            </li>
-            <li class="post-action">
-                
-                    
-                <a
-                    class="post-action-btn btn btn--default tooltip--top"
-                    href="/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/17%E6%90%9C%E7%B4%A2%E6%A0%91%E4%B9%A0%E9%A2%98(%E6%B2%A1%E5%81%9A%E5%AE%8C)/"
-                    data-tooltip="17搜索树习题(没做完)"
-                    aria-label="NEXT: 17搜索树习题(没做完)"
-                >
-                    
-                        <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
-                        <i class="fa fa-angle-right" aria-hidden="true"></i>
-                    </a>
-            </li>
-        </ul>
-    </nav>
-    <ul class="post-actions post-action-share">
-        <li class="post-action hide-lg hide-md hide-sm">
-            <a
-                class="post-action-btn btn btn--default btn-open-shareoptions"
-                href="#btn-open-shareoptions"
-                aria-label="Share this post"
-            >
-                <i class="fa fa-share-alt" aria-hidden="true"></i>
-            </a>
-        </li>
-        
-            
-            
-            <li class="post-action hide-xs">
-                <a
-                    class="post-action-btn btn btn--default"
-                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/16%E5%8D%95%E9%93%BE%E8%A1%A8%E9%80%86%E8%BD%AC/"
-                    title="Share on Facebook"
-                    aria-label="Share on Facebook"
-                >
-                    <i class="fab fa-facebook" aria-hidden="true"></i>
-                </a>
-            </li>
-        
-            
-            
-            <li class="post-action hide-xs">
-                <a
-                    class="post-action-btn btn btn--default"
-                    target="new" href="https://twitter.com/intent/tweet?text=http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/16%E5%8D%95%E9%93%BE%E8%A1%A8%E9%80%86%E8%BD%AC/"
-                    title="Share on Twitter"
-                    aria-label="Share on Twitter"
-                >
-                    <i class="fab fa-twitter" aria-hidden="true"></i>
-                </a>
-            </li>
-        
-            
-            
-            <li class="post-action hide-xs">
-                <a
-                    class="post-action-btn btn btn--default"
-                    target="new" href="https://plus.google.com/share?url=http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/16%E5%8D%95%E9%93%BE%E8%A1%A8%E9%80%86%E8%BD%AC/"
-                    title="Share on Google+"
-                    aria-label="Share on Google+"
-                >
-                    <i class="fab fa-google-plus" aria-hidden="true"></i>
-                </a>
-            </li>
-        
-        
-            
-        
-        <li class="post-action">
-            
-                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
-            
-                <i class="fa fa-list" aria-hidden="true"></i>
-            </a>
-        </li>
-    </ul>
-</div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
 
 
-        
-        
-            
-        
-    </div>
-</article>
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
 
 
+    <div class="main-inner post posts-expand">
 
-                <footer id="footer" class="main-content-wrap">
-    <span class="copyrights">
-        Copyrights &copy; 2022 陈宇韶chenyushao. All Rights Reserved.
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/16%E5%8D%95%E9%93%BE%E8%A1%A8%E9%80%86%E8%BD%AC/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="陈宇韶chenyushao">
     </span>
-</footer>
 
-            </div>
-            
-                <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
-                    <div class="post-actions-wrap">
-    <nav>
-        <ul class="post-actions post-action-nav">
-            <li class="post-action">
-                
-                    
-                <a
-                    class="post-action-btn btn btn--default tooltip--top"
-                    href="/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/15%E4%BA%8C%E5%8F%89%E5%B9%B3%E8%A1%A1%E6%A0%91/"
-                    data-tooltip="15二叉平衡树"
-                    aria-label="PREVIOUS: 15二叉平衡树"
-                >
-                    
-                        <i class="fa fa-angle-left" aria-hidden="true"></i>
-                        <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
-                    </a>
-            </li>
-            <li class="post-action">
-                
-                    
-                <a
-                    class="post-action-btn btn btn--default tooltip--top"
-                    href="/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/17%E6%90%9C%E7%B4%A2%E6%A0%91%E4%B9%A0%E9%A2%98(%E6%B2%A1%E5%81%9A%E5%AE%8C)/"
-                    data-tooltip="17搜索树习题(没做完)"
-                    aria-label="NEXT: 17搜索树习题(没做完)"
-                >
-                    
-                        <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
-                        <i class="fa fa-angle-right" aria-hidden="true"></i>
-                    </a>
-            </li>
-        </ul>
-    </nav>
-    <ul class="post-actions post-action-share">
-        <li class="post-action hide-lg hide-md hide-sm">
-            <a
-                class="post-action-btn btn btn--default btn-open-shareoptions"
-                href="#btn-open-shareoptions"
-                aria-label="Share this post"
-            >
-                <i class="fa fa-share-alt" aria-hidden="true"></i>
-            </a>
-        </li>
-        
-            
-            
-            <li class="post-action hide-xs">
-                <a
-                    class="post-action-btn btn btn--default"
-                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/16%E5%8D%95%E9%93%BE%E8%A1%A8%E9%80%86%E8%BD%AC/"
-                    title="Share on Facebook"
-                    aria-label="Share on Facebook"
-                >
-                    <i class="fab fa-facebook" aria-hidden="true"></i>
-                </a>
-            </li>
-        
-            
-            
-            <li class="post-action hide-xs">
-                <a
-                    class="post-action-btn btn btn--default"
-                    target="new" href="https://twitter.com/intent/tweet?text=http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/16%E5%8D%95%E9%93%BE%E8%A1%A8%E9%80%86%E8%BD%AC/"
-                    title="Share on Twitter"
-                    aria-label="Share on Twitter"
-                >
-                    <i class="fab fa-twitter" aria-hidden="true"></i>
-                </a>
-            </li>
-        
-            
-            
-            <li class="post-action hide-xs">
-                <a
-                    class="post-action-btn btn btn--default"
-                    target="new" href="https://plus.google.com/share?url=http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/16%E5%8D%95%E9%93%BE%E8%A1%A8%E9%80%86%E8%BD%AC/"
-                    title="Share on Google+"
-                    aria-label="Share on Google+"
-                >
-                    <i class="fab fa-google-plus" aria-hidden="true"></i>
-                </a>
-            </li>
-        
-        
-            
-        
-        <li class="post-action">
-            
-                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
-            
-                <i class="fa fa-list" aria-hidden="true"></i>
-            </a>
-        </li>
-    </ul>
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tiger_pop's Blog">
+      <meta itemprop="description" content="爱学习、爱工作、爱生活">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="16单链表逆转 | Tiger_pop's Blog">
+      <meta itemprop="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          16单链表逆转
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2021-09-27 20:00:36" itemprop="dateCreated datePublished" datetime="2021-09-27T20:00:36+08:00">2021-09-27</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2022-10-28 23:41:30" itemprop="dateModified" datetime="2022-10-28T23:41:30+08:00">2022-10-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%B5%99%E5%A4%A7%E7%AE%97%E6%B3%95%E4%B8%8E%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B-python%E5%AE%9E%E7%8E%B0/" itemprop="url" rel="index"><span itemprop="name">浙大算法与数据结构课程(python实现)</span></a>
+        </span>
+    </span>
+
+  
 </div>
 
-
-                </div>
-                
-    <div id="share-options-bar" class="share-options-bar" data-behavior="4">
-        <i id="btn-close-shareoptions" class="fa fa-times"></i>
-        <ul class="share-options">
-            
-                
-                
-                <li class="share-option">
-                    <a
-                        class="share-option-btn"
-                        target="new"
-                        href="https://www.facebook.com/sharer/sharer.php?u=http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/16%E5%8D%95%E9%93%BE%E8%A1%A8%E9%80%86%E8%BD%AC/"
-                        aria-label="Share on Facebook"
-                    >
-                        <i class="fab fa-facebook" aria-hidden="true"></i><span>Share on Facebook</span>
-                    </a>
-                </li>
-            
-                
-                
-                <li class="share-option">
-                    <a
-                        class="share-option-btn"
-                        target="new"
-                        href="https://twitter.com/intent/tweet?text=http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/16%E5%8D%95%E9%93%BE%E8%A1%A8%E9%80%86%E8%BD%AC/"
-                        aria-label="Share on Twitter"
-                    >
-                        <i class="fab fa-twitter" aria-hidden="true"></i><span>Share on Twitter</span>
-                    </a>
-                </li>
-            
-                
-                
-                <li class="share-option">
-                    <a
-                        class="share-option-btn"
-                        target="new"
-                        href="https://plus.google.com/share?url=http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/16%E5%8D%95%E9%93%BE%E8%A1%A8%E9%80%86%E8%BD%AC/"
-                        aria-label="Share on Google+"
-                    >
-                        <i class="fab fa-google-plus" aria-hidden="true"></i><span>Share on Google+</span>
-                    </a>
-                </li>
-            
-        </ul>
-    </div>
-
-
-            
+            <div class="post-description">这是文章开头，显示在主页面，详情请点击此处。</div>
         </div>
-        
-
-
-<div id="about">
-    <div id="about-card">
-        <div id="about-btn-close">
-            <i class="fa fa-times"></i>
-        </div>
-        
-            <h4 id="about-card-name">陈宇韶chenyushao</h4>
-        
-            <div id="about-card-bio"><p>author.bio</p>
-</div>
-        
-        
-            <div id="about-card-job">
-                <i class="fa fa-briefcase"></i>
-                <br/>
-                <p>author.job</p>
-
-            </div>
-        
-        
-    </div>
-</div>
-
-        
-        
-<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
-        <!--SCRIPTS-->
-
-<script src="/assets/js/script-sbgpeqyl6jw5qe60mnfuzifzwky5la4ftiuwmschcdzx2pg5tfpl1pfp13e3.min.js"></script>
-
-<!--SCRIPTS END-->
-
+      </header>
 
     
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">给了单链表的头结点，</span></span><br><span class="line"><span class="string">给了一个int K 。</span></span><br><span class="line"><span class="string">要求把每 K 个结点逆转一下，</span></span><br><span class="line"><span class="string">要求返回的是逆转以后头结点的指针。</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Node</span>():</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self,data</span>):</span><br><span class="line">        self.data = data</span><br><span class="line">        self.<span class="built_in">next</span> = <span class="literal">None</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">linkedlist</span>():</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>):</span><br><span class="line">        self.front = <span class="literal">None</span></span><br><span class="line">        self.rear = <span class="literal">None</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">add</span>(<span class="params">self,item</span>):</span><br><span class="line">        node = Node(item)</span><br><span class="line">        <span class="keyword">if</span> self.front==<span class="literal">None</span> <span class="keyword">and</span> self.rear== <span class="literal">None</span>:</span><br><span class="line">            self.front = node</span><br><span class="line">            self.rear = node</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            self.rear.<span class="built_in">next</span> = node</span><br><span class="line">            self.rear = self.rear.<span class="built_in">next</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">show</span>(<span class="params">self</span>):</span><br><span class="line">        list_ = []</span><br><span class="line">        temp = self.front</span><br><span class="line">        <span class="keyword">while</span> temp:</span><br><span class="line">            list_.append(temp.data)</span><br><span class="line">            temp = temp.<span class="built_in">next</span></span><br><span class="line">        <span class="built_in">print</span>(list_)</span><br><span class="line">        <span class="keyword">return</span> list_</span><br><span class="line"></span><br><span class="line">ll = linkedlist()</span><br><span class="line">ll.add(<span class="string">&#x27;seat&#x27;</span>)</span><br><span class="line">ll.add(<span class="number">1</span>)</span><br><span class="line">ll.add(<span class="number">2</span>)</span><br><span class="line">ll.add(<span class="number">3</span>)</span><br><span class="line">ll.add(<span class="number">4</span>)</span><br><span class="line">ll.add(<span class="number">5</span>)</span><br><span class="line">ll.add(<span class="number">6</span>)</span><br><span class="line">ll.show()</span><br><span class="line"></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">给了单链表的头结点，</span></span><br><span class="line"><span class="string">给了一个int K 。</span></span><br><span class="line"><span class="string">要求把每 K 个结点逆转一下，</span></span><br><span class="line"><span class="string">要求返回的是逆转以后头结点的指针。</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">需要三个指针，new指向逆转好的，old指向还没有逆转好的，temp指向old后面的结点以防丢失后面的数据。</span></span><br><span class="line"><span class="string">三个指针连续的后移。</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">reverse</span>(<span class="params">head,k</span>):</span><br><span class="line">    new = head.<span class="built_in">next</span></span><br><span class="line">    old = new.<span class="built_in">next</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(k-<span class="number">1</span>):</span><br><span class="line">        temp = old.<span class="built_in">next</span></span><br><span class="line">        old.<span class="built_in">next</span> = new <span class="comment"># 实现逆序操作。</span></span><br><span class="line">        new = old</span><br><span class="line">        old = temp</span><br><span class="line">    head.<span class="built_in">next</span>.<span class="built_in">next</span> = old       <span class="comment"># 保证链表的完整性。</span></span><br><span class="line">                          <span class="comment"># head的 next，这里可以体现出头部设置空结点的好处。</span></span><br><span class="line">                          <span class="comment"># 这里的空结点用seat在链表里设定了。就没有写进reverse方法里面了。</span></span><br><span class="line">    head.<span class="built_in">next</span> = new  <span class="comment">#</span></span><br><span class="line">    <span class="keyword">return</span> new</span><br><span class="line"></span><br><span class="line">result = reverse(ll.front,<span class="number">6</span>)</span><br><span class="line"><span class="built_in">print</span>(result.data)</span><br><span class="line">ll.show()</span><br><span class="line"></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">注意：</span></span><br><span class="line"><span class="string">这里重点介绍一下设置头结点，在链表操作中的好处</span></span><br><span class="line"><span class="string">1、使头部的操作和中部尾部的操作一致；</span></span><br><span class="line"><span class="string">2、使非空链表与空链表的操作统一；</span></span><br><span class="line"><span class="string">3、在改变链表的顺序时，可以避免链表数据丢失。</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">就比如上面这题，如果有一个头结点，可以说相当于有一个锚。</span></span><br><span class="line"><span class="string">方便和后面的几个新加入的new、old等指针配合使用。</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">纠正一个我之前的错误认知，插入结点时，并不是说一定要保证链表的连贯不断，</span></span><br><span class="line"><span class="string">而是要保证 断开的结点还能 在书写上能够找回来，</span></span><br><span class="line"><span class="string">插入结点时之所以是&quot;先插再断&quot;，是因为这样可以在书写上实现找到后序结点。</span></span><br><span class="line"><span class="string">本题中，逆序的过程中，出现过断链的情况，但是借助new 、old 指针，</span></span><br><span class="line"><span class="string">可以找回结点，所以也没关系。</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E9%93%BE%E8%A1%A8/" rel="tag"># 链表</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/17%E6%90%9C%E7%B4%A2%E6%A0%91%E4%B9%A0%E9%A2%98(%E6%B2%A1%E5%81%9A%E5%AE%8C)/" rel="prev" title="17搜索树习题(没做完)">
+                  <i class="fa fa-chevron-left"></i> 17搜索树习题(没做完)
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/15%E4%BA%8C%E5%8F%89%E5%B9%B3%E8%A1%A1%E6%A0%91/" rel="next" title="15二叉平衡树">
+                  15二叉平衡树 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
 
 
 
 
-    </body>
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">陈宇韶chenyushao</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+</body>
 </html>

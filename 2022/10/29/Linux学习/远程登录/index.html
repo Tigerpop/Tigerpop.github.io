@@ -1,23 +1,26 @@
-
 <!DOCTYPE html>
 <html lang="en">
-    
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="generator" content="Tiger_pop&#39;s Blog">
-    <title>linux远程登录 - Tiger_pop&#39;s Blog</title>
-    <meta name="author" content="陈宇韶chenyushao">
-    
-    
-    
-        
-            <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
-        
-    
-    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"陈宇韶chenyushao","sameAs":["https://github.com/","https://www.linkedin.com/profile/","mailto"]},"articleBody":"简介 \n    Linux服务器是公网上小组共享的。\n\nWindows​\t\tXshell 是一款不错的Windows远程登录Linux的软件，解决了中文乱码。可以在Windows下访问不同系统的服务器。选家用下载即可。\nhttps://www.netsarang.com/en/free-for-home-school/\nmacOS​\t\tFinalShell 是一款国内开发的服务器网络管理软件，运维工具。\nLinux​\t\tTermius是一款全平台的SSH客户端，该软件最大的特点就是支持全部平台，包括Windows、Mac、Linux、iOS、Android等，有了移动设备支持，只要有网络，你可以在任何时间地点管理服务器。\n操作(1、局域网概念补充)（补充：在同一局域网内，同一个无线局域网：\n查看两台设备的ip4地址和子网掩码。若子网掩码不一样，则不在同一局域网内。若一样，分别计算IP&amp;MASK，若二者相同，则在同一局域网内，否则不在同一局域网。\n​\t\t\n192.168.0.101 &amp; 255.255.255.0 &#x3D; 192.168.0.0\n192.168.0.105 &amp; 255.255.255.0 &#x3D; 192.168.0.0\n二者结果相同，故在同一局域网内，一般来说，IP前三个一致，就会在同一个局域网内。\n​\t\t假设电脑A、B均在192.168.0.X的网段内，两台电脑不需要额外设置，就可以互相ping的通。如果ping不通，包括但不限于的原因有：\n\n目标主机的防火墙没关\n目标主机有电脑管家&#x2F;360等防护软件\n针对多台机器连接Wi-Fi这种类型的局域网，有的路由器开启了ap隔离，需要关闭，有时候重启一下路由器问题就解决了。\n\n）\n(2、Linux开启接受远程访问概念补充 )​\t\t先在本地端 ping 一下 远程端IP试试能不能通。（用 ifconfig命令 查看远程端局域网的IP。）\n​\t\t接着检查远程端是不是已经安装或启用了ssh服务，执行：\n1ps -e | grep ssh\n\n​\t\t如果有sshd，证明你已经装好了ssh-server并已启用，当然就可以不用往下看了，如果没有sshd则：\n1sudo apt install openssh-server\n\n​\t\t再执行\n1ps -e | grep ssh\n\n​\t\t发现多了sshd,远程连接本电脑就已经启用了。此时就可以用ssh在本地端登录远程端了。在本地端输入 如：\n12ssh &#x27;远程端那台电脑的用户名&#x27;@&#x27;远程端那台电脑局域网IP&#x27;    // 登录；然后输入远程端用户对应的密码即可成功连接。logout &#x27;远程端那台电脑局域网IP&#x27;                      // 退出\n\n​\t\t如果中途断掉了链接，可以重启路由器或者重启远程端主机ssh服务，再重新链接。\n（用finalshell在mac登录局域网内另一台ubuntu机器桌面，模拟远程登录服务器实验）​\t\t确保1、本地端和远程端在同一局域网；2远程端开启了接受远程访问。\n​\t\tfinalshell 可以选择远程端用户的账户密码或者私钥公钥方式登录。以下主机IP 就是  ‘远程端那台电脑局域网IP’。\n​\t\t1、若选择私钥公钥方式，用命令生成 ssh私钥和公钥。先在确保公钥已经在服务器上了，再以ssh方式输入私钥连接远程服务器。\n\n（注意：finalshell 使用的密钥格式为 PEM格式。用以下命令生成。生成的私钥公钥 会最好还是放在 隐藏的 .ssh文件夹内，其中 pub结尾的文件是公钥。）\n1ssh-keygen -m PEM -t rsa -C &quot;注释&quot;\t\t\n\n​\t\t2、若选择账号密码登录，指的就是远程服务器中的用户名和密码。\n\n​\t\t(启用Exec 那个小勾可以不勾也可以勾。我在这个连接局域网Ubuntu这个实验里没有勾。)\n","dateCreated":"2022-10-29T15:42:07+08:00","dateModified":"2022-10-29T16:39:56+08:00","datePublished":"2022-10-29T15:42:07+08:00","description":"简介","headline":"linux远程登录","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E8%BF%9C%E7%A8%8B%E7%99%BB%E5%BD%95/"},"publisher":{"@type":"Organization","name":"陈宇韶chenyushao","sameAs":["https://github.com/","https://www.linkedin.com/profile/","mailto"]},"url":"http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E8%BF%9C%E7%A8%8B%E7%99%BB%E5%BD%95/","keywords":"linux"}</script>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha256-AbA177XfpSnFEvgpYu1jMygiLabzPCJCRIBtR5jGc0k=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.13.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
     <meta name="description" content="这是文章开头，显示在主页面，详情请点击此处。">
-<meta property="og:type" content="blog">
+<meta property="og:type" content="article">
 <meta property="og:title" content="linux远程登录">
 <meta property="og:url" content="http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E8%BF%9C%E7%A8%8B%E7%99%BB%E5%BD%95/index.html">
 <meta property="og:site_name" content="Tiger_pop&#39;s Blog">
@@ -32,249 +35,210 @@
 <meta property="article:tag" content="linux">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E8%BF%9C%E7%A8%8B%E7%99%BB%E5%BD%95/image-20220109103823793.png">
-    
-    
-        
-    
-    
-    
-    
-    
-    <!--STYLES-->
-    
-<link rel="stylesheet" href="/assets/css/style-yrbj4x87sme2npnaj5hmxl88fi8ktzpa1hwzrvan2almcpvu5niegj13ryff.min.css">
 
-    <!--STYLES END-->
-    
 
-    
+<link rel="canonical" href="http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E8%BF%9C%E7%A8%8B%E7%99%BB%E5%BD%95/">
 
-    
-        
-    
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E8%BF%9C%E7%A8%8B%E7%99%BB%E5%BD%95/","path":"2022/10/29/Linux学习/远程登录/","title":"linux远程登录"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>linux远程登录 | Tiger_pop's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="Tiger_pop's Blog" type="application/atom+xml">
 </head>
 
-    <body>
-        <div id="blog">
-            <!-- Define author's picture -->
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
 
-
-    
-
-<header id="header" data-behavior="4">
-    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
-    <div class="header-title">
-        <a
-            class="header-title-link"
-            href="/"
-            aria-label=""
-        >
-            Tiger_pop&#39;s Blog
-        </a>
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
     </div>
-    
-        
-            <a
-                class="header-right-picture "
-                href="#about"
-                aria-label="Open the link: /#about"
-            >
-        
-        
-        </a>
-    
-</header>
+  </div>
 
-            <!-- Define author's picture -->
+  <div class="site-meta">
 
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Tiger_pop's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">tiger_pop 的博客</p>
+  </div>
 
-<nav id="sidebar" data-behavior="4">
-    <div class="sidebar-container">
-        
-        
-            <ul class="sidebar-buttons">
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="/"
-                            
-                            rel="noopener"
-                            title="Home"
-                        >
-                        <i class="sidebar-button-icon fa fa-home" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Home</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="/all-categories"
-                            
-                            rel="noopener"
-                            title="Categories"
-                        >
-                        <i class="sidebar-button-icon fa fa-bookmark" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Categories</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="/all-tags"
-                            
-                            rel="noopener"
-                            title="Tags"
-                        >
-                        <i class="sidebar-button-icon fa fa-tags" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Tags</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="/all-archives"
-                            
-                            rel="noopener"
-                            title="Archives"
-                        >
-                        <i class="sidebar-button-icon fa fa-archive" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Archives</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="#about"
-                            
-                            rel="noopener"
-                            title="About"
-                        >
-                        <i class="sidebar-button-icon fa fa-question" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">About</span>
-                    </a>
-            </li>
-            
-        </ul>
-        
-            <ul class="sidebar-buttons">
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="https://github.com/"
-                            
-                                target="_blank"
-                            
-                            rel="noopener"
-                            title="GitHub"
-                        >
-                        <i class="sidebar-button-icon fab fa-github" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">GitHub</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="https://www.linkedin.com/profile/"
-                            
-                                target="_blank"
-                            
-                            rel="noopener"
-                            title="LinkedIn"
-                        >
-                        <i class="sidebar-button-icon fab fa-linkedin" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">LinkedIn</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="/mailto"
-                            
-                            rel="noopener"
-                            title="Mail"
-                        >
-                        <i class="sidebar-button-icon fa fa-envelope" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Mail</span>
-                    </a>
-            </li>
-            
-        </ul>
-        
-            <ul class="sidebar-buttons">
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="/atom.xml"
-                            
-                            rel="noopener"
-                            title="RSS"
-                        >
-                        <i class="sidebar-button-icon fa fa-rss" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">RSS</span>
-                    </a>
-            </li>
-            
-        </ul>
-        
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
     </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+  </ul>
 </nav>
 
-            
-            <div id="main" data-behavior="4"
-                 class="
-                        hasCoverMetaIn
-                        ">
-                
-<article class="post">
-    
-    
-        <div class="post-header main-content-wrap text-left">
-    
-        <h1 class="post-title">
-            linux远程登录
-        </h1>
-    
-    
-        <div class="post-meta">
-    <time datetime="2022-10-29T15:42:07+08:00">
-	
-		    Oct 29, 2022
-    	
-    </time>
-    
-        <span>in </span>
+
+
+
+</div>
         
-    <a class="category-link" href="/categories/Linux/">Linux</a>
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
 
+  <aside class="sidebar">
 
-    
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Windows"><span class="nav-number">1.</span> <span class="nav-text">Windows</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#macOS"><span class="nav-number">2.</span> <span class="nav-text">macOS</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Linux"><span class="nav-number">3.</span> <span class="nav-text">Linux</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%93%8D%E4%BD%9C"><span class="nav-number">4.</span> <span class="nav-text">操作</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1%E3%80%81%E5%B1%80%E5%9F%9F%E7%BD%91%E6%A6%82%E5%BF%B5%E8%A1%A5%E5%85%85"><span class="nav-number">4.1.</span> <span class="nav-text">(1、局域网概念补充)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2%E3%80%81Linux%E5%BC%80%E5%90%AF%E6%8E%A5%E5%8F%97%E8%BF%9C%E7%A8%8B%E8%AE%BF%E9%97%AE%E6%A6%82%E5%BF%B5%E8%A1%A5%E5%85%85"><span class="nav-number">4.2.</span> <span class="nav-text">(2、Linux开启接受远程访问概念补充 )</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%EF%BC%88%E7%94%A8finalshell%E5%9C%A8mac%E7%99%BB%E5%BD%95%E5%B1%80%E5%9F%9F%E7%BD%91%E5%86%85%E5%8F%A6%E4%B8%80%E5%8F%B0ubuntu%E6%9C%BA%E5%99%A8%E6%A1%8C%E9%9D%A2%EF%BC%8C%E6%A8%A1%E6%8B%9F%E8%BF%9C%E7%A8%8B%E7%99%BB%E5%BD%95%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AE%9E%E9%AA%8C%EF%BC%89"><span class="nav-number">4.3.</span> <span class="nav-text">（用finalshell在mac登录局域网内另一台ubuntu机器桌面，模拟远程登录服务器实验）</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">陈宇韶chenyushao</p>
+  <div class="site-description" itemprop="description">爱学习、爱工作、爱生活</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">303</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">19</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">95</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
 </div>
 
-    
-</div>
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
 
     
-    <div class="post-content markdown">
-        <div class="main-content-wrap">
-            <p>简介 <span id="more"></span></p>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E8%BF%9C%E7%A8%8B%E7%99%BB%E5%BD%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="陈宇韶chenyushao">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tiger_pop's Blog">
+      <meta itemprop="description" content="爱学习、爱工作、爱生活">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="linux远程登录 | Tiger_pop's Blog">
+      <meta itemprop="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          linux远程登录
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2022-10-29 15:42:07 / Modified: 16:39:56" itemprop="dateCreated datePublished" datetime="2022-10-29T15:42:07+08:00">2022-10-29</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+            <div class="post-description">这是文章开头，显示在主页面，详情请点击此处。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>简介 <span id="more"></span></p>
 <pre><code>    Linux服务器是公网上小组共享的。
 </code></pre>
 <h1 id="Windows"><a href="#Windows" class="headerlink" title="Windows"></a>Windows</h1><p>​		Xshell 是一款不错的Windows远程登录Linux的软件，解决了中文乱码。可以在Windows下访问不同系统的服务器。选家用下载即可。</p>
@@ -319,324 +283,76 @@
 <p><img src="/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E8%BF%9C%E7%A8%8B%E7%99%BB%E5%BD%95/image-20220109195259480-7030980.png" alt="image-20220109195259480"></p>
 <p>​		(启用Exec 那个小勾可以不勾也可以勾。我在这个连接局域网Ubuntu这个实验里没有勾。)</p>
 
-            
-
-
-        </div>
     </div>
-    <div id="post-footer" class="post-footer main-content-wrap">
-        
-            <div class="post-footer-tags">
-                <span class="text-color-light text-small">TAGGED IN</span><br/>
-                
-    <a class="tag tag--primary tag--small t-none-link" href="/tags/linux/" rel="tag">linux</a>
-
-            </div>
-        
-        
-            <div class="post-actions-wrap">
-    <nav>
-        <ul class="post-actions post-action-nav">
-            <li class="post-action">
-                
-                    
-                <a
-                    class="post-action-btn btn btn--default tooltip--top"
-                    href="/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/"
-                    data-tooltip="linux进程管理"
-                    aria-label="PREVIOUS: linux进程管理"
-                >
-                    
-                        <i class="fa fa-angle-left" aria-hidden="true"></i>
-                        <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
-                    </a>
-            </li>
-            <li class="post-action">
-                
-                    
-                <a
-                    class="post-action-btn btn btn--default tooltip--top"
-                    href="/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E5%92%8Cflume%E7%9A%84%E9%9B%86%E6%88%90/"
-                    data-tooltip="kafka和flume的集成"
-                    aria-label="NEXT: kafka和flume的集成"
-                >
-                    
-                        <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
-                        <i class="fa fa-angle-right" aria-hidden="true"></i>
-                    </a>
-            </li>
-        </ul>
-    </nav>
-    <ul class="post-actions post-action-share">
-        <li class="post-action hide-lg hide-md hide-sm">
-            <a
-                class="post-action-btn btn btn--default btn-open-shareoptions"
-                href="#btn-open-shareoptions"
-                aria-label="Share this post"
-            >
-                <i class="fa fa-share-alt" aria-hidden="true"></i>
-            </a>
-        </li>
-        
-            
-            
-            <li class="post-action hide-xs">
-                <a
-                    class="post-action-btn btn btn--default"
-                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E8%BF%9C%E7%A8%8B%E7%99%BB%E5%BD%95/"
-                    title="Share on Facebook"
-                    aria-label="Share on Facebook"
-                >
-                    <i class="fab fa-facebook" aria-hidden="true"></i>
-                </a>
-            </li>
-        
-            
-            
-            <li class="post-action hide-xs">
-                <a
-                    class="post-action-btn btn btn--default"
-                    target="new" href="https://twitter.com/intent/tweet?text=http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E8%BF%9C%E7%A8%8B%E7%99%BB%E5%BD%95/"
-                    title="Share on Twitter"
-                    aria-label="Share on Twitter"
-                >
-                    <i class="fab fa-twitter" aria-hidden="true"></i>
-                </a>
-            </li>
-        
-            
-            
-            <li class="post-action hide-xs">
-                <a
-                    class="post-action-btn btn btn--default"
-                    target="new" href="https://plus.google.com/share?url=http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E8%BF%9C%E7%A8%8B%E7%99%BB%E5%BD%95/"
-                    title="Share on Google+"
-                    aria-label="Share on Google+"
-                >
-                    <i class="fab fa-google-plus" aria-hidden="true"></i>
-                </a>
-            </li>
-        
-        
-            
-        
-        <li class="post-action">
-            
-                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
-            
-                <i class="fa fa-list" aria-hidden="true"></i>
-            </a>
-        </li>
-    </ul>
-</div>
-
-
-        
-        
-            
-        
-    </div>
-</article>
-
-
-
-                <footer id="footer" class="main-content-wrap">
-    <span class="copyrights">
-        Copyrights &copy; 2022 陈宇韶chenyushao. All Rights Reserved.
-    </span>
-</footer>
-
-            </div>
-            
-                <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
-                    <div class="post-actions-wrap">
-    <nav>
-        <ul class="post-actions post-action-nav">
-            <li class="post-action">
-                
-                    
-                <a
-                    class="post-action-btn btn btn--default tooltip--top"
-                    href="/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/"
-                    data-tooltip="linux进程管理"
-                    aria-label="PREVIOUS: linux进程管理"
-                >
-                    
-                        <i class="fa fa-angle-left" aria-hidden="true"></i>
-                        <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
-                    </a>
-            </li>
-            <li class="post-action">
-                
-                    
-                <a
-                    class="post-action-btn btn btn--default tooltip--top"
-                    href="/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E5%92%8Cflume%E7%9A%84%E9%9B%86%E6%88%90/"
-                    data-tooltip="kafka和flume的集成"
-                    aria-label="NEXT: kafka和flume的集成"
-                >
-                    
-                        <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
-                        <i class="fa fa-angle-right" aria-hidden="true"></i>
-                    </a>
-            </li>
-        </ul>
-    </nav>
-    <ul class="post-actions post-action-share">
-        <li class="post-action hide-lg hide-md hide-sm">
-            <a
-                class="post-action-btn btn btn--default btn-open-shareoptions"
-                href="#btn-open-shareoptions"
-                aria-label="Share this post"
-            >
-                <i class="fa fa-share-alt" aria-hidden="true"></i>
-            </a>
-        </li>
-        
-            
-            
-            <li class="post-action hide-xs">
-                <a
-                    class="post-action-btn btn btn--default"
-                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E8%BF%9C%E7%A8%8B%E7%99%BB%E5%BD%95/"
-                    title="Share on Facebook"
-                    aria-label="Share on Facebook"
-                >
-                    <i class="fab fa-facebook" aria-hidden="true"></i>
-                </a>
-            </li>
-        
-            
-            
-            <li class="post-action hide-xs">
-                <a
-                    class="post-action-btn btn btn--default"
-                    target="new" href="https://twitter.com/intent/tweet?text=http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E8%BF%9C%E7%A8%8B%E7%99%BB%E5%BD%95/"
-                    title="Share on Twitter"
-                    aria-label="Share on Twitter"
-                >
-                    <i class="fab fa-twitter" aria-hidden="true"></i>
-                </a>
-            </li>
-        
-            
-            
-            <li class="post-action hide-xs">
-                <a
-                    class="post-action-btn btn btn--default"
-                    target="new" href="https://plus.google.com/share?url=http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E8%BF%9C%E7%A8%8B%E7%99%BB%E5%BD%95/"
-                    title="Share on Google+"
-                    aria-label="Share on Google+"
-                >
-                    <i class="fab fa-google-plus" aria-hidden="true"></i>
-                </a>
-            </li>
-        
-        
-            
-        
-        <li class="post-action">
-            
-                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
-            
-                <i class="fa fa-list" aria-hidden="true"></i>
-            </a>
-        </li>
-    </ul>
-</div>
-
-
-                </div>
-                
-    <div id="share-options-bar" class="share-options-bar" data-behavior="4">
-        <i id="btn-close-shareoptions" class="fa fa-times"></i>
-        <ul class="share-options">
-            
-                
-                
-                <li class="share-option">
-                    <a
-                        class="share-option-btn"
-                        target="new"
-                        href="https://www.facebook.com/sharer/sharer.php?u=http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E8%BF%9C%E7%A8%8B%E7%99%BB%E5%BD%95/"
-                        aria-label="Share on Facebook"
-                    >
-                        <i class="fab fa-facebook" aria-hidden="true"></i><span>Share on Facebook</span>
-                    </a>
-                </li>
-            
-                
-                
-                <li class="share-option">
-                    <a
-                        class="share-option-btn"
-                        target="new"
-                        href="https://twitter.com/intent/tweet?text=http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E8%BF%9C%E7%A8%8B%E7%99%BB%E5%BD%95/"
-                        aria-label="Share on Twitter"
-                    >
-                        <i class="fab fa-twitter" aria-hidden="true"></i><span>Share on Twitter</span>
-                    </a>
-                </li>
-            
-                
-                
-                <li class="share-option">
-                    <a
-                        class="share-option-btn"
-                        target="new"
-                        href="https://plus.google.com/share?url=http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E8%BF%9C%E7%A8%8B%E7%99%BB%E5%BD%95/"
-                        aria-label="Share on Google+"
-                    >
-                        <i class="fab fa-google-plus" aria-hidden="true"></i><span>Share on Google+</span>
-                    </a>
-                </li>
-            
-        </ul>
-    </div>
-
-
-            
-        </div>
-        
-
-
-<div id="about">
-    <div id="about-card">
-        <div id="about-btn-close">
-            <i class="fa fa-times"></i>
-        </div>
-        
-            <h4 id="about-card-name">陈宇韶chenyushao</h4>
-        
-            <div id="about-card-bio"><p>author.bio</p>
-</div>
-        
-        
-            <div id="about-card-job">
-                <i class="fa fa-briefcase"></i>
-                <br/>
-                <p>author.job</p>
-
-            </div>
-        
-        
-    </div>
-</div>
-
-        
-        
-<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
-        <!--SCRIPTS-->
-
-<script src="/assets/js/script-sbgpeqyl6jw5qe60mnfuzifzwky5la4ftiuwmschcdzx2pg5tfpl1pfp13e3.min.js"></script>
-
-<!--SCRIPTS END-->
-
 
     
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/linux/" rel="tag"># linux</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E5%92%8Cflume%E7%9A%84%E9%9B%86%E6%88%90/" rel="prev" title="kafka和flume的集成">
+                  <i class="fa fa-chevron-left"></i> kafka和flume的集成
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/" rel="next" title="linux进程管理">
+                  linux进程管理 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
 
 
 
 
-    </body>
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">陈宇韶chenyushao</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+</body>
 </html>

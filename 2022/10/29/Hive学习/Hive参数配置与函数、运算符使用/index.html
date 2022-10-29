@@ -1,23 +1,26 @@
-
 <!DOCTYPE html>
 <html lang="en">
-    
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="generator" content="Tiger_pop&#39;s Blog">
-    <title>Hive参数配置与函数、运算符使用 - Tiger_pop&#39;s Blog</title>
-    <meta name="author" content="陈宇韶chenyushao">
-    
-    
-    
-        
-            <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
-        
-    
-    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"陈宇韶chenyushao","sameAs":["https://github.com/","https://www.linkedin.com/profile/","mailto"]},"articleBody":"简介 \n配置属性\n\n\n\n\n\n\n\n在这个会话中，把日志设置为debug，并输出在console控制台上。\n\n运算符\n\n\n123456789101112131415161718192021----------------Hive中关系运算符----------------------------is null空值判断select 1 from dual where &#x27;itcast&#x27; is null;--is not null 非空值判断select 1 from dual where &#x27;itcast&#x27; is not null;--like比较： _表示任意单个字符 %表示任意数量字符--否定比较： NOT A like Bselect 1 from dual where &#x27;itcast&#x27; like &#x27;it_&#x27;;select 1 from dual where &#x27;itcast&#x27; like &#x27;it%&#x27;;select 1 from dual where  &#x27;itcast&#x27; not like &#x27;hadoo_&#x27;;select 1 from dual where  not &#x27;itcast&#x27; like &#x27;hadoo_&#x27;;--rlike：确定字符串是否匹配正则表达式，是REGEXP_LIKE()的同义词。select 1 from dual where &#x27;itcast&#x27; rlike &#x27;^i.*t$&#x27;;select 1 from dual where &#x27;123456&#x27; rlike &#x27;^\\\\d+$&#x27;;  --判断是否全为数字select 1 from dual where &#x27;123456aa&#x27; rlike &#x27;^\\\\d+$&#x27;;--regexp：功能与rlike相同 用于判断字符串是否匹配正则表达式select 1 from dual where &#x27;itcast&#x27; regexp &#x27;^i.*t$&#x27;;\n\n\n\n\n123456789101112131415161718192021222324Hive逻辑运算符--与操作: A AND B   如果A和B均为TRUE，则为TRUE，否则为FALSE。如果A或B为NULL，则为NULL。select 1 from dual where 3&gt;1 and 2&gt;1;--或操作: A OR B   如果A或B或两者均为TRUE，则为TRUE，否则为FALSE。select 1 from dual where 3&gt;1 or 2!=2;--非操作: NOT A 、!A   如果A为FALSE，则为TRUE；如果A为NULL，则为NULL。否则为FALSE。select 1 from dual where not 2&gt;1;select 1 from dual where !2=1;--在:A IN (val1, val2, ...)  如果A等于任何值，则为TRUE。select 1 from dual where 11  in(11,22,33);--不在:A NOT IN (val1, val2, ...) 如果A不等于任何值，则为TRUEselect 1 from dual where 11 not in(22,33,44);--逻辑是否存在: [NOT] EXISTS (subquery)--将主查询的数据，放到子查询中做条件验证，根据验证结果（TRUE 或 FALSE）来决定主查询的数据结果是否得以保留。select A.* from Awhere exists (select B.id from B where A.id = B.id);--其他运算符select &#x27;it&#x27; || &#x27;cast&#x27;;select concat()select `array`(11,22,33)from dual;\n\n\nselect concat (‘a’,’b’); \nfunction\n\n\n\n123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051------------String Functions 字符串函数------------select concat(&quot;angela&quot;,&quot;baby&quot;);--带分隔符字符串连接函数：concat_ws(separator, [string | array(string)]+)select concat_ws(&#x27;.&#x27;, &#x27;www&#x27;, array(&#x27;itcast&#x27;, &#x27;cn&#x27;));--字符串截取函数：substr(str, pos[, len]) 或者  substring(str, pos[, len])select substr(&quot;angelababy&quot;,-2); --pos是从1开始的索引，如果为负数则倒着数select substr(&quot;angelababy&quot;,2,2);--正则表达式替换函数：regexp_replace(str, regexp, rep)select regexp_replace(&#x27;100-200&#x27;, &#x27;(\\\\d+)&#x27;, &#x27;num&#x27;);--正则表达式解析函数：regexp_extract(str, regexp[, idx]) 提取正则匹配到的指定组内容select regexp_extract(&#x27;100-200&#x27;, &#x27;(\\\\d+)-(\\\\d+)&#x27;, 2);--URL解析函数：parse_url 注意要想一次解析出多个 可以使用parse_url_tuple这个UDTF函数select parse_url(&#x27;http://www.itcast.cn/path/p1.php?query=1&#x27;, &#x27;HOST&#x27;);--分割字符串函数: split(str, regex)select split(&#x27;apache hive&#x27;, &#x27;\\\\s+&#x27;);--json解析函数：get_json_object(json_txt, path)--$表示json对象select get_json_object(&#x27;[&#123;&quot;website&quot;:&quot;www.itcast.cn&quot;,&quot;name&quot;:&quot;allenwoon&quot;&#125;, &#123;&quot;website&quot;:&quot;cloud.itcast.com&quot;,&quot;name&quot;:&quot;carbondata 中文文档&quot;&#125;]&#x27;, &#x27;$.[1].website&#x27;);--字符串长度函数：length(str | binary)select length(&quot;angelababy&quot;);--字符串反转函数：reverseselect reverse(&quot;angelababy&quot;);--字符串连接函数：concat(str1, str2, ... strN)--字符串转大写函数：upper,ucaseselect upper(&quot;angelababy&quot;);select ucase(&quot;angelababy&quot;);--字符串转小写函数：lower,lcaseselect lower(&quot;ANGELABABY&quot;);select lcase(&quot;ANGELABABY&quot;);--去空格函数：trim 去除左右两边的空格select trim(&quot; angelababy &quot;);--左边去空格函数：ltrimselect ltrim(&quot; angelababy &quot;);--右边去空格函数：rtrimselect rtrim(&quot; angelababy &quot;);--空格字符串函数：space(n) 返回指定个数空格select space(4);--重复字符串函数：repeat(str, n) 重复str字符串n次select repeat(&quot;angela&quot;,2);--首字符ascii函数：asciiselect ascii(&quot;angela&quot;);  --a对应ASCII 97--左补足函数：lpadselect lpad(&#x27;hi&#x27;, 5, &#x27;??&#x27;);  --???hiselect lpad(&#x27;hi&#x27;, 1, &#x27;??&#x27;);  --h--右补足函数：rpadselect rpad(&#x27;hi&#x27;, 5, &#x27;??&#x27;);--集合查找函数: find_in_set(str,str_array)select find_in_set(&#x27;a&#x27;,&#x27;abc,b,ab,c,def&#x27;);\n\n日期函数\n123456789101112131415161718192021222324252627282930313233343536373839----------- Date Functions 日期函数 -------------------获取当前日期: current_dateselect current_date();--获取当前时间戳: current_timestamp--同一查询中对current_timestamp的所有调用均返回相同的值。select current_timestamp();--获取当前UNIX时间戳函数: unix_timestampselect unix_timestamp();--日期转UNIX时间戳函数: unix_timestampselect unix_timestamp(&quot;2011-12-07 13:01:03&quot;);--指定格式日期转UNIX时间戳函数: unix_timestampselect unix_timestamp(&#x27;20111207 13:01:03&#x27;,&#x27;yyyyMMdd HH:mm:ss&#x27;);--UNIX时间戳转日期函数: from_unixtimeselect from_unixtime(1618238391);select from_unixtime(0, &#x27;yyyy-MM-dd HH:mm:ss&#x27;);--日期比较函数: datediff  日期格式要求&#x27;yyyy-MM-dd HH:mm:ss&#x27; or &#x27;yyyy-MM-dd&#x27;select datediff(&#x27;2012-12-08&#x27;,&#x27;2012-05-09&#x27;);--日期增加函数: date_addselect date_add(&#x27;2012-02-28&#x27;,10);--日期减少函数: date_subselect date_sub(&#x27;2012-01-1&#x27;,10);--抽取日期函数: to_dateselect to_date(&#x27;2009-07-30 04:17:52&#x27;);--日期转年函数: yearselect year(&#x27;2009-07-30 04:17:52&#x27;);--日期转月函数: monthselect month(&#x27;2009-07-30 04:17:52&#x27;);--日期转天函数: dayselect day(&#x27;2009-07-30 04:17:52&#x27;);--日期转小时函数: hourselect hour(&#x27;2009-07-30 04:17:52&#x27;);--日期转分钟函数: minuteselect minute(&#x27;2009-07-30 04:17:52&#x27;);--日期转秒函数: secondselect second(&#x27;2009-07-30 04:17:52&#x27;);--日期转周函数: weekofyear 返回指定日期所示年份第几周select weekofyear(&#x27;2009-07-30 04:17:52&#x27;);\n\n1234567891011121314151617-------Collection Functions 集合函数----------------集合元素size函数: size(Map&lt;K.V&gt;) size(Array&lt;T&gt;)select size(`array`(11,22,33));select size(`map`(&quot;id&quot;,10086,&quot;name&quot;,&quot;zhangsan&quot;,&quot;age&quot;,18));--取map集合keys函数: map_keys(Map&lt;K.V&gt;)select map_keys(`map`(&quot;id&quot;,10086,&quot;name&quot;,&quot;zhangsan&quot;,&quot;age&quot;,18));--取map集合values函数: map_values(Map&lt;K.V&gt;)select map_values(`map`(&quot;id&quot;,10086,&quot;name&quot;,&quot;zhangsan&quot;,&quot;age&quot;,18));--判断数组是否包含指定元素: array_contains(Array&lt;T&gt;, value)select array_contains(`array`(11,22,33),11);select array_contains(`array`(11,22,33),66);--数组排序函数:sort_array(Array&lt;T&gt;)select sort_array(`array`(12,2,32));\n\n123456789101112131415161718192021222324----Mathematical Functions 数学函数---------------取整函数: round  返回double类型的整数值部分 （遵循四舍五入）select round(3.1415926);--指定精度取整函数: round(double a, int d) 返回指定精度d的double类型select round(3.1415926,4);--向下取整函数: floorselect floor(3.1415926);select floor(-3.1415926);--向上取整函数: ceilselect ceil(3.1415926);select ceil(-3.1415926);--取随机数函数: rand 每次执行都不一样 返回一个0到1范围内的随机数select rand();--指定种子取随机数函数: rand(int seed) 得到一个稳定的随机数序列select rand(3);--二进制函数:  bin(BIGINT a)select bin(18);--进制转换函数: conv(BIGINT num, int from_base, int to_base)select conv(17,10,16);--绝对值函数: absselect abs(-3.9);\n\n\n12345678910111213141516171819202122232425262728293031323334353637383940-----Conditional Functions 条件函数--------------------使用之前课程创建好的student表数据select * from student limit 3;describe function extended isnull;--if条件判断: if(boolean testCondition, T valueTrue, T valueFalseOrNull)select if(1=2,100,200);select if(sex =&#x27;男&#x27;,&#x27;M&#x27;,&#x27;W&#x27;) from student limit 3;--空判断函数: isnull( a )select isnull(&quot;allen&quot;);select isnull(null);--非空判断函数: isnotnull ( a )select isnotnull(&quot;allen&quot;);select isnotnull(null);--空值转换函数: nvl(T value, T default_value)select nvl(&quot;allen&quot;,&quot;itcast&quot;);select nvl(null,&quot;itcast&quot;);--非空查找函数: COALESCE(T v1, T v2, ...)--返回参数中的第一个非空值；如果所有值都为NULL，那么返回NULLselect COALESCE(null,11,22,33);select COALESCE(null,null,null,33);select COALESCE(null,null,null);--条件转换函数: CASE a WHEN b THEN c [WHEN d THEN e]* [ELSE f] ENDselect case 100 when 50 then &#x27;tom&#x27; when 100 then &#x27;mary&#x27; else &#x27;tim&#x27; end;select case sex when &#x27;男&#x27; then &#x27;male&#x27; else &#x27;female&#x27; end from student limit 3;--nullif( a, b ):-- 如果a = b，则返回NULL，否则返回一个select nullif(11,11);select nullif(11,12);--assert_true(condition)--如果&#x27;condition&#x27;不为真，则引发异常，否则返回nullSELECT assert_true(11 &gt;= 0);SELECT assert_true(-1 &gt;= 0);\n\n\n\n如果string 转 string 是没有意义的，返回的结果就是null。\n123456789101112131415161718192021222324----Data Masking Functions 数据脱敏函数--------------mask--将查询回的数据，大写字母转换为X，小写字母转换为x，数字转换为n。select mask(&quot;abc123DEF&quot;);select mask(&quot;abc123DEF&quot;,&#x27;-&#x27;,&#x27;.&#x27;,&#x27;^&#x27;); --自定义替换的字母--mask_first_n(string str[, int n]--对前n个进行脱敏替换select mask_first_n(&quot;abc123DEF&quot;,4);--mask_last_n(string str[, int n])select mask_last_n(&quot;abc123DEF&quot;,4);--mask_show_first_n(string str[, int n])--除了前n个字符，其余进行掩码处理select mask_show_first_n(&quot;abc123DEF&quot;,4);--mask_show_last_n(string str[, int n])select mask_show_last_n(&quot;abc123DEF&quot;,4);--mask_hash(string|char|varchar str)--返回字符串的hash编码。select mask_hash(&quot;abc123DEF&quot;);\n\n1234567891011121314151617181920212223242526272829303132333435----- Misc. Functions 其他杂项函数-----------------如果你要调用的java方法所在的jar包不是hive自带的 可以使用add jar添加进来--hive调用java方法: java_method(class, method[, arg1[, arg2..]])select java_method(&quot;java.lang.Math&quot;,&quot;max&quot;,11,22);--反射函数: reflect(class, method[, arg1[, arg2..]])select reflect(&quot;java.lang.Math&quot;,&quot;max&quot;,11,22);-- hive调用python方法：add file  local的位置/py_file.py; select transform(col1,col2,col3...) using &#x27;python py_file.py&#x27; as (out1,out2,out3...) from table;# transform 的参数col1，col2，col3... 作为python脚本的输入，而out1,out2,out3...作为输出字段。利用这个可以把hive自身所带的函数不能或不方便处理的任务，转用python写。毕竟人生苦短我还是喜欢python。--------------------------------------------------------------------------------- hive用python例子# use.py文件内容。import sysimport datetime for line in sys.stdin:                                 //接收输入  line = line.strip()    \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t //去除头尾的空格  userid, movieid, rating, unixtime = line.split(&#x27;\\t&#x27;) //分割一条数据  weekday = datetime.datetime.fromtimestamp(float(unixtime)).isoweekday()//转化unixtime时间戳为日期时间，获取对应的星期值  print &#x27;\\t&#x27;.join([userid, movieid, rating, str(weekday)])//输出清洗后的数据# hive内add file /user/hive/warehouse/use.py;  # 注意 python脚本的路径是没有“” 的！而且路径是local的就行了，不是hdfs的路径。INSERT OVERWRITE TABLE u_data_newSELECT  TRANSFORM (userid, movieid, rating, unixtime)    \t//输入值（基表）  USING &#x27;python weekday_mapper.py&#x27;                  //使用脚本清洗 # 注意写个python 放前面，不然不执行。   AS (userid, movieid, rating, weekday)             //输出值（子表）FROM u_data;   \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t//基表\n\n我在centos搭建的Hadoop集群和hive工具，实验如下：1、创建原始表12345678910drop table t_python_test;create table t_python_test(    id int,    sex string,    age int)row format delimited fields terminated by &quot;\\t&quot;;load data local inpath &#x27;/opt/data/python_test.txt&#x27; into table t_python_test;# 加载数据select * from t_python_test;  # 原表如下\n\n\n2、写python脚本；123456789101112131415# coding:utf-8import systry:    for line in sys.stdin: # python脚本以sys.stdin 读hive输入。其输入是以字段拼接字段而形成的字符串，这样的字符串有多行。        line = line.strip() # 读取一行，去头尾的空格。        [t_id,t_sex,t_age] = line.split(&#x27;\\t&#x27;)         #print( t_id,t_sex,t_age)        if t_sex == &#x27;m&#x27;:            t_age =int(t_age) + 1            t_sex = &#x27;super_m&#x27;        print(&#x27;\\t&#x27;.join([str(t_id),t_sex,str(t_age)])) # python脚本输出一个字符串，hive读取python脚本输出的时候会根据 字段名 自动切分好此字符串。  except    print(&#x27;\\t&#x27;.join([&#x27;0&#x27;,&#x27;modify failed&#x27;,&#x27;0&#x27;]))\n\n​\t\t注意：一定要记得在hive、Hadoop环境之外先用python检查一下有没有什么python编写错误，因为在hive里运行的速度太慢了，每一次排错都要花太多太多的时间，并且报错以后的提示看不到错在哪里，只是简单的说你的自定义脚本有问题Execution Error, return code 20003 from org.apache.hadoop.hive.ql.exec.mr.MapRedTask. An error occurred when trying to close the Operator running your custom script.。\n1cat python_test.txt | python hive_python_test.py  # 在hive以外运行一遍，用来排错。\n\n3、hive调用python脚本12345678910add file /opt/data/hive_python_test.py;  # 添加python文件到hdfs，路径就是本地，没引号drop table t_python_test_new;create table  t_python_test_new as selecttransform(id,sex,age )                   # 从原表中 选这些字段组成str汇成多行，输入脚本using &#x27;python hive_python_test.py&#x27;       # python 运行 python脚本as (id,sex,age)\t\t\t\t\t\t\t\t\t\t\t\t   # 将脚本的输出，按照这里定义的字段切分好。from t_python_test;select * from t_python_test_new;         # 如下\n\n\n网上教学案例\n\n\n\n\n我这里还是选择用python实现，毕竟越傻瓜越方便嘛。\n函数高阶介绍\n\n\n\n\n\n\n\n\n\n\n\n注意：以上的col1 col2 col3 是炸开的udtf表的 字段的名字。\n\n\n\n\n\n\n\n\ncoalsesce函数 将null值 换成0.\n\nstruct类型：\nSTRUCT：STRUCT可以包含不同数据类型的元素。这些元素可以通过”点语法”的方式来得到所需要的元素，比如user是一个STRUCT类型，那么可以通过user.address得到这个用户的地址。\n123create table student_test(id int,info struct&lt;name:string,age:int&gt;)row format delimited fields terminated by &quot;,&quot; collection items terminated by &quot;:&quot;;\n\n文件\n [root@hello110 data]# vi student_test 1001,zhangsan:24 1002,lisi:25 1003,xiaoming:26 1004,dongdong:27\n1234567select   info.name,info.age from student_test;OKname    agezhangsan        24lisi    25xiaoming        26dongdong        27\n\n\nStruct结构用于按字典顺序排序，从左往右地按字段比较。\n\n\n\n\n\n\n注意：左侧的含义，a c 就不属于左侧的定义。\n\n\n用窗口函数聚合 和 普通聚合函数聚合的区别：\n​\t\t方便看清分组的细节，而且即便不用聚合函数，可以select 和分组无关的字段。（这在一般的分组情况下是不可以的）。\n\n注意：窗口函数 over 内的order by 不是全局排序，而是分组内排序了。和普通的order by 作用域不一样。\n\n\n\n注意：一旦窗口函数over内有了 order by 排序 ，sum（） 会变成累计求和。\n\n\n这个窗口表达式的向前几行到当前行 ，或者向后几行，要注意，求和就变成了这个窗口表达式的范围内的求和了。\n\n\n \n\n以上三个窗口排序函数 适合 top N 业务分析。\n\n12345# 需求：找出每个用户访问pv最多的top 3，重复并列不考虑。select * from (select cookieid,createtime,pv,  row_number() over(partition by cookieid order by pv desc) as seq from website_pv_info)tmp where tmp.seq&lt;4;\n\n\n7个要平均分成3份，只能是3、2、2这样分。\n\n\n\n\n\n\n\n\n\n\n","dateCreated":"2022-10-29T15:14:33+08:00","dateModified":"2022-10-29T15:15:56+08:00","datePublished":"2022-10-29T15:14:33+08:00","description":"简介","headline":"Hive参数配置与函数、运算符使用","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/"},"publisher":{"@type":"Organization","name":"陈宇韶chenyushao","sameAs":["https://github.com/","https://www.linkedin.com/profile/","mailto"]},"url":"http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/","keywords":"hive"}</script>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha256-AbA177XfpSnFEvgpYu1jMygiLabzPCJCRIBtR5jGc0k=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.13.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
     <meta name="description" content="这是文章开头，显示在主页面，详情请点击此处。">
-<meta property="og:type" content="blog">
+<meta property="og:type" content="article">
 <meta property="og:title" content="Hive参数配置与函数、运算符使用">
 <meta property="og:url" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/index.html">
 <meta property="og:site_name" content="Tiger_pop&#39;s Blog">
@@ -112,249 +115,210 @@
 <meta property="article:tag" content="hive">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-09%2015.54.49-7026880.jpg">
-    
-    
-        
-    
-    
-    
-    
-    
-    <!--STYLES-->
-    
-<link rel="stylesheet" href="/assets/css/style-yrbj4x87sme2npnaj5hmxl88fi8ktzpa1hwzrvan2almcpvu5niegj13ryff.min.css">
 
-    <!--STYLES END-->
-    
 
-    
+<link rel="canonical" href="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/">
 
-    
-        
-    
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/","path":"2022/10/29/Hive学习/Hive参数配置与函数、运算符使用/","title":"Hive参数配置与函数、运算符使用"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Hive参数配置与函数、运算符使用 | Tiger_pop's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="Tiger_pop's Blog" type="application/atom+xml">
 </head>
 
-    <body>
-        <div id="blog">
-            <!-- Define author's picture -->
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
 
-
-    
-
-<header id="header" data-behavior="4">
-    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
-    <div class="header-title">
-        <a
-            class="header-title-link"
-            href="/"
-            aria-label=""
-        >
-            Tiger_pop&#39;s Blog
-        </a>
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
     </div>
-    
-        
-            <a
-                class="header-right-picture "
-                href="#about"
-                aria-label="Open the link: /#about"
-            >
-        
-        
-        </a>
-    
-</header>
+  </div>
 
-            <!-- Define author's picture -->
+  <div class="site-meta">
 
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Tiger_pop's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">tiger_pop 的博客</p>
+  </div>
 
-<nav id="sidebar" data-behavior="4">
-    <div class="sidebar-container">
-        
-        
-            <ul class="sidebar-buttons">
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="/"
-                            
-                            rel="noopener"
-                            title="Home"
-                        >
-                        <i class="sidebar-button-icon fa fa-home" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Home</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="/all-categories"
-                            
-                            rel="noopener"
-                            title="Categories"
-                        >
-                        <i class="sidebar-button-icon fa fa-bookmark" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Categories</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="/all-tags"
-                            
-                            rel="noopener"
-                            title="Tags"
-                        >
-                        <i class="sidebar-button-icon fa fa-tags" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Tags</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="/all-archives"
-                            
-                            rel="noopener"
-                            title="Archives"
-                        >
-                        <i class="sidebar-button-icon fa fa-archive" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Archives</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="#about"
-                            
-                            rel="noopener"
-                            title="About"
-                        >
-                        <i class="sidebar-button-icon fa fa-question" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">About</span>
-                    </a>
-            </li>
-            
-        </ul>
-        
-            <ul class="sidebar-buttons">
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="https://github.com/"
-                            
-                                target="_blank"
-                            
-                            rel="noopener"
-                            title="GitHub"
-                        >
-                        <i class="sidebar-button-icon fab fa-github" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">GitHub</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="https://www.linkedin.com/profile/"
-                            
-                                target="_blank"
-                            
-                            rel="noopener"
-                            title="LinkedIn"
-                        >
-                        <i class="sidebar-button-icon fab fa-linkedin" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">LinkedIn</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="/mailto"
-                            
-                            rel="noopener"
-                            title="Mail"
-                        >
-                        <i class="sidebar-button-icon fa fa-envelope" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Mail</span>
-                    </a>
-            </li>
-            
-        </ul>
-        
-            <ul class="sidebar-buttons">
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="/atom.xml"
-                            
-                            rel="noopener"
-                            title="RSS"
-                        >
-                        <i class="sidebar-button-icon fa fa-rss" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">RSS</span>
-                    </a>
-            </li>
-            
-        </ul>
-        
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
     </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+  </ul>
 </nav>
 
-            
-            <div id="main" data-behavior="4"
-                 class="
-                        hasCoverMetaIn
-                        ">
-                
-<article class="post">
-    
-    
-        <div class="post-header main-content-wrap text-left">
-    
-        <h1 class="post-title">
-            Hive参数配置与函数、运算符使用
-        </h1>
-    
-    
-        <div class="post-meta">
-    <time datetime="2022-10-29T15:14:33+08:00">
-	
-		    Oct 29, 2022
-    	
-    </time>
-    
-        <span>in </span>
+
+
+
+</div>
         
-    <a class="category-link" href="/categories/hive/">hive</a>
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
 
+  <aside class="sidebar">
 
-    
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E5%B1%9E%E6%80%A7"><span class="nav-number">1.</span> <span class="nav-text">配置属性</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="nav-number">2.</span> <span class="nav-text">运算符</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#function"><span class="nav-number">3.</span> <span class="nav-text">function</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%88%91%E5%9C%A8centos%E6%90%AD%E5%BB%BA%E7%9A%84Hadoop%E9%9B%86%E7%BE%A4%E5%92%8Chive%E5%B7%A5%E5%85%B7%EF%BC%8C%E5%AE%9E%E9%AA%8C%E5%A6%82%E4%B8%8B%EF%BC%9A"><span class="nav-number">3.1.</span> <span class="nav-text">我在centos搭建的Hadoop集群和hive工具，实验如下：</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1%E3%80%81%E5%88%9B%E5%BB%BA%E5%8E%9F%E5%A7%8B%E8%A1%A8"><span class="nav-number">3.1.1.</span> <span class="nav-text">1、创建原始表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2%E3%80%81%E5%86%99python%E8%84%9A%E6%9C%AC%EF%BC%9B"><span class="nav-number">3.1.2.</span> <span class="nav-text">2、写python脚本；</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3%E3%80%81hive%E8%B0%83%E7%94%A8python%E8%84%9A%E6%9C%AC"><span class="nav-number">3.1.3.</span> <span class="nav-text">3、hive调用python脚本</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BD%91%E4%B8%8A%E6%95%99%E5%AD%A6%E6%A1%88%E4%BE%8B"><span class="nav-number">3.2.</span> <span class="nav-text">网上教学案例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%87%BD%E6%95%B0%E9%AB%98%E9%98%B6%E4%BB%8B%E7%BB%8D"><span class="nav-number">3.3.</span> <span class="nav-text">函数高阶介绍</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">陈宇韶chenyushao</p>
+  <div class="site-description" itemprop="description">爱学习、爱工作、爱生活</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">303</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">19</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">95</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
 </div>
 
-    
-</div>
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
 
     
-    <div class="post-content markdown">
-        <div class="main-content-wrap">
-            <p>简介 <span id="more"></span></p>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="陈宇韶chenyushao">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tiger_pop's Blog">
+      <meta itemprop="description" content="爱学习、爱工作、爱生活">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Hive参数配置与函数、运算符使用 | Tiger_pop's Blog">
+      <meta itemprop="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Hive参数配置与函数、运算符使用
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2022-10-29 15:14:33 / Modified: 15:15:56" itemprop="dateCreated datePublished" datetime="2022-10-29T15:14:33+08:00">2022-10-29</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/hive/" itemprop="url" rel="index"><span itemprop="name">hive</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+            <div class="post-description">这是文章开头，显示在主页面，详情请点击此处。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>简介 <span id="more"></span></p>
 <h1 id="配置属性"><a href="#配置属性" class="headerlink" title="配置属性"></a>配置属性</h1><p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-09%2015.54.49-7026880.jpg" alt="截屏2022-03-09 15.54.49"></p>
 <p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-09%2015.55.12.jpg" alt="截屏2022-03-09 15.55.12"></p>
 <p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-09%2016.01.59.jpg" alt="截屏2022-03-09 16.01.59"></p>
@@ -491,324 +455,76 @@
 <p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-14%2022.39.26.jpg" alt="截屏2022-03-14 22.39.26"></p>
 <p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-14%2022.48.28.jpg" alt="截屏2022-03-14 22.48.28"></p>
 
-            
-
-
-        </div>
     </div>
-    <div id="post-footer" class="post-footer main-content-wrap">
-        
-            <div class="post-footer-tags">
-                <span class="text-color-light text-small">TAGGED IN</span><br/>
-                
-    <a class="tag tag--primary tag--small t-none-link" href="/tags/hive/" rel="tag">hive</a>
-
-            </div>
-        
-        
-            <div class="post-actions-wrap">
-    <nav>
-        <ul class="post-actions post-action-nav">
-            <li class="post-action">
-                
-                    
-                <a
-                    class="post-action-btn btn btn--default tooltip--top"
-                    href="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/hive%E4%BC%98%E5%8C%96%E5%8F%8A%E6%96%B0%E7%89%B9%E6%80%A7/"
-                    data-tooltip="hive优化及新特性"
-                    aria-label="PREVIOUS: hive优化及新特性"
-                >
-                    
-                        <i class="fa fa-angle-left" aria-hidden="true"></i>
-                        <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
-                    </a>
-            </li>
-            <li class="post-action">
-                
-                    
-                <a
-                    class="post-action-btn btn btn--default tooltip--top"
-                    href="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/"
-                    data-tooltip="Hive_SQL数据定义语言_DDL"
-                    aria-label="NEXT: Hive_SQL数据定义语言_DDL"
-                >
-                    
-                        <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
-                        <i class="fa fa-angle-right" aria-hidden="true"></i>
-                    </a>
-            </li>
-        </ul>
-    </nav>
-    <ul class="post-actions post-action-share">
-        <li class="post-action hide-lg hide-md hide-sm">
-            <a
-                class="post-action-btn btn btn--default btn-open-shareoptions"
-                href="#btn-open-shareoptions"
-                aria-label="Share this post"
-            >
-                <i class="fa fa-share-alt" aria-hidden="true"></i>
-            </a>
-        </li>
-        
-            
-            
-            <li class="post-action hide-xs">
-                <a
-                    class="post-action-btn btn btn--default"
-                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/"
-                    title="Share on Facebook"
-                    aria-label="Share on Facebook"
-                >
-                    <i class="fab fa-facebook" aria-hidden="true"></i>
-                </a>
-            </li>
-        
-            
-            
-            <li class="post-action hide-xs">
-                <a
-                    class="post-action-btn btn btn--default"
-                    target="new" href="https://twitter.com/intent/tweet?text=http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/"
-                    title="Share on Twitter"
-                    aria-label="Share on Twitter"
-                >
-                    <i class="fab fa-twitter" aria-hidden="true"></i>
-                </a>
-            </li>
-        
-            
-            
-            <li class="post-action hide-xs">
-                <a
-                    class="post-action-btn btn btn--default"
-                    target="new" href="https://plus.google.com/share?url=http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/"
-                    title="Share on Google+"
-                    aria-label="Share on Google+"
-                >
-                    <i class="fab fa-google-plus" aria-hidden="true"></i>
-                </a>
-            </li>
-        
-        
-            
-        
-        <li class="post-action">
-            
-                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
-            
-                <i class="fa fa-list" aria-hidden="true"></i>
-            </a>
-        </li>
-    </ul>
-</div>
-
-
-        
-        
-            
-        
-    </div>
-</article>
-
-
-
-                <footer id="footer" class="main-content-wrap">
-    <span class="copyrights">
-        Copyrights &copy; 2022 陈宇韶chenyushao. All Rights Reserved.
-    </span>
-</footer>
-
-            </div>
-            
-                <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
-                    <div class="post-actions-wrap">
-    <nav>
-        <ul class="post-actions post-action-nav">
-            <li class="post-action">
-                
-                    
-                <a
-                    class="post-action-btn btn btn--default tooltip--top"
-                    href="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/hive%E4%BC%98%E5%8C%96%E5%8F%8A%E6%96%B0%E7%89%B9%E6%80%A7/"
-                    data-tooltip="hive优化及新特性"
-                    aria-label="PREVIOUS: hive优化及新特性"
-                >
-                    
-                        <i class="fa fa-angle-left" aria-hidden="true"></i>
-                        <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
-                    </a>
-            </li>
-            <li class="post-action">
-                
-                    
-                <a
-                    class="post-action-btn btn btn--default tooltip--top"
-                    href="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/"
-                    data-tooltip="Hive_SQL数据定义语言_DDL"
-                    aria-label="NEXT: Hive_SQL数据定义语言_DDL"
-                >
-                    
-                        <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
-                        <i class="fa fa-angle-right" aria-hidden="true"></i>
-                    </a>
-            </li>
-        </ul>
-    </nav>
-    <ul class="post-actions post-action-share">
-        <li class="post-action hide-lg hide-md hide-sm">
-            <a
-                class="post-action-btn btn btn--default btn-open-shareoptions"
-                href="#btn-open-shareoptions"
-                aria-label="Share this post"
-            >
-                <i class="fa fa-share-alt" aria-hidden="true"></i>
-            </a>
-        </li>
-        
-            
-            
-            <li class="post-action hide-xs">
-                <a
-                    class="post-action-btn btn btn--default"
-                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/"
-                    title="Share on Facebook"
-                    aria-label="Share on Facebook"
-                >
-                    <i class="fab fa-facebook" aria-hidden="true"></i>
-                </a>
-            </li>
-        
-            
-            
-            <li class="post-action hide-xs">
-                <a
-                    class="post-action-btn btn btn--default"
-                    target="new" href="https://twitter.com/intent/tweet?text=http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/"
-                    title="Share on Twitter"
-                    aria-label="Share on Twitter"
-                >
-                    <i class="fab fa-twitter" aria-hidden="true"></i>
-                </a>
-            </li>
-        
-            
-            
-            <li class="post-action hide-xs">
-                <a
-                    class="post-action-btn btn btn--default"
-                    target="new" href="https://plus.google.com/share?url=http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/"
-                    title="Share on Google+"
-                    aria-label="Share on Google+"
-                >
-                    <i class="fab fa-google-plus" aria-hidden="true"></i>
-                </a>
-            </li>
-        
-        
-            
-        
-        <li class="post-action">
-            
-                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
-            
-                <i class="fa fa-list" aria-hidden="true"></i>
-            </a>
-        </li>
-    </ul>
-</div>
-
-
-                </div>
-                
-    <div id="share-options-bar" class="share-options-bar" data-behavior="4">
-        <i id="btn-close-shareoptions" class="fa fa-times"></i>
-        <ul class="share-options">
-            
-                
-                
-                <li class="share-option">
-                    <a
-                        class="share-option-btn"
-                        target="new"
-                        href="https://www.facebook.com/sharer/sharer.php?u=http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/"
-                        aria-label="Share on Facebook"
-                    >
-                        <i class="fab fa-facebook" aria-hidden="true"></i><span>Share on Facebook</span>
-                    </a>
-                </li>
-            
-                
-                
-                <li class="share-option">
-                    <a
-                        class="share-option-btn"
-                        target="new"
-                        href="https://twitter.com/intent/tweet?text=http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/"
-                        aria-label="Share on Twitter"
-                    >
-                        <i class="fab fa-twitter" aria-hidden="true"></i><span>Share on Twitter</span>
-                    </a>
-                </li>
-            
-                
-                
-                <li class="share-option">
-                    <a
-                        class="share-option-btn"
-                        target="new"
-                        href="https://plus.google.com/share?url=http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/"
-                        aria-label="Share on Google+"
-                    >
-                        <i class="fab fa-google-plus" aria-hidden="true"></i><span>Share on Google+</span>
-                    </a>
-                </li>
-            
-        </ul>
-    </div>
-
-
-            
-        </div>
-        
-
-
-<div id="about">
-    <div id="about-card">
-        <div id="about-btn-close">
-            <i class="fa fa-times"></i>
-        </div>
-        
-            <h4 id="about-card-name">陈宇韶chenyushao</h4>
-        
-            <div id="about-card-bio"><p>author.bio</p>
-</div>
-        
-        
-            <div id="about-card-job">
-                <i class="fa fa-briefcase"></i>
-                <br/>
-                <p>author.job</p>
-
-            </div>
-        
-        
-    </div>
-</div>
-
-        
-        
-<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
-        <!--SCRIPTS-->
-
-<script src="/assets/js/script-sbgpeqyl6jw5qe60mnfuzifzwky5la4ftiuwmschcdzx2pg5tfpl1pfp13e3.min.js"></script>
-
-<!--SCRIPTS END-->
-
 
     
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/hive/" rel="tag"># hive</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/" rel="prev" title="Hive_SQL数据定义语言_DDL">
+                  <i class="fa fa-chevron-left"></i> Hive_SQL数据定义语言_DDL
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/hive%E4%BC%98%E5%8C%96%E5%8F%8A%E6%96%B0%E7%89%B9%E6%80%A7/" rel="next" title="hive优化及新特性">
+                  hive优化及新特性 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
 
 
 
 
-    </body>
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">陈宇韶chenyushao</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+</body>
 </html>

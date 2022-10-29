@@ -1,23 +1,26 @@
-
 <!DOCTYPE html>
 <html lang="en">
-    
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="generator" content="Tiger_pop&#39;s Blog">
-    <title>k-means聚类分析 - Tiger_pop&#39;s Blog</title>
-    <meta name="author" content="陈宇韶chenyushao">
-    
-    
-    
-        
-            <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
-        
-    
-    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"陈宇韶chenyushao","sameAs":["https://github.com/","https://www.linkedin.com/profile/","mailto"]},"articleBody":"#%% md \nK-means聚类算法的实现与应用#%% md\n一、实验简介#%% md\n（一）问题描述K-means聚类算法的主要思想是：将所有输入的数据划分成为K个子集合，并且要求每个子集合内各个元素之间的差异性尽可能的小，而不同子集合间元素的差异性尽可能的大。\nK-maens算法是聚类算法的一种，一般应用于维度、数值都比较小且连续的数据集中，比如，从随机分布的事物集合中将相同事物进行分组。聚类算法除了K-means算法外还有其他聚类算法，比如，基于密度的聚类算法、基于高斯混合模型的最大期望聚类算法。由于K-means算法的解释性强、计算简单、易于理解等优点使它成为本实验中最合适的聚类算法。\n本实验将对K-means聚类算法原理进行介绍，并根据原理构建算法的实现思路。按照算法实现思路，借助Python编程语言，以及相关科学计算包实现算法。实现好的算法将应用到手动生成的数据集中，对这个数据集的数据进行聚类。\n#%% md\n二、 实验任务与要求本实验首先根据K-means聚类算法原理设计并实现K-means聚类算法模型，然后将实现好的模型应用到手动生成的数据集中做聚类。具体实验要求如下：\n1.算法实现：对K-means聚类算法原理简单介绍，再采用面向对象程序设计的思想实现K-means聚类算法。\n2.算法应用：加载数据，将数据集按8：2的比例划分为训练集和测试集，使用训练集数据分别训练k值为3、5、7时的K-means聚类算法模型，得到训练集的簇中心，将训练完成的算法模型对测试集进行聚类。\n3.应用效果可视化：将聚类结果用不同颜色标记并进行可视化，同时标出每个簇的簇中心。\n#%% md\n三、实验步骤#%% md\n（一）算法实现1.算法原理\n对于给定的样本集，按照样本之间的距离大小，将样本集划分为K个簇。让簇内的点尽量紧密的连在一起，而让簇间的距离尽量的大。假设需要将样本集划为k个簇（$C_1$,$C_2$,…$C_k$），每个簇都有一个簇中心，则目标是最小化簇内所有样本与簇中心的平方误差：$$Loss &#x3D; \\sum_{i&#x3D;1}^k\\sum_{x \\in C_i}||x-\\mu_i||^2_2$$(式中的k是簇的数量，$C_i$是簇内样本，$x$是单个样本，$\\mu_i$是簇中心，也可以说是簇内样本均值，$||z||^2_2$是求z向量的大小的平方)，上式中的簇中心求解公式：$$\\mu_i &#x3D; \\frac1{|C_i|}\\sum_{x \\in C_i}x$$\n#%% md\n2.算法实现\n定义一个K-meanss算法类KMeans，该算法类的主要方法是算法模型的训练方法(fit()函数)和预测方法(predict()函数)。\n\nfit()函数的流程如下：（1）初始化选择k个簇中心，本算法选取训练集数据中的前k个样本数据做为簇中心；（2）对于k个簇，求离其最近的样本，并将这些样本划分到该簇中；（3）对于每个簇，更新簇中心的向量（求簇内的样本的属性的均值）；（4）重复2~3步骤直到算法收敛，或者迭代到了指定的次数为止，得到k个簇中心向量。  \n\npredict()函数的流程如下：（1）对输入数据的每一个样本计算与k个簇中心的距离，选择距离最近的簇作为该样本数据的类属。\n\n\n算法实现代码如下：\n#%%\nimport operatorimport numpy as np#科学计算包import copyimport matplotlib.pyplot as plt#画图包\n#%%\nclass KMeans:    def init(self, k,max_iter&#x3D;20):        “””        :param k: int，簇的数量（数据集要聚成多少类）        :param max_iter: int，聚类的最大迭代数        “””        self._k &#x3D; k      #簇的数量        self._max_iter &#x3D; max_iter        #聚类迭代次数\ndef init_centers(self,k, dataset):\n    &quot;&quot;&quot;\n    初始化簇中心：\n    选取数据集中的前k个样本数据作为簇中心\n    :param k：int，簇的个数\n    :param dataset：ndarray，数据集\n    &quot;&quot;&quot;\n    self.center_dict = &#123;&#125;\n    for i in range(k):\n        self.center_dict[i] = dataset[i]\n\ndef get_centers(self):\n    &quot;&quot;&quot;\n    获取簇中心：\n    主要用于外部实例化对象调用\n    &quot;&quot;&quot;\n    return self.center_dict\n\ndef calc_dist(self,simple1, simple2):\n    &quot;&quot;&quot;\n    计算距离：\n    该函数是计算两个点之间的欧式距离，该函数首先将点转为向量的形式，之后用norm()函数求向量的大小。\n    :param simple1：ndarray，第一个样本点的位置\n    :param simple2：ndarray，第二个样本点的位置\n    &quot;&quot;&quot;\n    return np.linalg.norm(simple1-simple2) \n\n\ndef fit(self, x): \n    &quot;&quot;&quot;\n    模型拟合：（模型训练）\n    给数据集的最后一列插入默认为-1的类标签，通过循环不断更新簇中心，同时也不断改变数据集的类标签，直到迭代次数达到最大迭代次数或\n    所有类簇内距离总和两次都不变时为止,最终得到数据集训练出来的每类的簇中心。\n    :param x：ndarray，样本数据\n    &quot;&quot;&quot;\n    ds = copy.deepcopy(x)  # 复制一份数据\n    epoch = 0 # 迭代次数\n    self.init_centers(self._k, ds)  # 第一次迭代时，初始化k个聚类中心\n\n    ds = np.insert(ds, 2, values=-1, axis=1)  # 插入一列作为类标签，默认为-1\n    total_last = np.inf  # 上一次迭代距离总和\n    while epoch &lt;= self._max_iter:  # 迭代次数少于20次时继续迭代，也可以直接设为True，当目标函数已收敛时自动结束迭代\n        cluster_dist = &#123;i:0 for i in range(self._k)&#125;  # 记录每一个类簇距离总和\n        for simple in ds:\n            min_dist = np.inf   # simple 到最近的聚类中心的距离\n            min_label = -1    # 最近的聚类中心类标签\n            for label in self.center_dict.keys():\n                dist = self.calc_dist(simple[:2], self.center_dict[label])\n                if dist &lt; min_dist:\n                    min_dist = dist\n                    min_label = label\n            simple[2] = min_label  # 将当前样本点划分到最近的聚类中心所在聚类中\n            cluster_dist[int(min_label)] = cluster_dist[int(min_label)] + min_dist  # 更新类簇内部距离总和\n        \n        loss_now = sum(cluster_dist.values())  # 所有类簇内部距离总和\n        if total_last == loss_now:  # 如果两次迭代距离总和都不变，证明已收敛，跳出循环\n            break\n        total_last = loss_now         #将当前所有类簇内距离作为上一个所有类簇内距离\n        \n        for label in self.center_dict.keys():  # 更新簇中心\n            simple_list = ds[ds[:,2]==label]  # 挑选出类标签为k的所有样本\n            x = np.mean(simple_list[:, 0])     #求同类样本数据第一列特征数据的均值\n            y = np.mean(simple_list[:, 1])\n            self.center_dict[label] = [x, y]      #更新簇中心\n        epoch += 1\n\ndef predict(self, arr_data): \n    &quot;&quot;&quot;\n    模型预测：\n    预测新数据属于哪个类，注意这个类是零时类、假想类\n    :param arr_data：ndarray，样本数据\n    &quot;&quot;&quot;\n    ret_lst_label =[]         #存储预测值的列表\n    for sample in arr_data:   #迭代数据集\n        lst_d = []\n        for key in self.center_dict:  #迭代每类的簇中心\n            d = self.calc_dist(sample, self.center_dict[key])  #计算每个样本数据与簇中心的距离\n            lst_d.append(d)                 \n        index_min = np.argmin(lst_d)          #获取列表中最小值的索引\n        label = list(self.center_dict.keys())[index_min]  #得到该样本数据所属的类\n        ret_lst_label.append(label)         #添加到预测值列表中去\n    return ret_lst_label          \n\n#%% md\n（二）算法应用本阶段操作内容：本阶段首先将手动生成的三批数据合成一批后按8：2划分为训练集和测试集，然后借助本实验中编写好的聚类算法模型对训练集进行学习，得到簇中心，之后用测试集数据进行聚类测试。 \n#%% md\n1.数据介绍\n本阶段所要用到的数据集是手工制作的，总共生成了3批数据，每批包含300个样本数据，每个样本数据有两个属性，每个属性的数据是由不同均值，同一方差的高斯函数生成的，不同批样本数据间属性数据的均值差别较大，同批样本数据中属性数据均值相差较小。下面分别介绍三批数据各属性数据高斯分布的均值和方差： \n\n\n\n数据批数\n属性一均值与方差\n属性二均值与方差\n数据个数\n\n\n\n第一批\n（20，5）\n（15，5）\n300\n\n\n第二批\n（20，5）\n（45，5）\n300\n\n\n第三批\n（55，5）\n（35，5）\n300\n\n\n#%% md\n2.准备数据\n#%%\n#加载数据集#此处加载的数据的后缀名是.npy（numpy数组的形式存储），因此可以直接利用numpy中的数据加载函数load()dataset &#x3D; np.load(‘cluster_data.npy’)dataset\n#%% md\n数据划分是对总数据集的行顺序进行随机重置，将重置后的样本数据的前80%作为训练集数据，剩余的20%作为测试集数据。将训练集数据和测试集数据的第一个属性作为x轴，第二个属性作为y轴，用散点图的形式进行可视化。\n#%%\nnp.random.shuffle(dataset)index_split &#x3D; int(dataset.shape[0]*0.8)   #获取数据集在80%处的样本索引#划分训练集和测试集train_X &#x3D; dataset[:index_split]test_X &#x3D; dataset[index_split:]\n#%% md\n3.数据可视化对原数据的分布进行散点图可视化，用于对比后面的模型应用效果的可视化图。\n#%%\nplt.figure(figsize&#x3D;(16, 6))    #定义画布大小，20是画布的宽，8是画布的高plt.subplot(121)               #定义子图121表示这组图有1行2列，该子图在第1幅图for i in train_X:    plt.scatter(i[0], i[1],c&#x3D;’black’,s&#x3D;6)plt.xlabel(‘property_one’)          #设置x坐标plt.ylabel(‘property_two’)\nplt.subplot(122)for i in test_X:    plt.scatter(i[0], i[1],c&#x3D;’black’,s&#x3D;6)plt.xlabel(‘property_one’)plt.ylabel(‘property_two’)plt.show()\n#%% md\n4.模型训练、预测\n#%%\n#模型调用model1 &#x3D; KMeans(3)model2 &#x3D; KMeans(5)model3 &#x3D; KMeans(7)\n#模型训练model1.fit(train_X)model2.fit(train_X)model3.fit(train_X)\n#模型预测pred1 &#x3D; model1.predict(test_X)pred2 &#x3D; model2.predict(test_X)pred3 &#x3D; model3.predict(test_X)\n#%% md\n（三）应用效果可视化本阶段操作：K-means算法是无监督学习算法，所用到的样本是没有标签的，因此不易了解样本数据聚类的实际情况，需要对聚类后不同类样本数据用不同颜色的点进行可视化观测。\n#%% md\n下面用3个子图分别可视化k值为3、5、7时K-means聚类算法模型对测试集的聚类结果（不同类别样本用不同颜色表示），以及每个簇的簇中心（用黑点表示）。此处是编写了一个draw_pred_result（date,pred,centers_dic,plt）函数，用来可视化单个k值模型的聚类结果，其参数解释如下：\ndata：数据集；\npred：聚类结果；\ncenters_dic：每个簇的簇中心（字典结构）；\nplt：画子图的对象。\n\n#%%\ndef draw_pred_result(date,pred,centers_dic,plt):    color &#x3D; [‘red’,’green’,’blue’,’yellow’,’orange’,’pink’,’cyan’]    #由于这里最大聚成7个簇，因此这里设置了7中颜色    #画每个簇的样本    for index,i in enumerate(pred):                        #迭代pred的值并获取其值的索引        plt.scatter(date[index,0], date[index,1],c&#x3D;color[i],s&#x3D;6)     #画簇中心    for key in centers_dic:        plt.scatter(centers_dic[key][0], centers_dic[key][1],c&#x3D;’black’)    plt.xlabel(‘property_one’)    plt.ylabel(‘property_two’)\n#%%\nplt.figure(figsize&#x3D;(21, 6))    #定义画布大小，20是画布的宽，8是画布的高plt.subplot(131)               #定义子图121表示这组图有1行2列，该子图在第1幅图draw_pred_result(test_X,pred1,model1.get_centers(),plt)plt.title(‘k&#x3D;3’)plt.subplot(132)               #定义子图121表示这组图有1行2列，该子图在第1幅图draw_pred_result(test_X,pred2,model2.get_centers(),plt)plt.title(‘k&#x3D;5’)plt.subplot(133)               #定义子图121表示这组图有1行2列，该子图在第1幅图draw_pred_result(test_X,pred3,model3.get_centers(),plt)plt.title(‘k&#x3D;7’)\n#%% md\n五、结果分析在次实验中首先对K-means算法原理进行了介绍，然后根据算法的原理实现了算法的训练、预测等功能，最后将搭建好的算法模型以不同的K值（k&#x3D;3、5、7)应用到手动制作的数据集中，并对这几个算法模型的聚类结果进行了可视化，从可视化图可以看出，该测试集数据聚成三个簇比较合适。结合原理，该算法在训练时，首先初始化簇中心，之后迭代计算簇内样本的均值更新簇中心；在对测试集进行预测时，选取离其最近的簇中心作为样本标签类，整个过程并没有表达如何选取合适的K值，因此该算法有个较大的缺点就是需要手动选取K值。然而手动选取就如上面可视化的三幅图一样，有可能是合适的，也有可能都不合适。\n#%%\nfrom sklearn.cluster import KMeansfrom sklearn.datasets import load_iris\n#%%\ndata &#x3D; load_iris()\n#%%\ndata.data,data.target\n#%%\ndata_x &#x3D; data.data\n#%%\nmodel &#x3D; KMeans(n_clusters&#x3D;3)\n#%%\nmodel.fit(data_x)\n#%%\nmodel.labels_#预测出来的标签\n#%%\ndata.target#真实的标签\n#%%\ndata.target_names#标签的名称\n#%%\n","dateCreated":"2022-10-28T21:07:36+08:00","dateModified":"2022-10-28T21:31:10+08:00","datePublished":"2022-10-28T21:07:36+08:00","description":"#%% md","headline":"k-means聚类分析","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"http://example.com/2022/10/28/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/k-means/"},"publisher":{"@type":"Organization","name":"陈宇韶chenyushao","sameAs":["https://github.com/","https://www.linkedin.com/profile/","mailto"]},"url":"http://example.com/2022/10/28/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/k-means/","keywords":"聚类算法, 无监督学习(unsupervised learning)"}</script>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha256-AbA177XfpSnFEvgpYu1jMygiLabzPCJCRIBtR5jGc0k=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.13.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
     <meta name="description" content="这是文章开头，显示在主页面，详情请点击此处。">
-<meta property="og:type" content="blog">
+<meta property="og:type" content="article">
 <meta property="og:title" content="k-means聚类分析">
 <meta property="og:url" content="http://example.com/2022/10/28/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/k-means/index.html">
 <meta property="og:site_name" content="Tiger_pop&#39;s Blog">
@@ -29,249 +32,210 @@
 <meta property="article:tag" content="聚类算法">
 <meta property="article:tag" content="无监督学习(unsupervised learning)">
 <meta name="twitter:card" content="summary">
-    
-    
-        
-    
-    
-    
-    
-    
-    <!--STYLES-->
-    
-<link rel="stylesheet" href="/assets/css/style-yrbj4x87sme2npnaj5hmxl88fi8ktzpa1hwzrvan2almcpvu5niegj13ryff.min.css">
 
-    <!--STYLES END-->
-    
 
-    
+<link rel="canonical" href="http://example.com/2022/10/28/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/k-means/">
 
-    
-        
-    
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/2022/10/28/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/k-means/","path":"2022/10/28/机器学习/k-means/","title":"k-means聚类分析"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>k-means聚类分析 | Tiger_pop's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="Tiger_pop's Blog" type="application/atom+xml">
 </head>
 
-    <body>
-        <div id="blog">
-            <!-- Define author's picture -->
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
 
-
-    
-
-<header id="header" data-behavior="4">
-    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
-    <div class="header-title">
-        <a
-            class="header-title-link"
-            href="/"
-            aria-label=""
-        >
-            Tiger_pop&#39;s Blog
-        </a>
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
     </div>
-    
-        
-            <a
-                class="header-right-picture "
-                href="#about"
-                aria-label="Open the link: /#about"
-            >
-        
-        
-        </a>
-    
-</header>
+  </div>
 
-            <!-- Define author's picture -->
+  <div class="site-meta">
 
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Tiger_pop's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">tiger_pop 的博客</p>
+  </div>
 
-<nav id="sidebar" data-behavior="4">
-    <div class="sidebar-container">
-        
-        
-            <ul class="sidebar-buttons">
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="/"
-                            
-                            rel="noopener"
-                            title="Home"
-                        >
-                        <i class="sidebar-button-icon fa fa-home" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Home</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="/all-categories"
-                            
-                            rel="noopener"
-                            title="Categories"
-                        >
-                        <i class="sidebar-button-icon fa fa-bookmark" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Categories</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="/all-tags"
-                            
-                            rel="noopener"
-                            title="Tags"
-                        >
-                        <i class="sidebar-button-icon fa fa-tags" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Tags</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="/all-archives"
-                            
-                            rel="noopener"
-                            title="Archives"
-                        >
-                        <i class="sidebar-button-icon fa fa-archive" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Archives</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="#about"
-                            
-                            rel="noopener"
-                            title="About"
-                        >
-                        <i class="sidebar-button-icon fa fa-question" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">About</span>
-                    </a>
-            </li>
-            
-        </ul>
-        
-            <ul class="sidebar-buttons">
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="https://github.com/"
-                            
-                                target="_blank"
-                            
-                            rel="noopener"
-                            title="GitHub"
-                        >
-                        <i class="sidebar-button-icon fab fa-github" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">GitHub</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="https://www.linkedin.com/profile/"
-                            
-                                target="_blank"
-                            
-                            rel="noopener"
-                            title="LinkedIn"
-                        >
-                        <i class="sidebar-button-icon fab fa-linkedin" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">LinkedIn</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="/mailto"
-                            
-                            rel="noopener"
-                            title="Mail"
-                        >
-                        <i class="sidebar-button-icon fa fa-envelope" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Mail</span>
-                    </a>
-            </li>
-            
-        </ul>
-        
-            <ul class="sidebar-buttons">
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="/atom.xml"
-                            
-                            rel="noopener"
-                            title="RSS"
-                        >
-                        <i class="sidebar-button-icon fa fa-rss" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">RSS</span>
-                    </a>
-            </li>
-            
-        </ul>
-        
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
     </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+  </ul>
 </nav>
 
-            
-            <div id="main" data-behavior="4"
-                 class="
-                        hasCoverMetaIn
-                        ">
-                
-<article class="post">
-    
-    
-        <div class="post-header main-content-wrap text-left">
-    
-        <h1 class="post-title">
-            k-means聚类分析
-        </h1>
-    
-    
-        <div class="post-meta">
-    <time datetime="2022-10-28T21:07:36+08:00">
-	
-		    Oct 28, 2022
-    	
-    </time>
-    
-        <span>in </span>
+
+
+
+</div>
         
-    <a class="category-link" href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/">机器学习</a>
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
 
+  <aside class="sidebar">
 
-    
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#K-means%E8%81%9A%E7%B1%BB%E7%AE%97%E6%B3%95%E7%9A%84%E5%AE%9E%E7%8E%B0%E4%B8%8E%E5%BA%94%E7%94%A8"><span class="nav-number">1.</span> <span class="nav-text">K-means聚类算法的实现与应用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E5%AE%9E%E9%AA%8C%E7%AE%80%E4%BB%8B"><span class="nav-number">1.1.</span> <span class="nav-text">一、实验简介</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%EF%BC%88%E4%B8%80%EF%BC%89%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0"><span class="nav-number">1.1.1.</span> <span class="nav-text">（一）问题描述</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81-%E5%AE%9E%E9%AA%8C%E4%BB%BB%E5%8A%A1%E4%B8%8E%E8%A6%81%E6%B1%82"><span class="nav-number">1.2.</span> <span class="nav-text">二、 实验任务与要求</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E5%AE%9E%E9%AA%8C%E6%AD%A5%E9%AA%A4"><span class="nav-number">1.3.</span> <span class="nav-text">三、实验步骤</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%EF%BC%88%E4%B8%80%EF%BC%89%E7%AE%97%E6%B3%95%E5%AE%9E%E7%8E%B0"><span class="nav-number">1.3.1.</span> <span class="nav-text">（一）算法实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%EF%BC%88%E4%BA%8C%EF%BC%89%E7%AE%97%E6%B3%95%E5%BA%94%E7%94%A8"><span class="nav-number">1.3.2.</span> <span class="nav-text">（二）算法应用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%EF%BC%88%E4%B8%89%EF%BC%89%E5%BA%94%E7%94%A8%E6%95%88%E6%9E%9C%E5%8F%AF%E8%A7%86%E5%8C%96"><span class="nav-number">1.3.3.</span> <span class="nav-text">（三）应用效果可视化</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E3%80%81%E7%BB%93%E6%9E%9C%E5%88%86%E6%9E%90"><span class="nav-number">1.4.</span> <span class="nav-text">五、结果分析</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">陈宇韶chenyushao</p>
+  <div class="site-description" itemprop="description">爱学习、爱工作、爱生活</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">303</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">19</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">95</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
 </div>
 
-    
-</div>
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
 
     
-    <div class="post-content markdown">
-        <div class="main-content-wrap">
-            <p>#%% md <span id="more"></span></p>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/10/28/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/k-means/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="陈宇韶chenyushao">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tiger_pop's Blog">
+      <meta itemprop="description" content="爱学习、爱工作、爱生活">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="k-means聚类分析 | Tiger_pop's Blog">
+      <meta itemprop="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          k-means聚类分析
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2022-10-28 21:07:36 / Modified: 21:31:10" itemprop="dateCreated datePublished" datetime="2022-10-28T21:07:36+08:00">2022-10-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+            <div class="post-description">这是文章开头，显示在主页面，详情请点击此处。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>#%% md <span id="more"></span></p>
 <h1 id="K-means聚类算法的实现与应用"><a href="#K-means聚类算法的实现与应用" class="headerlink" title="K-means聚类算法的实现与应用"></a>K-means聚类算法的实现与应用</h1><p>#%% md</p>
 <h2 id="一、实验简介"><a href="#一、实验简介" class="headerlink" title="一、实验简介"></a>一、实验简介</h2><p>#%% md</p>
 <h3 id="（一）问题描述"><a href="#（一）问题描述" class="headerlink" title="（一）问题描述"></a>（一）问题描述</h3><p>K-means聚类算法的主要思想是：将所有输入的数据划分成为K个子集合，并且要求每个子集合内各个元素之间的差异性尽可能的小，而不同子集合间元素的差异性尽可能的大。</p>
@@ -470,324 +434,77 @@ plt：画子图的对象。
 <p>data.target_names#标签的名称</p>
 <p>#%%</p>
 
-            
-
-
-        </div>
     </div>
-    <div id="post-footer" class="post-footer main-content-wrap">
-        
-            <div class="post-footer-tags">
-                <span class="text-color-light text-small">TAGGED IN</span><br/>
-                
-    <a class="tag tag--primary tag--small t-none-link" href="/tags/%E6%97%A0%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0-unsupervised-learning/" rel="tag">无监督学习(unsupervised learning)</a> <a class="tag tag--primary tag--small t-none-link" href="/tags/%E8%81%9A%E7%B1%BB%E7%AE%97%E6%B3%95/" rel="tag">聚类算法</a>
-
-            </div>
-        
-        
-            <div class="post-actions-wrap">
-    <nav>
-        <ul class="post-actions post-action-nav">
-            <li class="post-action">
-                
-                    
-                <a
-                    class="post-action-btn btn btn--default tooltip--top"
-                    href="/2022/10/28/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/KNN/"
-                    data-tooltip="KNNk近邻分类\回归"
-                    aria-label="PREVIOUS: KNNk近邻分类\回归"
-                >
-                    
-                        <i class="fa fa-angle-left" aria-hidden="true"></i>
-                        <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
-                    </a>
-            </li>
-            <li class="post-action">
-                
-                    
-                <a
-                    class="post-action-btn btn btn--default tooltip--top"
-                    href="/2022/10/28/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/pca/"
-                    data-tooltip="PCA主成分分析"
-                    aria-label="NEXT: PCA主成分分析"
-                >
-                    
-                        <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
-                        <i class="fa fa-angle-right" aria-hidden="true"></i>
-                    </a>
-            </li>
-        </ul>
-    </nav>
-    <ul class="post-actions post-action-share">
-        <li class="post-action hide-lg hide-md hide-sm">
-            <a
-                class="post-action-btn btn btn--default btn-open-shareoptions"
-                href="#btn-open-shareoptions"
-                aria-label="Share this post"
-            >
-                <i class="fa fa-share-alt" aria-hidden="true"></i>
-            </a>
-        </li>
-        
-            
-            
-            <li class="post-action hide-xs">
-                <a
-                    class="post-action-btn btn btn--default"
-                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://example.com/2022/10/28/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/k-means/"
-                    title="Share on Facebook"
-                    aria-label="Share on Facebook"
-                >
-                    <i class="fab fa-facebook" aria-hidden="true"></i>
-                </a>
-            </li>
-        
-            
-            
-            <li class="post-action hide-xs">
-                <a
-                    class="post-action-btn btn btn--default"
-                    target="new" href="https://twitter.com/intent/tweet?text=http://example.com/2022/10/28/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/k-means/"
-                    title="Share on Twitter"
-                    aria-label="Share on Twitter"
-                >
-                    <i class="fab fa-twitter" aria-hidden="true"></i>
-                </a>
-            </li>
-        
-            
-            
-            <li class="post-action hide-xs">
-                <a
-                    class="post-action-btn btn btn--default"
-                    target="new" href="https://plus.google.com/share?url=http://example.com/2022/10/28/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/k-means/"
-                    title="Share on Google+"
-                    aria-label="Share on Google+"
-                >
-                    <i class="fab fa-google-plus" aria-hidden="true"></i>
-                </a>
-            </li>
-        
-        
-            
-        
-        <li class="post-action">
-            
-                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
-            
-                <i class="fa fa-list" aria-hidden="true"></i>
-            </a>
-        </li>
-    </ul>
-</div>
-
-
-        
-        
-            
-        
-    </div>
-</article>
-
-
-
-                <footer id="footer" class="main-content-wrap">
-    <span class="copyrights">
-        Copyrights &copy; 2022 陈宇韶chenyushao. All Rights Reserved.
-    </span>
-</footer>
-
-            </div>
-            
-                <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
-                    <div class="post-actions-wrap">
-    <nav>
-        <ul class="post-actions post-action-nav">
-            <li class="post-action">
-                
-                    
-                <a
-                    class="post-action-btn btn btn--default tooltip--top"
-                    href="/2022/10/28/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/KNN/"
-                    data-tooltip="KNNk近邻分类\回归"
-                    aria-label="PREVIOUS: KNNk近邻分类\回归"
-                >
-                    
-                        <i class="fa fa-angle-left" aria-hidden="true"></i>
-                        <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
-                    </a>
-            </li>
-            <li class="post-action">
-                
-                    
-                <a
-                    class="post-action-btn btn btn--default tooltip--top"
-                    href="/2022/10/28/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/pca/"
-                    data-tooltip="PCA主成分分析"
-                    aria-label="NEXT: PCA主成分分析"
-                >
-                    
-                        <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
-                        <i class="fa fa-angle-right" aria-hidden="true"></i>
-                    </a>
-            </li>
-        </ul>
-    </nav>
-    <ul class="post-actions post-action-share">
-        <li class="post-action hide-lg hide-md hide-sm">
-            <a
-                class="post-action-btn btn btn--default btn-open-shareoptions"
-                href="#btn-open-shareoptions"
-                aria-label="Share this post"
-            >
-                <i class="fa fa-share-alt" aria-hidden="true"></i>
-            </a>
-        </li>
-        
-            
-            
-            <li class="post-action hide-xs">
-                <a
-                    class="post-action-btn btn btn--default"
-                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://example.com/2022/10/28/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/k-means/"
-                    title="Share on Facebook"
-                    aria-label="Share on Facebook"
-                >
-                    <i class="fab fa-facebook" aria-hidden="true"></i>
-                </a>
-            </li>
-        
-            
-            
-            <li class="post-action hide-xs">
-                <a
-                    class="post-action-btn btn btn--default"
-                    target="new" href="https://twitter.com/intent/tweet?text=http://example.com/2022/10/28/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/k-means/"
-                    title="Share on Twitter"
-                    aria-label="Share on Twitter"
-                >
-                    <i class="fab fa-twitter" aria-hidden="true"></i>
-                </a>
-            </li>
-        
-            
-            
-            <li class="post-action hide-xs">
-                <a
-                    class="post-action-btn btn btn--default"
-                    target="new" href="https://plus.google.com/share?url=http://example.com/2022/10/28/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/k-means/"
-                    title="Share on Google+"
-                    aria-label="Share on Google+"
-                >
-                    <i class="fab fa-google-plus" aria-hidden="true"></i>
-                </a>
-            </li>
-        
-        
-            
-        
-        <li class="post-action">
-            
-                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
-            
-                <i class="fa fa-list" aria-hidden="true"></i>
-            </a>
-        </li>
-    </ul>
-</div>
-
-
-                </div>
-                
-    <div id="share-options-bar" class="share-options-bar" data-behavior="4">
-        <i id="btn-close-shareoptions" class="fa fa-times"></i>
-        <ul class="share-options">
-            
-                
-                
-                <li class="share-option">
-                    <a
-                        class="share-option-btn"
-                        target="new"
-                        href="https://www.facebook.com/sharer/sharer.php?u=http://example.com/2022/10/28/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/k-means/"
-                        aria-label="Share on Facebook"
-                    >
-                        <i class="fab fa-facebook" aria-hidden="true"></i><span>Share on Facebook</span>
-                    </a>
-                </li>
-            
-                
-                
-                <li class="share-option">
-                    <a
-                        class="share-option-btn"
-                        target="new"
-                        href="https://twitter.com/intent/tweet?text=http://example.com/2022/10/28/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/k-means/"
-                        aria-label="Share on Twitter"
-                    >
-                        <i class="fab fa-twitter" aria-hidden="true"></i><span>Share on Twitter</span>
-                    </a>
-                </li>
-            
-                
-                
-                <li class="share-option">
-                    <a
-                        class="share-option-btn"
-                        target="new"
-                        href="https://plus.google.com/share?url=http://example.com/2022/10/28/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/k-means/"
-                        aria-label="Share on Google+"
-                    >
-                        <i class="fab fa-google-plus" aria-hidden="true"></i><span>Share on Google+</span>
-                    </a>
-                </li>
-            
-        </ul>
-    </div>
-
-
-            
-        </div>
-        
-
-
-<div id="about">
-    <div id="about-card">
-        <div id="about-btn-close">
-            <i class="fa fa-times"></i>
-        </div>
-        
-            <h4 id="about-card-name">陈宇韶chenyushao</h4>
-        
-            <div id="about-card-bio"><p>author.bio</p>
-</div>
-        
-        
-            <div id="about-card-job">
-                <i class="fa fa-briefcase"></i>
-                <br/>
-                <p>author.job</p>
-
-            </div>
-        
-        
-    </div>
-</div>
-
-        
-        
-<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
-        <!--SCRIPTS-->
-
-<script src="/assets/js/script-sbgpeqyl6jw5qe60mnfuzifzwky5la4ftiuwmschcdzx2pg5tfpl1pfp13e3.min.js"></script>
-
-<!--SCRIPTS END-->
-
 
     
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E8%81%9A%E7%B1%BB%E7%AE%97%E6%B3%95/" rel="tag"># 聚类算法</a>
+              <a href="/tags/%E6%97%A0%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0-unsupervised-learning/" rel="tag"># 无监督学习(unsupervised learning)</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/10/28/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/pca/" rel="prev" title="PCA主成分分析">
+                  <i class="fa fa-chevron-left"></i> PCA主成分分析
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2022/10/28/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/KNN/" rel="next" title="KNNk近邻分类\回归">
+                  KNNk近邻分类\回归 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
 
 
 
 
-    </body>
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">陈宇韶chenyushao</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+</body>
 </html>

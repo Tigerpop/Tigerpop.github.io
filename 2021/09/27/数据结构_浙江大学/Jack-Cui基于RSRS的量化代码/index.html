@@ -1,23 +1,26 @@
-
 <!DOCTYPE html>
 <html lang="en">
-    
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="generator" content="Tiger_pop&#39;s Blog">
-    <title>Jack-Cui基于RSRS的量化代码 - Tiger_pop&#39;s Blog</title>
-    <meta name="author" content="陈宇韶chenyushao">
-    
-    
-    
-        
-            <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
-        
-    
-    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"陈宇韶chenyushao","sameAs":["https://github.com/","https://www.linkedin.com/profile/","mailto"]},"articleBody":"‘’’策略思路：选股：财务指标选股择时：RSRS择时持仓：有开仓信号时持有10只股票，不满足时保持空仓\n‘’’\n导入函数库import statsmodels.api as smfrom pandas.stats.api import ols\n初始化函数，设定基准等等def initialize(context):    # 开启动态复权模式(真实价格)    set_option(‘use_real_price’, True)    # 过滤掉order系列API产生的比error级别低的log    # log.set_level(‘order’, ‘error’)    set_parameter(context)    ### 股票相关设定 ###    # 股票类每笔交易时的手续费是：买入时佣金万分之三，卖出时佣金万分之三加千分之一印花税, 每笔交易佣金最低扣5块钱    set_order_cost(OrderCost(close_tax&#x3D;0.001, open_commission&#x3D;0.0003, close_commission&#x3D;0.0003, min_commission&#x3D;5),                   type&#x3D;’stock’)\n## 运行函数（reference_security为运行时间的参考标的；传入的标的只做种类区分，因此传入&#39;000300.XSHG&#39;或&#39;510300.XSHG&#39;是一样的）\n# 开盘前运行\nrun_daily(before_market_open, time=&#39;before_open&#39;, reference_security=&#39;000300.XSHG&#39;)\n# 开盘时运行\nrun_daily(market_open, time=&#39;open&#39;, reference_security=&#39;000300.XSHG&#39;)\n# 收盘后运行\n# run_daily(after_market_close, time=&#39;after_close&#39;, reference_security=&#39;000300.XSHG&#39;)\n\n‘’’&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;参数设置部分&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;‘’’\ndef set_parameter(context):    # 设置RSRS指标中N, M的值    # 统计周期    g.N &#x3D; 18    # 统计样本长度    g.M &#x3D; 1100    # 首次运行判断    g.init &#x3D; True    # 持仓股票数    g.stock_num &#x3D; 10    # 风险参考基准    g.security &#x3D; ‘000300.XSHG’    # 设定策略运行基准    set_benchmark(g.security)    # 记录策略运行天数    g.days &#x3D; 0    # set_benchmark(g.stock)    # 买入阈值    g.buy &#x3D; 0.7    g.sell &#x3D; -0.7    # 用于记录回归后的beta值，即斜率    g.ans &#x3D; []    # 用于计算被决定系数加权修正后的贝塔值    g.ans_rightdev &#x3D; []\n# 计算2005年1月5日至回测开始日期的RSRS斜率指标\nprices = get_price(g.security, &#39;2005-01-05&#39;, context.previous_date, &#39;1d&#39;, [&#39;high&#39;, &#39;low&#39;])\nhighs = prices.high\nlows = prices.low\ng.ans = []\nfor i in range(len(highs))[g.N:]:\n    data_high = highs.iloc[i - g.N + 1:i + 1]\n    data_low = lows.iloc[i - g.N + 1:i + 1]\n    X = sm.add_constant(data_low)\n    model = sm.OLS(data_high, X)\n    results = model.fit()\n    g.ans.append(results.params[1])\n    # 计算r2\n    g.ans_rightdev.append(results.rsquared)\n\n开盘前运行函数def before_market_open(context):    # 输出运行时间    # log.info(‘函数运行时间(before_market_open)：’+str(context.current_dt.time()))    g.days +&#x3D; 1    # 给微信发送消息（添加模拟交易，并绑定微信生效）    send_message(‘策略正常，运行第%s天~’ % g.days)\n开盘时运行函数def market_open(context):    security &#x3D; g.security    # 填入各个日期的RSRS斜率值    beta &#x3D; 0    r2 &#x3D; 0    if g.init:        g.init &#x3D; False    else:        # RSRS斜率指标定义        prices &#x3D; attribute_history(security, g.N, ‘1d’, [‘high’, ‘low’])        highs &#x3D; prices.high        lows &#x3D; prices.low        X &#x3D; sm.add_constant(lows)        model &#x3D; sm.OLS(highs, X)        beta &#x3D; model.fit().params[1]        g.ans.append(beta)        # 计算r2        r2 &#x3D; model.fit().rsquared        g.ans_rightdev.append(r2)\n# 计算标准化的RSRS指标\n# 计算均值序列\nsection = g.ans[-g.M:]\n# 计算均值序列\nmu = np.mean(section)\n# 计算标准化RSRS指标序列\nsigma = np.std(section)\nzscore = (section[-1] - mu) / sigma\n# 计算右偏RSRS标准分\nzscore_rightdev = zscore * beta * r2\n\n# 如果上一时间点的RSRS斜率大于买入阈值, 则全仓买入\nif zscore_rightdev &gt; g.buy:\n    # 记录这次买入\n    log.info(&quot;市场风险在合理范围&quot;)\n    # 满足条件运行交易\n    trade_func(context)\n# 如果上一时间点的RSRS斜率小于卖出阈值, 则空仓卖出\nelif (zscore_rightdev &lt; g.sell) and (len(context.portfolio.positions.keys()) &gt; 0):\n    # 记录这次卖出\n    log.info(&quot;市场风险过大，保持空仓状态&quot;)\n    # 卖出所有股票,使这只股票的最终持有量为0\n    for s in context.portfolio.positions.keys():\n        order_target(s, 0)\n\n策略选股买卖部分def trade_func(context):    # 获取股票池    df &#x3D; get_fundamentals(query(valuation.code, valuation.pb_ratio, indicator.roe))    # 进行pb,roe大于0筛选    df &#x3D; df[(df[‘roe’] &gt; 0) &amp; (df[‘pb_ratio’] &gt; 0)].sort(‘pb_ratio’)    # 以股票名词作为index    df.index &#x3D; df[‘code’].values    # 取roe倒数    df[‘1&#x2F;roe’] &#x3D; 1 &#x2F; df[‘roe’]    # 获取综合得分    df[‘point’] &#x3D; df[[‘pb_ratio’, ‘1&#x2F;roe’]].rank().T.apply(f_sum)    # 按得分进行排序，取指定数量的股票    df &#x3D; df.sort(‘point’)[:g.stock_num]    pool &#x3D; df.index    log.info(‘总共选出%s只股票’ % len(pool))    # 得到每只股票应该分配的资金    cash &#x3D; context.portfolio.total_value &#x2F; len(pool)    # 获取已经持仓列表    hold_stock &#x3D; context.portfolio.positions.keys()    # 卖出不在持仓中的股票    for s in hold_stock:        if s not in pool:            order_target(s, 0)    # 买入股票    for s in pool:        order_target_value(s, cash)\n打分工具def f_sum(x):    return sum(x)\n收盘后运行函数def after_market_close(context):    # 得到当天所有成交记录    trades &#x3D; get_trades()    for _trade in trades.values():        log.info(‘成交记录：’ + str(_trade))    # 打印账户总资产    log.info(‘今日账户总资产：%s’ % round(context.portfolio.total_value, 2))    # log.info(‘##############################################################’)\n","dateCreated":"2021-09-27T20:00:36+08:00","dateModified":"2022-10-29T00:18:44+08:00","datePublished":"2021-09-27T20:00:36+08:00","description":"","headline":"Jack-Cui基于RSRS的量化代码","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/Jack-Cui%E5%9F%BA%E4%BA%8ERSRS%E7%9A%84%E9%87%8F%E5%8C%96%E4%BB%A3%E7%A0%81/"},"publisher":{"@type":"Organization","name":"陈宇韶chenyushao","sameAs":["https://github.com/","https://www.linkedin.com/profile/","mailto"]},"url":"http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/Jack-Cui%E5%9F%BA%E4%BA%8ERSRS%E7%9A%84%E9%87%8F%E5%8C%96%E4%BB%A3%E7%A0%81/","keywords":"量化"}</script>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha256-AbA177XfpSnFEvgpYu1jMygiLabzPCJCRIBtR5jGc0k=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.13.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
     <meta name="description" content="这是文章开头，显示在主页面，详情请点击此处。">
-<meta property="og:type" content="blog">
+<meta property="og:type" content="article">
 <meta property="og:title" content="Jack-Cui基于RSRS的量化代码">
 <meta property="og:url" content="http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/Jack-Cui%E5%9F%BA%E4%BA%8ERSRS%E7%9A%84%E9%87%8F%E5%8C%96%E4%BB%A3%E7%A0%81/index.html">
 <meta property="og:site_name" content="Tiger_pop&#39;s Blog">
@@ -28,249 +31,216 @@
 <meta property="article:author" content="陈宇韶chenyushao">
 <meta property="article:tag" content="量化">
 <meta name="twitter:card" content="summary">
-    
-    
-        
-    
-    
-    
-    
-    
-    <!--STYLES-->
-    
-<link rel="stylesheet" href="/assets/css/style-yrbj4x87sme2npnaj5hmxl88fi8ktzpa1hwzrvan2almcpvu5niegj13ryff.min.css">
 
-    <!--STYLES END-->
-    
 
-    
+<link rel="canonical" href="http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/Jack-Cui%E5%9F%BA%E4%BA%8ERSRS%E7%9A%84%E9%87%8F%E5%8C%96%E4%BB%A3%E7%A0%81/">
 
-    
-        
-    
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/Jack-Cui%E5%9F%BA%E4%BA%8ERSRS%E7%9A%84%E9%87%8F%E5%8C%96%E4%BB%A3%E7%A0%81/","path":"2021/09/27/数据结构_浙江大学/Jack-Cui基于RSRS的量化代码/","title":"Jack-Cui基于RSRS的量化代码"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Jack-Cui基于RSRS的量化代码 | Tiger_pop's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="Tiger_pop's Blog" type="application/atom+xml">
 </head>
 
-    <body>
-        <div id="blog">
-            <!-- Define author's picture -->
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
 
-
-    
-
-<header id="header" data-behavior="4">
-    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
-    <div class="header-title">
-        <a
-            class="header-title-link"
-            href="/"
-            aria-label=""
-        >
-            Tiger_pop&#39;s Blog
-        </a>
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
     </div>
-    
-        
-            <a
-                class="header-right-picture "
-                href="#about"
-                aria-label="Open the link: /#about"
-            >
-        
-        
-        </a>
-    
-</header>
+  </div>
 
-            <!-- Define author's picture -->
+  <div class="site-meta">
 
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Tiger_pop's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">tiger_pop 的博客</p>
+  </div>
 
-<nav id="sidebar" data-behavior="4">
-    <div class="sidebar-container">
-        
-        
-            <ul class="sidebar-buttons">
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="/"
-                            
-                            rel="noopener"
-                            title="Home"
-                        >
-                        <i class="sidebar-button-icon fa fa-home" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Home</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="/all-categories"
-                            
-                            rel="noopener"
-                            title="Categories"
-                        >
-                        <i class="sidebar-button-icon fa fa-bookmark" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Categories</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="/all-tags"
-                            
-                            rel="noopener"
-                            title="Tags"
-                        >
-                        <i class="sidebar-button-icon fa fa-tags" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Tags</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="/all-archives"
-                            
-                            rel="noopener"
-                            title="Archives"
-                        >
-                        <i class="sidebar-button-icon fa fa-archive" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Archives</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="#about"
-                            
-                            rel="noopener"
-                            title="About"
-                        >
-                        <i class="sidebar-button-icon fa fa-question" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">About</span>
-                    </a>
-            </li>
-            
-        </ul>
-        
-            <ul class="sidebar-buttons">
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="https://github.com/"
-                            
-                                target="_blank"
-                            
-                            rel="noopener"
-                            title="GitHub"
-                        >
-                        <i class="sidebar-button-icon fab fa-github" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">GitHub</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="https://www.linkedin.com/profile/"
-                            
-                                target="_blank"
-                            
-                            rel="noopener"
-                            title="LinkedIn"
-                        >
-                        <i class="sidebar-button-icon fab fa-linkedin" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">LinkedIn</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="/mailto"
-                            
-                            rel="noopener"
-                            title="Mail"
-                        >
-                        <i class="sidebar-button-icon fa fa-envelope" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Mail</span>
-                    </a>
-            </li>
-            
-        </ul>
-        
-            <ul class="sidebar-buttons">
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="/atom.xml"
-                            
-                            rel="noopener"
-                            title="RSS"
-                        >
-                        <i class="sidebar-button-icon fa fa-rss" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">RSS</span>
-                    </a>
-            </li>
-            
-        </ul>
-        
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
     </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+  </ul>
 </nav>
 
-            
-            <div id="main" data-behavior="4"
-                 class="
-                        hasCoverMetaIn
-                        ">
-                
-<article class="post">
-    
-    
-        <div class="post-header main-content-wrap text-left">
-    
-        <h1 class="post-title">
-            Jack-Cui基于RSRS的量化代码
-        </h1>
-    
-    
-        <div class="post-meta">
-    <time datetime="2021-09-27T20:00:36+08:00">
-	
-		    Sep 27, 2021
-    	
-    </time>
-    
-        <span>in </span>
+
+
+
+</div>
         
-    <a class="category-link" href="/categories/%E6%B5%99%E5%A4%A7%E7%AE%97%E6%B3%95%E4%B8%8E%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B-python%E5%AE%9E%E7%8E%B0/">浙大算法与数据结构课程(python实现)</a>
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
 
+  <aside class="sidebar">
 
-    
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AF%BC%E5%85%A5%E5%87%BD%E6%95%B0%E5%BA%93"><span class="nav-number">1.</span> <span class="nav-text">导入函数库</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96%E5%87%BD%E6%95%B0%EF%BC%8C%E8%AE%BE%E5%AE%9A%E5%9F%BA%E5%87%86%E7%AD%89%E7%AD%89"><span class="nav-number">2.</span> <span class="nav-text">初始化函数，设定基准等等</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%80%E7%9B%98%E5%89%8D%E8%BF%90%E8%A1%8C%E5%87%BD%E6%95%B0"><span class="nav-number">2.1.</span> <span class="nav-text">开盘前运行函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%80%E7%9B%98%E6%97%B6%E8%BF%90%E8%A1%8C%E5%87%BD%E6%95%B0"><span class="nav-number">2.2.</span> <span class="nav-text">开盘时运行函数</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AD%96%E7%95%A5%E9%80%89%E8%82%A1%E4%B9%B0%E5%8D%96%E9%83%A8%E5%88%86"><span class="nav-number">3.</span> <span class="nav-text">策略选股买卖部分</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%89%93%E5%88%86%E5%B7%A5%E5%85%B7"><span class="nav-number">4.</span> <span class="nav-text">打分工具</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%94%B6%E7%9B%98%E5%90%8E%E8%BF%90%E8%A1%8C%E5%87%BD%E6%95%B0"><span class="nav-number">4.1.</span> <span class="nav-text">收盘后运行函数</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">陈宇韶chenyushao</p>
+  <div class="site-description" itemprop="description">爱学习、爱工作、爱生活</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">303</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">19</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">95</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
 </div>
 
-    
-</div>
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
 
     
-    <div class="post-content markdown">
-        <div class="main-content-wrap">
-            <p>‘’’<br>策略思路：<br>选股：财务指标选股<br>择时：RSRS择时<br>持仓：有开仓信号时持有10只股票，不满足时保持空仓</p>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/Jack-Cui%E5%9F%BA%E4%BA%8ERSRS%E7%9A%84%E9%87%8F%E5%8C%96%E4%BB%A3%E7%A0%81/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="陈宇韶chenyushao">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tiger_pop's Blog">
+      <meta itemprop="description" content="爱学习、爱工作、爱生活">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Jack-Cui基于RSRS的量化代码 | Tiger_pop's Blog">
+      <meta itemprop="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Jack-Cui基于RSRS的量化代码
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2021-09-27 20:00:36" itemprop="dateCreated datePublished" datetime="2021-09-27T20:00:36+08:00">2021-09-27</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2022-10-29 00:18:44" itemprop="dateModified" datetime="2022-10-29T00:18:44+08:00">2022-10-29</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%B5%99%E5%A4%A7%E7%AE%97%E6%B3%95%E4%B8%8E%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B-python%E5%AE%9E%E7%8E%B0/" itemprop="url" rel="index"><span itemprop="name">浙大算法与数据结构课程(python实现)</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+            <div class="post-description">这是文章开头，显示在主页面，详情请点击此处。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>‘’’<br>策略思路：<br>选股：财务指标选股<br>择时：RSRS择时<br>持仓：有开仓信号时持有10只股票，不满足时保持空仓</p>
 <p>‘’’</p>
 <h1 id="导入函数库"><a href="#导入函数库" class="headerlink" title="导入函数库"></a>导入函数库</h1><p>import statsmodels.api as sm<br>from pandas.stats.api import ols</p>
 <h1 id="初始化函数，设定基准等等"><a href="#初始化函数，设定基准等等" class="headerlink" title="初始化函数，设定基准等等"></a>初始化函数，设定基准等等</h1><p>def initialize(context):<br>    # 开启动态复权模式(真实价格)<br>    set_option(‘use_real_price’, True)<br>    # 过滤掉order系列API产生的比error级别低的log<br>    # log.set_level(‘order’, ‘error’)<br>    set_parameter(context)<br>    ### 股票相关设定 ###<br>    # 股票类每笔交易时的手续费是：买入时佣金万分之三，卖出时佣金万分之三加千分之一印花税, 每笔交易佣金最低扣5块钱<br>    set_order_cost(OrderCost(close_tax&#x3D;0.001, open_commission&#x3D;0.0003, close_commission&#x3D;0.0003, min_commission&#x3D;5),<br>                   type&#x3D;’stock’)</p>
@@ -330,324 +300,76 @@ elif (zscore_rightdev &lt; g.sell) and (len(context.portfolio.positions.keys()) 
 <h1 id="打分工具"><a href="#打分工具" class="headerlink" title="打分工具"></a>打分工具</h1><p>def f_sum(x):<br>    return sum(x)</p>
 <h2 id="收盘后运行函数"><a href="#收盘后运行函数" class="headerlink" title="收盘后运行函数"></a>收盘后运行函数</h2><p>def after_market_close(context):<br>    # 得到当天所有成交记录<br>    trades &#x3D; get_trades()<br>    for _trade in trades.values():<br>        log.info(‘成交记录：’ + str(_trade))<br>    # 打印账户总资产<br>    log.info(‘今日账户总资产：%s’ % round(context.portfolio.total_value, 2))<br>    # log.info(‘##############################################################’)</p>
 
-            
-
-
-        </div>
     </div>
-    <div id="post-footer" class="post-footer main-content-wrap">
-        
-            <div class="post-footer-tags">
-                <span class="text-color-light text-small">TAGGED IN</span><br/>
-                
-    <a class="tag tag--primary tag--small t-none-link" href="/tags/%E9%87%8F%E5%8C%96/" rel="tag">量化</a>
-
-            </div>
-        
-        
-            <div class="post-actions-wrap">
-    <nav>
-        <ul class="post-actions post-action-nav">
-            <li class="post-action">
-                
-                    
-                <a
-                    class="post-action-btn btn btn--default tooltip--top"
-                    href="/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/%E8%8D%89%E7%A8%BF/"
-                    data-tooltip="草稿"
-                    aria-label="PREVIOUS: 草稿"
-                >
-                    
-                        <i class="fa fa-angle-left" aria-hidden="true"></i>
-                        <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
-                    </a>
-            </li>
-            <li class="post-action">
-                
-                    
-                <a
-                    class="post-action-btn btn btn--default tooltip--top"
-                    href="/2021/09/27/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/101.%20%E5%AF%B9%E7%A7%B0%E4%BA%8C%E5%8F%89%E6%A0%91/"
-                    data-tooltip="101. 对称二叉树"
-                    aria-label="NEXT: 101. 对称二叉树"
-                >
-                    
-                        <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
-                        <i class="fa fa-angle-right" aria-hidden="true"></i>
-                    </a>
-            </li>
-        </ul>
-    </nav>
-    <ul class="post-actions post-action-share">
-        <li class="post-action hide-lg hide-md hide-sm">
-            <a
-                class="post-action-btn btn btn--default btn-open-shareoptions"
-                href="#btn-open-shareoptions"
-                aria-label="Share this post"
-            >
-                <i class="fa fa-share-alt" aria-hidden="true"></i>
-            </a>
-        </li>
-        
-            
-            
-            <li class="post-action hide-xs">
-                <a
-                    class="post-action-btn btn btn--default"
-                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/Jack-Cui%E5%9F%BA%E4%BA%8ERSRS%E7%9A%84%E9%87%8F%E5%8C%96%E4%BB%A3%E7%A0%81/"
-                    title="Share on Facebook"
-                    aria-label="Share on Facebook"
-                >
-                    <i class="fab fa-facebook" aria-hidden="true"></i>
-                </a>
-            </li>
-        
-            
-            
-            <li class="post-action hide-xs">
-                <a
-                    class="post-action-btn btn btn--default"
-                    target="new" href="https://twitter.com/intent/tweet?text=http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/Jack-Cui%E5%9F%BA%E4%BA%8ERSRS%E7%9A%84%E9%87%8F%E5%8C%96%E4%BB%A3%E7%A0%81/"
-                    title="Share on Twitter"
-                    aria-label="Share on Twitter"
-                >
-                    <i class="fab fa-twitter" aria-hidden="true"></i>
-                </a>
-            </li>
-        
-            
-            
-            <li class="post-action hide-xs">
-                <a
-                    class="post-action-btn btn btn--default"
-                    target="new" href="https://plus.google.com/share?url=http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/Jack-Cui%E5%9F%BA%E4%BA%8ERSRS%E7%9A%84%E9%87%8F%E5%8C%96%E4%BB%A3%E7%A0%81/"
-                    title="Share on Google+"
-                    aria-label="Share on Google+"
-                >
-                    <i class="fab fa-google-plus" aria-hidden="true"></i>
-                </a>
-            </li>
-        
-        
-            
-        
-        <li class="post-action">
-            
-                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
-            
-                <i class="fa fa-list" aria-hidden="true"></i>
-            </a>
-        </li>
-    </ul>
-</div>
-
-
-        
-        
-            
-        
-    </div>
-</article>
-
-
-
-                <footer id="footer" class="main-content-wrap">
-    <span class="copyrights">
-        Copyrights &copy; 2022 陈宇韶chenyushao. All Rights Reserved.
-    </span>
-</footer>
-
-            </div>
-            
-                <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
-                    <div class="post-actions-wrap">
-    <nav>
-        <ul class="post-actions post-action-nav">
-            <li class="post-action">
-                
-                    
-                <a
-                    class="post-action-btn btn btn--default tooltip--top"
-                    href="/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/%E8%8D%89%E7%A8%BF/"
-                    data-tooltip="草稿"
-                    aria-label="PREVIOUS: 草稿"
-                >
-                    
-                        <i class="fa fa-angle-left" aria-hidden="true"></i>
-                        <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
-                    </a>
-            </li>
-            <li class="post-action">
-                
-                    
-                <a
-                    class="post-action-btn btn btn--default tooltip--top"
-                    href="/2021/09/27/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/101.%20%E5%AF%B9%E7%A7%B0%E4%BA%8C%E5%8F%89%E6%A0%91/"
-                    data-tooltip="101. 对称二叉树"
-                    aria-label="NEXT: 101. 对称二叉树"
-                >
-                    
-                        <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
-                        <i class="fa fa-angle-right" aria-hidden="true"></i>
-                    </a>
-            </li>
-        </ul>
-    </nav>
-    <ul class="post-actions post-action-share">
-        <li class="post-action hide-lg hide-md hide-sm">
-            <a
-                class="post-action-btn btn btn--default btn-open-shareoptions"
-                href="#btn-open-shareoptions"
-                aria-label="Share this post"
-            >
-                <i class="fa fa-share-alt" aria-hidden="true"></i>
-            </a>
-        </li>
-        
-            
-            
-            <li class="post-action hide-xs">
-                <a
-                    class="post-action-btn btn btn--default"
-                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/Jack-Cui%E5%9F%BA%E4%BA%8ERSRS%E7%9A%84%E9%87%8F%E5%8C%96%E4%BB%A3%E7%A0%81/"
-                    title="Share on Facebook"
-                    aria-label="Share on Facebook"
-                >
-                    <i class="fab fa-facebook" aria-hidden="true"></i>
-                </a>
-            </li>
-        
-            
-            
-            <li class="post-action hide-xs">
-                <a
-                    class="post-action-btn btn btn--default"
-                    target="new" href="https://twitter.com/intent/tweet?text=http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/Jack-Cui%E5%9F%BA%E4%BA%8ERSRS%E7%9A%84%E9%87%8F%E5%8C%96%E4%BB%A3%E7%A0%81/"
-                    title="Share on Twitter"
-                    aria-label="Share on Twitter"
-                >
-                    <i class="fab fa-twitter" aria-hidden="true"></i>
-                </a>
-            </li>
-        
-            
-            
-            <li class="post-action hide-xs">
-                <a
-                    class="post-action-btn btn btn--default"
-                    target="new" href="https://plus.google.com/share?url=http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/Jack-Cui%E5%9F%BA%E4%BA%8ERSRS%E7%9A%84%E9%87%8F%E5%8C%96%E4%BB%A3%E7%A0%81/"
-                    title="Share on Google+"
-                    aria-label="Share on Google+"
-                >
-                    <i class="fab fa-google-plus" aria-hidden="true"></i>
-                </a>
-            </li>
-        
-        
-            
-        
-        <li class="post-action">
-            
-                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
-            
-                <i class="fa fa-list" aria-hidden="true"></i>
-            </a>
-        </li>
-    </ul>
-</div>
-
-
-                </div>
-                
-    <div id="share-options-bar" class="share-options-bar" data-behavior="4">
-        <i id="btn-close-shareoptions" class="fa fa-times"></i>
-        <ul class="share-options">
-            
-                
-                
-                <li class="share-option">
-                    <a
-                        class="share-option-btn"
-                        target="new"
-                        href="https://www.facebook.com/sharer/sharer.php?u=http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/Jack-Cui%E5%9F%BA%E4%BA%8ERSRS%E7%9A%84%E9%87%8F%E5%8C%96%E4%BB%A3%E7%A0%81/"
-                        aria-label="Share on Facebook"
-                    >
-                        <i class="fab fa-facebook" aria-hidden="true"></i><span>Share on Facebook</span>
-                    </a>
-                </li>
-            
-                
-                
-                <li class="share-option">
-                    <a
-                        class="share-option-btn"
-                        target="new"
-                        href="https://twitter.com/intent/tweet?text=http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/Jack-Cui%E5%9F%BA%E4%BA%8ERSRS%E7%9A%84%E9%87%8F%E5%8C%96%E4%BB%A3%E7%A0%81/"
-                        aria-label="Share on Twitter"
-                    >
-                        <i class="fab fa-twitter" aria-hidden="true"></i><span>Share on Twitter</span>
-                    </a>
-                </li>
-            
-                
-                
-                <li class="share-option">
-                    <a
-                        class="share-option-btn"
-                        target="new"
-                        href="https://plus.google.com/share?url=http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/Jack-Cui%E5%9F%BA%E4%BA%8ERSRS%E7%9A%84%E9%87%8F%E5%8C%96%E4%BB%A3%E7%A0%81/"
-                        aria-label="Share on Google+"
-                    >
-                        <i class="fab fa-google-plus" aria-hidden="true"></i><span>Share on Google+</span>
-                    </a>
-                </li>
-            
-        </ul>
-    </div>
-
-
-            
-        </div>
-        
-
-
-<div id="about">
-    <div id="about-card">
-        <div id="about-btn-close">
-            <i class="fa fa-times"></i>
-        </div>
-        
-            <h4 id="about-card-name">陈宇韶chenyushao</h4>
-        
-            <div id="about-card-bio"><p>author.bio</p>
-</div>
-        
-        
-            <div id="about-card-job">
-                <i class="fa fa-briefcase"></i>
-                <br/>
-                <p>author.job</p>
-
-            </div>
-        
-        
-    </div>
-</div>
-
-        
-        
-<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
-        <!--SCRIPTS-->
-
-<script src="/assets/js/script-sbgpeqyl6jw5qe60mnfuzifzwky5la4ftiuwmschcdzx2pg5tfpl1pfp13e3.min.js"></script>
-
-<!--SCRIPTS END-->
-
 
     
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E9%87%8F%E5%8C%96/" rel="tag"># 量化</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/k%E8%B7%AF%E5%BD%92%E5%B9%B6%E6%8E%92%E5%BA%8F/" rel="prev" title="k路归并排序">
+                  <i class="fa fa-chevron-left"></i> k路归并排序
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/9%E4%BA%8C%E5%8F%89%E6%A0%91%E9%80%92%E5%BD%92%E9%81%8D%E5%8E%86/" rel="next" title="9二叉树递归遍历">
+                  9二叉树递归遍历 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
 
 
 
 
-    </body>
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">陈宇韶chenyushao</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+</body>
 </html>

@@ -1,23 +1,26 @@
-
 <!DOCTYPE html>
 <html lang="en">
-    
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="generator" content="Tiger_pop&#39;s Blog">
-    <title>kafka写入_存储_消费流程 - Tiger_pop&#39;s Blog</title>
-    <meta name="author" content="陈宇韶chenyushao">
-    
-    
-    
-        
-            <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
-        
-    
-    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"陈宇韶chenyushao","sameAs":["https://github.com/","https://www.linkedin.com/profile/","mailto"]},"articleBody":"简介 \n写入方式​\t\tproducer采用推（push）模式将消息发布到broker，每条消息都被追加（append）到分区（patition）中，属于顺序写磁盘（顺序写磁盘效率比随机写内存要高，保障kafka吞吐率）。\n​\t\tkafka的 logs 直接存数据，不像别的框架的log 仅仅当日志。\n为什么kafka顺序写磁盘 效率会高于 随机写内存？kafka 高吞吐量；\nkafka 顺写日志；\nkafka 0复制；\nkafka 分段日志 segment ； \nkafka 预读read ahead ，后写write behind；\n\n​\t\t随机写内存 ，把OS 中的 A 复制一份到  B，一次数据传递 ，实际要经过 多个read buffer和 write buffer 、cache，实际要 拷贝 4次（每次进入缓冲区都要拷贝一次）。\n\n​\t\t随机写内存，有10个数据，就至少要拷贝4*10&#x3D;40次，如果要走网络传输net ，要 41次。\n​\t\t\n​\t\t而kafka 做了改进，用一个底层指令 sendfile ，直接要操作系统 从cache中 传输数据 走了。如果是 走网络，同样10 个数据，每个拷贝一次进cache ，再一次性从cache 拷贝去 net 中传输，一共也就是 10+1&#x3D;11 次拷贝。\n​\t\t可见 kafka 几乎实现了0拷贝。\n​\t\t\n\n​\t\t这个.log 文件是实际存放数据的。\n​\t\t.log 前面 这20 个0 ，实际是偏移量 offset 。\n​\t\t上图的意思是说，假如第一次存了10个数据，一共1g，第二次存的数据就给了一个偏移量10，标注为10.log ，以此类推，这样可以找数据更方便。\n​\t\t\n​\t\t预读后写。\n​\t\t读的时候，把周边的可能相关的数据一起读进cache 中，方便下次用；写的时候，kafka在应用层没有写入的操作，直接引导数据写进了系统层的cache中，要写到文件file中以后再由cache写过去就行了，在同一层级内部的写操作会高效很多，kafka利用这一点大幅提升了写的效率。下图可以解释后写的意思：\n分区Partition\nindex用途这里通过一个例子解释 .index 文件的用途。\n\n​\t\t寻找目标数据，当目标数据偏移量offset &#x3D; 12 时，可以初步定位到数据应该是在 10.log 这个文件中，并且对应的位置是 10.log 文件的 12-10&#x3D;2 号数据；\n​\t\t但是如何定位 10.log文件 的2号数据在哪个位置呢？就要用到 10.index 索引文件。\n​\t\t上述索引文件中 1对应 index&#x3D;0 位置，2对应 index&#x3D;10 位置。\n​\t\t因此 offset&#x3D;12 我们很快就从一大堆的log 文件中找出了对应的目标数据。\n​\t\t补充一点： offset 偏移量时按照consumer group消费者组来定的，不是根据某一个消费者，假如消费者a和消费者b在一个组内，某一个分区a读一半停了b来读，会继续从a停止的位置继续读。\n\n分区​\t\t消息发送时都被发送到一个topic，其本质就是一个目录，而topic是由一些Partition Logs(分区日志)组成，其组织结构如下图所示：\n\n​\t\t每个Partition中的消息都是有序的，生产的消息被不断追加到Partition log上，其中的每一个消息都被赋予了一个唯一的offset值。\t\t\n1）分区的原因\n（1）方便在集群中扩展，每个Partition可以通过调整以适应它所在的机器，而一个topic又可以有多个Partition组成，因此整个集群就可以适应任意大小的数据了，数据大了直接加分区，嘿嘿；\n（2）可以提高并发，因为可以以Partition为单位读写了。\n2）分区的原则\n（1）指定了patition，则直接使用；\n（2）未指定patition但指定key，通过对key的value进行hash出一个patition；\n（3）patition和key都未指定，使用轮询选出一个patition。\n12345678910111213141516171819DefaultPartitioner类public int partition(String topic, Object key, byte[] keyBytes, Object value, byte[] valueBytes, Cluster cluster) &#123;        List&lt;PartitionInfo&gt; partitions = cluster.partitionsForTopic(topic);        int numPartitions = partitions.size();        if (keyBytes == null) &#123;            int nextValue = nextValue(topic);            List&lt;PartitionInfo&gt; availablePartitions = cluster.availablePartitionsForTopic(topic);            if (availablePartitions.size() &gt; 0) &#123;                int part = Utils.toPositive(nextValue) % availablePartitions.size();                return availablePartitions.get(part).partition();            &#125; else &#123;                // no partitions are available, give a non-available partition                return Utils.toPositive(nextValue) % numPartitions;            &#125;        &#125; else &#123;            // hash the keyBytes to choose a partition            return Utils.toPositive(Utils.murmur2(keyBytes)) % numPartitions;        &#125;    &#125;\n\n​\t\t在idea 中不断的往上 找方法的源代码，会发现，这个hash 底层也是 按位求与运算。类似如下：\n\n​\t\t放松一下：java中 \n1234int i = 0;i = i++;println(i)// 结果是 0 ，中间临时变量—a=i，i=1；i=—a=0；\n\n副本（Replication）同一个partition可能会有多个replication（对应 server.properties 配置中的 default.replication.factor&#x3D;N）。没有replication的情况下，一旦broker 宕机，其上所有 patition 的数据都不可被消费，同时producer也不能再将数据存于其上的patition。引入replication之后，同一个partition可能会有多个replication，而这时需要在这些replication之间选出一个leader，producer和consumer只与这个leader交互，其它replication作为follower从leader 中复制数据。\n​\t\tzookeeper 和 producer 没有关系。zookeeper只管理集群和consumer偏移量数据。都是集群中哪个partition副本是leader，这样的信息存储在zookeeper中。\n​\t——————————————————————————————————-\n   补充： 设置topic时，partition数目 可以大于 broker的数目，但是replication factor 设置一定不能 大于 broker的 数目；\n\n​\t\t例如： kafka集群 3台机器 broker &#x3D;3；一旦设置partition&#x3D;2，replication factor &#x3D;4 ，某一台机器中会同时出现 partition0 分区的leader副本和follower副本，一旦此机器宕机，极有可能数据全部丢失！！！\n​\t\t所以 ，不允许把 replication factor 设置的超过 broker的数目。\n\n​\t\t\n生成数据时应答机制ACK​\t\tack&#x3D;0: 生产者发送完数据，不关心数据是否到达kafka集群，然后直接发送下一条数据，效率高、易丢失；\n​\t\tack&#x3D;1: 生产者发送数据，需要等待leader副本的应答，leader副本把数据在log存放好了完成应答，生产者才发送下一条数据（不关心follower是否从leader中把数据备份成功，存在leader刚刚接收完数据就宕机，follower没来得及备份生产者又停止发送，导致数据丢失的可能）；\n​\t\tack&#x3D;-1: （all 模式）生产者发送数据，需要等待leader和follower都接收完成做出应答，才发送下一条数据，这样最安全，但是效率低一些；\n\n数据生产流程\n​\t\t生产者想要把数据发送给 leader，虽然不知道leader是哪个，但是也没必要向zookeeper通信拿leader数据，因为zookeeper一直保持和kafka的通信，生产者直接送数据到kafka集群，kafka集群会自己和zookeeper通信，安排好数据发送到leader中。\n​\t\t由一个 sender 管理消息发送&#x2F;退回 环节。如果 ack 无应答，消息传递失败，消息由sender原路返回producer的deque（双端队列）中。\n​\t\tproducer 用批量传输的经典方式 避免频繁的消息传递资源浪费，于是在内部按照想要发送的分区 先 批量写好到一处p0等，后放进由数据收集器搭建的双端队列DQ(deque)中，由DQ进入sender。之所以要双端队列，是考虑到应答失败消息退回的存放。\n数据保存流程​\t\tHW: high watermark 高水位。\n​\t\tLEO: log end offset 最后偏移量。 \n​\t\t\n​\t\t\n情形一：假设 下图时 leader突然宕机了。\n​\t\t上图是 假定 leader拿到了一个新的数据4，high watermark 还是3，logend offset 变成了4。\n​\t\t正常情况下，follower找leader备份数据，会把消息4备份过来，然后leader的 hw 赋值 为 4，follower再把 leader中的 hw &#x3D;4 备份过来让follower中同步 hw&#x3D;4。\n​\t\t但是此时leader宕机，follower看不见leader的数据了，\tfollower 的hw&#x3D;3，leo&#x3D;3 不会发生改变，并且转正成新的leader，此时用户都不知道数据发生了丢失。\n情形二：假设 下图时 leader突然宕机了。\n\t\t此时，follower 已经备份好了leader的数据，由于只有自己存在了，所以follower中 hw&#x3D;4，leo&#x3D;4，并且随后转正成leader，数据未发生丢失。\n情形三：正常成功备份。\n​\t\t\n​\t\tfollower 备份好了数据4 ，follower 的 leo&#x3D;4完成，leader 接收到follower 的 leo&#x3D;4 完成的信息，leader中 hw从 3 改为 4，follower 看见leader的hw&#x3D;4，也把自己的hw 同步为 4。\n​\t\t\n数据消费流程​\t\t\n​\t\t老版本的offset 是放在zookeeper中的，所以老版本的consumer 要调用zookeeper 集群拿数据，但是新版kafka 的offset 数据放在 kafka 集群的logs 文件中，用 bootstrap- server 直接从kafka集群中拿offset，来代替从zookeeper 中拿offset 数据了。其实offset 的数据还能放在redis 中，等等。\n​\t\t\n​\t\t\n​\t\t对某一个时刻而言，1个消费者可以消费多个partition，但是 1个partition 在这一时刻 只能 被一个消费者消费。\n​\t\t因为 offset 偏移量是以 group 为单位标记的，如上图，a、b在一个组内，只能是a消费完了以后，b才能接着a消费完的offset位置继续消费。\n再平衡策略​\t\t\n​\t\t上图中，三个partition 一个消费组，两个消费者，b消费者消费两个分区。为了效率我们再组内加入了一个新的消费者，会触发 “再平衡”策略，在组内选leader消费者，合理安排组内成员消费，尽可能一一对应分组消费。如下图：\n\n​\t\t\nbroker消息存储存储方式​\t\t物理上把topic分成一个或多个patition（对应 server.properties 中的num.partitions&#x3D;3配置），每个patition物理上对应一个文件夹（该文件夹存储该patition的所有消息和索引文件）\n存储策略​\t\t无论消息是否被消费，kafka都会保留所有消息。有两种策略可以删除旧数据：\n1）基于时间：log.retention.hours&#x3D;168（7天）\n2）基于大小：log.retention.bytes&#x3D;1073741824（1g）\n​\t\t需要注意的是，因为Kafka读取特定消息的时间复杂度为O(1)，因为index的存在，即与文件大小无关，所以这里删除过期文件与提高 Kafka 性能无关。\nZookeeper 存储结构（matedata）\t\tproducer不在zk中注册，消费者在zk中注册（新版本也不在zk中了，直接放在logs中，以组脚本命令查看)。\n​\t\t\n​\t\t我们在zookeeper 的bin 文件夹中 zkCli.sh\t然后 回车 ls / 查看zookeeper的根目录中有什么，发现全部都是kafka存入的文件，如下：\t\t\n​\t\t我们加入这些文件夹，看看这些元数据到底是什么。\n\n​\t\t在&#x2F;cluster&#x2F;id 中 有版本1，kafka集群 的id号。\n\n​\t\t在controller中，指定了集群的 “老大” 是 brokerid &#x3D;1 的那个。由它来安排kafka 的其他broker，zookeeper 有选举机制，“老大”没了能选个新的。\n\n​\t\t“老大” broker 挂掉 一次，就要竞选一次，竞选一次就进入一个新的纪元epoch，上图说明竞选了3次。\n\n​\t\t&#x2F;brokers 中有 broker的信息，id 是 broker相关，topic 有消费者偏移量 50份、topic信息等等 ，如上图。还挺详细。\n消费者组信息存储123# bootstrap-server打开一个消费者kafka-console-consumer.sh --bootstrap-server node01:9092 --topic test-topic --from-beginning# zookeeper的/comsumer中却看不见东西。因为用的是bootstrap-server，如果是老版本zookeeper node01:2181 ，会在zookeeper的/consumer中生成消费者组的信息。\n\n​\t\t消费者组消费 topic 的元数据信息，在旧版本里面是存储在 zookeeper 中，但由于 zookeeper 并不适合大批量的频繁写入操作，新版 kafka 已将消费者组的元数据信息保存在 kafka 内部的 topic 中，即 __consumer_offsets ，并提供了kafka-consumer-groups.sh 脚本供用户查看消费者组的元数据信息。\n​\t\t那么如何使用 kafka 提供的脚本查询某消费者组的元数据信息呢？\t\n12345678910111213141516171819202122232425# 查看消费者列表sh bin/kafka-consumer-groups.sh --bootstrap-server xxxx:9090 --list# 查看消费者组详情# 查看指定消费组详情--groupsh bin/kafka-consumer-groups.sh --bootstrap-server xxxxx:9090 --describe --group test2_consumer_group# 查看所有消费组详情--all-groupssh bin/kafka-consumer-groups.sh --bootstrap-server xxxxx:9090 --describe --all-groups# 查询消费者成员信息# 所有消费组成员信息sh bin/kafka-consumer-groups.sh --describe --all-groups --members --bootstrap-server xxx:9090# 指定消费组成员信息sh bin/kafka-consumer-groups.sh --describe --members --group test2_consumer_group --bootstrap-server xxxx:9090# 查询消费者状态信息--state# 删除消费者组--delete# 重置消费组的偏移量 --reset-offsets# 能够执行成功的一个前提是 消费组这会是不可用状态;# 删除偏移量delete-offsets# 能够执行成功的一个前提是 消费组这会是不可用状态;# 偏移量被删除了之后,Consumer Group下次启动的时候,会从头消费;\n\n​\t\t__consumer_offsets 默认有 50 个 partition，kafka 会根据 group.id 的 hash 值选择往哪个 partition 里面存放该 group 的元数据信息。\n​\t\t计算 group.id 对应的 partition 的公式为：\n​\t\tMath.abs(groupID.hashCode()) % numPartitions\n​\t\t举例：Math.abs(“test-17”.hashCode()) % 50，其中 test-17 是 group.id 。\n​\t\t找到 group.id 对应的 partition 后，就可以指定分区消费了：\n1./bin/kafka-console-consumer.sh --bootstrap-server message-1:9092 --topic __consumer_offsets --formatter &quot;kafka.coordinator.group.GroupMetadataManager\\$OffsetsMessageFormatter&quot; --partition 45\n\n\n​\t\t开一个producer和两个consumer窗口（实际生成了两个消费者组），陆续在producer写入多行数据，我们在 group 内 describe检查，发现log-end- offset一直在变化，不停写入不同的分区中：\t\t\n实现消费者组案例实操\n​\t（1）在node02、node03 上修改 config&#x2F;consumer.properties配置文件中的group.id属性为任意组名。\n​\t（2）在node02、node03  上分别启动消费者（带上参数–consumer.config ）\n1kafka-console-consumer.sh --bootstrap-server node01:9092 --topic test-topic --consumer.config ../config/consumer.properties\n\n​\t（3）在node01 上启动生产者，随便输入一堆数据。\n12345678910111213kafka-console-producer.sh --broker-list node01:9092 --topic test-topic&gt; ok&gt;have two consumer &gt;add one &gt;add new onw&gt;just do it&gt;no no no &gt;123&gt;123&gt;3423&gt;ow &gt;wo &gt;you know\n\n​\t（4）查看node02、node03的接收者。\n\n​\t\t可见同一时刻只有一个消费者接收到消息。\n​\t\t\noffset管理高级API1）高级API优点\n高级API 写起来简单\n不需要自行去管理offset，系统通过自行管理。\n不需要管理分区，副本等情况，.系统自动管理。\n消费者断线会自动根据上一次记录的offset去接着获取数据（默认设置1分钟更新一下__consumer_offset中存的offset）\n可以使用group来区分对同一个topic 的不同程序访问分离开来（不同的group记录不同的offset，这样不同程序读取同一个topic才不会因为offset互相影响）\n2）高级API缺点\n不能自行控制offset（对于某些特殊需求来说）\n​\t\t比如“去重”，offset没更新就挂了，又消费一遍导致重复消费，我们最好手动给offset一个去重处理，遇到一样的部分跳过，这样消费时去重也可以把生产者带来的重复数据一并处理，但是高级API做不到。\n不能细化控制如分区、副本 等\noffset管理低级API1）低级 API 优点\n能够让开发者自己控制offset，想从哪里读取就从哪里读取。\n自行控制连接分区，对分区自定义进行负载均衡\n2）低级API缺点\n太过复杂，需要自行控制offset，连接哪个分区，找到分区leader 等。\n​\t\t\n","dateCreated":"2022-10-29T15:41:39+08:00","dateModified":"2022-10-29T15:51:27+08:00","datePublished":"2022-10-29T15:41:39+08:00","description":"简介","headline":"kafka写入_存储_消费流程","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"http://example.com/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E5%86%99%E5%85%A5-%E5%AD%98%E5%82%A8-%E6%B6%88%E8%B4%B9%E6%B5%81%E7%A8%8B/"},"publisher":{"@type":"Organization","name":"陈宇韶chenyushao","sameAs":["https://github.com/","https://www.linkedin.com/profile/","mailto"]},"url":"http://example.com/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E5%86%99%E5%85%A5-%E5%AD%98%E5%82%A8-%E6%B6%88%E8%B4%B9%E6%B5%81%E7%A8%8B/","keywords":"kafka"}</script>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha256-AbA177XfpSnFEvgpYu1jMygiLabzPCJCRIBtR5jGc0k=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.13.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
     <meta name="description" content="这是文章开头，显示在主页面，详情请点击此处。">
-<meta property="og:type" content="blog">
+<meta property="og:type" content="article">
 <meta property="og:title" content="kafka写入_存储_消费流程">
 <meta property="og:url" content="http://example.com/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E5%86%99%E5%85%A5-%E5%AD%98%E5%82%A8-%E6%B6%88%E8%B4%B9%E6%B5%81%E7%A8%8B/index.html">
 <meta property="og:site_name" content="Tiger_pop&#39;s Blog">
@@ -58,249 +61,210 @@
 <meta property="article:tag" content="kafka">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http://example.com/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E5%86%99%E5%85%A5-%E5%AD%98%E5%82%A8-%E6%B6%88%E8%B4%B9%E6%B5%81%E7%A8%8B/%E6%88%AA%E5%B1%8F2022-04-24%2019.55.50-7029042.jpg">
-    
-    
-        
-    
-    
-    
-    
-    
-    <!--STYLES-->
-    
-<link rel="stylesheet" href="/assets/css/style-yrbj4x87sme2npnaj5hmxl88fi8ktzpa1hwzrvan2almcpvu5niegj13ryff.min.css">
 
-    <!--STYLES END-->
-    
 
-    
+<link rel="canonical" href="http://example.com/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E5%86%99%E5%85%A5-%E5%AD%98%E5%82%A8-%E6%B6%88%E8%B4%B9%E6%B5%81%E7%A8%8B/">
 
-    
-        
-    
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E5%86%99%E5%85%A5-%E5%AD%98%E5%82%A8-%E6%B6%88%E8%B4%B9%E6%B5%81%E7%A8%8B/","path":"2022/10/29/kafka学习/kafka写入-存储-消费流程/","title":"kafka写入_存储_消费流程"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>kafka写入_存储_消费流程 | Tiger_pop's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="Tiger_pop's Blog" type="application/atom+xml">
 </head>
 
-    <body>
-        <div id="blog">
-            <!-- Define author's picture -->
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
 
-
-    
-
-<header id="header" data-behavior="4">
-    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
-    <div class="header-title">
-        <a
-            class="header-title-link"
-            href="/"
-            aria-label=""
-        >
-            Tiger_pop&#39;s Blog
-        </a>
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
     </div>
-    
-        
-            <a
-                class="header-right-picture "
-                href="#about"
-                aria-label="Open the link: /#about"
-            >
-        
-        
-        </a>
-    
-</header>
+  </div>
 
-            <!-- Define author's picture -->
+  <div class="site-meta">
 
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Tiger_pop's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">tiger_pop 的博客</p>
+  </div>
 
-<nav id="sidebar" data-behavior="4">
-    <div class="sidebar-container">
-        
-        
-            <ul class="sidebar-buttons">
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="/"
-                            
-                            rel="noopener"
-                            title="Home"
-                        >
-                        <i class="sidebar-button-icon fa fa-home" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Home</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="/all-categories"
-                            
-                            rel="noopener"
-                            title="Categories"
-                        >
-                        <i class="sidebar-button-icon fa fa-bookmark" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Categories</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="/all-tags"
-                            
-                            rel="noopener"
-                            title="Tags"
-                        >
-                        <i class="sidebar-button-icon fa fa-tags" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Tags</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="/all-archives"
-                            
-                            rel="noopener"
-                            title="Archives"
-                        >
-                        <i class="sidebar-button-icon fa fa-archive" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Archives</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="#about"
-                            
-                            rel="noopener"
-                            title="About"
-                        >
-                        <i class="sidebar-button-icon fa fa-question" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">About</span>
-                    </a>
-            </li>
-            
-        </ul>
-        
-            <ul class="sidebar-buttons">
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="https://github.com/"
-                            
-                                target="_blank"
-                            
-                            rel="noopener"
-                            title="GitHub"
-                        >
-                        <i class="sidebar-button-icon fab fa-github" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">GitHub</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="https://www.linkedin.com/profile/"
-                            
-                                target="_blank"
-                            
-                            rel="noopener"
-                            title="LinkedIn"
-                        >
-                        <i class="sidebar-button-icon fab fa-linkedin" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">LinkedIn</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="/mailto"
-                            
-                            rel="noopener"
-                            title="Mail"
-                        >
-                        <i class="sidebar-button-icon fa fa-envelope" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Mail</span>
-                    </a>
-            </li>
-            
-        </ul>
-        
-            <ul class="sidebar-buttons">
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="/atom.xml"
-                            
-                            rel="noopener"
-                            title="RSS"
-                        >
-                        <i class="sidebar-button-icon fa fa-rss" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">RSS</span>
-                    </a>
-            </li>
-            
-        </ul>
-        
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
     </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+  </ul>
 </nav>
 
-            
-            <div id="main" data-behavior="4"
-                 class="
-                        hasCoverMetaIn
-                        ">
-                
-<article class="post">
-    
-    
-        <div class="post-header main-content-wrap text-left">
-    
-        <h1 class="post-title">
-            kafka写入_存储_消费流程
-        </h1>
-    
-    
-        <div class="post-meta">
-    <time datetime="2022-10-29T15:41:39+08:00">
-	
-		    Oct 29, 2022
-    	
-    </time>
-    
-        <span>in </span>
+
+
+
+</div>
         
-    <a class="category-link" href="/categories/kafka/">kafka</a>
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
 
+  <aside class="sidebar">
 
-    
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%86%99%E5%85%A5%E6%96%B9%E5%BC%8F"><span class="nav-number">1.</span> <span class="nav-text">写入方式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88kafka%E9%A1%BA%E5%BA%8F%E5%86%99%E7%A3%81%E7%9B%98-%E6%95%88%E7%8E%87%E4%BC%9A%E9%AB%98%E4%BA%8E-%E9%9A%8F%E6%9C%BA%E5%86%99%E5%86%85%E5%AD%98%EF%BC%9F"><span class="nav-number">1.1.</span> <span class="nav-text">为什么kafka顺序写磁盘 效率会高于 随机写内存？</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%88%86%E5%8C%BAPartition"><span class="nav-number">2.</span> <span class="nav-text">分区Partition</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#index%E7%94%A8%E9%80%94"><span class="nav-number">2.1.</span> <span class="nav-text">index用途</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%86%E5%8C%BA"><span class="nav-number">2.2.</span> <span class="nav-text">分区</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%89%AF%E6%9C%AC%EF%BC%88Replication%EF%BC%89"><span class="nav-number">2.2.1.</span> <span class="nav-text">副本（Replication）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%9F%E6%88%90%E6%95%B0%E6%8D%AE%E6%97%B6%E5%BA%94%E7%AD%94%E6%9C%BA%E5%88%B6ACK"><span class="nav-number">2.2.2.</span> <span class="nav-text">生成数据时应答机制ACK</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E7%94%9F%E4%BA%A7%E6%B5%81%E7%A8%8B"><span class="nav-number">3.</span> <span class="nav-text">数据生产流程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E4%BF%9D%E5%AD%98%E6%B5%81%E7%A8%8B"><span class="nav-number">4.</span> <span class="nav-text">数据保存流程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E6%B6%88%E8%B4%B9%E6%B5%81%E7%A8%8B"><span class="nav-number">5.</span> <span class="nav-text">数据消费流程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%8D%E5%B9%B3%E8%A1%A1%E7%AD%96%E7%95%A5"><span class="nav-number">5.1.</span> <span class="nav-text">再平衡策略</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#broker%E6%B6%88%E6%81%AF%E5%AD%98%E5%82%A8"><span class="nav-number">6.</span> <span class="nav-text">broker消息存储</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AD%98%E5%82%A8%E6%96%B9%E5%BC%8F"><span class="nav-number">6.1.</span> <span class="nav-text">存储方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AD%98%E5%82%A8%E7%AD%96%E7%95%A5"><span class="nav-number">6.2.</span> <span class="nav-text">存储策略</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Zookeeper-%E5%AD%98%E5%82%A8%E7%BB%93%E6%9E%84%EF%BC%88matedata%EF%BC%89"><span class="nav-number">6.3.</span> <span class="nav-text">Zookeeper 存储结构（matedata）</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%B6%88%E8%B4%B9%E8%80%85%E7%BB%84%E4%BF%A1%E6%81%AF%E5%AD%98%E5%82%A8"><span class="nav-number">7.</span> <span class="nav-text">消费者组信息存储</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0%E6%B6%88%E8%B4%B9%E8%80%85%E7%BB%84"><span class="nav-number">7.1.</span> <span class="nav-text">实现消费者组</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#offset%E7%AE%A1%E7%90%86%E9%AB%98%E7%BA%A7API"><span class="nav-number">8.</span> <span class="nav-text">offset管理高级API</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#offset%E7%AE%A1%E7%90%86%E4%BD%8E%E7%BA%A7API"><span class="nav-number">9.</span> <span class="nav-text">offset管理低级API</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">陈宇韶chenyushao</p>
+  <div class="site-description" itemprop="description">爱学习、爱工作、爱生活</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">303</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">19</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">95</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
 </div>
 
-    
-</div>
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
 
     
-    <div class="post-content markdown">
-        <div class="main-content-wrap">
-            <p>简介 <span id="more"></span></p>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E5%86%99%E5%85%A5-%E5%AD%98%E5%82%A8-%E6%B6%88%E8%B4%B9%E6%B5%81%E7%A8%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="陈宇韶chenyushao">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tiger_pop's Blog">
+      <meta itemprop="description" content="爱学习、爱工作、爱生活">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="kafka写入_存储_消费流程 | Tiger_pop's Blog">
+      <meta itemprop="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          kafka写入_存储_消费流程
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2022-10-29 15:41:39 / Modified: 15:51:27" itemprop="dateCreated datePublished" datetime="2022-10-29T15:41:39+08:00">2022-10-29</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/kafka/" itemprop="url" rel="index"><span itemprop="name">kafka</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+            <div class="post-description">这是文章开头，显示在主页面，详情请点击此处。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>简介 <span id="more"></span></p>
 <h1 id="写入方式"><a href="#写入方式" class="headerlink" title="写入方式"></a>写入方式</h1><p>​		producer采用推（push）模式将消息发布到broker，每条消息都被追加（append）到分区（patition）中，属于顺序写磁盘（顺序写磁盘效率比随机写内存要高，保障kafka吞吐率）。</p>
 <p>​		kafka的 logs 直接存数据，不像别的框架的log 仅仅当日志。</p>
 <h2 id="为什么kafka顺序写磁盘-效率会高于-随机写内存？"><a href="#为什么kafka顺序写磁盘-效率会高于-随机写内存？" class="headerlink" title="为什么kafka顺序写磁盘 效率会高于 随机写内存？"></a>为什么kafka顺序写磁盘 效率会高于 随机写内存？</h2><p>kafka 高吞吐量；</p>
@@ -451,324 +415,76 @@
 <p>太过复杂，需要自行控制offset，连接哪个分区，找到分区leader 等。</p>
 <p>​		</p>
 
-            
-
-
-        </div>
     </div>
-    <div id="post-footer" class="post-footer main-content-wrap">
-        
-            <div class="post-footer-tags">
-                <span class="text-color-light text-small">TAGGED IN</span><br/>
-                
-    <a class="tag tag--primary tag--small t-none-link" href="/tags/kafka/" rel="tag">kafka</a>
-
-            </div>
-        
-        
-            <div class="post-actions-wrap">
-    <nav>
-        <ul class="post-actions post-action-nav">
-            <li class="post-action">
-                
-                    
-                <a
-                    class="post-action-btn btn btn--default tooltip--top"
-                    href="/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka-API%E5%AE%9E%E6%88%98/"
-                    data-tooltip="kafka_API实战"
-                    aria-label="PREVIOUS: kafka_API实战"
-                >
-                    
-                        <i class="fa fa-angle-left" aria-hidden="true"></i>
-                        <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
-                    </a>
-            </li>
-            <li class="post-action">
-                
-                    
-                <a
-                    class="post-action-btn btn btn--default tooltip--top"
-                    href="/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E6%B5%81%E5%BC%8F%E6%95%B0%E6%8D%AE/"
-                    data-tooltip="kafka流式数据"
-                    aria-label="NEXT: kafka流式数据"
-                >
-                    
-                        <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
-                        <i class="fa fa-angle-right" aria-hidden="true"></i>
-                    </a>
-            </li>
-        </ul>
-    </nav>
-    <ul class="post-actions post-action-share">
-        <li class="post-action hide-lg hide-md hide-sm">
-            <a
-                class="post-action-btn btn btn--default btn-open-shareoptions"
-                href="#btn-open-shareoptions"
-                aria-label="Share this post"
-            >
-                <i class="fa fa-share-alt" aria-hidden="true"></i>
-            </a>
-        </li>
-        
-            
-            
-            <li class="post-action hide-xs">
-                <a
-                    class="post-action-btn btn btn--default"
-                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://example.com/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E5%86%99%E5%85%A5-%E5%AD%98%E5%82%A8-%E6%B6%88%E8%B4%B9%E6%B5%81%E7%A8%8B/"
-                    title="Share on Facebook"
-                    aria-label="Share on Facebook"
-                >
-                    <i class="fab fa-facebook" aria-hidden="true"></i>
-                </a>
-            </li>
-        
-            
-            
-            <li class="post-action hide-xs">
-                <a
-                    class="post-action-btn btn btn--default"
-                    target="new" href="https://twitter.com/intent/tweet?text=http://example.com/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E5%86%99%E5%85%A5-%E5%AD%98%E5%82%A8-%E6%B6%88%E8%B4%B9%E6%B5%81%E7%A8%8B/"
-                    title="Share on Twitter"
-                    aria-label="Share on Twitter"
-                >
-                    <i class="fab fa-twitter" aria-hidden="true"></i>
-                </a>
-            </li>
-        
-            
-            
-            <li class="post-action hide-xs">
-                <a
-                    class="post-action-btn btn btn--default"
-                    target="new" href="https://plus.google.com/share?url=http://example.com/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E5%86%99%E5%85%A5-%E5%AD%98%E5%82%A8-%E6%B6%88%E8%B4%B9%E6%B5%81%E7%A8%8B/"
-                    title="Share on Google+"
-                    aria-label="Share on Google+"
-                >
-                    <i class="fab fa-google-plus" aria-hidden="true"></i>
-                </a>
-            </li>
-        
-        
-            
-        
-        <li class="post-action">
-            
-                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
-            
-                <i class="fa fa-list" aria-hidden="true"></i>
-            </a>
-        </li>
-    </ul>
-</div>
-
-
-        
-        
-            
-        
-    </div>
-</article>
-
-
-
-                <footer id="footer" class="main-content-wrap">
-    <span class="copyrights">
-        Copyrights &copy; 2022 陈宇韶chenyushao. All Rights Reserved.
-    </span>
-</footer>
-
-            </div>
-            
-                <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
-                    <div class="post-actions-wrap">
-    <nav>
-        <ul class="post-actions post-action-nav">
-            <li class="post-action">
-                
-                    
-                <a
-                    class="post-action-btn btn btn--default tooltip--top"
-                    href="/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka-API%E5%AE%9E%E6%88%98/"
-                    data-tooltip="kafka_API实战"
-                    aria-label="PREVIOUS: kafka_API实战"
-                >
-                    
-                        <i class="fa fa-angle-left" aria-hidden="true"></i>
-                        <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
-                    </a>
-            </li>
-            <li class="post-action">
-                
-                    
-                <a
-                    class="post-action-btn btn btn--default tooltip--top"
-                    href="/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E6%B5%81%E5%BC%8F%E6%95%B0%E6%8D%AE/"
-                    data-tooltip="kafka流式数据"
-                    aria-label="NEXT: kafka流式数据"
-                >
-                    
-                        <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
-                        <i class="fa fa-angle-right" aria-hidden="true"></i>
-                    </a>
-            </li>
-        </ul>
-    </nav>
-    <ul class="post-actions post-action-share">
-        <li class="post-action hide-lg hide-md hide-sm">
-            <a
-                class="post-action-btn btn btn--default btn-open-shareoptions"
-                href="#btn-open-shareoptions"
-                aria-label="Share this post"
-            >
-                <i class="fa fa-share-alt" aria-hidden="true"></i>
-            </a>
-        </li>
-        
-            
-            
-            <li class="post-action hide-xs">
-                <a
-                    class="post-action-btn btn btn--default"
-                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://example.com/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E5%86%99%E5%85%A5-%E5%AD%98%E5%82%A8-%E6%B6%88%E8%B4%B9%E6%B5%81%E7%A8%8B/"
-                    title="Share on Facebook"
-                    aria-label="Share on Facebook"
-                >
-                    <i class="fab fa-facebook" aria-hidden="true"></i>
-                </a>
-            </li>
-        
-            
-            
-            <li class="post-action hide-xs">
-                <a
-                    class="post-action-btn btn btn--default"
-                    target="new" href="https://twitter.com/intent/tweet?text=http://example.com/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E5%86%99%E5%85%A5-%E5%AD%98%E5%82%A8-%E6%B6%88%E8%B4%B9%E6%B5%81%E7%A8%8B/"
-                    title="Share on Twitter"
-                    aria-label="Share on Twitter"
-                >
-                    <i class="fab fa-twitter" aria-hidden="true"></i>
-                </a>
-            </li>
-        
-            
-            
-            <li class="post-action hide-xs">
-                <a
-                    class="post-action-btn btn btn--default"
-                    target="new" href="https://plus.google.com/share?url=http://example.com/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E5%86%99%E5%85%A5-%E5%AD%98%E5%82%A8-%E6%B6%88%E8%B4%B9%E6%B5%81%E7%A8%8B/"
-                    title="Share on Google+"
-                    aria-label="Share on Google+"
-                >
-                    <i class="fab fa-google-plus" aria-hidden="true"></i>
-                </a>
-            </li>
-        
-        
-            
-        
-        <li class="post-action">
-            
-                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
-            
-                <i class="fa fa-list" aria-hidden="true"></i>
-            </a>
-        </li>
-    </ul>
-</div>
-
-
-                </div>
-                
-    <div id="share-options-bar" class="share-options-bar" data-behavior="4">
-        <i id="btn-close-shareoptions" class="fa fa-times"></i>
-        <ul class="share-options">
-            
-                
-                
-                <li class="share-option">
-                    <a
-                        class="share-option-btn"
-                        target="new"
-                        href="https://www.facebook.com/sharer/sharer.php?u=http://example.com/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E5%86%99%E5%85%A5-%E5%AD%98%E5%82%A8-%E6%B6%88%E8%B4%B9%E6%B5%81%E7%A8%8B/"
-                        aria-label="Share on Facebook"
-                    >
-                        <i class="fab fa-facebook" aria-hidden="true"></i><span>Share on Facebook</span>
-                    </a>
-                </li>
-            
-                
-                
-                <li class="share-option">
-                    <a
-                        class="share-option-btn"
-                        target="new"
-                        href="https://twitter.com/intent/tweet?text=http://example.com/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E5%86%99%E5%85%A5-%E5%AD%98%E5%82%A8-%E6%B6%88%E8%B4%B9%E6%B5%81%E7%A8%8B/"
-                        aria-label="Share on Twitter"
-                    >
-                        <i class="fab fa-twitter" aria-hidden="true"></i><span>Share on Twitter</span>
-                    </a>
-                </li>
-            
-                
-                
-                <li class="share-option">
-                    <a
-                        class="share-option-btn"
-                        target="new"
-                        href="https://plus.google.com/share?url=http://example.com/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E5%86%99%E5%85%A5-%E5%AD%98%E5%82%A8-%E6%B6%88%E8%B4%B9%E6%B5%81%E7%A8%8B/"
-                        aria-label="Share on Google+"
-                    >
-                        <i class="fab fa-google-plus" aria-hidden="true"></i><span>Share on Google+</span>
-                    </a>
-                </li>
-            
-        </ul>
-    </div>
-
-
-            
-        </div>
-        
-
-
-<div id="about">
-    <div id="about-card">
-        <div id="about-btn-close">
-            <i class="fa fa-times"></i>
-        </div>
-        
-            <h4 id="about-card-name">陈宇韶chenyushao</h4>
-        
-            <div id="about-card-bio"><p>author.bio</p>
-</div>
-        
-        
-            <div id="about-card-job">
-                <i class="fa fa-briefcase"></i>
-                <br/>
-                <p>author.job</p>
-
-            </div>
-        
-        
-    </div>
-</div>
-
-        
-        
-<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
-        <!--SCRIPTS-->
-
-<script src="/assets/js/script-sbgpeqyl6jw5qe60mnfuzifzwky5la4ftiuwmschcdzx2pg5tfpl1pfp13e3.min.js"></script>
-
-<!--SCRIPTS END-->
-
 
     
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/kafka/" rel="tag"># kafka</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E6%B5%81%E5%BC%8F%E6%95%B0%E6%8D%AE/" rel="prev" title="kafka流式数据">
+                  <i class="fa fa-chevron-left"></i> kafka流式数据
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka-API%E5%AE%9E%E6%88%98/" rel="next" title="kafka_API实战">
+                  kafka_API实战 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
 
 
 
 
-    </body>
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">陈宇韶chenyushao</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+</body>
 </html>

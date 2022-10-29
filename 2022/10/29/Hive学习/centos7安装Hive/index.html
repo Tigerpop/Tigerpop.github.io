@@ -1,23 +1,26 @@
-
 <!DOCTYPE html>
 <html lang="en">
-    
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="generator" content="Tiger_pop&#39;s Blog">
-    <title>centos7安装Hive - Tiger_pop&#39;s Blog</title>
-    <meta name="author" content="陈宇韶chenyushao">
-    
-    
-    
-        
-            <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
-        
-    
-    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"陈宇韶chenyushao","sameAs":["https://github.com/","https://www.linkedin.com/profile/","mailto"]},"articleBody":"    安装hive，需要先安装配置好Hadoop，可以看之前的Hadoop安装配置笔记。先启动Hadoop，接下来的操作都是在主节点中进行，我的主节点机器主机名是node01。\n\n\n一、将hive解压，并在Hadoop的core-site.xml中整合hive。12tar -zxvf apache-hive-3.1.2-bin.tar.gz vim /opt/hadoop/hadoop/etc/hadoop/core-site.xml\n\n1234567891011# 追加如下两个属性； Hadoop集群同步配置文件，重启生效(我允许* 就是任何用户任何分组，用root用户权限来运行，所以下面是root.hosts\\root.groups)。        &lt;!--整合 prepare for hive --&gt;        &lt;property&gt;                &lt;name&gt;hadoop.proxyuser.root.hosts&lt;/name&gt;                &lt;value&gt;*&lt;/value&gt;        &lt;/property&gt;        &lt;property&gt;                &lt;name&gt;hadoop.proxyuser.root.groups&lt;/name&gt;                &lt;value&gt;*&lt;/value&gt;        &lt;/property&gt;\n\n\n\n二、检查Hadoop和hive的guava版本是否有差异。12345678910111213# 如果Hadoop和hive的guava版本有差异，就用Hadoop下的guava包替换hive的guava包。cd /opt/hadoop/hadoop/share/hadoop/common/libls | grep guava# 显示： guava-27.0-jre.jarcd /opt/hive/apache-hive-3.1.2-bin/libls | grep guava# 显示： guava-19.0.jar# 可见Hadoop的guava版本高一些，所以用Hadoop的guava覆盖hive的guava。cp /opt/hadoop/hadoop/share/hadoop/common/lib/guava-27.0-jre.jar  /opt/hive/apache-hive-3.1.2-bin/librm -rf /opt/hive/apache-hive-3.1.2-bin/lib/guava-19.0.jar\n\n\n\n三、添加数据驱动包​\t\t将mysql的java驱动包     *   上传到  &#x2F;opt&#x2F;hive&#x2F;apache-hive-3.1.2-bin&#x2F;lib 。\t\n​\t\t驱动包下载地址：https://mvnrepository.com/artifact/mysql/mysql-connector-java![截屏2022-02-27 15.56.42](centos7%E5%AE%89%E8%A3%85Hive.assets&#x2F;%E6%88%AA%E5%B1%8F2022-02-27%2015.56.42-7026054.jpg)\n123# 我的mysql版本  Server version: 5.7.26 MySQL # mysql官方推荐mysql5.6以上 使用connector/j 8.0 ，而且在使用时需要对时区进行设置。java推荐java1.8以后都用connector/j 8.0 。cp mysql-connector-java-8.0.25.jar /opt/hive/apache-hive-3.1.2-bin/lib # 或者用finalshell直接传进hive的lib中。\n\n\n四、添加环境变量12vim /etc/profile# 当然啦，也可以和我配置Hadoop一样在 /root/.bash_profile 中配置环境变量，就是那样需要每次都source /root/.bash_profile 激活一次，有点小麻烦。现在我们换个口味。\n\n123456# &#123;&#125; 加不加都可以。这里试试加花括号效果一样。export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.322.b06-1.el7_9.x86_64export HIVE_HOME=/opt/hive/apache-hive-3.1.2-binexport HIVE_CONF_DIR=$&#123;HIVE_HOME&#125;/confexport HIVE_AUX_JARS_PATH=/opt/hive/apache-hive-3.1.2-bin/libexport PATH=.:$&#123;JAVA_HOME&#125;/bin:$&#123;SCALA_HOME&#125;/bin:$&#123;SPARK_HOME&#125;/bin:$&#123;HADOOP_HOME&#125;/bin:$&#123;ZK_HOME&#125;/bin:$&#123;HBASE_HOME&#125;/bin:$&#123;HIVE_HOME&#125;/bin:$PATH\n\n1source /etc/profile # 生效\n\n\n\n五、在conf中更改配置1、新建hive-site.xml(远程模式部署metastore服务 ，链接上mysql的hive数据库。)1vim /opt/hive/apache-hive-3.1.2-bin/conf/hive-site.xml\n\n12345678910111213141516171819202122232425262728293031323334353637383940&lt;configuration&gt;  &lt;property&gt;    &lt;!--mysql 搭建在第一台机器上，用到的database名字就叫hive(这个是定好的)。--&gt;    &lt;name&gt;javax.jdo.option.ConnectionURL&lt;/name&gt;    &lt;value&gt;jdbc:mysql://node01:3306/hive?createDatabaseIfNotExist=true&amp;amp;useSSL=false&lt;/value&gt;  &lt;/property&gt;  &lt;property&gt;    &lt;name&gt;javax.jdo.option.ConnectionDriverName&lt;/name&gt;    &lt;value&gt;com.mysql.jdbc.Driver&lt;/value&gt;  &lt;/property&gt;    &lt;!--hive中要用到mysql，这里填写 mysql的用户名。我先就在mysql中创建了一个名叫hive的用户。 --&gt;  &lt;property&gt;    &lt;name&gt;javax.jdo.option.ConnectionUserName&lt;/name&gt;    &lt;value&gt;hive&lt;/value&gt;  &lt;/property&gt;    &lt;!--上面mysql用户名对应的 mysql数据库登录密码（需要修改成密码） --&gt;  &lt;property&gt;    &lt;name&gt;javax.jdo.option.ConnectionPassword&lt;/name&gt;    &lt;value&gt;hive&lt;/value&gt;  &lt;/property&gt;  &lt;!--远程模式部署metastore服务地址,hive就安装在node01上，用thrift协议对外，端口9083 --&gt;  &lt;property&gt;    &lt;name&gt;hive.metastore.uris&lt;/name&gt;    &lt;value&gt;thrift://node01:9083&lt;/value&gt;  &lt;/property&gt;    &lt;!--关闭元数据存储授权--&gt;  &lt;property&gt;    &lt;name&gt;hive.metastore.event.db.notification.api.auth&lt;/name&gt;    &lt;value&gt;false&lt;/value&gt;  &lt;/property&gt;  &lt;!--关闭元数据存储版本验证--&gt;  &lt;property&gt;    &lt;name&gt;hive.metastore.schema.verification&lt;/name&gt;    &lt;value&gt;false&lt;/value&gt;  &lt;/property&gt;&lt;/configuration&gt;\n\n2、修改hive-env.sh12cp hive-env.sh.template hive-env.shvim hive-env.sh\n\n123export HADOOP_HOME=/opt/hadoop/hadoopexport HIVE_CONF_DIR=/opt/hive/apache-hive-3.1.2-bin/confexport HIVE_AUX_JARS_PATH=/opt/hive/apache-hive-3.1.2-bin/lib\n\n\n\n六、初始化metadata123# 在hive 的bin中初始化metadata，指定元数据在mysql当中。cd /opt/hive/apache-hive-3.1.2-bin/binschematool -initSchema -dbType mysql -verbos\n\n判断是否初始化metadata成功的方法，就是去mysql看看有没有新生成一个叫hive的database，同时hive 的database中是否有74张表。\n\n​\t\t但是此时直接在bin运行 hive的命令会报错\n1234cd /opt/hive/apache-hive-3.1.2-bin/binhive # 进入hive 输命令的界面show databases;# 报错  Unable to instantiate org.apache.hadoop.hive.ql.metadata.SessionHiveMetaStoreClient 无法实例化metastore的客户端。\n\n\n​\t\t从上图可知报错原因，要先手动打开metastore服务。不然直接启动hive，链接不到mysql中的元数据。\n七、手动开启metastore服务（多种方式可选）1234567891011121314# 任选一种：# 1、前台启动（一直要挂着一个命令窗口）cd /opt/hive/apache-hive-3.1.2-bin/binhive --service metastore# 2、放在后台以进程方式启动。nohup hive --service metastore &amp;    # 回车jps # 可以看见下面多了一个Runjarll  # 可以看见多了一个 nohup.out 文件,存放日志文件。\t\t# 但 这样的后台进程方式启动的服务，想要删除只能 jps 找到对应的进程号 再 “kill -9 进程号” 删除，不能ctrl+c这样结束。# 3、前台启动，加上debug日志hive --service metastore --hiveconf hive.root.logger=DEBUG,console\n\n12hiveshow databases; # 不再报错。\n\n\n\n八、在从属机器使用hive 和beeline 客户端​\t\t在node02机器上重复上面操作,或者node01直接发送到node02。\n123# node01直接ssh发送过去。cd /optscp -r /opt/hive node02:/opt\n\n12# 注意： hive-site.xml配置 仅仅需要保留 访问metastore的能力就够了。vim /opt/hive/apache-hive-3.1.2-bin/conf/hive-site.xml\n\n12345678910111213141516171819202122232425262728293031323334353637383940414243&lt;configuration&gt;    &lt;!--远程模式部署metastore服务地址,hive就安装在node01上，用thrift协议对外，端口9083 --&gt;  &lt;property&gt;    &lt;name&gt;hive.metastore.uris&lt;/name&gt;    &lt;value&gt;thrift://node01:9083&lt;/value&gt;  &lt;/property&gt;# 以下部分都不用。&lt;!--  &lt;property&gt;    &lt;!--mysql 搭建在第一台机器上，用到的database名字就叫hive(这个是定好的)。--&gt;    &lt;name&gt;javax.jdo.option.ConnectionURL&lt;/name&gt;    &lt;value&gt;jdbc:mysql://node01:3306/hive?createDatabaseIfNotExist=true&amp;amp;useSSL=false&lt;/value&gt;  &lt;/property&gt;  &lt;property&gt;    &lt;name&gt;javax.jdo.option.ConnectionDriverName&lt;/name&gt;    &lt;value&gt;com.mysql.jdbc.Driver&lt;/value&gt;  &lt;/property&gt;    &lt;!--hive中要用到mysql，这里填写 mysql的用户名。我先就在mysql中创建了一个名叫hive的用户。 --&gt;  &lt;property&gt;    &lt;name&gt;javax.jdo.option.ConnectionUserName&lt;/name&gt;    &lt;value&gt;hive&lt;/value&gt;  &lt;/property&gt;    &lt;!--上面mysql用户名对应的 mysql数据库登录密码（需要修改成密码） --&gt;  &lt;property&gt;    &lt;name&gt;javax.jdo.option.ConnectionPassword&lt;/name&gt;    &lt;value&gt;hive&lt;/value&gt;  &lt;/property&gt;    &lt;!--关闭元数据存储授权--&gt;  &lt;property&gt;    &lt;name&gt;hive.metastore.event.db.notification.api.auth&lt;/name&gt;    &lt;value&gt;false&lt;/value&gt;  &lt;/property&gt;  &lt;!--关闭元数据存储版本验证--&gt;  &lt;property&gt;    &lt;name&gt;hive.metastore.schema.verification&lt;/name&gt;    &lt;value&gt;false&lt;/value&gt;  &lt;/property&gt;--&gt;&lt;/configuration&gt;\n\n​\t\tnode02 再个填环境变量。\n12345678910vim /etc/profile# &#123;&#125; 加不加都可以。这里试试加花括号效果一样。export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.322.b06-1.el7_9.x86_64export HIVE_HOME=/opt/hive/apache-hive-3.1.2-binexport HIVE_CONF_DIR=$&#123;HIVE_HOME&#125;/confexport HIVE_AUX_JARS_PATH=/opt/hive/apache-hive-3.1.2-bin/libexport PATH=.:$&#123;JAVA_HOME&#125;/bin:$&#123;SCALA_HOME&#125;/bin:$&#123;SPARK_HOME&#125;/bin:$&#123;HADOOP_HOME&#125;/bin:$&#123;ZK_HOME&#125;/bin:$&#123;HBASE_HOME&#125;/bin:$&#123;HIVE_HOME&#125;/bin:$PATHsource /etc/profile \n\n1、hive​\t\t操作同上。\n2、beeline​\t\t\t\t\n开启beeline前要先在主机器node01 打开 metastore、hiveserver2 两个服务。\n12/opt/hive/apache-hive-3.1.2-bin/bin/hive --service metastore/opt/hive/apache-hive-3.1.2-bin/bin/hive --service hiveserver2\n\nnode02 开启beeline客户端,并远程登录到node01 的hiveserver2。\n123/opt/hive/apache-hive-3.1.2-bin/bin/beeline! connect jdbc:hive2://node01:10000# 然后用root登录，不用密码直接回车。\n\n\n\nbeeline界面确实是要漂亮一些。\n","dateCreated":"2022-10-29T14:41:49+08:00","dateModified":"2022-10-29T14:56:05+08:00","datePublished":"2022-10-29T14:41:49+08:00","description":"    安装hive，需要先安装配置好Hadoop，可以看之前的Hadoop安装配置笔记。先启动Hadoop，接下来的操作都是在主节点中进行，我的主节点机器主机名是node01。\n","headline":"centos7安装Hive","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/centos7%E5%AE%89%E8%A3%85Hive/"},"publisher":{"@type":"Organization","name":"陈宇韶chenyushao","sameAs":["https://github.com/","https://www.linkedin.com/profile/","mailto"]},"url":"http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/centos7%E5%AE%89%E8%A3%85Hive/","keywords":"hive, centos"}</script>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha256-AbA177XfpSnFEvgpYu1jMygiLabzPCJCRIBtR5jGc0k=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.13.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
     <meta name="description" content="这是文章开头，显示在主页面，详情请点击此处。">
-<meta property="og:type" content="blog">
+<meta property="og:type" content="article">
 <meta property="og:title" content="centos7安装Hive">
 <meta property="og:url" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/centos7%E5%AE%89%E8%A3%85Hive/index.html">
 <meta property="og:site_name" content="Tiger_pop&#39;s Blog">
@@ -37,249 +40,210 @@
 <meta property="article:tag" content="centos">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/centos7%E5%AE%89%E8%A3%85Hive/%E6%88%AA%E5%B1%8F2022-02-27%2016.43.28.jpg">
-    
-    
-        
-    
-    
-    
-    
-    
-    <!--STYLES-->
-    
-<link rel="stylesheet" href="/assets/css/style-yrbj4x87sme2npnaj5hmxl88fi8ktzpa1hwzrvan2almcpvu5niegj13ryff.min.css">
 
-    <!--STYLES END-->
-    
 
-    
+<link rel="canonical" href="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/centos7%E5%AE%89%E8%A3%85Hive/">
 
-    
-        
-    
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/centos7%E5%AE%89%E8%A3%85Hive/","path":"2022/10/29/Hive学习/centos7安装Hive/","title":"centos7安装Hive"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>centos7安装Hive | Tiger_pop's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="Tiger_pop's Blog" type="application/atom+xml">
 </head>
 
-    <body>
-        <div id="blog">
-            <!-- Define author's picture -->
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
 
-
-    
-
-<header id="header" data-behavior="4">
-    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
-    <div class="header-title">
-        <a
-            class="header-title-link"
-            href="/"
-            aria-label=""
-        >
-            Tiger_pop&#39;s Blog
-        </a>
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
     </div>
-    
-        
-            <a
-                class="header-right-picture "
-                href="#about"
-                aria-label="Open the link: /#about"
-            >
-        
-        
-        </a>
-    
-</header>
+  </div>
 
-            <!-- Define author's picture -->
+  <div class="site-meta">
 
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Tiger_pop's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">tiger_pop 的博客</p>
+  </div>
 
-<nav id="sidebar" data-behavior="4">
-    <div class="sidebar-container">
-        
-        
-            <ul class="sidebar-buttons">
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="/"
-                            
-                            rel="noopener"
-                            title="Home"
-                        >
-                        <i class="sidebar-button-icon fa fa-home" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Home</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="/all-categories"
-                            
-                            rel="noopener"
-                            title="Categories"
-                        >
-                        <i class="sidebar-button-icon fa fa-bookmark" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Categories</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="/all-tags"
-                            
-                            rel="noopener"
-                            title="Tags"
-                        >
-                        <i class="sidebar-button-icon fa fa-tags" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Tags</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="/all-archives"
-                            
-                            rel="noopener"
-                            title="Archives"
-                        >
-                        <i class="sidebar-button-icon fa fa-archive" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Archives</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="#about"
-                            
-                            rel="noopener"
-                            title="About"
-                        >
-                        <i class="sidebar-button-icon fa fa-question" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">About</span>
-                    </a>
-            </li>
-            
-        </ul>
-        
-            <ul class="sidebar-buttons">
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="https://github.com/"
-                            
-                                target="_blank"
-                            
-                            rel="noopener"
-                            title="GitHub"
-                        >
-                        <i class="sidebar-button-icon fab fa-github" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">GitHub</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="https://www.linkedin.com/profile/"
-                            
-                                target="_blank"
-                            
-                            rel="noopener"
-                            title="LinkedIn"
-                        >
-                        <i class="sidebar-button-icon fab fa-linkedin" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">LinkedIn</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="/mailto"
-                            
-                            rel="noopener"
-                            title="Mail"
-                        >
-                        <i class="sidebar-button-icon fa fa-envelope" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Mail</span>
-                    </a>
-            </li>
-            
-        </ul>
-        
-            <ul class="sidebar-buttons">
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="/atom.xml"
-                            
-                            rel="noopener"
-                            title="RSS"
-                        >
-                        <i class="sidebar-button-icon fa fa-rss" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">RSS</span>
-                    </a>
-            </li>
-            
-        </ul>
-        
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
     </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+  </ul>
 </nav>
 
-            
-            <div id="main" data-behavior="4"
-                 class="
-                        hasCoverMetaIn
-                        ">
-                
-<article class="post">
-    
-    
-        <div class="post-header main-content-wrap text-left">
-    
-        <h1 class="post-title">
-            centos7安装Hive
-        </h1>
-    
-    
-        <div class="post-meta">
-    <time datetime="2022-10-29T14:41:49+08:00">
-	
-		    Oct 29, 2022
-    	
-    </time>
-    
-        <span>in </span>
+
+
+
+</div>
         
-    <a class="category-link" href="/categories/hive/">hive</a>
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
 
+  <aside class="sidebar">
 
-    
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E5%B0%86hive%E8%A7%A3%E5%8E%8B%EF%BC%8C%E5%B9%B6%E5%9C%A8Hadoop%E7%9A%84core-site-xml%E4%B8%AD%E6%95%B4%E5%90%88hive%E3%80%82"><span class="nav-number">1.</span> <span class="nav-text">一、将hive解压，并在Hadoop的core-site.xml中整合hive。</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E6%A3%80%E6%9F%A5Hadoop%E5%92%8Chive%E7%9A%84guava%E7%89%88%E6%9C%AC%E6%98%AF%E5%90%A6%E6%9C%89%E5%B7%AE%E5%BC%82%E3%80%82"><span class="nav-number">1.1.</span> <span class="nav-text">二、检查Hadoop和hive的guava版本是否有差异。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E6%B7%BB%E5%8A%A0%E6%95%B0%E6%8D%AE%E9%A9%B1%E5%8A%A8%E5%8C%85"><span class="nav-number">1.2.</span> <span class="nav-text">三、添加数据驱动包</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9B%9B%E3%80%81%E6%B7%BB%E5%8A%A0%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F"><span class="nav-number">2.</span> <span class="nav-text">四、添加环境变量</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%94%E3%80%81%E5%9C%A8conf%E4%B8%AD%E6%9B%B4%E6%94%B9%E9%85%8D%E7%BD%AE"><span class="nav-number">3.</span> <span class="nav-text">五、在conf中更改配置</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1%E3%80%81%E6%96%B0%E5%BB%BAhive-site-xml-%E8%BF%9C%E7%A8%8B%E6%A8%A1%E5%BC%8F%E9%83%A8%E7%BD%B2metastore%E6%9C%8D%E5%8A%A1-%EF%BC%8C%E9%93%BE%E6%8E%A5%E4%B8%8Amysql%E7%9A%84hive%E6%95%B0%E6%8D%AE%E5%BA%93%E3%80%82"><span class="nav-number">3.1.</span> <span class="nav-text">1、新建hive-site.xml(远程模式部署metastore服务 ，链接上mysql的hive数据库。)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2%E3%80%81%E4%BF%AE%E6%94%B9hive-env-sh"><span class="nav-number">3.2.</span> <span class="nav-text">2、修改hive-env.sh</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%85%AD%E3%80%81%E5%88%9D%E5%A7%8B%E5%8C%96metadata"><span class="nav-number">4.</span> <span class="nav-text">六、初始化metadata</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%83%E3%80%81%E6%89%8B%E5%8A%A8%E5%BC%80%E5%90%AFmetastore%E6%9C%8D%E5%8A%A1%EF%BC%88%E5%A4%9A%E7%A7%8D%E6%96%B9%E5%BC%8F%E5%8F%AF%E9%80%89%EF%BC%89"><span class="nav-number">5.</span> <span class="nav-text">七、手动开启metastore服务（多种方式可选）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%85%AB%E3%80%81%E5%9C%A8%E4%BB%8E%E5%B1%9E%E6%9C%BA%E5%99%A8%E4%BD%BF%E7%94%A8hive-%E5%92%8Cbeeline-%E5%AE%A2%E6%88%B7%E7%AB%AF"><span class="nav-number">6.</span> <span class="nav-text">八、在从属机器使用hive 和beeline 客户端</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link"><span class="nav-number">6.1.</span> <span class="nav-text"></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1%E3%80%81hive"><span class="nav-number">6.2.</span> <span class="nav-text">1、hive</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2%E3%80%81beeline"><span class="nav-number">6.3.</span> <span class="nav-text">2、beeline</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">陈宇韶chenyushao</p>
+  <div class="site-description" itemprop="description">爱学习、爱工作、爱生活</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">303</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">19</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">95</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
 </div>
 
-    
-</div>
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
 
     
-    <div class="post-content markdown">
-        <div class="main-content-wrap">
-            <pre><code>    安装hive，需要先安装配置好Hadoop，可以看之前的Hadoop安装配置笔记。先启动Hadoop，接下来的操作都是在主节点中进行，我的主节点机器主机名是node01。
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/centos7%E5%AE%89%E8%A3%85Hive/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="陈宇韶chenyushao">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tiger_pop's Blog">
+      <meta itemprop="description" content="爱学习、爱工作、爱生活">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="centos7安装Hive | Tiger_pop's Blog">
+      <meta itemprop="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          centos7安装Hive
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2022-10-29 14:41:49 / Modified: 14:56:05" itemprop="dateCreated datePublished" datetime="2022-10-29T14:41:49+08:00">2022-10-29</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/hive/" itemprop="url" rel="index"><span itemprop="name">hive</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+            <div class="post-description">这是文章开头，显示在主页面，详情请点击此处。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <pre><code>    安装hive，需要先安装配置好Hadoop，可以看之前的Hadoop安装配置笔记。先启动Hadoop，接下来的操作都是在主节点中进行，我的主节点机器主机名是node01。
 </code></pre>
 <span id="more"></span>
 <h1 id="一、将hive解压，并在Hadoop的core-site-xml中整合hive。"><a href="#一、将hive解压，并在Hadoop的core-site-xml中整合hive。" class="headerlink" title="一、将hive解压，并在Hadoop的core-site.xml中整合hive。"></a>一、将hive解压，并在Hadoop的core-site.xml中整合hive。</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">tar -zxvf apache-hive-3.1.2-bin.tar.gz </span><br><span class="line">vim /opt/hadoop/hadoop/etc/hadoop/core-site.xml</span><br></pre></td></tr></table></figure>
@@ -352,324 +316,77 @@
 <p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/centos7%E5%AE%89%E8%A3%85Hive/%E6%88%AA%E5%B1%8F2022-02-27%2020.44.10.jpg" alt="截屏2022-02-27 20.44.10"></p>
 <p>beeline界面确实是要漂亮一些。</p>
 
-            
-
-
-        </div>
     </div>
-    <div id="post-footer" class="post-footer main-content-wrap">
-        
-            <div class="post-footer-tags">
-                <span class="text-color-light text-small">TAGGED IN</span><br/>
-                
-    <a class="tag tag--primary tag--small t-none-link" href="/tags/centos/" rel="tag">centos</a> <a class="tag tag--primary tag--small t-none-link" href="/tags/hive/" rel="tag">hive</a>
-
-            </div>
-        
-        
-            <div class="post-actions-wrap">
-    <nav>
-        <ul class="post-actions post-action-nav">
-            <li class="post-action">
-                
-                    
-                <a
-                    class="post-action-btn btn btn--default tooltip--top"
-                    href="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/centos7%E5%AE%89%E8%A3%85Hadoop/"
-                    data-tooltip="centos7安装Hadoop"
-                    aria-label="PREVIOUS: centos7安装Hadoop"
-                >
-                    
-                        <i class="fa fa-angle-left" aria-hidden="true"></i>
-                        <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
-                    </a>
-            </li>
-            <li class="post-action">
-                
-                    
-                <a
-                    class="post-action-btn btn btn--default tooltip--top"
-                    href="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/"
-                    data-tooltip="hive函数应用的案例"
-                    aria-label="NEXT: hive函数应用的案例"
-                >
-                    
-                        <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
-                        <i class="fa fa-angle-right" aria-hidden="true"></i>
-                    </a>
-            </li>
-        </ul>
-    </nav>
-    <ul class="post-actions post-action-share">
-        <li class="post-action hide-lg hide-md hide-sm">
-            <a
-                class="post-action-btn btn btn--default btn-open-shareoptions"
-                href="#btn-open-shareoptions"
-                aria-label="Share this post"
-            >
-                <i class="fa fa-share-alt" aria-hidden="true"></i>
-            </a>
-        </li>
-        
-            
-            
-            <li class="post-action hide-xs">
-                <a
-                    class="post-action-btn btn btn--default"
-                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/centos7%E5%AE%89%E8%A3%85Hive/"
-                    title="Share on Facebook"
-                    aria-label="Share on Facebook"
-                >
-                    <i class="fab fa-facebook" aria-hidden="true"></i>
-                </a>
-            </li>
-        
-            
-            
-            <li class="post-action hide-xs">
-                <a
-                    class="post-action-btn btn btn--default"
-                    target="new" href="https://twitter.com/intent/tweet?text=http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/centos7%E5%AE%89%E8%A3%85Hive/"
-                    title="Share on Twitter"
-                    aria-label="Share on Twitter"
-                >
-                    <i class="fab fa-twitter" aria-hidden="true"></i>
-                </a>
-            </li>
-        
-            
-            
-            <li class="post-action hide-xs">
-                <a
-                    class="post-action-btn btn btn--default"
-                    target="new" href="https://plus.google.com/share?url=http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/centos7%E5%AE%89%E8%A3%85Hive/"
-                    title="Share on Google+"
-                    aria-label="Share on Google+"
-                >
-                    <i class="fab fa-google-plus" aria-hidden="true"></i>
-                </a>
-            </li>
-        
-        
-            
-        
-        <li class="post-action">
-            
-                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
-            
-                <i class="fa fa-list" aria-hidden="true"></i>
-            </a>
-        </li>
-    </ul>
-</div>
-
-
-        
-        
-            
-        
-    </div>
-</article>
-
-
-
-                <footer id="footer" class="main-content-wrap">
-    <span class="copyrights">
-        Copyrights &copy; 2022 陈宇韶chenyushao. All Rights Reserved.
-    </span>
-</footer>
-
-            </div>
-            
-                <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
-                    <div class="post-actions-wrap">
-    <nav>
-        <ul class="post-actions post-action-nav">
-            <li class="post-action">
-                
-                    
-                <a
-                    class="post-action-btn btn btn--default tooltip--top"
-                    href="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/centos7%E5%AE%89%E8%A3%85Hadoop/"
-                    data-tooltip="centos7安装Hadoop"
-                    aria-label="PREVIOUS: centos7安装Hadoop"
-                >
-                    
-                        <i class="fa fa-angle-left" aria-hidden="true"></i>
-                        <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
-                    </a>
-            </li>
-            <li class="post-action">
-                
-                    
-                <a
-                    class="post-action-btn btn btn--default tooltip--top"
-                    href="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/"
-                    data-tooltip="hive函数应用的案例"
-                    aria-label="NEXT: hive函数应用的案例"
-                >
-                    
-                        <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
-                        <i class="fa fa-angle-right" aria-hidden="true"></i>
-                    </a>
-            </li>
-        </ul>
-    </nav>
-    <ul class="post-actions post-action-share">
-        <li class="post-action hide-lg hide-md hide-sm">
-            <a
-                class="post-action-btn btn btn--default btn-open-shareoptions"
-                href="#btn-open-shareoptions"
-                aria-label="Share this post"
-            >
-                <i class="fa fa-share-alt" aria-hidden="true"></i>
-            </a>
-        </li>
-        
-            
-            
-            <li class="post-action hide-xs">
-                <a
-                    class="post-action-btn btn btn--default"
-                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/centos7%E5%AE%89%E8%A3%85Hive/"
-                    title="Share on Facebook"
-                    aria-label="Share on Facebook"
-                >
-                    <i class="fab fa-facebook" aria-hidden="true"></i>
-                </a>
-            </li>
-        
-            
-            
-            <li class="post-action hide-xs">
-                <a
-                    class="post-action-btn btn btn--default"
-                    target="new" href="https://twitter.com/intent/tweet?text=http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/centos7%E5%AE%89%E8%A3%85Hive/"
-                    title="Share on Twitter"
-                    aria-label="Share on Twitter"
-                >
-                    <i class="fab fa-twitter" aria-hidden="true"></i>
-                </a>
-            </li>
-        
-            
-            
-            <li class="post-action hide-xs">
-                <a
-                    class="post-action-btn btn btn--default"
-                    target="new" href="https://plus.google.com/share?url=http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/centos7%E5%AE%89%E8%A3%85Hive/"
-                    title="Share on Google+"
-                    aria-label="Share on Google+"
-                >
-                    <i class="fab fa-google-plus" aria-hidden="true"></i>
-                </a>
-            </li>
-        
-        
-            
-        
-        <li class="post-action">
-            
-                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
-            
-                <i class="fa fa-list" aria-hidden="true"></i>
-            </a>
-        </li>
-    </ul>
-</div>
-
-
-                </div>
-                
-    <div id="share-options-bar" class="share-options-bar" data-behavior="4">
-        <i id="btn-close-shareoptions" class="fa fa-times"></i>
-        <ul class="share-options">
-            
-                
-                
-                <li class="share-option">
-                    <a
-                        class="share-option-btn"
-                        target="new"
-                        href="https://www.facebook.com/sharer/sharer.php?u=http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/centos7%E5%AE%89%E8%A3%85Hive/"
-                        aria-label="Share on Facebook"
-                    >
-                        <i class="fab fa-facebook" aria-hidden="true"></i><span>Share on Facebook</span>
-                    </a>
-                </li>
-            
-                
-                
-                <li class="share-option">
-                    <a
-                        class="share-option-btn"
-                        target="new"
-                        href="https://twitter.com/intent/tweet?text=http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/centos7%E5%AE%89%E8%A3%85Hive/"
-                        aria-label="Share on Twitter"
-                    >
-                        <i class="fab fa-twitter" aria-hidden="true"></i><span>Share on Twitter</span>
-                    </a>
-                </li>
-            
-                
-                
-                <li class="share-option">
-                    <a
-                        class="share-option-btn"
-                        target="new"
-                        href="https://plus.google.com/share?url=http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/centos7%E5%AE%89%E8%A3%85Hive/"
-                        aria-label="Share on Google+"
-                    >
-                        <i class="fab fa-google-plus" aria-hidden="true"></i><span>Share on Google+</span>
-                    </a>
-                </li>
-            
-        </ul>
-    </div>
-
-
-            
-        </div>
-        
-
-
-<div id="about">
-    <div id="about-card">
-        <div id="about-btn-close">
-            <i class="fa fa-times"></i>
-        </div>
-        
-            <h4 id="about-card-name">陈宇韶chenyushao</h4>
-        
-            <div id="about-card-bio"><p>author.bio</p>
-</div>
-        
-        
-            <div id="about-card-job">
-                <i class="fa fa-briefcase"></i>
-                <br/>
-                <p>author.job</p>
-
-            </div>
-        
-        
-    </div>
-</div>
-
-        
-        
-<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
-        <!--SCRIPTS-->
-
-<script src="/assets/js/script-sbgpeqyl6jw5qe60mnfuzifzwky5la4ftiuwmschcdzx2pg5tfpl1pfp13e3.min.js"></script>
-
-<!--SCRIPTS END-->
-
 
     
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/hive/" rel="tag"># hive</a>
+              <a href="/tags/centos/" rel="tag"># centos</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/" rel="prev" title="hive函数应用的案例">
+                  <i class="fa fa-chevron-left"></i> hive函数应用的案例
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/centos7%E5%AE%89%E8%A3%85Hadoop/" rel="next" title="centos7安装Hadoop">
+                  centos7安装Hadoop <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
 
 
 
 
-    </body>
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">陈宇韶chenyushao</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+</body>
 </html>

@@ -1,23 +1,26 @@
-
 <!DOCTYPE html>
 <html lang="en">
-    
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="generator" content="Tiger_pop&#39;s Blog">
-    <title>私钥_公钥_数字签名 - Tiger_pop&#39;s Blog</title>
-    <meta name="author" content="陈宇韶chenyushao">
-    
-    
-    
-        
-            <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
-        
-    
-    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"陈宇韶chenyushao","sameAs":["https://github.com/","https://www.linkedin.com/profile/","mailto"]},"articleBody":"私钥公钥的逻辑 私钥和公钥可以视为加密解密算法的一个参数。\n明文 + 密钥 + 加密算法 ——&gt; 密文；\n密文 + 密钥 + 解密算法 ——&gt; 明文；\n先介绍一个“对称加密”和“非对称加密”。\n“对称加密”：​\t\t相当于两个人手里都有相通的钥匙。要线下交换钥匙，互联网上不适用。\n“非对称加密”（公开密钥系统）：​\t\t两把不同的钥匙，用其中一把上锁，只能用另一把开锁。（公钥、私钥）作为一个通信实体，其中公钥匙公开的，私钥只有发送方自己知道。下面我们用A 给 B 发信息来解释此过程。\n​\t\tA 给 B 发信息：\n​\t\t\t\t1、A 给 B 发出请求；A 用 B 公开在网上的公钥，加密好数据得到 Kb公(m)，发送给 B。\n​\t\t\t\t2、B 收到 A 发出的  K公(m) 之后，用 B 的私钥解密得到 Kb私(Kb公(m))。\n​\t\t分析：\n​\t\t在此过程中第三方拿到 Kb公(m) 报文，也会由于缺少私钥而无法解密。但是，第三方可能胡乱修改报文内容，B拿到被修改的报文后，也无法判断是否报文被修改过。\n​\t\t那么如何让接收方确认信息来自发送方，如何确认内容没有被第三方修改过？\n数字签名​\t\t如何让接收方 B 确认信息来自发送方A ？一个简单的方法就是将这个发送者独一无二的东西附加到这段报文中，如同现实生活中的 某个领导在某个文件上签名，难以伪造。\n​\t\t在通信中，用私钥对报文进行加密，得到一个密文，这种行为叫做文件的签名。Ka私(m) 。\n​\t\t如果将“签名”和原始数据一起发给接收方，发——&gt; [ m,Ka私(m) ] ——&gt;收。接收方用发送方公开在网上的 公钥 对  Ka私(m) 进行 解密 得到 Ka公( Ka私(m) )。\n​\t\t接收方看看，只要  Ka公( Ka私(m) ) &#x3D;&#x3D; m ；\n​\t\t则 报文来自发送人，且保证了数据完整。（中间有没有被第三方窃取不知道，但是第三方没有对报文进行修改）。\n用密码哈希函数节约算力前文中，Ka私(m)、Ka公( Ka私(m) )对完整的报文内容加密、解密十分消耗算力。\n哈希函数​\t\tH(m) &#x3D; n\n​\t\t哈希函数的顺向计算容易，而由 n 逆变换算 m 很难。可以回顾我之前算法与数据结构学习散列表的内容。\n我们用散列函数（又称哈希函数）来处理报文 m ，得到一个报文“摘要”  H(m)，\nKa公( Ka私( H(m) ) &#x3D;&#x3D; H(m) ；\n则 报文来自发送人，且保证了数据完整。\n综上猜想A ——&gt;   Kb公( [ m,Ka私(m) ] ) ——&gt; B\nhttps 协议 规划的就是以上 过程，但是第一步获取公钥其实是 客户端 向 服务器 发出第一个请求，通过URL访问服务器建立SSL连接。服务端收到客户端请求后，会将网站支持的证书信息（证书中包含公钥）传送一份给客户端。\n","dateCreated":"2020-09-05T11:12:11+08:00","dateModified":"2022-10-29T14:54:58+08:00","datePublished":"2020-09-05T11:12:11+08:00","description":"私钥公钥的逻辑","headline":"私钥_公钥_数字签名","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"http://example.com/2020/09/05/%E7%BD%91%E7%BB%9C%E5%AD%A6%E4%B9%A0/%E7%A7%81%E9%92%A5_%E5%85%AC%E9%92%A5_%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D/"},"publisher":{"@type":"Organization","name":"陈宇韶chenyushao","sameAs":["https://github.com/","https://www.linkedin.com/profile/","mailto"]},"url":"http://example.com/2020/09/05/%E7%BD%91%E7%BB%9C%E5%AD%A6%E4%B9%A0/%E7%A7%81%E9%92%A5_%E5%85%AC%E9%92%A5_%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D/","keywords":"私钥、公钥"}</script>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha256-AbA177XfpSnFEvgpYu1jMygiLabzPCJCRIBtR5jGc0k=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.13.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
     <meta name="description" content="这是文章开头，显示在主页面，详情请点击此处。">
-<meta property="og:type" content="blog">
+<meta property="og:type" content="article">
 <meta property="og:title" content="私钥_公钥_数字签名">
 <meta property="og:url" content="http://example.com/2020/09/05/%E7%BD%91%E7%BB%9C%E5%AD%A6%E4%B9%A0/%E7%A7%81%E9%92%A5_%E5%85%AC%E9%92%A5_%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D/index.html">
 <meta property="og:site_name" content="Tiger_pop&#39;s Blog">
@@ -28,249 +31,216 @@
 <meta property="article:author" content="陈宇韶chenyushao">
 <meta property="article:tag" content="私钥、公钥">
 <meta name="twitter:card" content="summary">
-    
-    
-        
-    
-    
-    
-    
-    
-    <!--STYLES-->
-    
-<link rel="stylesheet" href="/assets/css/style-yrbj4x87sme2npnaj5hmxl88fi8ktzpa1hwzrvan2almcpvu5niegj13ryff.min.css">
 
-    <!--STYLES END-->
-    
 
-    
+<link rel="canonical" href="http://example.com/2020/09/05/%E7%BD%91%E7%BB%9C%E5%AD%A6%E4%B9%A0/%E7%A7%81%E9%92%A5_%E5%85%AC%E9%92%A5_%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D/">
 
-    
-        
-    
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/2020/09/05/%E7%BD%91%E7%BB%9C%E5%AD%A6%E4%B9%A0/%E7%A7%81%E9%92%A5_%E5%85%AC%E9%92%A5_%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D/","path":"2020/09/05/网络学习/私钥_公钥_数字签名/","title":"私钥_公钥_数字签名"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>私钥_公钥_数字签名 | Tiger_pop's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="Tiger_pop's Blog" type="application/atom+xml">
 </head>
 
-    <body>
-        <div id="blog">
-            <!-- Define author's picture -->
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
 
-
-    
-
-<header id="header" data-behavior="4">
-    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
-    <div class="header-title">
-        <a
-            class="header-title-link"
-            href="/"
-            aria-label=""
-        >
-            Tiger_pop&#39;s Blog
-        </a>
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
     </div>
-    
-        
-            <a
-                class="header-right-picture "
-                href="#about"
-                aria-label="Open the link: /#about"
-            >
-        
-        
-        </a>
-    
-</header>
+  </div>
 
-            <!-- Define author's picture -->
+  <div class="site-meta">
 
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Tiger_pop's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">tiger_pop 的博客</p>
+  </div>
 
-<nav id="sidebar" data-behavior="4">
-    <div class="sidebar-container">
-        
-        
-            <ul class="sidebar-buttons">
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="/"
-                            
-                            rel="noopener"
-                            title="Home"
-                        >
-                        <i class="sidebar-button-icon fa fa-home" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Home</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="/all-categories"
-                            
-                            rel="noopener"
-                            title="Categories"
-                        >
-                        <i class="sidebar-button-icon fa fa-bookmark" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Categories</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="/all-tags"
-                            
-                            rel="noopener"
-                            title="Tags"
-                        >
-                        <i class="sidebar-button-icon fa fa-tags" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Tags</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="/all-archives"
-                            
-                            rel="noopener"
-                            title="Archives"
-                        >
-                        <i class="sidebar-button-icon fa fa-archive" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Archives</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="#about"
-                            
-                            rel="noopener"
-                            title="About"
-                        >
-                        <i class="sidebar-button-icon fa fa-question" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">About</span>
-                    </a>
-            </li>
-            
-        </ul>
-        
-            <ul class="sidebar-buttons">
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="https://github.com/"
-                            
-                                target="_blank"
-                            
-                            rel="noopener"
-                            title="GitHub"
-                        >
-                        <i class="sidebar-button-icon fab fa-github" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">GitHub</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="https://www.linkedin.com/profile/"
-                            
-                                target="_blank"
-                            
-                            rel="noopener"
-                            title="LinkedIn"
-                        >
-                        <i class="sidebar-button-icon fab fa-linkedin" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">LinkedIn</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="/mailto"
-                            
-                            rel="noopener"
-                            title="Mail"
-                        >
-                        <i class="sidebar-button-icon fa fa-envelope" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Mail</span>
-                    </a>
-            </li>
-            
-        </ul>
-        
-            <ul class="sidebar-buttons">
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="/atom.xml"
-                            
-                            rel="noopener"
-                            title="RSS"
-                        >
-                        <i class="sidebar-button-icon fa fa-rss" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">RSS</span>
-                    </a>
-            </li>
-            
-        </ul>
-        
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
     </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+  </ul>
 </nav>
 
-            
-            <div id="main" data-behavior="4"
-                 class="
-                        hasCoverMetaIn
-                        ">
-                
-<article class="post">
-    
-    
-        <div class="post-header main-content-wrap text-left">
-    
-        <h1 class="post-title">
-            私钥_公钥_数字签名
-        </h1>
-    
-    
-        <div class="post-meta">
-    <time datetime="2020-09-05T11:12:11+08:00">
-	
-		    Sep 05, 2020
-    	
-    </time>
-    
-        <span>in </span>
+
+
+
+</div>
         
-    <a class="category-link" href="/categories/%E7%BD%91%E7%BB%9C%E5%AD%A6%E4%B9%A0/">网络学习</a>
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
 
+  <aside class="sidebar">
 
-    
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%A7%81%E9%92%A5%E5%85%AC%E9%92%A5%E7%9A%84%E9%80%BB%E8%BE%91"><span class="nav-number">1.</span> <span class="nav-text">私钥公钥的逻辑 </span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E2%80%9C%E5%AF%B9%E7%A7%B0%E5%8A%A0%E5%AF%86%E2%80%9D%EF%BC%9A"><span class="nav-number">1.1.</span> <span class="nav-text">“对称加密”：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E2%80%9C%E9%9D%9E%E5%AF%B9%E7%A7%B0%E5%8A%A0%E5%AF%86%E2%80%9D%EF%BC%88%E5%85%AC%E5%BC%80%E5%AF%86%E9%92%A5%E7%B3%BB%E7%BB%9F%EF%BC%89%EF%BC%9A"><span class="nav-number">1.2.</span> <span class="nav-text">“非对称加密”（公开密钥系统）：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D"><span class="nav-number">1.3.</span> <span class="nav-text">数字签名</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%A8%E5%AF%86%E7%A0%81%E5%93%88%E5%B8%8C%E5%87%BD%E6%95%B0%E8%8A%82%E7%BA%A6%E7%AE%97%E5%8A%9B"><span class="nav-number">1.4.</span> <span class="nav-text">用密码哈希函数节约算力</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%93%88%E5%B8%8C%E5%87%BD%E6%95%B0"><span class="nav-number">1.4.1.</span> <span class="nav-text">哈希函数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%BC%E4%B8%8A%E7%8C%9C%E6%83%B3"><span class="nav-number">1.5.</span> <span class="nav-text">综上猜想</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">陈宇韶chenyushao</p>
+  <div class="site-description" itemprop="description">爱学习、爱工作、爱生活</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">303</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">19</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">95</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
 </div>
 
-    
-</div>
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
 
     
-    <div class="post-content markdown">
-        <div class="main-content-wrap">
-            <h1 id="私钥公钥的逻辑"><a href="#私钥公钥的逻辑" class="headerlink" title="私钥公钥的逻辑 "></a>私钥公钥的逻辑 <span id="more"></span></h1><p>私钥和公钥可以视为加密解密算法的一个参数。</p>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2020/09/05/%E7%BD%91%E7%BB%9C%E5%AD%A6%E4%B9%A0/%E7%A7%81%E9%92%A5_%E5%85%AC%E9%92%A5_%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="陈宇韶chenyushao">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tiger_pop's Blog">
+      <meta itemprop="description" content="爱学习、爱工作、爱生活">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="私钥_公钥_数字签名 | Tiger_pop's Blog">
+      <meta itemprop="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          私钥_公钥_数字签名
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2020-09-05 11:12:11" itemprop="dateCreated datePublished" datetime="2020-09-05T11:12:11+08:00">2020-09-05</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2022-10-29 14:54:58" itemprop="dateModified" datetime="2022-10-29T14:54:58+08:00">2022-10-29</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%BD%91%E7%BB%9C%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">网络学习</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+            <div class="post-description">这是文章开头，显示在主页面，详情请点击此处。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="私钥公钥的逻辑"><a href="#私钥公钥的逻辑" class="headerlink" title="私钥公钥的逻辑 "></a>私钥公钥的逻辑 <span id="more"></span></h1><p>私钥和公钥可以视为加密解密算法的一个参数。</p>
 <p>明文 + 密钥 + 加密算法 ——&gt; 密文；</p>
 <p>密文 + 密钥 + 解密算法 ——&gt; 明文；</p>
 <p>先介绍一个“对称加密”和“非对称加密”。</p>
@@ -296,318 +266,73 @@
 <h2 id="综上猜想"><a href="#综上猜想" class="headerlink" title="综上猜想"></a>综上猜想</h2><p>A ——&gt;   K<sub>b公</sub>( [ m,K<sub>a私</sub>(m) ] ) ——&gt; B</p>
 <p>https 协议 规划的就是以上 过程，但是第一步获取公钥其实是 客户端 向 服务器 发出第一个请求，通过URL访问服务器建立SSL连接。服务端收到客户端请求后，会将网站支持的证书信息（证书中包含公钥）传送一份给客户端。</p>
 
-            
-
-
-        </div>
     </div>
-    <div id="post-footer" class="post-footer main-content-wrap">
-        
-            <div class="post-footer-tags">
-                <span class="text-color-light text-small">TAGGED IN</span><br/>
-                
-    <a class="tag tag--primary tag--small t-none-link" href="/tags/%E7%A7%81%E9%92%A5%E3%80%81%E5%85%AC%E9%92%A5/" rel="tag">私钥、公钥</a>
-
-            </div>
-        
-        
-            <div class="post-actions-wrap">
-    <nav>
-        <ul class="post-actions post-action-nav">
-            <li class="post-action">
-                
-                    
-                <a
-                    class="post-action-btn btn btn--default tooltip--top"
-                    href="/2020/09/05/git%E5%AD%A6%E4%B9%A0/git%E5%AD%A6%E4%B9%A0/"
-                    data-tooltip="git学习"
-                    aria-label="PREVIOUS: git学习"
-                >
-                    
-                        <i class="fa fa-angle-left" aria-hidden="true"></i>
-                        <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
-                    </a>
-            </li>
-            <li class="post-action">
-                
-                    <a
-                        class="post-action-btn btn btn--disabled"
-                        aria-hidden="true"
-                    >
-                        
-                        <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
-                        <i class="fa fa-angle-right" aria-hidden="true"></i>
-                    </a>
-            </li>
-        </ul>
-    </nav>
-    <ul class="post-actions post-action-share">
-        <li class="post-action hide-lg hide-md hide-sm">
-            <a
-                class="post-action-btn btn btn--default btn-open-shareoptions"
-                href="#btn-open-shareoptions"
-                aria-label="Share this post"
-            >
-                <i class="fa fa-share-alt" aria-hidden="true"></i>
-            </a>
-        </li>
-        
-            
-            
-            <li class="post-action hide-xs">
-                <a
-                    class="post-action-btn btn btn--default"
-                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://example.com/2020/09/05/%E7%BD%91%E7%BB%9C%E5%AD%A6%E4%B9%A0/%E7%A7%81%E9%92%A5_%E5%85%AC%E9%92%A5_%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D/"
-                    title="Share on Facebook"
-                    aria-label="Share on Facebook"
-                >
-                    <i class="fab fa-facebook" aria-hidden="true"></i>
-                </a>
-            </li>
-        
-            
-            
-            <li class="post-action hide-xs">
-                <a
-                    class="post-action-btn btn btn--default"
-                    target="new" href="https://twitter.com/intent/tweet?text=http://example.com/2020/09/05/%E7%BD%91%E7%BB%9C%E5%AD%A6%E4%B9%A0/%E7%A7%81%E9%92%A5_%E5%85%AC%E9%92%A5_%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D/"
-                    title="Share on Twitter"
-                    aria-label="Share on Twitter"
-                >
-                    <i class="fab fa-twitter" aria-hidden="true"></i>
-                </a>
-            </li>
-        
-            
-            
-            <li class="post-action hide-xs">
-                <a
-                    class="post-action-btn btn btn--default"
-                    target="new" href="https://plus.google.com/share?url=http://example.com/2020/09/05/%E7%BD%91%E7%BB%9C%E5%AD%A6%E4%B9%A0/%E7%A7%81%E9%92%A5_%E5%85%AC%E9%92%A5_%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D/"
-                    title="Share on Google+"
-                    aria-label="Share on Google+"
-                >
-                    <i class="fab fa-google-plus" aria-hidden="true"></i>
-                </a>
-            </li>
-        
-        
-            
-        
-        <li class="post-action">
-            
-                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
-            
-                <i class="fa fa-list" aria-hidden="true"></i>
-            </a>
-        </li>
-    </ul>
-</div>
-
-
-        
-        
-            
-        
-    </div>
-</article>
-
-
-
-                <footer id="footer" class="main-content-wrap">
-    <span class="copyrights">
-        Copyrights &copy; 2022 陈宇韶chenyushao. All Rights Reserved.
-    </span>
-</footer>
-
-            </div>
-            
-                <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
-                    <div class="post-actions-wrap">
-    <nav>
-        <ul class="post-actions post-action-nav">
-            <li class="post-action">
-                
-                    
-                <a
-                    class="post-action-btn btn btn--default tooltip--top"
-                    href="/2020/09/05/git%E5%AD%A6%E4%B9%A0/git%E5%AD%A6%E4%B9%A0/"
-                    data-tooltip="git学习"
-                    aria-label="PREVIOUS: git学习"
-                >
-                    
-                        <i class="fa fa-angle-left" aria-hidden="true"></i>
-                        <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
-                    </a>
-            </li>
-            <li class="post-action">
-                
-                    <a
-                        class="post-action-btn btn btn--disabled"
-                        aria-hidden="true"
-                    >
-                        
-                        <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
-                        <i class="fa fa-angle-right" aria-hidden="true"></i>
-                    </a>
-            </li>
-        </ul>
-    </nav>
-    <ul class="post-actions post-action-share">
-        <li class="post-action hide-lg hide-md hide-sm">
-            <a
-                class="post-action-btn btn btn--default btn-open-shareoptions"
-                href="#btn-open-shareoptions"
-                aria-label="Share this post"
-            >
-                <i class="fa fa-share-alt" aria-hidden="true"></i>
-            </a>
-        </li>
-        
-            
-            
-            <li class="post-action hide-xs">
-                <a
-                    class="post-action-btn btn btn--default"
-                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://example.com/2020/09/05/%E7%BD%91%E7%BB%9C%E5%AD%A6%E4%B9%A0/%E7%A7%81%E9%92%A5_%E5%85%AC%E9%92%A5_%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D/"
-                    title="Share on Facebook"
-                    aria-label="Share on Facebook"
-                >
-                    <i class="fab fa-facebook" aria-hidden="true"></i>
-                </a>
-            </li>
-        
-            
-            
-            <li class="post-action hide-xs">
-                <a
-                    class="post-action-btn btn btn--default"
-                    target="new" href="https://twitter.com/intent/tweet?text=http://example.com/2020/09/05/%E7%BD%91%E7%BB%9C%E5%AD%A6%E4%B9%A0/%E7%A7%81%E9%92%A5_%E5%85%AC%E9%92%A5_%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D/"
-                    title="Share on Twitter"
-                    aria-label="Share on Twitter"
-                >
-                    <i class="fab fa-twitter" aria-hidden="true"></i>
-                </a>
-            </li>
-        
-            
-            
-            <li class="post-action hide-xs">
-                <a
-                    class="post-action-btn btn btn--default"
-                    target="new" href="https://plus.google.com/share?url=http://example.com/2020/09/05/%E7%BD%91%E7%BB%9C%E5%AD%A6%E4%B9%A0/%E7%A7%81%E9%92%A5_%E5%85%AC%E9%92%A5_%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D/"
-                    title="Share on Google+"
-                    aria-label="Share on Google+"
-                >
-                    <i class="fab fa-google-plus" aria-hidden="true"></i>
-                </a>
-            </li>
-        
-        
-            
-        
-        <li class="post-action">
-            
-                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
-            
-                <i class="fa fa-list" aria-hidden="true"></i>
-            </a>
-        </li>
-    </ul>
-</div>
-
-
-                </div>
-                
-    <div id="share-options-bar" class="share-options-bar" data-behavior="4">
-        <i id="btn-close-shareoptions" class="fa fa-times"></i>
-        <ul class="share-options">
-            
-                
-                
-                <li class="share-option">
-                    <a
-                        class="share-option-btn"
-                        target="new"
-                        href="https://www.facebook.com/sharer/sharer.php?u=http://example.com/2020/09/05/%E7%BD%91%E7%BB%9C%E5%AD%A6%E4%B9%A0/%E7%A7%81%E9%92%A5_%E5%85%AC%E9%92%A5_%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D/"
-                        aria-label="Share on Facebook"
-                    >
-                        <i class="fab fa-facebook" aria-hidden="true"></i><span>Share on Facebook</span>
-                    </a>
-                </li>
-            
-                
-                
-                <li class="share-option">
-                    <a
-                        class="share-option-btn"
-                        target="new"
-                        href="https://twitter.com/intent/tweet?text=http://example.com/2020/09/05/%E7%BD%91%E7%BB%9C%E5%AD%A6%E4%B9%A0/%E7%A7%81%E9%92%A5_%E5%85%AC%E9%92%A5_%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D/"
-                        aria-label="Share on Twitter"
-                    >
-                        <i class="fab fa-twitter" aria-hidden="true"></i><span>Share on Twitter</span>
-                    </a>
-                </li>
-            
-                
-                
-                <li class="share-option">
-                    <a
-                        class="share-option-btn"
-                        target="new"
-                        href="https://plus.google.com/share?url=http://example.com/2020/09/05/%E7%BD%91%E7%BB%9C%E5%AD%A6%E4%B9%A0/%E7%A7%81%E9%92%A5_%E5%85%AC%E9%92%A5_%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D/"
-                        aria-label="Share on Google+"
-                    >
-                        <i class="fab fa-google-plus" aria-hidden="true"></i><span>Share on Google+</span>
-                    </a>
-                </li>
-            
-        </ul>
-    </div>
-
-
-            
-        </div>
-        
-
-
-<div id="about">
-    <div id="about-card">
-        <div id="about-btn-close">
-            <i class="fa fa-times"></i>
-        </div>
-        
-            <h4 id="about-card-name">陈宇韶chenyushao</h4>
-        
-            <div id="about-card-bio"><p>author.bio</p>
-</div>
-        
-        
-            <div id="about-card-job">
-                <i class="fa fa-briefcase"></i>
-                <br/>
-                <p>author.job</p>
-
-            </div>
-        
-        
-    </div>
-</div>
-
-        
-        
-<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
-        <!--SCRIPTS-->
-
-<script src="/assets/js/script-sbgpeqyl6jw5qe60mnfuzifzwky5la4ftiuwmschcdzx2pg5tfpl1pfp13e3.min.js"></script>
-
-<!--SCRIPTS END-->
-
 
     
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E7%A7%81%E9%92%A5%E3%80%81%E5%85%AC%E9%92%A5/" rel="tag"># 私钥、公钥</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+            </div>
+            <div class="post-nav-item">
+                <a href="/2020/09/05/git%E5%AD%A6%E4%B9%A0/git%E5%AD%A6%E4%B9%A0/" rel="next" title="git学习">
+                  git学习 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
 
 
 
 
-    </body>
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">陈宇韶chenyushao</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+</body>
 </html>

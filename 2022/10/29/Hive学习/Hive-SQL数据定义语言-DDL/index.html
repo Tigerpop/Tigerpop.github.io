@@ -1,23 +1,26 @@
-
 <!DOCTYPE html>
 <html lang="en">
-    
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="generator" content="Tiger_pop&#39;s Blog">
-    <title>Hive_SQL数据定义语言_DDL - Tiger_pop&#39;s Blog</title>
-    <meta name="author" content="陈宇韶chenyushao">
-    
-    
-    
-        
-            <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
-        
-    
-    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"陈宇韶chenyushao","sameAs":["https://github.com/","https://www.linkedin.com/profile/","mailto"]},"articleBody":"简介 \n简介\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n内嵌模式安装（这只是简介，具体的安装配置教程参考之前的hive安装笔记。）：\n\n本地模式安装（这只是简介，具体的安装配置教程参考之前的hive安装笔记。）：\n\n\n远程模式安装：\n\n\n方式3 远程方式安装，这才是hive主要应用场景（这只是简介，具体的安装配置教程参考之前的hive安装笔记。）：\n\n\n\n\n\n​\t\t我们在用hive强行新建一个表，并插入数据时，速度很慢实际是运行一个java程序，此时我们打开yarn的监测端口可以看见一个mapreduce程序正在运行。\n\n\n\n​\t\t卧槽插入一条数据花了182秒，可见hive真的不是sql。\n​\t\t映射成表才是正解\n1234567vim user.txt1,zhangsan2,lisibin/hadoop fs -put user.txt / # 用Hadoop命令把user.txt 传到hdfs的根目录下。此时用9870端口查看yarn的根目录，可见多了一个user.txt文件。\n\n\n​\t\t默认情况下，hive在 &#x2F;user&#x2F;hive&#x2F;warehouse 中创建库和表。将我们刚才放在hdfs根目录的user.txt移动到 &#x2F;user&#x2F;hive&#x2F;warehouse 与之对应的表中。\n1bin/hadoop  fs  -mv  /user.txt  /user/hive/warehouse/test.db/table_test\n\n​\t\t现在可以看见有东西存进来了，但是新的内容都是显示null，\n\n​\t\thive建立表的时间加上分隔符\n1create table t_user(id int,name varchar(20))row format delimited fields terminated by &#x27;,&#x27;;\n\n​\t\t把user.txt 文件映射到指定位置的表中\n1bin/hadoop fs -put user.txt /user/hive/warehouse/test.db/t_user\n\n​\t\t再在hive中 select * from t_user; 可见\n\n​\t\t成功映射好了。\n​\t\t注意文件映射为表，hive会自己尝试着把类型对应，比如文件类型是int，映射的表中类型是varchar，那么hive可以帮我们自动类型转换，但是如果文件中类型是str字符串类型，表中定义时就定义了是int类型，hive自动类型转换str转int是转不过来的，有点像java的自动类型转换的级别特点。\n​\t\t所以建立表时，要把字段顺序和字段类型和文件保持一致。\n\nHive SQL数据定义语言 DDL​\t\t\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n​\t新建完sql 记得新增数据源 configure data source，就是apache hive。改一下主机名，用户名，测试一下，然后链接。\n\n\n\n​\t\t把文件放到hive表对应的的位置，马上就映射成功了。\n\n\n\n\n所以优先考虑 \\001 作为分隔符。\n\n注意上面的 &#x2F; 是hdfs的根目录，不是系统根目录。\n123456789hadoop fs -chmod -R 777 / # 可以让 node01:9870 浏览器中修改hdfs的目录文件夹。给了权限。# 更加传统的方法是# 查看文件hadoop fs -ls /user/hive/warehouse# 删除文件、目录hadoop fs -rm  /data# 有了新的hdfs的文件夹以后，可以hive建表location到 指定的hdfs下的位置了。将文件Hadoop fs -put 文件 新位置 ; 传过来即可映射。\n\n\n\n\n\n\n\n\n​\t\texternal创建外部表，但是不添加location，存放位置还是在&#x2F;usr&#x2F;hive&#x2F;warehouse 中。但是它还是外部表，删除操作保留原文件。\n内部表还是外部表由external存在与否决定，location在哪里和这点没关系。\n\n\n\n\n\n\n\n​\t\t分区表数据不能想原来一样 put 进指定位置映射就完事，需要每一个源文件在 hive console控制台内 静态加载到 hdfs 对应表中。\n\n\n\n\n​\t\t我的分区优化后的查询用时1分59秒，没有分区的查询时间是2分7秒。\n\n\n\n\n\n\n​\t\t第三点中，底层原数据没有变化，显示的分区字段其实是 hive 中生成的。\n123456789101112131415161718192021222324252627282930set hive.exec.dynamic.partition=true;set hive.exec.dynamic.partition.mode=nonstrict;create table t_all_hero_part_dynamic(                                id int,                                name string,                                hp_max int,                                mp_max int,                                attack_max int,                                defense_man int,                                attack_range string,                                role_main string,                                role_assist string)partitioned by (role string) row format delimited fields terminated by &quot;\\t&quot;;create table t_all_hero(                                        id int,                                        name string,                                        hp_max int,                                        mp_max int,                                        attack_max int,                                        defense_man int,                                        attack_range string,                                        role_main string,                                        role_assist string)row format delimited fields terminated by &quot;\\t&quot;;# 动态插入分区表\\动态分区。insert into table t_all_hero_part_dynamic partition(role)select tmp.*,tmp.role_main from t_all_hero tmp;\n\n\n\n​\t\t这里可以回顾一下，之前学习的算法与数据结构中的 散列表。\n\n\n\n\n​\t\t分桶表还可以提高抽样的效率。\n\n\n\n\n\n\ninsert into trans_student values(1,’chenyushao’,29);\n\n\n​\t\t可以看见其实hive没有删除原文件，只是用了新的 “事务操作” 产生新的版本而已。\n123456789101112131415161718set hive.support.concurrency=true;set hive.enforce.bucketing=true;set hive.exec.dynamic.partition.mode=nonstrict;set hive.txn.manager=org.apache.hadoop.hive.ql.lockmgr.DbTxnManager;set hive.compactor.initiator.on=true;set hive.compactor.worker.threads=1;drop table trans_student;create table trans_student(    id int,    name string,    age int)clustered by (id) into 2 buckets stored as orc TBLPROPERTIES(&#x27;transactional&#x27;=&#x27;true&#x27;);insert into trans_student values(1,&#x27;chenyushao&#x27;,29);  # 插入数据到事务表， 速度实在是太慢了！3分钟。update trans_student set age=20 where id=1;delete from trans_student where id =1;select * from trans_student;\n\n\n\n\n​\t\t基于select 创建视图，只看前面5项。\n\n​\t\t\n\n\n\n\n\n​\t\t注意：view只是让我们方便查看语句，并不是真的优化了查询的性能。\n\n\n\n\n\n\n\n\n\n\n1234567891011121314151617181920212223242526create table student(    id int ,    name string,    sex string,    age string,    studept string)row format delimited fields terminated by&quot;,&quot;;drop table student_trans;create table student_trans(    sno int,    sname string,    sdept string)clustered by (sno) into 2 buckets stored as orc TBLPROPERTIES (&#x27;transactional&#x27;=&#x27;true&#x27;); # 新建一个分桶事务表。insert into table student_trans select id,name,studept from student; # 从普通表插入到分桶事务表中。create materialized view student_trans_agg    as select sdept ,count(*)as dept_cnt from student_trans group by sdept; # 创建物化视图（因为这个查询经常用，才会作一个物化视图。）select sdept,count(*) from student_trans group by sdept;  # 速度快，直接从物化视图的存档继续。explain select sdept,count(*) from student_trans group by sdept; # 可见从物化视图继续的，并不是从student_trans。alter materialized view student_trans_agg disable rewrite; # 关闭此物化视图的重写属性。select sdept,count(*) from student_trans group by sdept;  # 速度瞬间变慢。alter materialized view student_trans_agg enable rewrite;select sdept,count(*) from student_trans group by sdept;\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n​\t\t1、在hive的console创建一个分区的表；\n​\t\t2、直接用hdfs命令创建分区文件夹；hadoop fs -mkdir -p &#x2F;user&#x2F;hive&#x2F;marehouse&#x2F;databasename&#x2F;tablename&#x2F;role&#x3D;sheshou（分区名）\n​\t\t3、hdfs 命令直接 put 数据上 对应的分区位置；\n​\t\t4、hive 的select 看不见上面的分区表；\n​\t\t5、用msck 修复分区，msck repair table 【tablename】 add partition；add partition 可以不写、msck默认添加分区。\n​\t\t6、hive可以操作新分区表了。\n​\t\t1、hdfs 直接删除分区表的一个分区；\n​\t\t2、hive 看不见变化，还误以为没有变；\n​\t\t3、msck repair table 【tablename】drop partition； 修复删除分区。\n​\t\t4、hive 正常了。\n【sync】同步hive 的分区表元存储 与 hdfs上的内容。操作同上。\n\n\n\n","dateCreated":"2022-10-29T15:11:19+08:00","dateModified":"2022-10-29T15:26:38+08:00","datePublished":"2022-10-29T15:11:19+08:00","description":"简介","headline":"Hive_SQL数据定义语言_DDL","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/"},"publisher":{"@type":"Organization","name":"陈宇韶chenyushao","sameAs":["https://github.com/","https://www.linkedin.com/profile/","mailto"]},"url":"http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/","keywords":"hive, sql"}</script>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha256-AbA177XfpSnFEvgpYu1jMygiLabzPCJCRIBtR5jGc0k=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.13.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
     <meta name="description" content="这是文章开头，显示在主页面，详情请点击此处。">
-<meta property="og:type" content="blog">
+<meta property="og:type" content="article">
 <meta property="og:title" content="Hive_SQL数据定义语言_DDL">
 <meta property="og:url" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/index.html">
 <meta property="og:site_name" content="Tiger_pop&#39;s Blog">
@@ -164,249 +167,210 @@
 <meta property="article:tag" content="sql">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-02-24%2015.38.54-7028285-7028320.jpg">
-    
-    
-        
-    
-    
-    
-    
-    
-    <!--STYLES-->
-    
-<link rel="stylesheet" href="/assets/css/style-yrbj4x87sme2npnaj5hmxl88fi8ktzpa1hwzrvan2almcpvu5niegj13ryff.min.css">
 
-    <!--STYLES END-->
-    
 
-    
+<link rel="canonical" href="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/">
 
-    
-        
-    
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/","path":"2022/10/29/Hive学习/Hive-SQL数据定义语言-DDL/","title":"Hive_SQL数据定义语言_DDL"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Hive_SQL数据定义语言_DDL | Tiger_pop's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="Tiger_pop's Blog" type="application/atom+xml">
 </head>
 
-    <body>
-        <div id="blog">
-            <!-- Define author's picture -->
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
 
-
-    
-
-<header id="header" data-behavior="4">
-    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
-    <div class="header-title">
-        <a
-            class="header-title-link"
-            href="/"
-            aria-label=""
-        >
-            Tiger_pop&#39;s Blog
-        </a>
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
     </div>
-    
-        
-            <a
-                class="header-right-picture "
-                href="#about"
-                aria-label="Open the link: /#about"
-            >
-        
-        
-        </a>
-    
-</header>
+  </div>
 
-            <!-- Define author's picture -->
+  <div class="site-meta">
 
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Tiger_pop's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">tiger_pop 的博客</p>
+  </div>
 
-<nav id="sidebar" data-behavior="4">
-    <div class="sidebar-container">
-        
-        
-            <ul class="sidebar-buttons">
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="/"
-                            
-                            rel="noopener"
-                            title="Home"
-                        >
-                        <i class="sidebar-button-icon fa fa-home" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Home</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="/all-categories"
-                            
-                            rel="noopener"
-                            title="Categories"
-                        >
-                        <i class="sidebar-button-icon fa fa-bookmark" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Categories</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="/all-tags"
-                            
-                            rel="noopener"
-                            title="Tags"
-                        >
-                        <i class="sidebar-button-icon fa fa-tags" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Tags</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="/all-archives"
-                            
-                            rel="noopener"
-                            title="Archives"
-                        >
-                        <i class="sidebar-button-icon fa fa-archive" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Archives</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="#about"
-                            
-                            rel="noopener"
-                            title="About"
-                        >
-                        <i class="sidebar-button-icon fa fa-question" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">About</span>
-                    </a>
-            </li>
-            
-        </ul>
-        
-            <ul class="sidebar-buttons">
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="https://github.com/"
-                            
-                                target="_blank"
-                            
-                            rel="noopener"
-                            title="GitHub"
-                        >
-                        <i class="sidebar-button-icon fab fa-github" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">GitHub</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="https://www.linkedin.com/profile/"
-                            
-                                target="_blank"
-                            
-                            rel="noopener"
-                            title="LinkedIn"
-                        >
-                        <i class="sidebar-button-icon fab fa-linkedin" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">LinkedIn</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="/mailto"
-                            
-                            rel="noopener"
-                            title="Mail"
-                        >
-                        <i class="sidebar-button-icon fa fa-envelope" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Mail</span>
-                    </a>
-            </li>
-            
-        </ul>
-        
-            <ul class="sidebar-buttons">
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="/atom.xml"
-                            
-                            rel="noopener"
-                            title="RSS"
-                        >
-                        <i class="sidebar-button-icon fa fa-rss" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">RSS</span>
-                    </a>
-            </li>
-            
-        </ul>
-        
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
     </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+  </ul>
 </nav>
 
-            
-            <div id="main" data-behavior="4"
-                 class="
-                        hasCoverMetaIn
-                        ">
-                
-<article class="post">
-    
-    
-        <div class="post-header main-content-wrap text-left">
-    
-        <h1 class="post-title">
-            Hive_SQL数据定义语言_DDL
-        </h1>
-    
-    
-        <div class="post-meta">
-    <time datetime="2022-10-29T15:11:19+08:00">
-	
-		    Oct 29, 2022
-    	
-    </time>
-    
-        <span>in </span>
+
+
+
+</div>
         
-    <a class="category-link" href="/categories/hive/">hive</a>
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
 
+  <aside class="sidebar">
 
-    
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AE%80%E4%BB%8B"><span class="nav-number">1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL"><span class="nav-number">2.</span> <span class="nav-text">Hive SQL数据定义语言 DDL</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">陈宇韶chenyushao</p>
+  <div class="site-description" itemprop="description">爱学习、爱工作、爱生活</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">303</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">19</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">95</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
 </div>
 
-    
-</div>
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
 
     
-    <div class="post-content markdown">
-        <div class="main-content-wrap">
-            <p>简介 <span id="more"></span></p>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="陈宇韶chenyushao">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tiger_pop's Blog">
+      <meta itemprop="description" content="爱学习、爱工作、爱生活">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Hive_SQL数据定义语言_DDL | Tiger_pop's Blog">
+      <meta itemprop="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Hive_SQL数据定义语言_DDL
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2022-10-29 15:11:19 / Modified: 15:26:38" itemprop="dateCreated datePublished" datetime="2022-10-29T15:11:19+08:00">2022-10-29</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/hive/" itemprop="url" rel="index"><span itemprop="name">hive</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+            <div class="post-description">这是文章开头，显示在主页面，详情请点击此处。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>简介 <span id="more"></span></p>
 <h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-02-24%2015.38.54-7028285-7028320.jpg" alt="截屏2022-02-24 15.38.54"></p>
 <p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-02-24%2016.23.09-7028320.jpg" alt="截屏2022-02-24 16.23.09"></p>
 <p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-02-24%2016.27.45-7028320.jpg" alt="截屏2022-02-24 16.27.45"></p>
@@ -602,324 +566,77 @@
 <p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-06%2022.20.03-7028320.jpg" alt="截屏2022-03-06 22.20.03"></p>
 <p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-06%2022.21.16-7028320.jpg" alt="截屏2022-03-06 22.21.16"></p>
 
-            
-
-
-        </div>
     </div>
-    <div id="post-footer" class="post-footer main-content-wrap">
-        
-            <div class="post-footer-tags">
-                <span class="text-color-light text-small">TAGGED IN</span><br/>
-                
-    <a class="tag tag--primary tag--small t-none-link" href="/tags/hive/" rel="tag">hive</a> <a class="tag tag--primary tag--small t-none-link" href="/tags/sql/" rel="tag">sql</a>
-
-            </div>
-        
-        
-            <div class="post-actions-wrap">
-    <nav>
-        <ul class="post-actions post-action-nav">
-            <li class="post-action">
-                
-                    
-                <a
-                    class="post-action-btn btn btn--default tooltip--top"
-                    href="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/"
-                    data-tooltip="Hive参数配置与函数、运算符使用"
-                    aria-label="PREVIOUS: Hive参数配置与函数、运算符使用"
-                >
-                    
-                        <i class="fa fa-angle-left" aria-hidden="true"></i>
-                        <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
-                    </a>
-            </li>
-            <li class="post-action">
-                
-                    
-                <a
-                    class="post-action-btn btn btn--default tooltip--top"
-                    href="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/"
-                    data-tooltip="Hive SQL 数据操控、查询语言 DML、DQL"
-                    aria-label="NEXT: Hive SQL 数据操控、查询语言 DML、DQL"
-                >
-                    
-                        <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
-                        <i class="fa fa-angle-right" aria-hidden="true"></i>
-                    </a>
-            </li>
-        </ul>
-    </nav>
-    <ul class="post-actions post-action-share">
-        <li class="post-action hide-lg hide-md hide-sm">
-            <a
-                class="post-action-btn btn btn--default btn-open-shareoptions"
-                href="#btn-open-shareoptions"
-                aria-label="Share this post"
-            >
-                <i class="fa fa-share-alt" aria-hidden="true"></i>
-            </a>
-        </li>
-        
-            
-            
-            <li class="post-action hide-xs">
-                <a
-                    class="post-action-btn btn btn--default"
-                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/"
-                    title="Share on Facebook"
-                    aria-label="Share on Facebook"
-                >
-                    <i class="fab fa-facebook" aria-hidden="true"></i>
-                </a>
-            </li>
-        
-            
-            
-            <li class="post-action hide-xs">
-                <a
-                    class="post-action-btn btn btn--default"
-                    target="new" href="https://twitter.com/intent/tweet?text=http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/"
-                    title="Share on Twitter"
-                    aria-label="Share on Twitter"
-                >
-                    <i class="fab fa-twitter" aria-hidden="true"></i>
-                </a>
-            </li>
-        
-            
-            
-            <li class="post-action hide-xs">
-                <a
-                    class="post-action-btn btn btn--default"
-                    target="new" href="https://plus.google.com/share?url=http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/"
-                    title="Share on Google+"
-                    aria-label="Share on Google+"
-                >
-                    <i class="fab fa-google-plus" aria-hidden="true"></i>
-                </a>
-            </li>
-        
-        
-            
-        
-        <li class="post-action">
-            
-                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
-            
-                <i class="fa fa-list" aria-hidden="true"></i>
-            </a>
-        </li>
-    </ul>
-</div>
-
-
-        
-        
-            
-        
-    </div>
-</article>
-
-
-
-                <footer id="footer" class="main-content-wrap">
-    <span class="copyrights">
-        Copyrights &copy; 2022 陈宇韶chenyushao. All Rights Reserved.
-    </span>
-</footer>
-
-            </div>
-            
-                <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
-                    <div class="post-actions-wrap">
-    <nav>
-        <ul class="post-actions post-action-nav">
-            <li class="post-action">
-                
-                    
-                <a
-                    class="post-action-btn btn btn--default tooltip--top"
-                    href="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/"
-                    data-tooltip="Hive参数配置与函数、运算符使用"
-                    aria-label="PREVIOUS: Hive参数配置与函数、运算符使用"
-                >
-                    
-                        <i class="fa fa-angle-left" aria-hidden="true"></i>
-                        <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
-                    </a>
-            </li>
-            <li class="post-action">
-                
-                    
-                <a
-                    class="post-action-btn btn btn--default tooltip--top"
-                    href="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/"
-                    data-tooltip="Hive SQL 数据操控、查询语言 DML、DQL"
-                    aria-label="NEXT: Hive SQL 数据操控、查询语言 DML、DQL"
-                >
-                    
-                        <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
-                        <i class="fa fa-angle-right" aria-hidden="true"></i>
-                    </a>
-            </li>
-        </ul>
-    </nav>
-    <ul class="post-actions post-action-share">
-        <li class="post-action hide-lg hide-md hide-sm">
-            <a
-                class="post-action-btn btn btn--default btn-open-shareoptions"
-                href="#btn-open-shareoptions"
-                aria-label="Share this post"
-            >
-                <i class="fa fa-share-alt" aria-hidden="true"></i>
-            </a>
-        </li>
-        
-            
-            
-            <li class="post-action hide-xs">
-                <a
-                    class="post-action-btn btn btn--default"
-                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/"
-                    title="Share on Facebook"
-                    aria-label="Share on Facebook"
-                >
-                    <i class="fab fa-facebook" aria-hidden="true"></i>
-                </a>
-            </li>
-        
-            
-            
-            <li class="post-action hide-xs">
-                <a
-                    class="post-action-btn btn btn--default"
-                    target="new" href="https://twitter.com/intent/tweet?text=http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/"
-                    title="Share on Twitter"
-                    aria-label="Share on Twitter"
-                >
-                    <i class="fab fa-twitter" aria-hidden="true"></i>
-                </a>
-            </li>
-        
-            
-            
-            <li class="post-action hide-xs">
-                <a
-                    class="post-action-btn btn btn--default"
-                    target="new" href="https://plus.google.com/share?url=http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/"
-                    title="Share on Google+"
-                    aria-label="Share on Google+"
-                >
-                    <i class="fab fa-google-plus" aria-hidden="true"></i>
-                </a>
-            </li>
-        
-        
-            
-        
-        <li class="post-action">
-            
-                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
-            
-                <i class="fa fa-list" aria-hidden="true"></i>
-            </a>
-        </li>
-    </ul>
-</div>
-
-
-                </div>
-                
-    <div id="share-options-bar" class="share-options-bar" data-behavior="4">
-        <i id="btn-close-shareoptions" class="fa fa-times"></i>
-        <ul class="share-options">
-            
-                
-                
-                <li class="share-option">
-                    <a
-                        class="share-option-btn"
-                        target="new"
-                        href="https://www.facebook.com/sharer/sharer.php?u=http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/"
-                        aria-label="Share on Facebook"
-                    >
-                        <i class="fab fa-facebook" aria-hidden="true"></i><span>Share on Facebook</span>
-                    </a>
-                </li>
-            
-                
-                
-                <li class="share-option">
-                    <a
-                        class="share-option-btn"
-                        target="new"
-                        href="https://twitter.com/intent/tweet?text=http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/"
-                        aria-label="Share on Twitter"
-                    >
-                        <i class="fab fa-twitter" aria-hidden="true"></i><span>Share on Twitter</span>
-                    </a>
-                </li>
-            
-                
-                
-                <li class="share-option">
-                    <a
-                        class="share-option-btn"
-                        target="new"
-                        href="https://plus.google.com/share?url=http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/"
-                        aria-label="Share on Google+"
-                    >
-                        <i class="fab fa-google-plus" aria-hidden="true"></i><span>Share on Google+</span>
-                    </a>
-                </li>
-            
-        </ul>
-    </div>
-
-
-            
-        </div>
-        
-
-
-<div id="about">
-    <div id="about-card">
-        <div id="about-btn-close">
-            <i class="fa fa-times"></i>
-        </div>
-        
-            <h4 id="about-card-name">陈宇韶chenyushao</h4>
-        
-            <div id="about-card-bio"><p>author.bio</p>
-</div>
-        
-        
-            <div id="about-card-job">
-                <i class="fa fa-briefcase"></i>
-                <br/>
-                <p>author.job</p>
-
-            </div>
-        
-        
-    </div>
-</div>
-
-        
-        
-<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
-        <!--SCRIPTS-->
-
-<script src="/assets/js/script-sbgpeqyl6jw5qe60mnfuzifzwky5la4ftiuwmschcdzx2pg5tfpl1pfp13e3.min.js"></script>
-
-<!--SCRIPTS END-->
-
 
     
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/hive/" rel="tag"># hive</a>
+              <a href="/tags/sql/" rel="tag"># sql</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/" rel="prev" title="Hive SQL 数据操控、查询语言 DML、DQL">
+                  <i class="fa fa-chevron-left"></i> Hive SQL 数据操控、查询语言 DML、DQL
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/" rel="next" title="Hive参数配置与函数、运算符使用">
+                  Hive参数配置与函数、运算符使用 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
 
 
 
 
-    </body>
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">陈宇韶chenyushao</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+</body>
 </html>

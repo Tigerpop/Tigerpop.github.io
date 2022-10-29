@@ -1,23 +1,26 @@
-
 <!DOCTYPE html>
 <html lang="en">
-    
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="generator" content="Tiger_pop&#39;s Blog">
-    <title>线性回归 - Tiger_pop&#39;s Blog</title>
-    <meta name="author" content="陈宇韶chenyushao">
-    
-    
-    
-        
-            <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
-        
-    
-    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"陈宇韶chenyushao","sameAs":["https://github.com/","https://www.linkedin.com/profile/","mailto"]},"articleBody":"#%% md \n线性回归算法的实现与应用#%% md\n问题描述线性回归算法是机器学习中最著名和最容易理解的算法之一，其本质是求解一个多元函数的回归系数，求解机制是通过对损失函数（用来估量模型的预测值与真实值的不一致程度）的导数计算来寻找参数的最优解。在求解这个多元函数的回归系数时，输入的特征数据就是此函数的自变量，而标签就是此函数的因变量。\n线性回归一般用于回归任务中，比如房价预测、股价预测等等，由于普通线性回归是一次性拟合，有可能出现欠拟合，因此在普通线性回归算法的基础上出现了大量的线性回归衍生算法，比如基于梯度下降的线性回归算法、岭回归算法等等，这些算法都有各自的优缺点，在使用不同数据做任务时可以选择到更适合该数据的算法。\n本实验将对普通线性回归算法和基于全局梯度下降的线性回归算法进行原理介绍，以及在原理的基础上使用Python编程语言进行算法实现，将实现好的算法应用到糖尿病患者一年后疾病进展的定量测量值的预测。\n#%% md\n环境要求（1）Python 3.x。\n（2）Jupyter Notebook。\n（3）Windows 7及以上和Linux操作系统下运行。\n#%% md\n一、 实验目标本实验根据线性回归算法的原理，使用Numpy库设计并实现普通线性回归算法模型和基于全局梯度下降的线性回归算法模型，最终将实现好的模型应用到糖尿病数据集中做回归任务。具体的实验要求如下：1.算法实现：采用面向对象程序设计思想，将线性回归算法以类的形式实现。\n2.算法应用：加载数据，将数据集按8：2的比例划分为训练集和测试集，使用训练集数据来训练算法模型，并使用学习好的算法模型来预测测试集数据。\n3.应用效果评估：对两个线性回归（普通线性回归与基于全局梯度下降的线性回归）算法模型的预测结果进行可视化。\n#%% md\n二、实验步骤#%% md\n（一）算法实现#%% md\n1.算法原理  \n\n普通线性回归算法（OLR）&amp;emsp;&amp;emsp;OLR的目的是最小化损失函数，损失函数表示的是误差的平方和，损失函数公式为：$$f(x) &#x3D; \\sum_{i&#x3D;1}^n(y_i-wx_i)^2$$(式中的w就是回归系数也称权值，在损失函数中是自变量，x是样本数据，作为该函数的自变量前的系数，y是样本标签，作为该函数的因变量)。&amp;emsp;&amp;emsp;OLR求回归系数的方式是对损失函数的权值w进行求导，得到导函数$f^&#96;(x)&#x3D;2x^2w-2xy$，根据导函数为0求解线性方程，得到使损失函数在极小值点处的权值$w &#x3D; x^{-2}xy$，此处x不能约，在机器学习中该等式的表达为：$$W&#x3D;(X^TX)^{-1}X^TY$$(式中的W是权值矩阵，X是样本特征数据矩阵，T是矩阵的转置，-1是对矩阵求逆阵，Y是样本特征对应的标签数据矩阵)。\n\n#%% md\n\n基于全局梯度下降的线性回归算法（GD）&amp;emsp;&amp;emsp;GD目的和上面是一样的，但是求回归系数的方式有些不同，损失函数公式为:$$f(x) &#x3D; \\frac 12\\sum_{i&#x3D;1}^n(y_i-wx_i)^2$$得到梯度式子为：$$\\Delta&#x3D;\\sum_{i&#x3D;1}^nX_iw^2-X_iY_i$$该梯度则代表了损失函数的递增或递减方向，这里是将每个样本数据放入到$\\Delta$式子中去求平均梯度，之后将当前的权值减去该梯度得到一个更新后的权值，但是梯度过小将不利于算法的训练，因此需要通过学习率来控制权值更新的速度，那么其公式为：$$\\hat w&#x3D;w-\\frac \\alpha n\\sum_{i&#x3D;1}^nX_iw^2-X_iY_i$$这是更新的一个周期，基于全局梯度下降的线性回归算法需要对该权值进行多次更新。\n\n#%% md\n2.定义算法\n定义一个包含以上两种求回归系数方法的线性回归类LinearRegression，该类的功能包括模型的拟合fit()函数和预测predict()函数。\n\nfit()函数OLR实现步骤：（1）将特征数据和样本标签数据转为矩阵；（2）通过矩阵计算$(X^TX)^{-1}X^TY$求得权值$W$。GD实现步骤：（1）设定迭代次数，初始化权值W；（2）将整个数据集放入损失函数中计算平均梯度$\\overline\\Delta$；（3）更新权值，得到$\\hat w$；（4）将$\\hat w$做为当前权值$W$重复步骤2，直到达到规定迭代次数为止。\n\npredict()函数（1）对新数据$Z$进行预测时，计算$ZW$得到预测结果。\n\n\n#%%\nimport numpy as np#科学计算包import matplotlib.pyplot as plt#画图包\n#%%\nclass LinearRegression:\ndef __init__(self, n_iterations=3000, learning_rate=0.005, gradient=True):\n    &quot;&quot;&quot;\n    必要的初始化操作\n    :param n_iterations: int，梯度下降的轮数\n    :param learning_rate: float，梯度下降学习率\n    :param gradient: bool，是否采用梯度下降法或正规方程法。若使用了正则化，暂只支持梯度下降\n    &quot;&quot;&quot;\n    self.n_iterations = n_iterations      \n    self.learning_rate = learning_rate\n    self.gradient = gradient\n\ndef initialize_weights(self, n_features):\n    &quot;&quot;&quot;\n    初始化权值函数：\n    通过特征数量的倒数获取一个随特征数量n_features的增多而减小的限制值limit,在值域为（-limit,limit)的范围内\n    获取n_features个实数作为初始权值，为了更好的操作，这里将阈值也放到权值里面，同时下面会为阈值对应的系数设置为1，该初始化\n    主要是用于梯度下降。\n    :param n_features: int，训练样本的样本数量\n    &quot;&quot;&quot;\n    # 初始化参数\n    limit = np.sqrt(1 / n_features)\n    w = np.random.uniform(-limit, limit, (n_features, 1))\n    b = 0\n    self.w = np.insert(w, 0, b, axis=0)\n\ndef fit(self, X, y):\n    &quot;&quot;&quot;\n    模型训练：\n    该函数使用到两个方法用来进行训练，第一个是基于全局梯度下降的线性回归（self.gradient == True），第二个是普通线性回归。\n    :param X: ndarray，样本特征数据\n    :param y: ndarray，样本标签数据\n    &quot;&quot;&quot;\n    m_samples, n_features = X.shape    \n    self.initialize_weights(n_features)   #初始化权值\n    X = np.insert(X, 0, 1, axis=1)        #在数据集的第一列插入阈值系数\n    y = np.reshape(y, (m_samples, 1))      \n    if self.gradient == True:\n        # 基于全局梯度下降\n        self.loss_ = []           #存储损失函数的损失值\n        self.index = []\n        for i in range(self.n_iterations):\n            y_pred = X.dot(self.w)            #用当前权值与训练样本的特征数据进行计算，得到预测值\n\nloss &#x3D; np.mean(0.5 * (y_pred - y) ** 2) #计算lossif i%5000&#x3D;&#x3D;0:self.index.append(i)self.loss_.append(loss)               #保存每一次迭代的预测误差值            w_grad = X.T.dot(y-y_pred)/m_samples # 计算梯度\n            self.w = self.w + self.learning_rate * w_grad #更新权值w\n    else:\n        # 普通线性回归\n        X = np.matrix(X)     #将数据集转为矩阵\n        y = np.matrix(y)\n        X_T_X = X.T.dot(X)\n        X_T_X_I_X_T = X_T_X.I.dot(X.T)\n        X_T_X_I_X_T_X_T_y = X_T_X_I_X_T.dot(y)\n        self.w = X_T_X_I_X_T_X_T_y\n\ndef predict(self, X):\n    &quot;&quot;&quot;\n    模型预测函数：\n    根据前面训练出的权值与数据集的特征进行计算得到预测结果，X就是要预测的数据集，这里值得注意的是需要在数据集的首列插入\n    阈值系数1，因为所得到的权值里面包含一个阈值。\n    :param X: ndarray，样本特征数据\n    &quot;&quot;&quot;\n    X = np.insert(X, 0, 1, axis=1)    #在预测数据集的首列插入一个阈值系数1\n    y_pred = X.dot(self.w)          #进行预测\n    return y_pred           \n\n#%% md\n（二）算法应用#%% md\n1.数据介绍\n本阶段将使用Scikit-learn库中自带的糖尿病数据集来训练算法模型并使算法模型预测未参与训练的数据。数据集中包含442个样本数据，每个样本数据的特征总共10项，分别为年龄、性别、体质指数、血压、s1、s2、s3、s4、s4、s6 (s1-s6分别代表六种血清的化验数据)，标签为一年后疾病进展的定量测量（其值范围在25~346的整数）。以上的数据是经过特殊处理的，10列特征数据中的每列都做了均值中心化处理，然后又用标准差乘以个体数量调整了数值范围。\n#%% md\n2.准备数据\n调用机器学习库中的load_diabetes(return_X_y)糖尿病数据集加载函数，之后将数据集按8：2的比例划分为训练集和测试集。load_diabetes()函数参数解释：\nreturn_X_y：是否返回数据(True、False)。\n\n#%%\nfrom sklearn.datasets import load_diabetesX, y &#x3D; load_diabetes(return_X_y&#x3D;True)   #获取样本特征数据和样本标签数据\n#%%\nX.shape,y.shape\n#%%\nindex_split &#x3D; int(X.shape[0]*0.8)   #获取数据集在80%处的样本索引#划分训练集和测试集train_X &#x3D; X[:index_split]train_Y &#x3D; y[:index_split]test_X &#x3D; X[index_split:]test_Y &#x3D; y[index_split:]\n#%% md\n3.模型训练、预测\n#%%\n#模型调用 实例化mode &#x3D; LinearRegression(n_iterations&#x3D;100000, learning_rate&#x3D;0.02, gradient&#x3D;True)mode1 &#x3D; LinearRegression(gradient&#x3D;False)\n#模型训练mode.fit(train_X, train_Y)mode1.fit(train_X, train_Y)\n#模型预测pred &#x3D; mode.predict(test_X).reshape(1,-1)[0]pred1 &#x3D; mode1.predict(test_X).reshape(1,-1)[0]\n#%% md\n（三）应用效果评估下面要对预测结果与标签一一对应并进行可视化，为了避免可视化图像的线条出现混乱，需要对测试集的标签进行从小到大排序获取排序后的索引，用索引对测试集标签数组和预测值数组进行重置，以便后面画图更加简明。\n#%%\nindex &#x3D; test_Y.argsort(axis&#x3D;0)         #获取标签数组的值按从小到大排序的索引label &#x3D; test_Y[index].tolist()    #将标签数组重置，并转为列表OLR_pred &#x3D; pred1.A[0][index]      #将预测值数组重置GD_pred &#x3D; pred[index]                    #将预测值数组重置\n#%% md\n对OLR算法和GD算法的预测结果用子图的方式可视化。\n#%%\nplt.figure(figsize&#x3D;(20, 8))    #定义画布大小，20是画布的宽，8是画布的高plt.subplot(121)               #定义子图121表示这组图有1行2列，该子图在第1幅图plt.plot(range(len(label)),label,label&#x3D;’label’)     #画标签折线图，并做好标记plt.plot(range(len(label)),OLR_pred,label&#x3D;’OLR_pred’)  #画预测值折线图，并做好标记plt.title(‘OLR predict result’)plt.xlabel(‘samples number’)plt.ylabel(‘label_value’)plt.legend()   #显示标记\nplt.subplot(122)plt.plot(range(len(label)),label,label&#x3D;’label’)     #画标签折线图，并做好标记plt.plot(range(len(label)),GD_pred,label&#x3D;’GD_pred’)  #画预测值折线图，并做好标记plt.title(‘GD predict result’)plt.xlabel(‘samples number’)plt.legend()   #显示标记plt.show()    #显示图片\n#%% md\n三、结果分析在次实验中首先对线性回归算法原理进行了介绍，其次根据算法的原理实现了普通线性回归算法和基于梯度下降的线性回归算法的功能，最后将实现好的两个算法应用到Scikit-learn库中自带的糖尿病数据集中，并对两个算法的预测结果进行了可视化。从可视化图可以看出，两个算法的预测结果差别不大，结合原理，这两个算法都是在求损失函数的极小值点处的回归系数，只是他们求的方式不同，OLR算法是一步求到最小值点处的回归系数，而GD算法是通过学习率控制下降的梯度分多步进行求极小值点处的回归系数。\n#%% md\n四、选择SGD算法来实现#%%\nfrom sklearn.linear_model import LinearRegressionmodel &#x3D; LinearRegression().fit(train_X, train_Y)pred &#x3D; model.predict(test_X)\n#%%\nplt.figure(figsize&#x3D;(20, 8))    #定义画布大小，20是画布的宽，8是画布的高plt.subplot(131)               #定义子图121表示这组图有1行2列，该子图在第1幅图plt.plot(range(len(label)),label,label&#x3D;’label’)     #画标签折线图，并做好标记plt.plot(range(len(label)),OLR_pred,label&#x3D;’OLR_pred’)  #画预测值折线图，并做好标记plt.title(‘OLR predict result’)plt.xlabel(‘samples number’)plt.ylabel(‘label_value’)plt.legend()   #显示标记plt.subplot(132)plt.plot(range(len(label)),label,label&#x3D;’label’)     #画标签折线图，并做好标记plt.plot(range(len(label)),GD_pred,label&#x3D;’GD_pred’)  #画预测值折线图，并做好标记plt.title(‘GD predict result’)plt.xlabel(‘samples number’)plt.legend()   #显示标记plt.subplot(133)plt.plot(range(len(label)),label,label&#x3D;’label’)     #画标签折线图，并做好标记plt.plot(range(len(label)),pred,label&#x3D;’SGD_pred’)  #画预测值折线图，并做好标记plt.title(‘LR predict result’)plt.xlabel(‘samples number’)plt.legend()   #显示标记plt.show()    #显示图片\n#%%\n","dateCreated":"2022-10-28T21:07:36+08:00","dateModified":"2022-10-28T21:27:28+08:00","datePublished":"2022-10-28T21:07:36+08:00","description":"#%% md","headline":"线性回归","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"http://example.com/2022/10/28/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92/"},"publisher":{"@type":"Organization","name":"陈宇韶chenyushao","sameAs":["https://github.com/","https://www.linkedin.com/profile/","mailto"]},"url":"http://example.com/2022/10/28/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92/","keywords":"监督学习(supervised learning), 线性回归（Linear Regression）"}</script>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha256-AbA177XfpSnFEvgpYu1jMygiLabzPCJCRIBtR5jGc0k=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.13.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
     <meta name="description" content="这是文章开头，显示在主页面，详情请点击此处。">
-<meta property="og:type" content="blog">
+<meta property="og:type" content="article">
 <meta property="og:title" content="线性回归">
 <meta property="og:url" content="http://example.com/2022/10/28/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92/index.html">
 <meta property="og:site_name" content="Tiger_pop&#39;s Blog">
@@ -29,249 +32,210 @@
 <meta property="article:tag" content="监督学习(supervised learning)">
 <meta property="article:tag" content="线性回归（Linear Regression）">
 <meta name="twitter:card" content="summary">
-    
-    
-        
-    
-    
-    
-    
-    
-    <!--STYLES-->
-    
-<link rel="stylesheet" href="/assets/css/style-yrbj4x87sme2npnaj5hmxl88fi8ktzpa1hwzrvan2almcpvu5niegj13ryff.min.css">
 
-    <!--STYLES END-->
-    
 
-    
+<link rel="canonical" href="http://example.com/2022/10/28/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92/">
 
-    
-        
-    
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/2022/10/28/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92/","path":"2022/10/28/机器学习/线性回归/","title":"线性回归"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>线性回归 | Tiger_pop's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="Tiger_pop's Blog" type="application/atom+xml">
 </head>
 
-    <body>
-        <div id="blog">
-            <!-- Define author's picture -->
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
 
-
-    
-
-<header id="header" data-behavior="4">
-    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
-    <div class="header-title">
-        <a
-            class="header-title-link"
-            href="/"
-            aria-label=""
-        >
-            Tiger_pop&#39;s Blog
-        </a>
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
     </div>
-    
-        
-            <a
-                class="header-right-picture "
-                href="#about"
-                aria-label="Open the link: /#about"
-            >
-        
-        
-        </a>
-    
-</header>
+  </div>
 
-            <!-- Define author's picture -->
+  <div class="site-meta">
 
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Tiger_pop's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">tiger_pop 的博客</p>
+  </div>
 
-<nav id="sidebar" data-behavior="4">
-    <div class="sidebar-container">
-        
-        
-            <ul class="sidebar-buttons">
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="/"
-                            
-                            rel="noopener"
-                            title="Home"
-                        >
-                        <i class="sidebar-button-icon fa fa-home" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Home</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="/all-categories"
-                            
-                            rel="noopener"
-                            title="Categories"
-                        >
-                        <i class="sidebar-button-icon fa fa-bookmark" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Categories</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="/all-tags"
-                            
-                            rel="noopener"
-                            title="Tags"
-                        >
-                        <i class="sidebar-button-icon fa fa-tags" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Tags</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="/all-archives"
-                            
-                            rel="noopener"
-                            title="Archives"
-                        >
-                        <i class="sidebar-button-icon fa fa-archive" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Archives</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="#about"
-                            
-                            rel="noopener"
-                            title="About"
-                        >
-                        <i class="sidebar-button-icon fa fa-question" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">About</span>
-                    </a>
-            </li>
-            
-        </ul>
-        
-            <ul class="sidebar-buttons">
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="https://github.com/"
-                            
-                                target="_blank"
-                            
-                            rel="noopener"
-                            title="GitHub"
-                        >
-                        <i class="sidebar-button-icon fab fa-github" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">GitHub</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="https://www.linkedin.com/profile/"
-                            
-                                target="_blank"
-                            
-                            rel="noopener"
-                            title="LinkedIn"
-                        >
-                        <i class="sidebar-button-icon fab fa-linkedin" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">LinkedIn</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="/mailto"
-                            
-                            rel="noopener"
-                            title="Mail"
-                        >
-                        <i class="sidebar-button-icon fa fa-envelope" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Mail</span>
-                    </a>
-            </li>
-            
-        </ul>
-        
-            <ul class="sidebar-buttons">
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="/atom.xml"
-                            
-                            rel="noopener"
-                            title="RSS"
-                        >
-                        <i class="sidebar-button-icon fa fa-rss" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">RSS</span>
-                    </a>
-            </li>
-            
-        </ul>
-        
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
     </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+  </ul>
 </nav>
 
-            
-            <div id="main" data-behavior="4"
-                 class="
-                        hasCoverMetaIn
-                        ">
-                
-<article class="post">
-    
-    
-        <div class="post-header main-content-wrap text-left">
-    
-        <h1 class="post-title">
-            线性回归
-        </h1>
-    
-    
-        <div class="post-meta">
-    <time datetime="2022-10-28T21:07:36+08:00">
-	
-		    Oct 28, 2022
-    	
-    </time>
-    
-        <span>in </span>
+
+
+
+</div>
         
-    <a class="category-link" href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/">机器学习</a>
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
 
+  <aside class="sidebar">
 
-    
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92%E7%AE%97%E6%B3%95%E7%9A%84%E5%AE%9E%E7%8E%B0%E4%B8%8E%E5%BA%94%E7%94%A8"><span class="nav-number">1.</span> <span class="nav-text">线性回归算法的实现与应用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0"><span class="nav-number">1.0.1.</span> <span class="nav-text">问题描述</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%8E%AF%E5%A2%83%E8%A6%81%E6%B1%82"><span class="nav-number">1.0.1.1.</span> <span class="nav-text">环境要求</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81-%E5%AE%9E%E9%AA%8C%E7%9B%AE%E6%A0%87"><span class="nav-number">1.1.</span> <span class="nav-text">一、 实验目标</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E5%AE%9E%E9%AA%8C%E6%AD%A5%E9%AA%A4"><span class="nav-number">1.2.</span> <span class="nav-text">二、实验步骤</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%EF%BC%88%E4%B8%80%EF%BC%89%E7%AE%97%E6%B3%95%E5%AE%9E%E7%8E%B0"><span class="nav-number">1.2.1.</span> <span class="nav-text">（一）算法实现</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#loss-x3D-np-mean-0-5-y-pred-y-2-%E8%AE%A1%E7%AE%97loss"><span class="nav-number">2.</span> <span class="nav-text">loss &#x3D; np.mean(0.5 * (y_pred - y) ** 2) #计算loss</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#if-i-5000-x3D-x3D-0"><span class="nav-number">3.</span> <span class="nav-text">if i%5000&#x3D;&#x3D;0:</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#self-index-append-i"><span class="nav-number">4.</span> <span class="nav-text">self.index.append(i)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#self-loss-append-loss-%E4%BF%9D%E5%AD%98%E6%AF%8F%E4%B8%80%E6%AC%A1%E8%BF%AD%E4%BB%A3%E7%9A%84%E9%A2%84%E6%B5%8B%E8%AF%AF%E5%B7%AE%E5%80%BC"><span class="nav-number">5.</span> <span class="nav-text">self.loss_.append(loss)               #保存每一次迭代的预测误差值</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%EF%BC%88%E4%BA%8C%EF%BC%89%E7%AE%97%E6%B3%95%E5%BA%94%E7%94%A8"><span class="nav-number">5.0.1.</span> <span class="nav-text">（二）算法应用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%EF%BC%88%E4%B8%89%EF%BC%89%E5%BA%94%E7%94%A8%E6%95%88%E6%9E%9C%E8%AF%84%E4%BC%B0"><span class="nav-number">5.0.2.</span> <span class="nav-text">（三）应用效果评估</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E7%BB%93%E6%9E%9C%E5%88%86%E6%9E%90"><span class="nav-number">5.1.</span> <span class="nav-text">三、结果分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%81%E9%80%89%E6%8B%A9SGD%E7%AE%97%E6%B3%95%E6%9D%A5%E5%AE%9E%E7%8E%B0"><span class="nav-number">5.2.</span> <span class="nav-text">四、选择SGD算法来实现</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#plt-figure-figsize-x3D-20-8-%E5%AE%9A%E4%B9%89%E7%94%BB%E5%B8%83%E5%A4%A7%E5%B0%8F%EF%BC%8C20%E6%98%AF%E7%94%BB%E5%B8%83%E7%9A%84%E5%AE%BD%EF%BC%8C8%E6%98%AF%E7%94%BB%E5%B8%83%E7%9A%84%E9%AB%98"><span class="nav-number">6.</span> <span class="nav-text">plt.figure(figsize&#x3D;(20, 8))    #定义画布大小，20是画布的宽，8是画布的高</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#plt-subplot-131-%E5%AE%9A%E4%B9%89%E5%AD%90%E5%9B%BE121%E8%A1%A8%E7%A4%BA%E8%BF%99%E7%BB%84%E5%9B%BE%E6%9C%891%E8%A1%8C2%E5%88%97%EF%BC%8C%E8%AF%A5%E5%AD%90%E5%9B%BE%E5%9C%A8%E7%AC%AC1%E5%B9%85%E5%9B%BE"><span class="nav-number">7.</span> <span class="nav-text">plt.subplot(131)               #定义子图121表示这组图有1行2列，该子图在第1幅图</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#plt-plot-range-len-label-label-label-x3D-%E2%80%99label%E2%80%99-%E7%94%BB%E6%A0%87%E7%AD%BE%E6%8A%98%E7%BA%BF%E5%9B%BE%EF%BC%8C%E5%B9%B6%E5%81%9A%E5%A5%BD%E6%A0%87%E8%AE%B0"><span class="nav-number">8.</span> <span class="nav-text">plt.plot(range(len(label)),label,label&#x3D;’label’)     #画标签折线图，并做好标记</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#plt-plot-range-len-label-OLR-pred-label-x3D-%E2%80%99OLR-pred%E2%80%99-%E7%94%BB%E9%A2%84%E6%B5%8B%E5%80%BC%E6%8A%98%E7%BA%BF%E5%9B%BE%EF%BC%8C%E5%B9%B6%E5%81%9A%E5%A5%BD%E6%A0%87%E8%AE%B0"><span class="nav-number">9.</span> <span class="nav-text">plt.plot(range(len(label)),OLR_pred,label&#x3D;’OLR_pred’)  #画预测值折线图，并做好标记</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#plt-title-%E2%80%98OLR-predict-result%E2%80%99"><span class="nav-number">10.</span> <span class="nav-text">plt.title(‘OLR predict result’)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#plt-xlabel-%E2%80%98samples-number%E2%80%99"><span class="nav-number">11.</span> <span class="nav-text">plt.xlabel(‘samples number’)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#plt-ylabel-%E2%80%98label-value%E2%80%99"><span class="nav-number">12.</span> <span class="nav-text">plt.ylabel(‘label_value’)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#plt-legend-%E6%98%BE%E7%A4%BA%E6%A0%87%E8%AE%B0"><span class="nav-number">13.</span> <span class="nav-text">plt.legend()   #显示标记</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#plt-subplot-132"><span class="nav-number">14.</span> <span class="nav-text">plt.subplot(132)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#plt-plot-range-len-label-label-label-x3D-%E2%80%99label%E2%80%99-%E7%94%BB%E6%A0%87%E7%AD%BE%E6%8A%98%E7%BA%BF%E5%9B%BE%EF%BC%8C%E5%B9%B6%E5%81%9A%E5%A5%BD%E6%A0%87%E8%AE%B0-1"><span class="nav-number">15.</span> <span class="nav-text">plt.plot(range(len(label)),label,label&#x3D;’label’)     #画标签折线图，并做好标记</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#plt-plot-range-len-label-GD-pred-label-x3D-%E2%80%99GD-pred%E2%80%99-%E7%94%BB%E9%A2%84%E6%B5%8B%E5%80%BC%E6%8A%98%E7%BA%BF%E5%9B%BE%EF%BC%8C%E5%B9%B6%E5%81%9A%E5%A5%BD%E6%A0%87%E8%AE%B0"><span class="nav-number">16.</span> <span class="nav-text">plt.plot(range(len(label)),GD_pred,label&#x3D;’GD_pred’)  #画预测值折线图，并做好标记</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#plt-title-%E2%80%98GD-predict-result%E2%80%99"><span class="nav-number">17.</span> <span class="nav-text">plt.title(‘GD predict result’)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#plt-xlabel-%E2%80%98samples-number%E2%80%99-1"><span class="nav-number">18.</span> <span class="nav-text">plt.xlabel(‘samples number’)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#plt-legend-%E6%98%BE%E7%A4%BA%E6%A0%87%E8%AE%B0-1"><span class="nav-number">19.</span> <span class="nav-text">plt.legend()   #显示标记</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#plt-subplot-133"><span class="nav-number">20.</span> <span class="nav-text">plt.subplot(133)</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">陈宇韶chenyushao</p>
+  <div class="site-description" itemprop="description">爱学习、爱工作、爱生活</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">303</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">19</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">95</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
 </div>
 
-    
-</div>
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
 
     
-    <div class="post-content markdown">
-        <div class="main-content-wrap">
-            <p>#%% md <span id="more"></span></p>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/10/28/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="陈宇韶chenyushao">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tiger_pop's Blog">
+      <meta itemprop="description" content="爱学习、爱工作、爱生活">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="线性回归 | Tiger_pop's Blog">
+      <meta itemprop="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          线性回归
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2022-10-28 21:07:36 / Modified: 21:27:28" itemprop="dateCreated datePublished" datetime="2022-10-28T21:07:36+08:00">2022-10-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+            <div class="post-description">这是文章开头，显示在主页面，详情请点击此处。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>#%% md <span id="more"></span></p>
 <h1 id="线性回归算法的实现与应用"><a href="#线性回归算法的实现与应用" class="headerlink" title="线性回归算法的实现与应用"></a>线性回归算法的实现与应用</h1><p>#%% md</p>
 <h3 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h3><p>线性回归算法是机器学习中最著名和最容易理解的算法之一，其本质是求解一个多元函数的回归系数，求解机制是通过对损失函数（用来估量模型的预测值与真实值的不一致程度）的导数计算来寻找参数的最优解。在求解这个多元函数的回归系数时，输入的特征数据就是此函数的自变量，而标签就是此函数的因变量。</p>
 <p>线性回归一般用于回归任务中，比如房价预测、股价预测等等，由于普通线性回归是一次性拟合，有可能出现欠拟合，因此在普通线性回归算法的基础上出现了大量的线性回归衍生算法，比如基于梯度下降的线性回归算法、岭回归算法等等，这些算法都有各自的优缺点，在使用不同数据做任务时可以选择到更适合该数据的算法。</p>
@@ -412,324 +376,77 @@ def predict(self, X):
 <h1 id="plt-figure-figsize-x3D-20-8-定义画布大小，20是画布的宽，8是画布的高"><a href="#plt-figure-figsize-x3D-20-8-定义画布大小，20是画布的宽，8是画布的高" class="headerlink" title="plt.figure(figsize&#x3D;(20, 8))    #定义画布大小，20是画布的宽，8是画布的高"></a>plt.figure(figsize&#x3D;(20, 8))    #定义画布大小，20是画布的宽，8是画布的高</h1><h1 id="plt-subplot-131-定义子图121表示这组图有1行2列，该子图在第1幅图"><a href="#plt-subplot-131-定义子图121表示这组图有1行2列，该子图在第1幅图" class="headerlink" title="plt.subplot(131)               #定义子图121表示这组图有1行2列，该子图在第1幅图"></a>plt.subplot(131)               #定义子图121表示这组图有1行2列，该子图在第1幅图</h1><h1 id="plt-plot-range-len-label-label-label-x3D-’label’-画标签折线图，并做好标记"><a href="#plt-plot-range-len-label-label-label-x3D-’label’-画标签折线图，并做好标记" class="headerlink" title="plt.plot(range(len(label)),label,label&#x3D;’label’)     #画标签折线图，并做好标记"></a>plt.plot(range(len(label)),label,label&#x3D;’label’)     #画标签折线图，并做好标记</h1><h1 id="plt-plot-range-len-label-OLR-pred-label-x3D-’OLR-pred’-画预测值折线图，并做好标记"><a href="#plt-plot-range-len-label-OLR-pred-label-x3D-’OLR-pred’-画预测值折线图，并做好标记" class="headerlink" title="plt.plot(range(len(label)),OLR_pred,label&#x3D;’OLR_pred’)  #画预测值折线图，并做好标记"></a>plt.plot(range(len(label)),OLR_pred,label&#x3D;’OLR_pred’)  #画预测值折线图，并做好标记</h1><h1 id="plt-title-‘OLR-predict-result’"><a href="#plt-title-‘OLR-predict-result’" class="headerlink" title="plt.title(‘OLR predict result’)"></a>plt.title(‘OLR predict result’)</h1><h1 id="plt-xlabel-‘samples-number’"><a href="#plt-xlabel-‘samples-number’" class="headerlink" title="plt.xlabel(‘samples number’)"></a>plt.xlabel(‘samples number’)</h1><h1 id="plt-ylabel-‘label-value’"><a href="#plt-ylabel-‘label-value’" class="headerlink" title="plt.ylabel(‘label_value’)"></a>plt.ylabel(‘label_value’)</h1><h1 id="plt-legend-显示标记"><a href="#plt-legend-显示标记" class="headerlink" title="plt.legend()   #显示标记"></a>plt.legend()   #显示标记</h1><h1 id="plt-subplot-132"><a href="#plt-subplot-132" class="headerlink" title="plt.subplot(132)"></a>plt.subplot(132)</h1><h1 id="plt-plot-range-len-label-label-label-x3D-’label’-画标签折线图，并做好标记-1"><a href="#plt-plot-range-len-label-label-label-x3D-’label’-画标签折线图，并做好标记-1" class="headerlink" title="plt.plot(range(len(label)),label,label&#x3D;’label’)     #画标签折线图，并做好标记"></a>plt.plot(range(len(label)),label,label&#x3D;’label’)     #画标签折线图，并做好标记</h1><h1 id="plt-plot-range-len-label-GD-pred-label-x3D-’GD-pred’-画预测值折线图，并做好标记"><a href="#plt-plot-range-len-label-GD-pred-label-x3D-’GD-pred’-画预测值折线图，并做好标记" class="headerlink" title="plt.plot(range(len(label)),GD_pred,label&#x3D;’GD_pred’)  #画预测值折线图，并做好标记"></a>plt.plot(range(len(label)),GD_pred,label&#x3D;’GD_pred’)  #画预测值折线图，并做好标记</h1><h1 id="plt-title-‘GD-predict-result’"><a href="#plt-title-‘GD-predict-result’" class="headerlink" title="plt.title(‘GD predict result’)"></a>plt.title(‘GD predict result’)</h1><h1 id="plt-xlabel-‘samples-number’-1"><a href="#plt-xlabel-‘samples-number’-1" class="headerlink" title="plt.xlabel(‘samples number’)"></a>plt.xlabel(‘samples number’)</h1><h1 id="plt-legend-显示标记-1"><a href="#plt-legend-显示标记-1" class="headerlink" title="plt.legend()   #显示标记"></a>plt.legend()   #显示标记</h1><h1 id="plt-subplot-133"><a href="#plt-subplot-133" class="headerlink" title="plt.subplot(133)"></a>plt.subplot(133)</h1><p>plt.plot(range(len(label)),label,label&#x3D;’label’)     #画标签折线图，并做好标记<br>plt.plot(range(len(label)),pred,label&#x3D;’SGD_pred’)  #画预测值折线图，并做好标记<br>plt.title(‘LR predict result’)<br>plt.xlabel(‘samples number’)<br>plt.legend()   #显示标记<br>plt.show()    #显示图片</p>
 <p>#%%</p>
 
-            
-
-
-        </div>
     </div>
-    <div id="post-footer" class="post-footer main-content-wrap">
-        
-            <div class="post-footer-tags">
-                <span class="text-color-light text-small">TAGGED IN</span><br/>
-                
-    <a class="tag tag--primary tag--small t-none-link" href="/tags/%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0-supervised-learning/" rel="tag">监督学习(supervised learning)</a> <a class="tag tag--primary tag--small t-none-link" href="/tags/%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92%EF%BC%88Linear-Regression%EF%BC%89/" rel="tag">线性回归（Linear Regression）</a>
-
-            </div>
-        
-        
-            <div class="post-actions-wrap">
-    <nav>
-        <ul class="post-actions post-action-nav">
-            <li class="post-action">
-                
-                    
-                <a
-                    class="post-action-btn btn btn--default tooltip--top"
-                    href="/2022/10/28/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/svm/"
-                    data-tooltip="SVM"
-                    aria-label="PREVIOUS: SVM"
-                >
-                    
-                        <i class="fa fa-angle-left" aria-hidden="true"></i>
-                        <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
-                    </a>
-            </li>
-            <li class="post-action">
-                
-                    
-                <a
-                    class="post-action-btn btn btn--default tooltip--top"
-                    href="/2022/10/28/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97/"
-                    data-tooltip="随机森林"
-                    aria-label="NEXT: 随机森林"
-                >
-                    
-                        <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
-                        <i class="fa fa-angle-right" aria-hidden="true"></i>
-                    </a>
-            </li>
-        </ul>
-    </nav>
-    <ul class="post-actions post-action-share">
-        <li class="post-action hide-lg hide-md hide-sm">
-            <a
-                class="post-action-btn btn btn--default btn-open-shareoptions"
-                href="#btn-open-shareoptions"
-                aria-label="Share this post"
-            >
-                <i class="fa fa-share-alt" aria-hidden="true"></i>
-            </a>
-        </li>
-        
-            
-            
-            <li class="post-action hide-xs">
-                <a
-                    class="post-action-btn btn btn--default"
-                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://example.com/2022/10/28/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92/"
-                    title="Share on Facebook"
-                    aria-label="Share on Facebook"
-                >
-                    <i class="fab fa-facebook" aria-hidden="true"></i>
-                </a>
-            </li>
-        
-            
-            
-            <li class="post-action hide-xs">
-                <a
-                    class="post-action-btn btn btn--default"
-                    target="new" href="https://twitter.com/intent/tweet?text=http://example.com/2022/10/28/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92/"
-                    title="Share on Twitter"
-                    aria-label="Share on Twitter"
-                >
-                    <i class="fab fa-twitter" aria-hidden="true"></i>
-                </a>
-            </li>
-        
-            
-            
-            <li class="post-action hide-xs">
-                <a
-                    class="post-action-btn btn btn--default"
-                    target="new" href="https://plus.google.com/share?url=http://example.com/2022/10/28/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92/"
-                    title="Share on Google+"
-                    aria-label="Share on Google+"
-                >
-                    <i class="fab fa-google-plus" aria-hidden="true"></i>
-                </a>
-            </li>
-        
-        
-            
-        
-        <li class="post-action">
-            
-                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
-            
-                <i class="fa fa-list" aria-hidden="true"></i>
-            </a>
-        </li>
-    </ul>
-</div>
-
-
-        
-        
-            
-        
-    </div>
-</article>
-
-
-
-                <footer id="footer" class="main-content-wrap">
-    <span class="copyrights">
-        Copyrights &copy; 2022 陈宇韶chenyushao. All Rights Reserved.
-    </span>
-</footer>
-
-            </div>
-            
-                <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
-                    <div class="post-actions-wrap">
-    <nav>
-        <ul class="post-actions post-action-nav">
-            <li class="post-action">
-                
-                    
-                <a
-                    class="post-action-btn btn btn--default tooltip--top"
-                    href="/2022/10/28/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/svm/"
-                    data-tooltip="SVM"
-                    aria-label="PREVIOUS: SVM"
-                >
-                    
-                        <i class="fa fa-angle-left" aria-hidden="true"></i>
-                        <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
-                    </a>
-            </li>
-            <li class="post-action">
-                
-                    
-                <a
-                    class="post-action-btn btn btn--default tooltip--top"
-                    href="/2022/10/28/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97/"
-                    data-tooltip="随机森林"
-                    aria-label="NEXT: 随机森林"
-                >
-                    
-                        <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
-                        <i class="fa fa-angle-right" aria-hidden="true"></i>
-                    </a>
-            </li>
-        </ul>
-    </nav>
-    <ul class="post-actions post-action-share">
-        <li class="post-action hide-lg hide-md hide-sm">
-            <a
-                class="post-action-btn btn btn--default btn-open-shareoptions"
-                href="#btn-open-shareoptions"
-                aria-label="Share this post"
-            >
-                <i class="fa fa-share-alt" aria-hidden="true"></i>
-            </a>
-        </li>
-        
-            
-            
-            <li class="post-action hide-xs">
-                <a
-                    class="post-action-btn btn btn--default"
-                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://example.com/2022/10/28/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92/"
-                    title="Share on Facebook"
-                    aria-label="Share on Facebook"
-                >
-                    <i class="fab fa-facebook" aria-hidden="true"></i>
-                </a>
-            </li>
-        
-            
-            
-            <li class="post-action hide-xs">
-                <a
-                    class="post-action-btn btn btn--default"
-                    target="new" href="https://twitter.com/intent/tweet?text=http://example.com/2022/10/28/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92/"
-                    title="Share on Twitter"
-                    aria-label="Share on Twitter"
-                >
-                    <i class="fab fa-twitter" aria-hidden="true"></i>
-                </a>
-            </li>
-        
-            
-            
-            <li class="post-action hide-xs">
-                <a
-                    class="post-action-btn btn btn--default"
-                    target="new" href="https://plus.google.com/share?url=http://example.com/2022/10/28/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92/"
-                    title="Share on Google+"
-                    aria-label="Share on Google+"
-                >
-                    <i class="fab fa-google-plus" aria-hidden="true"></i>
-                </a>
-            </li>
-        
-        
-            
-        
-        <li class="post-action">
-            
-                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
-            
-                <i class="fa fa-list" aria-hidden="true"></i>
-            </a>
-        </li>
-    </ul>
-</div>
-
-
-                </div>
-                
-    <div id="share-options-bar" class="share-options-bar" data-behavior="4">
-        <i id="btn-close-shareoptions" class="fa fa-times"></i>
-        <ul class="share-options">
-            
-                
-                
-                <li class="share-option">
-                    <a
-                        class="share-option-btn"
-                        target="new"
-                        href="https://www.facebook.com/sharer/sharer.php?u=http://example.com/2022/10/28/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92/"
-                        aria-label="Share on Facebook"
-                    >
-                        <i class="fab fa-facebook" aria-hidden="true"></i><span>Share on Facebook</span>
-                    </a>
-                </li>
-            
-                
-                
-                <li class="share-option">
-                    <a
-                        class="share-option-btn"
-                        target="new"
-                        href="https://twitter.com/intent/tweet?text=http://example.com/2022/10/28/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92/"
-                        aria-label="Share on Twitter"
-                    >
-                        <i class="fab fa-twitter" aria-hidden="true"></i><span>Share on Twitter</span>
-                    </a>
-                </li>
-            
-                
-                
-                <li class="share-option">
-                    <a
-                        class="share-option-btn"
-                        target="new"
-                        href="https://plus.google.com/share?url=http://example.com/2022/10/28/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92/"
-                        aria-label="Share on Google+"
-                    >
-                        <i class="fab fa-google-plus" aria-hidden="true"></i><span>Share on Google+</span>
-                    </a>
-                </li>
-            
-        </ul>
-    </div>
-
-
-            
-        </div>
-        
-
-
-<div id="about">
-    <div id="about-card">
-        <div id="about-btn-close">
-            <i class="fa fa-times"></i>
-        </div>
-        
-            <h4 id="about-card-name">陈宇韶chenyushao</h4>
-        
-            <div id="about-card-bio"><p>author.bio</p>
-</div>
-        
-        
-            <div id="about-card-job">
-                <i class="fa fa-briefcase"></i>
-                <br/>
-                <p>author.job</p>
-
-            </div>
-        
-        
-    </div>
-</div>
-
-        
-        
-<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
-        <!--SCRIPTS-->
-
-<script src="/assets/js/script-sbgpeqyl6jw5qe60mnfuzifzwky5la4ftiuwmschcdzx2pg5tfpl1pfp13e3.min.js"></script>
-
-<!--SCRIPTS END-->
-
 
     
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0-supervised-learning/" rel="tag"># 监督学习(supervised learning)</a>
+              <a href="/tags/%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92%EF%BC%88Linear-Regression%EF%BC%89/" rel="tag"># 线性回归（Linear Regression）</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/10/28/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97/" rel="prev" title="随机森林">
+                  <i class="fa fa-chevron-left"></i> 随机森林
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2022/10/28/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/svm/" rel="next" title="SVM">
+                  SVM <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
 
 
 
 
-    </body>
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">陈宇韶chenyushao</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+</body>
 </html>

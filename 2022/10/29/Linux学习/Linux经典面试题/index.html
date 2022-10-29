@@ -1,23 +1,26 @@
-
 <!DOCTYPE html>
 <html lang="en">
-    
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="generator" content="Tiger_pop&#39;s Blog">
-    <title>linux经典面试题 - Tiger_pop&#39;s Blog</title>
-    <meta name="author" content="陈宇韶chenyushao">
-    
-    
-    
-        
-            <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
-        
-    
-    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"陈宇韶chenyushao","sameAs":["https://github.com/","https://www.linkedin.com/profile/","mailto"]},"articleBody":"简介 \n\n1cat t.log | cut -d &#x27;/&#x27; -f 3 | sort | uniq -c | sort -nr -k 1    # cut 不能用空格来分割，awk 可以。uniq 可以把相邻的重复的行删除仅保留一行；-c 参数是用来统计相同行数量。sort -nr 从大到小排序，注意：sort 是对行 排序。 可以   man 命令 查看uniq 的相应用法 man uniq。\n\n\n\n\n1netstat -anp | more # 查看端口与协议的对应关系。\n\n\n\n12345 netstat -anp | grep &quot;ESTABLISHED&quot; | awk -F &quot; &quot; &#x27;&#123;print $5&#125;&#x27; | gawk -F &quot;:&quot; &#x27;&#123;print $1&#125;&#x27; | sort | uniq -c | sort -nr# awk/gawk -F &quot;分割标志&quot; &#x27;&#123;print $分割后的第n段&#125;&#x27; # awk 和 cut 很类似，但是awk 用面广一点。netstat -anp | grep &quot;ESTABLISHED&quot; | awk -F &#x27; &#x27; &#x27;&#123;print $5&#125;&#x27; | gawk -F &#x27;:&#x27; &#x27;&#123;print $1&#125;&#x27; | uniq -c | sort -nr -k 1 | awk -F &quot; &quot; &#x27;&#123;print $2&#125;&#x27;\n\n\n\n\n1234567891011121314151617181920212223vim /etc/my.cnf   \t\t\t\t\t\t\t\t\t# 更改mysql的进入密码设置。# my.cof 内添加如下内容：跳过权限表(空密码登录)。skip-grant-tables# 注释掉  validate_password=offsystemctl restart mysqld.service \t\t# 重启mysql服务mysql -u root -p  \t\t\t\t\t\t\t\t  # 空密码登录show databases;  \t\t\t\t\t\t\t\t\t\t# 会看见一个mysql 的数据库use mysql;show tables; \t\t\t\t\t\t\t\t\t\t\t  # 会看见一个user表desc user;\t\t\t\t\t\t\t\t\t\t\t\t  # 找到字段authentication_stringupdate user set authentication_string=password(&quot;mysql654321&quot;) where user=&#x27;root&#x27;;  \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t# 修改此字段更改初始密码为mysql654321flush privileges;  \t\t\t\t\t\t\t\t\t# 刷新mysql source 文件 linux 这样快速生效。exit;vim /etc/my.cof   \t\t\t\t\t\t\t\t\t# 去这里注释掉（空密码登录）# skip-grant-tables  systemctl restart mysqld.servicemysql -u root -p \t\t\t\t\t\t\t\t\t\t# 用新的密码登录。\n\n\n\n\n1cat access.log | awk -F &quot; &quot; &#x27;&#123;print $1&#125;&#x27; | sort | uniq -c | sort -nr | head -n 2\n\n\n\n\n12# 假如要用来监听的，本机网络设备是 ens160tcpdump -i ens160 host 192.168.200.1 and port 22 &gt;&gt; /home/tcpdump.log\n\n\n\n\n123rewrite # 重写ssl     # 安全加密\n\n\n\n\n\n123456789102) 注意事项1、注意权限分离，不要把权限集中在一个部门；2、权限最小化，尽可能少的给权限；3、用sudo 代替 root用户；4、用chatter 锁定一些关键文件夹的修改权限； # chattr +i /etc/passwd 给密码设置加锁，即便是root用户也呀解锁后才能改。chattr -i /etc/passwd 相应的解锁。# which chattr / find / -name chattr 都能找到chattr 脚本的位置，所以还能为了保险起见给chattr 移动位置或者改名，记住位置和新名字即可，复原后就又能解锁了。5、用rootkit hunter 工具检测 利用 rookit 搞的入侵。6、Tripwire 检测文件系统的完整性。\n\n\n\n\n\n12341、能读；不能修改；能删除（因为对上级目录有w的权限）。2、不能读；不能修改；不能删除。（因为上级目录都进不去，什么操作都做不了。）3、能读；不能修改（因为没w权限）；不能删除（因为没有w权限）。4、能读；不能修改（虽然有w权限，但是文件本身是只读的。）；能删除（虽然文件只读，但是上级目录有w权限，就能把文件直接删除。）。\n\n\n\n\n1# 大家直接去看韩顺平老师的讲解吧，太多了，跳过。\n\n\n\n\n12345678netstat     #网络状态监控top\t\t\t\t\t#系统运行状态lsblk\t\t\t\t#看出硬盘分区find\t\t\t\t#查找ps -aux\t\t\t#查看运行进程chkconfig\t\t#查看服务启动状态systemctl\t\t#管理系统服务器\n\n\n\n\n123456topiotop # 可能需要先yum 或者apt install iotopdf -lhnetstatps -aux | grep XXX\n\n\n\n\n\n123456789cat t2.txt | gawk -F &quot; &quot; &#x27;&#123;sum+=$2&#125; END &#123;print sum&#125;&#x27;150# awk脚本，这里不是shell 脚本，没有 $变量 等等写法。而且 BEGIN、END 一定要大写才能生效。关于 awk 脚本，我们需要注意两个关键词 BEGIN 和 END。1、BEGIN&#123; 这里面放的是执行前的语句 &#125;2、END &#123;这里面放的是处理完所有的行后要执行的语句 &#125;3、&#123;这里面放的是处理每一行时要执行的语句&#125;\n\n\n\n\n123456if [ -f 文件名 ]then\techo &quot;存在&quot;else \techo &quot;不存在&quot;fi\n\n\n\n\n123456789 8 7 6 5 4 3 2 10sort -nr t3.txt | awk -F &quot; &quot; &#x27;&#123;sum+=$1;print$1&#125; END &#123;print &quot;和等于：&quot;sum&#125;&#x27;# 注意求和的过程中要 print $1 不然只有最后的求和。如果这个是一行的话 cat t3.txt | xargs -n1 | sort -n | awk -F &quot; &quot; &#x27;BEGIN&#123;sum=0&#125;&#123;sum+=$1;print$1&#125;END&#123;print &quot;sumis&quot; sum&#125;&#x27; | awk &#x27;&#123;a=a&quot; &quot;$1&#125;END&#123;print a&#125;&#x27;# xargs -n1 是把 一行变成一列。然后就能用 sort 的行排序了。# &#123;a=a&quot; &quot;$1&#125;END&#123;print a&#125; 是又把列 转成行了，中间用空格隔开。\n\n\n\n\n12grep -r &quot;cat&quot; /home | cut -d &quot;:&quot; -f 1# grep -r 是连带着所有的内容递归过滤。\n\n\n\n\n123find /home -name &quot;*.*&quot; | wc -lfind /home -name &quot;*.*&quot; | xargs wc -l# find 会自动递归找。 *.* 会把隐藏的也显示。xargs 除了可以进行 行列转换以外，还能 把之前管道的整体内容，转为一行一行 套用到 后面的语句中执行。\n\n\n\n\n1234NginxHaproxykeepalivedLVS\n\n\n\n\n123456789101112vim /root/mail.sh  # 建立sh脚本# mail.sh文件内写入#!/bin/bashcd /var/spool &amp;&amp; /bin/tar -zcvf /home/`date +%Y-%m-%d_%H%M%S`.tar.gz /mail# ； 是都执行、&amp;&amp; 是 前面成功了再执行后面的命令、 ｜｜ 是 前面不成功 再执行后面。crontab -e      # 给sh脚本定时# 写入30 22 * * * /root/mail.sh # 可以检查一下定时文件是否okcrontab -l\n\n\n\n\n\n1234567891、用sudo2、定时自动更新，用阿里云等等。3、apt / yum 等等用国内源替换，或者用代理。4、有必要的端口才在防火墙打开，没用的端口关闭。5、打开最大文件数。vim /etc/profile ulimit -SHn 655356、配置合理的备份策略7、对nginx apache优化。8、用chattr锁定一些关键文件夹文件 /etc/passwd /etc/shadow /etc/inittab。等等。\n\n \n","dateCreated":"2022-10-29T15:42:07+08:00","dateModified":"2022-10-29T16:43:10+08:00","datePublished":"2022-10-29T15:42:07+08:00","description":"简介","headline":"linux经典面试题","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/Linux%E7%BB%8F%E5%85%B8%E9%9D%A2%E8%AF%95%E9%A2%98/"},"publisher":{"@type":"Organization","name":"陈宇韶chenyushao","sameAs":["https://github.com/","https://www.linkedin.com/profile/","mailto"]},"url":"http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/Linux%E7%BB%8F%E5%85%B8%E9%9D%A2%E8%AF%95%E9%A2%98/","keywords":"linux"}</script>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha256-AbA177XfpSnFEvgpYu1jMygiLabzPCJCRIBtR5jGc0k=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.13.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
     <meta name="description" content="这是文章开头，显示在主页面，详情请点击此处。">
-<meta property="og:type" content="blog">
+<meta property="og:type" content="article">
 <meta property="og:title" content="linux经典面试题">
 <meta property="og:url" content="http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/Linux%E7%BB%8F%E5%85%B8%E9%9D%A2%E8%AF%95%E9%A2%98/index.html">
 <meta property="og:site_name" content="Tiger_pop&#39;s Blog">
@@ -56,249 +59,209 @@
 <meta property="article:tag" content="linux">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/Linux%E7%BB%8F%E5%85%B8%E9%9D%A2%E8%AF%95%E9%A2%98/image-20220120124414838-7031132.png">
-    
-    
-        
-    
-    
-    
-    
-    
-    <!--STYLES-->
-    
-<link rel="stylesheet" href="/assets/css/style-yrbj4x87sme2npnaj5hmxl88fi8ktzpa1hwzrvan2almcpvu5niegj13ryff.min.css">
 
-    <!--STYLES END-->
-    
 
-    
+<link rel="canonical" href="http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/Linux%E7%BB%8F%E5%85%B8%E9%9D%A2%E8%AF%95%E9%A2%98/">
 
-    
-        
-    
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/Linux%E7%BB%8F%E5%85%B8%E9%9D%A2%E8%AF%95%E9%A2%98/","path":"2022/10/29/Linux学习/Linux经典面试题/","title":"linux经典面试题"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>linux经典面试题 | Tiger_pop's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="Tiger_pop's Blog" type="application/atom+xml">
 </head>
 
-    <body>
-        <div id="blog">
-            <!-- Define author's picture -->
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
 
-
-    
-
-<header id="header" data-behavior="4">
-    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
-    <div class="header-title">
-        <a
-            class="header-title-link"
-            href="/"
-            aria-label=""
-        >
-            Tiger_pop&#39;s Blog
-        </a>
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
     </div>
-    
-        
-            <a
-                class="header-right-picture "
-                href="#about"
-                aria-label="Open the link: /#about"
-            >
-        
-        
-        </a>
-    
-</header>
+  </div>
 
-            <!-- Define author's picture -->
+  <div class="site-meta">
 
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Tiger_pop's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">tiger_pop 的博客</p>
+  </div>
 
-<nav id="sidebar" data-behavior="4">
-    <div class="sidebar-container">
-        
-        
-            <ul class="sidebar-buttons">
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="/"
-                            
-                            rel="noopener"
-                            title="Home"
-                        >
-                        <i class="sidebar-button-icon fa fa-home" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Home</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="/all-categories"
-                            
-                            rel="noopener"
-                            title="Categories"
-                        >
-                        <i class="sidebar-button-icon fa fa-bookmark" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Categories</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="/all-tags"
-                            
-                            rel="noopener"
-                            title="Tags"
-                        >
-                        <i class="sidebar-button-icon fa fa-tags" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Tags</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="/all-archives"
-                            
-                            rel="noopener"
-                            title="Archives"
-                        >
-                        <i class="sidebar-button-icon fa fa-archive" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Archives</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="#about"
-                            
-                            rel="noopener"
-                            title="About"
-                        >
-                        <i class="sidebar-button-icon fa fa-question" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">About</span>
-                    </a>
-            </li>
-            
-        </ul>
-        
-            <ul class="sidebar-buttons">
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="https://github.com/"
-                            
-                                target="_blank"
-                            
-                            rel="noopener"
-                            title="GitHub"
-                        >
-                        <i class="sidebar-button-icon fab fa-github" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">GitHub</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="https://www.linkedin.com/profile/"
-                            
-                                target="_blank"
-                            
-                            rel="noopener"
-                            title="LinkedIn"
-                        >
-                        <i class="sidebar-button-icon fab fa-linkedin" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">LinkedIn</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="/mailto"
-                            
-                            rel="noopener"
-                            title="Mail"
-                        >
-                        <i class="sidebar-button-icon fa fa-envelope" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Mail</span>
-                    </a>
-            </li>
-            
-        </ul>
-        
-            <ul class="sidebar-buttons">
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="/atom.xml"
-                            
-                            rel="noopener"
-                            title="RSS"
-                        >
-                        <i class="sidebar-button-icon fa fa-rss" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">RSS</span>
-                    </a>
-            </li>
-            
-        </ul>
-        
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
     </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+  </ul>
 </nav>
 
-            
-            <div id="main" data-behavior="4"
-                 class="
-                        hasCoverMetaIn
-                        ">
-                
-<article class="post">
-    
-    
-        <div class="post-header main-content-wrap text-left">
-    
-        <h1 class="post-title">
-            linux经典面试题
-        </h1>
-    
-    
-        <div class="post-meta">
-    <time datetime="2022-10-29T15:42:07+08:00">
-	
-		    Oct 29, 2022
-    	
-    </time>
-    
-        <span>in </span>
+
+
+
+</div>
         
-    <a class="category-link" href="/categories/Linux/">Linux</a>
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
 
+  <aside class="sidebar">
 
-    
+    <div class="sidebar-inner sidebar-overview-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">陈宇韶chenyushao</p>
+  <div class="site-description" itemprop="description">爱学习、爱工作、爱生活</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">303</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">19</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">95</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
 </div>
 
-    
-</div>
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
 
     
-    <div class="post-content markdown">
-        <div class="main-content-wrap">
-            <p>简介 <span id="more"></span></p>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/Linux%E7%BB%8F%E5%85%B8%E9%9D%A2%E8%AF%95%E9%A2%98/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="陈宇韶chenyushao">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tiger_pop's Blog">
+      <meta itemprop="description" content="爱学习、爱工作、爱生活">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="linux经典面试题 | Tiger_pop's Blog">
+      <meta itemprop="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          linux经典面试题
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2022-10-29 15:42:07 / Modified: 16:43:10" itemprop="dateCreated datePublished" datetime="2022-10-29T15:42:07+08:00">2022-10-29</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+            <div class="post-description">这是文章开头，显示在主页面，详情请点击此处。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>简介 <span id="more"></span></p>
 <p><img src="/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/Linux%E7%BB%8F%E5%85%B8%E9%9D%A2%E8%AF%95%E9%A2%98/image-20220120124414838-7031132.png" alt="image-20220120124414838"></p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cat</span> t.log | <span class="built_in">cut</span> -d <span class="string">&#x27;/&#x27;</span> -f 3 | <span class="built_in">sort</span> | <span class="built_in">uniq</span> -c | <span class="built_in">sort</span> -nr -k 1    <span class="comment"># cut 不能用空格来分割，awk 可以。uniq 可以把相邻的重复的行删除仅保留一行；-c 参数是用来统计相同行数量。sort -nr 从大到小排序，注意：sort 是对行 排序。 可以   man 命令 查看uniq 的相应用法 man uniq。</span></span><br></pre></td></tr></table></figure>
 
@@ -402,324 +365,76 @@
 
 <p> <img src="/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/Linux%E7%BB%8F%E5%85%B8%E9%9D%A2%E8%AF%95%E9%A2%98/%E6%88%AA%E5%B1%8F2022-10-26%2017.31.21.jpg" alt="截屏2022-10-26 17.31.21"></p>
 
-            
-
-
-        </div>
     </div>
-    <div id="post-footer" class="post-footer main-content-wrap">
-        
-            <div class="post-footer-tags">
-                <span class="text-color-light text-small">TAGGED IN</span><br/>
-                
-    <a class="tag tag--primary tag--small t-none-link" href="/tags/linux/" rel="tag">linux</a>
-
-            </div>
-        
-        
-            <div class="post-actions-wrap">
-    <nav>
-        <ul class="post-actions post-action-nav">
-            <li class="post-action">
-                
-                    
-                <a
-                    class="post-action-btn btn btn--default tooltip--top"
-                    href="/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/Linux%E5%86%85%E6%A0%B8%E5%8D%87%E7%BA%A7/"
-                    data-tooltip="linux内核升级"
-                    aria-label="PREVIOUS: linux内核升级"
-                >
-                    
-                        <i class="fa fa-angle-left" aria-hidden="true"></i>
-                        <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
-                    </a>
-            </li>
-            <li class="post-action">
-                
-                    
-                <a
-                    class="post-action-btn btn btn--default tooltip--top"
-                    href="/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/Linux%E7%9B%AE%E5%BD%95%E6%96%87%E4%BB%B6/"
-                    data-tooltip="linux目录文件"
-                    aria-label="NEXT: linux目录文件"
-                >
-                    
-                        <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
-                        <i class="fa fa-angle-right" aria-hidden="true"></i>
-                    </a>
-            </li>
-        </ul>
-    </nav>
-    <ul class="post-actions post-action-share">
-        <li class="post-action hide-lg hide-md hide-sm">
-            <a
-                class="post-action-btn btn btn--default btn-open-shareoptions"
-                href="#btn-open-shareoptions"
-                aria-label="Share this post"
-            >
-                <i class="fa fa-share-alt" aria-hidden="true"></i>
-            </a>
-        </li>
-        
-            
-            
-            <li class="post-action hide-xs">
-                <a
-                    class="post-action-btn btn btn--default"
-                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/Linux%E7%BB%8F%E5%85%B8%E9%9D%A2%E8%AF%95%E9%A2%98/"
-                    title="Share on Facebook"
-                    aria-label="Share on Facebook"
-                >
-                    <i class="fab fa-facebook" aria-hidden="true"></i>
-                </a>
-            </li>
-        
-            
-            
-            <li class="post-action hide-xs">
-                <a
-                    class="post-action-btn btn btn--default"
-                    target="new" href="https://twitter.com/intent/tweet?text=http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/Linux%E7%BB%8F%E5%85%B8%E9%9D%A2%E8%AF%95%E9%A2%98/"
-                    title="Share on Twitter"
-                    aria-label="Share on Twitter"
-                >
-                    <i class="fab fa-twitter" aria-hidden="true"></i>
-                </a>
-            </li>
-        
-            
-            
-            <li class="post-action hide-xs">
-                <a
-                    class="post-action-btn btn btn--default"
-                    target="new" href="https://plus.google.com/share?url=http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/Linux%E7%BB%8F%E5%85%B8%E9%9D%A2%E8%AF%95%E9%A2%98/"
-                    title="Share on Google+"
-                    aria-label="Share on Google+"
-                >
-                    <i class="fab fa-google-plus" aria-hidden="true"></i>
-                </a>
-            </li>
-        
-        
-            
-        
-        <li class="post-action">
-            
-                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
-            
-                <i class="fa fa-list" aria-hidden="true"></i>
-            </a>
-        </li>
-    </ul>
-</div>
-
-
-        
-        
-            
-        
-    </div>
-</article>
-
-
-
-                <footer id="footer" class="main-content-wrap">
-    <span class="copyrights">
-        Copyrights &copy; 2022 陈宇韶chenyushao. All Rights Reserved.
-    </span>
-</footer>
-
-            </div>
-            
-                <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
-                    <div class="post-actions-wrap">
-    <nav>
-        <ul class="post-actions post-action-nav">
-            <li class="post-action">
-                
-                    
-                <a
-                    class="post-action-btn btn btn--default tooltip--top"
-                    href="/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/Linux%E5%86%85%E6%A0%B8%E5%8D%87%E7%BA%A7/"
-                    data-tooltip="linux内核升级"
-                    aria-label="PREVIOUS: linux内核升级"
-                >
-                    
-                        <i class="fa fa-angle-left" aria-hidden="true"></i>
-                        <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
-                    </a>
-            </li>
-            <li class="post-action">
-                
-                    
-                <a
-                    class="post-action-btn btn btn--default tooltip--top"
-                    href="/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/Linux%E7%9B%AE%E5%BD%95%E6%96%87%E4%BB%B6/"
-                    data-tooltip="linux目录文件"
-                    aria-label="NEXT: linux目录文件"
-                >
-                    
-                        <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
-                        <i class="fa fa-angle-right" aria-hidden="true"></i>
-                    </a>
-            </li>
-        </ul>
-    </nav>
-    <ul class="post-actions post-action-share">
-        <li class="post-action hide-lg hide-md hide-sm">
-            <a
-                class="post-action-btn btn btn--default btn-open-shareoptions"
-                href="#btn-open-shareoptions"
-                aria-label="Share this post"
-            >
-                <i class="fa fa-share-alt" aria-hidden="true"></i>
-            </a>
-        </li>
-        
-            
-            
-            <li class="post-action hide-xs">
-                <a
-                    class="post-action-btn btn btn--default"
-                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/Linux%E7%BB%8F%E5%85%B8%E9%9D%A2%E8%AF%95%E9%A2%98/"
-                    title="Share on Facebook"
-                    aria-label="Share on Facebook"
-                >
-                    <i class="fab fa-facebook" aria-hidden="true"></i>
-                </a>
-            </li>
-        
-            
-            
-            <li class="post-action hide-xs">
-                <a
-                    class="post-action-btn btn btn--default"
-                    target="new" href="https://twitter.com/intent/tweet?text=http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/Linux%E7%BB%8F%E5%85%B8%E9%9D%A2%E8%AF%95%E9%A2%98/"
-                    title="Share on Twitter"
-                    aria-label="Share on Twitter"
-                >
-                    <i class="fab fa-twitter" aria-hidden="true"></i>
-                </a>
-            </li>
-        
-            
-            
-            <li class="post-action hide-xs">
-                <a
-                    class="post-action-btn btn btn--default"
-                    target="new" href="https://plus.google.com/share?url=http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/Linux%E7%BB%8F%E5%85%B8%E9%9D%A2%E8%AF%95%E9%A2%98/"
-                    title="Share on Google+"
-                    aria-label="Share on Google+"
-                >
-                    <i class="fab fa-google-plus" aria-hidden="true"></i>
-                </a>
-            </li>
-        
-        
-            
-        
-        <li class="post-action">
-            
-                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
-            
-                <i class="fa fa-list" aria-hidden="true"></i>
-            </a>
-        </li>
-    </ul>
-</div>
-
-
-                </div>
-                
-    <div id="share-options-bar" class="share-options-bar" data-behavior="4">
-        <i id="btn-close-shareoptions" class="fa fa-times"></i>
-        <ul class="share-options">
-            
-                
-                
-                <li class="share-option">
-                    <a
-                        class="share-option-btn"
-                        target="new"
-                        href="https://www.facebook.com/sharer/sharer.php?u=http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/Linux%E7%BB%8F%E5%85%B8%E9%9D%A2%E8%AF%95%E9%A2%98/"
-                        aria-label="Share on Facebook"
-                    >
-                        <i class="fab fa-facebook" aria-hidden="true"></i><span>Share on Facebook</span>
-                    </a>
-                </li>
-            
-                
-                
-                <li class="share-option">
-                    <a
-                        class="share-option-btn"
-                        target="new"
-                        href="https://twitter.com/intent/tweet?text=http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/Linux%E7%BB%8F%E5%85%B8%E9%9D%A2%E8%AF%95%E9%A2%98/"
-                        aria-label="Share on Twitter"
-                    >
-                        <i class="fab fa-twitter" aria-hidden="true"></i><span>Share on Twitter</span>
-                    </a>
-                </li>
-            
-                
-                
-                <li class="share-option">
-                    <a
-                        class="share-option-btn"
-                        target="new"
-                        href="https://plus.google.com/share?url=http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/Linux%E7%BB%8F%E5%85%B8%E9%9D%A2%E8%AF%95%E9%A2%98/"
-                        aria-label="Share on Google+"
-                    >
-                        <i class="fab fa-google-plus" aria-hidden="true"></i><span>Share on Google+</span>
-                    </a>
-                </li>
-            
-        </ul>
-    </div>
-
-
-            
-        </div>
-        
-
-
-<div id="about">
-    <div id="about-card">
-        <div id="about-btn-close">
-            <i class="fa fa-times"></i>
-        </div>
-        
-            <h4 id="about-card-name">陈宇韶chenyushao</h4>
-        
-            <div id="about-card-bio"><p>author.bio</p>
-</div>
-        
-        
-            <div id="about-card-job">
-                <i class="fa fa-briefcase"></i>
-                <br/>
-                <p>author.job</p>
-
-            </div>
-        
-        
-    </div>
-</div>
-
-        
-        
-<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
-        <!--SCRIPTS-->
-
-<script src="/assets/js/script-sbgpeqyl6jw5qe60mnfuzifzwky5la4ftiuwmschcdzx2pg5tfpl1pfp13e3.min.js"></script>
-
-<!--SCRIPTS END-->
-
 
     
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/linux/" rel="tag"># linux</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/Mac%E5%86%85vmware%E8%B0%83%E5%88%86%E8%BE%A8%E7%8E%87/" rel="prev" title="Mac内vmware调分辨率">
+                  <i class="fa fa-chevron-left"></i> Mac内vmware调分辨率
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/Linux%E7%9B%AE%E5%BD%95%E6%96%87%E4%BB%B6/" rel="next" title="linux目录文件">
+                  linux目录文件 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
 
 
 
 
-    </body>
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">陈宇韶chenyushao</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+</body>
 </html>
