@@ -1,0 +1,642 @@
+
+<!DOCTYPE html>
+<html lang="en">
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Tiger_pop&#39;s Blog">
+    <title>linux远程登录 - Tiger_pop&#39;s Blog</title>
+    <meta name="author" content="陈宇韶chenyushao">
+    
+    
+    
+        
+            <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
+        
+    
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"陈宇韶chenyushao","sameAs":["https://github.com/","https://www.linkedin.com/profile/","mailto"]},"articleBody":"简介 \n    Linux服务器是公网上小组共享的。\n\nWindows​\t\tXshell 是一款不错的Windows远程登录Linux的软件，解决了中文乱码。可以在Windows下访问不同系统的服务器。选家用下载即可。\nhttps://www.netsarang.com/en/free-for-home-school/\nmacOS​\t\tFinalShell 是一款国内开发的服务器网络管理软件，运维工具。\nLinux​\t\tTermius是一款全平台的SSH客户端，该软件最大的特点就是支持全部平台，包括Windows、Mac、Linux、iOS、Android等，有了移动设备支持，只要有网络，你可以在任何时间地点管理服务器。\n操作(1、局域网概念补充)（补充：在同一局域网内，同一个无线局域网：\n查看两台设备的ip4地址和子网掩码。若子网掩码不一样，则不在同一局域网内。若一样，分别计算IP&amp;MASK，若二者相同，则在同一局域网内，否则不在同一局域网。\n​\t\t\n192.168.0.101 &amp; 255.255.255.0 &#x3D; 192.168.0.0\n192.168.0.105 &amp; 255.255.255.0 &#x3D; 192.168.0.0\n二者结果相同，故在同一局域网内，一般来说，IP前三个一致，就会在同一个局域网内。\n​\t\t假设电脑A、B均在192.168.0.X的网段内，两台电脑不需要额外设置，就可以互相ping的通。如果ping不通，包括但不限于的原因有：\n\n目标主机的防火墙没关\n目标主机有电脑管家&#x2F;360等防护软件\n针对多台机器连接Wi-Fi这种类型的局域网，有的路由器开启了ap隔离，需要关闭，有时候重启一下路由器问题就解决了。\n\n）\n(2、Linux开启接受远程访问概念补充 )​\t\t先在本地端 ping 一下 远程端IP试试能不能通。（用 ifconfig命令 查看远程端局域网的IP。）\n​\t\t接着检查远程端是不是已经安装或启用了ssh服务，执行：\n1ps -e | grep ssh\n\n​\t\t如果有sshd，证明你已经装好了ssh-server并已启用，当然就可以不用往下看了，如果没有sshd则：\n1sudo apt install openssh-server\n\n​\t\t再执行\n1ps -e | grep ssh\n\n​\t\t发现多了sshd,远程连接本电脑就已经启用了。此时就可以用ssh在本地端登录远程端了。在本地端输入 如：\n12ssh &#x27;远程端那台电脑的用户名&#x27;@&#x27;远程端那台电脑局域网IP&#x27;    // 登录；然后输入远程端用户对应的密码即可成功连接。logout &#x27;远程端那台电脑局域网IP&#x27;                      // 退出\n\n​\t\t如果中途断掉了链接，可以重启路由器或者重启远程端主机ssh服务，再重新链接。\n（用finalshell在mac登录局域网内另一台ubuntu机器桌面，模拟远程登录服务器实验）​\t\t确保1、本地端和远程端在同一局域网；2远程端开启了接受远程访问。\n​\t\tfinalshell 可以选择远程端用户的账户密码或者私钥公钥方式登录。以下主机IP 就是  ‘远程端那台电脑局域网IP’。\n​\t\t1、若选择私钥公钥方式，用命令生成 ssh私钥和公钥。先在确保公钥已经在服务器上了，再以ssh方式输入私钥连接远程服务器。\n\n（注意：finalshell 使用的密钥格式为 PEM格式。用以下命令生成。生成的私钥公钥 会最好还是放在 隐藏的 .ssh文件夹内，其中 pub结尾的文件是公钥。）\n1ssh-keygen -m PEM -t rsa -C &quot;注释&quot;\t\t\n\n​\t\t2、若选择账号密码登录，指的就是远程服务器中的用户名和密码。\n\n​\t\t(启用Exec 那个小勾可以不勾也可以勾。我在这个连接局域网Ubuntu这个实验里没有勾。)\n","dateCreated":"2022-10-29T15:42:07+08:00","dateModified":"2022-10-29T16:39:56+08:00","datePublished":"2022-10-29T15:42:07+08:00","description":"简介","headline":"linux远程登录","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E8%BF%9C%E7%A8%8B%E7%99%BB%E5%BD%95/"},"publisher":{"@type":"Organization","name":"陈宇韶chenyushao","sameAs":["https://github.com/","https://www.linkedin.com/profile/","mailto"]},"url":"http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E8%BF%9C%E7%A8%8B%E7%99%BB%E5%BD%95/","keywords":"linux"}</script>
+    <meta name="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="linux远程登录">
+<meta property="og:url" content="http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E8%BF%9C%E7%A8%8B%E7%99%BB%E5%BD%95/index.html">
+<meta property="og:site_name" content="Tiger_pop&#39;s Blog">
+<meta property="og:description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E8%BF%9C%E7%A8%8B%E7%99%BB%E5%BD%95/image-20220109103823793.png">
+<meta property="og:image" content="http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E8%BF%9C%E7%A8%8B%E7%99%BB%E5%BD%95/image-20220109195456083.png">
+<meta property="og:image" content="http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E8%BF%9C%E7%A8%8B%E7%99%BB%E5%BD%95/image-20220109195259480-7030980.png">
+<meta property="article:published_time" content="2022-10-29T07:42:07.000Z">
+<meta property="article:modified_time" content="2022-10-29T08:39:56.399Z">
+<meta property="article:author" content="陈宇韶chenyushao">
+<meta property="article:tag" content="linux">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E8%BF%9C%E7%A8%8B%E7%99%BB%E5%BD%95/image-20220109103823793.png">
+    
+    
+        
+    
+    
+    
+    
+    
+    <!--STYLES-->
+    
+<link rel="stylesheet" href="/assets/css/style-yrbj4x87sme2npnaj5hmxl88fi8ktzpa1hwzrvan2almcpvu5niegj13ryff.min.css">
+
+    <!--STYLES END-->
+    
+
+    
+
+    
+        
+    
+</head>
+
+    <body>
+        <div id="blog">
+            <!-- Define author's picture -->
+
+
+    
+
+<header id="header" data-behavior="4">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <div class="header-title">
+        <a
+            class="header-title-link"
+            href="/"
+            aria-label=""
+        >
+            Tiger_pop&#39;s Blog
+        </a>
+    </div>
+    
+        
+            <a
+                class="header-right-picture "
+                href="#about"
+                aria-label="Open the link: /#about"
+            >
+        
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+<nav id="sidebar" data-behavior="4">
+    <div class="sidebar-container">
+        
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/"
+                            
+                            rel="noopener"
+                            title="Home"
+                        >
+                        <i class="sidebar-button-icon fa fa-home" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Home</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-categories"
+                            
+                            rel="noopener"
+                            title="Categories"
+                        >
+                        <i class="sidebar-button-icon fa fa-bookmark" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Categories</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-tags"
+                            
+                            rel="noopener"
+                            title="Tags"
+                        >
+                        <i class="sidebar-button-icon fa fa-tags" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Tags</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-archives"
+                            
+                            rel="noopener"
+                            title="Archives"
+                        >
+                        <i class="sidebar-button-icon fa fa-archive" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Archives</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="#about"
+                            
+                            rel="noopener"
+                            title="About"
+                        >
+                        <i class="sidebar-button-icon fa fa-question" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">About</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://github.com/"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="GitHub"
+                        >
+                        <i class="sidebar-button-icon fab fa-github" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">GitHub</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://www.linkedin.com/profile/"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="LinkedIn"
+                        >
+                        <i class="sidebar-button-icon fab fa-linkedin" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">LinkedIn</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/mailto"
+                            
+                            rel="noopener"
+                            title="Mail"
+                        >
+                        <i class="sidebar-button-icon fa fa-envelope" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Mail</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/atom.xml"
+                            
+                            rel="noopener"
+                            title="RSS"
+                        >
+                        <i class="sidebar-button-icon fa fa-rss" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">RSS</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+    </div>
+</nav>
+
+            
+            <div id="main" data-behavior="4"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post">
+    
+    
+        <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title">
+            linux远程登录
+        </h1>
+    
+    
+        <div class="post-meta">
+    <time datetime="2022-10-29T15:42:07+08:00">
+	
+		    Oct 29, 2022
+    	
+    </time>
+    
+        <span>in </span>
+        
+    <a class="category-link" href="/categories/Linux/">Linux</a>
+
+
+    
+</div>
+
+    
+</div>
+
+    
+    <div class="post-content markdown">
+        <div class="main-content-wrap">
+            <p>简介 <span id="more"></span></p>
+<pre><code>    Linux服务器是公网上小组共享的。
+</code></pre>
+<h1 id="Windows"><a href="#Windows" class="headerlink" title="Windows"></a>Windows</h1><p>​		Xshell 是一款不错的Windows远程登录Linux的软件，解决了中文乱码。可以在Windows下访问不同系统的服务器。选家用下载即可。</p>
+<p><a target="_blank" rel="noopener" href="https://www.netsarang.com/en/free-for-home-school/">https://www.netsarang.com/en/free-for-home-school/</a></p>
+<h1 id="macOS"><a href="#macOS" class="headerlink" title="macOS"></a>macOS</h1><p>​		FinalShell 是一款国内开发的服务器网络管理软件，运维工具。</p>
+<h1 id="Linux"><a href="#Linux" class="headerlink" title="Linux"></a>Linux</h1><p>​		<a target="_blank" rel="noopener" href="https://termius.com/">Termius</a>是一款全平台的SSH客户端，该软件最大的特点就是支持全部平台，包括Windows、Mac、Linux、iOS、Android等，有了移动设备支持，只要有网络，你可以在任何时间地点管理服务器。</p>
+<h1 id="操作"><a href="#操作" class="headerlink" title="操作"></a>操作</h1><h2 id="1、局域网概念补充"><a href="#1、局域网概念补充" class="headerlink" title="(1、局域网概念补充)"></a>(1、局域网概念补充)</h2><p>（补充：在同一局域网内，同一个无线局域网：</p>
+<p>查看两台设备的ip4地址和子网掩码。若子网掩码不一样，则不在同一局域网内。若一样，分别计算IP&amp;MASK，若二者相同，则在同一局域网内，否则不在同一局域网。</p>
+<p>​		<img src="/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E8%BF%9C%E7%A8%8B%E7%99%BB%E5%BD%95/image-20220109103823793.png" alt="image-20220109103823793"></p>
+<p><strong>192.168.0.101 &amp; 255.255.255.0 &#x3D; 192.168.0.0</strong></p>
+<p><strong>192.168.0.105 &amp; 255.255.255.0 &#x3D; 192.168.0.0</strong></p>
+<p>二者结果相同，故在同一局域网内，一般来说，IP前三个一致，就会在同一个局域网内。</p>
+<p>​		假设电脑A、B均在192.168.0.X的网段内，两台电脑不需要额外设置，就可以互相ping的通。如果ping不通，包括但不限于的原因有：</p>
+<ul>
+<li>目标主机的防火墙没关</li>
+<li>目标主机有电脑管家&#x2F;360等防护软件</li>
+<li>针对多台机器连接Wi-Fi这种类型的局域网，有的路由器开启了ap隔离，需要关闭，有时候重启一下路由器问题就解决了。</li>
+</ul>
+<p>）</p>
+<h2 id="2、Linux开启接受远程访问概念补充"><a href="#2、Linux开启接受远程访问概念补充" class="headerlink" title="(2、Linux开启接受远程访问概念补充 )"></a>(2、Linux开启接受远程访问概念补充 )</h2><p>​		先在本地端 ping 一下 远程端IP试试能不能通。（用 ifconfig命令 查看远程端局域网的IP。）</p>
+<p>​		接着检查远程端是不是已经安装或启用了ssh服务，执行：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ps -e | grep ssh</span><br></pre></td></tr></table></figure>
+
+<p>​		如果有sshd，证明你已经装好了ssh-server并已启用，当然就可以不用往下看了，如果没有sshd则：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install openssh-server</span><br></pre></td></tr></table></figure>
+
+<p>​		再执行</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ps -e | grep ssh</span><br></pre></td></tr></table></figure>
+
+<p>​		发现多了sshd,远程连接本电脑就已经启用了。此时就可以用ssh在本地端登录远程端了。在本地端输入 如：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ssh &#x27;远程端那台电脑的用户名&#x27;@&#x27;远程端那台电脑局域网IP&#x27;    // 登录；然后输入远程端用户对应的密码即可成功连接。</span><br><span class="line">logout &#x27;远程端那台电脑局域网IP&#x27;                      // 退出</span><br></pre></td></tr></table></figure>
+
+<p>​		如果中途断掉了链接，可以重启路由器或者重启远程端主机ssh服务，再重新链接。</p>
+<h2 id="（用finalshell在mac登录局域网内另一台ubuntu机器桌面，模拟远程登录服务器实验）"><a href="#（用finalshell在mac登录局域网内另一台ubuntu机器桌面，模拟远程登录服务器实验）" class="headerlink" title="（用finalshell在mac登录局域网内另一台ubuntu机器桌面，模拟远程登录服务器实验）"></a>（用finalshell在mac登录局域网内另一台ubuntu机器桌面，模拟远程登录服务器实验）</h2><p>​		确保1、本地端和远程端在同一局域网；2远程端开启了接受远程访问。</p>
+<p>​		finalshell 可以选择远程端用户的账户密码或者私钥公钥方式登录。以下主机IP 就是  ‘远程端那台电脑局域网IP’。</p>
+<p>​		1、若选择私钥公钥方式，用命令生成 ssh私钥和公钥。先在确保公钥已经在服务器上了，再以ssh方式输入私钥连接远程服务器。</p>
+<p><img src="/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E8%BF%9C%E7%A8%8B%E7%99%BB%E5%BD%95/image-20220109195456083.png" alt="image-20220109195456083"></p>
+<p>（注意：finalshell 使用的密钥格式为 PEM格式。用以下命令生成。生成的私钥公钥 会最好还是放在 隐藏的 .ssh文件夹内，其中 pub结尾的文件是公钥。）</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-keygen -m PEM -t rsa -C &quot;注释&quot;		</span><br></pre></td></tr></table></figure>
+
+<p>​		2、若选择账号密码登录，指的就是远程服务器中的用户名和密码。</p>
+<p><img src="/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E8%BF%9C%E7%A8%8B%E7%99%BB%E5%BD%95/image-20220109195259480-7030980.png" alt="image-20220109195259480"></p>
+<p>​		(启用Exec 那个小勾可以不勾也可以勾。我在这个连接局域网Ubuntu这个实验里没有勾。)</p>
+
+            
+
+
+        </div>
+    </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
+        
+            <div class="post-footer-tags">
+                <span class="text-color-light text-small">TAGGED IN</span><br/>
+                
+    <a class="tag tag--primary tag--small t-none-link" href="/tags/linux/" rel="tag">linux</a>
+
+            </div>
+        
+        
+            <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/"
+                    data-tooltip="linux进程管理"
+                    aria-label="PREVIOUS: linux进程管理"
+                >
+                    
+                        <i class="fa fa-angle-left" aria-hidden="true"></i>
+                        <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+                    </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E5%92%8Cflume%E7%9A%84%E9%9B%86%E6%88%90/"
+                    data-tooltip="kafka和flume的集成"
+                    aria-label="NEXT: kafka和flume的集成"
+                >
+                    
+                        <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                    </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a
+                class="post-action-btn btn btn--default btn-open-shareoptions"
+                href="#btn-open-shareoptions"
+                aria-label="Share this post"
+            >
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E8%BF%9C%E7%A8%8B%E7%99%BB%E5%BD%95/"
+                    title="Share on Facebook"
+                    aria-label="Share on Facebook"
+                >
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://twitter.com/intent/tweet?text=http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E8%BF%9C%E7%A8%8B%E7%99%BB%E5%BD%95/"
+                    title="Share on Twitter"
+                    aria-label="Share on Twitter"
+                >
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://plus.google.com/share?url=http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E8%BF%9C%E7%A8%8B%E7%99%BB%E5%BD%95/"
+                    title="Share on Google+"
+                    aria-label="Share on Google+"
+                >
+                    <i class="fab fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+        
+        
+            
+        
+    </div>
+</article>
+
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2022 陈宇韶chenyushao. All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/"
+                    data-tooltip="linux进程管理"
+                    aria-label="PREVIOUS: linux进程管理"
+                >
+                    
+                        <i class="fa fa-angle-left" aria-hidden="true"></i>
+                        <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+                    </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E5%92%8Cflume%E7%9A%84%E9%9B%86%E6%88%90/"
+                    data-tooltip="kafka和flume的集成"
+                    aria-label="NEXT: kafka和flume的集成"
+                >
+                    
+                        <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                    </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a
+                class="post-action-btn btn btn--default btn-open-shareoptions"
+                href="#btn-open-shareoptions"
+                aria-label="Share this post"
+            >
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E8%BF%9C%E7%A8%8B%E7%99%BB%E5%BD%95/"
+                    title="Share on Facebook"
+                    aria-label="Share on Facebook"
+                >
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://twitter.com/intent/tweet?text=http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E8%BF%9C%E7%A8%8B%E7%99%BB%E5%BD%95/"
+                    title="Share on Twitter"
+                    aria-label="Share on Twitter"
+                >
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://plus.google.com/share?url=http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E8%BF%9C%E7%A8%8B%E7%99%BB%E5%BD%95/"
+                    title="Share on Google+"
+                    aria-label="Share on Google+"
+                >
+                    <i class="fab fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+                </div>
+                
+    <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+        <i id="btn-close-shareoptions" class="fa fa-times"></i>
+        <ul class="share-options">
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="https://www.facebook.com/sharer/sharer.php?u=http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E8%BF%9C%E7%A8%8B%E7%99%BB%E5%BD%95/"
+                        aria-label="Share on Facebook"
+                    >
+                        <i class="fab fa-facebook" aria-hidden="true"></i><span>Share on Facebook</span>
+                    </a>
+                </li>
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="https://twitter.com/intent/tweet?text=http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E8%BF%9C%E7%A8%8B%E7%99%BB%E5%BD%95/"
+                        aria-label="Share on Twitter"
+                    >
+                        <i class="fab fa-twitter" aria-hidden="true"></i><span>Share on Twitter</span>
+                    </a>
+                </li>
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="https://plus.google.com/share?url=http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E8%BF%9C%E7%A8%8B%E7%99%BB%E5%BD%95/"
+                        aria-label="Share on Google+"
+                    >
+                        <i class="fab fa-google-plus" aria-hidden="true"></i><span>Share on Google+</span>
+                    </a>
+                </li>
+            
+        </ul>
+    </div>
+
+
+            
+        </div>
+        
+
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-times"></i>
+        </div>
+        
+            <h4 id="about-card-name">陈宇韶chenyushao</h4>
+        
+            <div id="about-card-bio"><p>author.bio</p>
+</div>
+        
+        
+            <div id="about-card-job">
+                <i class="fa fa-briefcase"></i>
+                <br/>
+                <p>author.job</p>
+
+            </div>
+        
+        
+    </div>
+</div>
+
+        
+        
+<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
+        <!--SCRIPTS-->
+
+<script src="/assets/js/script-sbgpeqyl6jw5qe60mnfuzifzwky5la4ftiuwmschcdzx2pg5tfpl1pfp13e3.min.js"></script>
+
+<!--SCRIPTS END-->
+
+
+    
+
+
+
+
+    </body>
+</html>

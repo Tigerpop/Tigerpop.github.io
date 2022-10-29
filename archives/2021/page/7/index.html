@@ -658,23 +658,23 @@
                     
                         <a
                             class="link-unstyled"
-                            href="/2021/09/27/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/101.%20%E5%AF%B9%E7%A7%B0%E4%BA%8C%E5%8F%89%E6%A0%91/"
-                            aria-label=": 101. 对称二叉树"
+                            href="/2021/12/15/conda%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83%E4%B8%AD%E7%94%A8pip%E5%AE%89%E8%A3%85%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9/conda%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83%E4%B8%AD%E7%94%A8pip%E5%AE%89%E8%A3%85%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9/"
+                            aria-label=": conda虚拟环境中用pip安装注意事项"
                         >
-                            101. 对称二叉树
+                            conda虚拟环境中用pip安装注意事项
                         </a>
                     
                 </h1>
                 <div class="postShorten-meta">
-    <time datetime="2021-09-27T20:00:36+08:00">
+    <time datetime="2021-12-15T13:02:10+08:00">
 	
-		    Sep 27, 2021
+		    Dec 15, 2021
     	
     </time>
     
         <span>in </span>
         
-    <a class="category-link" href="/categories/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/">leecode刷题复习</a>
+    <a class="category-link" href="/categories/anaconda/">anaconda</a>
 
 
     
@@ -683,8 +683,14 @@
             </div>
             
                 <div class="postShorten-content">
-                    <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Definition for a binary tree node.</span></span><br><span class="line"><span class="comment"># class TreeNode:</span></span><br><span class="line"><span class="comment">#     def __init__(self, val=0, left=None, right=None):</span></span><br><span class="line"><span class="comment">#         self.val = val</span></span><br><span class="line"><span class="comment">#         self.left = left</span></span><br><span class="line"><span class="comment">#         self.right = right</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">isSymmetric</span>(<span class="params">self, root: <span class="type">Optional</span>[TreeNode]</span>) -&gt; <span class="built_in">bool</span>: </span><br><span class="line">        <span class="comment"># print(root.left.val,root.right.val)</span></span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">Symmetric</span>(<span class="params">a,b</span>):</span><br><span class="line">            <span class="keyword">if</span> (a <span class="keyword">and</span> b <span class="keyword">and</span> a.val != b.val) <span class="keyword">or</span> (a <span class="keyword">and</span> b==<span class="literal">None</span>) <span class="keyword">or</span> (a==<span class="literal">None</span> <span class="keyword">and</span> b) :</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line">            <span class="keyword">if</span> (a==<span class="literal">None</span> <span class="keyword">and</span> b==<span class="literal">None</span>):</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">True</span>  </span><br><span class="line">            <span class="keyword">if</span> (a.val==b.val):</span><br><span class="line">                result1 = Symmetric(a.left,b.right)</span><br><span class="line">                result2 = Symmetric(a.right,b.left)</span><br><span class="line">                <span class="keyword">if</span> result1 != <span class="literal">False</span> <span class="keyword">and</span> result2 != <span class="literal">False</span>:</span><br><span class="line">                    <span class="keyword">return</span> <span class="literal">True</span> </span><br><span class="line">                <span class="keyword">else</span>:</span><br><span class="line">                    <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line">        <span class="keyword">return</span> Symmetric(root.left,root.right)</span><br></pre></td></tr></table></figure>
-
+                    <p>   进入conda 虚拟环境 ，pip最好指定安装位置，到相应虚拟环境的site-package，以防安装位置错乱。</p>
+<p>具体操作流程：</p>
+<ol>
+<li>先进入conda 的虚拟环境，用pip -V 查看 相应虚拟环境里的pip 对应的site-package 位置。<br>例如： &#x2F;Users&#x2F;chenyushao&#x2F;anaconda3&#x2F;envs&#x2F;xgb&#x2F;lib&#x2F;python3.7&#x2F;site-packages&#x2F;pip (python 3.7)</li>
+<li>（以例子说明）在对应的虚拟环境中<br>sudo pip install 【包名】 –target&#x3D;&#x2F;Users&#x2F;chenyushao&#x2F;anaconda3&#x2F;envs&#x2F;xgb&#x2F;lib&#x2F;python3.7&#x2F;site-packages</li>
+</ol>
+<p>（还可以在此基础上补充用清华或者中科院的源提高下载速度）<br>sudo pip install 【包名】 –target&#x3D;&#x2F;Users&#x2F;chenyushao&#x2F;anaconda3&#x2F;envs&#x2F;xgb&#x2F;lib&#x2F;python3.7&#x2F;site-packages -i <a target="_blank" rel="noopener" href="https://pypi.mirrors.ustc.edu.cn/simple">https://pypi.mirrors.ustc.edu.cn/simple</a></p>
+<p>按照 1-2 步骤操作后，就仅在当前虚拟环境中安装了此包，与base的环境、其他环境没有关系。尤其注意：进入虚拟环境后直接pip安装，有可能会安装到base环境的pip下载汇总中，也有可能下载到基础环境的pip下载汇总中。</p>
 
                     
                         
@@ -694,7 +700,7 @@
                     
                         <p>
                             <a
-                                href="/2021/09/27/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/101.%20%E5%AF%B9%E7%A7%B0%E4%BA%8C%E5%8F%89%E6%A0%91/#post-footer"
+                                href="/2021/12/15/conda%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83%E4%B8%AD%E7%94%A8pip%E5%AE%89%E8%A3%85%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9/conda%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83%E4%B8%AD%E7%94%A8pip%E5%AE%89%E8%A3%85%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9/#post-footer"
                                 class="postShorten-excerpt_link link"
                                 aria-label=""
                             >
@@ -709,7 +715,7 @@
     </article>
     
     
-    <article class="postShorten postShorten--thumbnailimg-bottom">
+    <article class="postShorten postShorten--thumbnailimg-right">
         <div class="postShorten-wrap">
             
             <div class="postShorten-header">
@@ -717,10 +723,10 @@
                     
                         <a
                             class="link-unstyled"
-                            href="/2021/09/27/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/106.%20%E4%BB%8E%E4%B8%AD%E5%BA%8F%E4%B8%8E%E5%90%8E%E5%BA%8F%E9%81%8D%E5%8E%86%E5%BA%8F%E5%88%97%E6%9E%84%E9%80%A0%E4%BA%8C%E5%8F%89%E6%A0%91/"
-                            aria-label=": 106. 从中序与后序遍历序列构造二叉树"
+                            href="/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/10%E4%BA%8C%E5%8F%89%E6%A0%91%E9%9D%9E%E9%80%92%E5%BD%92%E9%81%8D%E5%8E%86/"
+                            aria-label=": 10二叉树非递归遍历"
                         >
-                            106. 从中序与后序遍历序列构造二叉树
+                            10二叉树非递归遍历
                         </a>
                     
                 </h1>
@@ -733,7 +739,7 @@
     
         <span>in </span>
         
-    <a class="category-link" href="/categories/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/">leecode刷题复习</a>
+    <a class="category-link" href="/categories/%E6%B5%99%E5%A4%A7%E7%AE%97%E6%B3%95%E4%B8%8E%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B-python%E5%AE%9E%E7%8E%B0/">浙大算法与数据结构课程(python实现)</a>
 
 
     
@@ -741,25 +747,17 @@
 
             </div>
             
-                <div class="postShorten-content">
-                    <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Definition for a binary tree node.</span></span><br><span class="line"><span class="comment"># class TreeNode:</span></span><br><span class="line"><span class="comment">#     def __init__(self, val=0, left=None, right=None):</span></span><br><span class="line"><span class="comment">#         self.val = val</span></span><br><span class="line"><span class="comment">#         self.left = left</span></span><br><span class="line"><span class="comment">#         self.right = right</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">buildTree</span>(<span class="params">self, inorder: <span class="type">List</span>[<span class="built_in">int</span>], postorder: <span class="type">List</span>[<span class="built_in">int</span>]</span>) -&gt; <span class="type">Optional</span>[TreeNode]:</span><br><span class="line">        <span class="comment"># 基线条件</span></span><br><span class="line">        <span class="keyword">if</span> inorder==[]: <span class="keyword">return</span> <span class="literal">None</span>    <span class="comment"># 空</span></span><br><span class="line">        root = TreeNode(postorder[-<span class="number">1</span>])  <span class="comment"># 定根节点</span></span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">len</span>(inorder)==<span class="number">1</span>: <span class="keyword">return</span> root <span class="comment"># 叶子结点</span></span><br><span class="line"></span><br><span class="line">        root_value = postorder[-<span class="number">1</span>]</span><br><span class="line">        <span class="keyword">for</span> index <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>,<span class="built_in">len</span>(inorder)):  <span class="comment"># 找根节点在中序遍历中的位置</span></span><br><span class="line">            <span class="keyword">if</span> inorder[index]==root_value:</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">        left_inorder,right_inorder = inorder[:index],inorder[index+<span class="number">1</span>:] <span class="comment"># 再切割</span></span><br><span class="line">        left_postorder,right_postorder = postorder[:index],postorder[index:-<span class="number">1</span>]</span><br><span class="line">        root.left = self.buildTree(left_inorder,left_postorder)  <span class="comment"># 构建树</span></span><br><span class="line">        root.right = self.buildTree(right_inorder,right_postorder)</span><br><span class="line">        <span class="keyword">return</span> root</span><br></pre></td></tr></table></figure>
-
-
+                <div class="postShorten-excerpt">
+                    <figure class="highlight python"><figcaption><span></span></figcaption></figure>
                     
+                        <a
+                            href="/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/10%E4%BA%8C%E5%8F%89%E6%A0%91%E9%9D%9E%E9%80%92%E5%BD%92%E9%81%8D%E5%8E%86/"
+                            class="postShorten-excerpt_link link"
+                            aria-label=": 10二叉树非递归遍历"
+                        >
+                            Continue reading
+                        </a>
                         
-
-
-                    
-                    
-                        <p>
-                            <a
-                                href="/2021/09/27/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/106.%20%E4%BB%8E%E4%B8%AD%E5%BA%8F%E4%B8%8E%E5%90%8E%E5%BA%8F%E9%81%8D%E5%8E%86%E5%BA%8F%E5%88%97%E6%9E%84%E9%80%A0%E4%BA%8C%E5%8F%89%E6%A0%91/#post-footer"
-                                class="postShorten-excerpt_link link"
-                                aria-label=""
-                            >
-                                Comment and share
-                            </a>
-                        </p>
                     
                 </div>
             
@@ -768,7 +766,7 @@
     </article>
     
     
-    <article class="postShorten postShorten--thumbnailimg-bottom">
+    <article class="postShorten postShorten--thumbnailimg-right">
         <div class="postShorten-wrap">
             
             <div class="postShorten-header">
@@ -776,10 +774,10 @@
                     
                         <a
                             class="link-unstyled"
-                            href="/2021/09/27/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/102.%20%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E5%B1%82%E5%BA%8F%E9%81%8D%E5%8E%86/"
-                            aria-label=": 102. 二叉树的层序遍历"
+                            href="/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/11%E4%BA%8C%E5%8F%89%E6%A0%91%E5%B1%82%E5%BA%8F%E9%81%8D%E5%8E%86/"
+                            aria-label=": 11二叉树层序遍历"
                         >
-                            102. 二叉树的层序遍历
+                            11二叉树层序遍历
                         </a>
                     
                 </h1>
@@ -792,7 +790,7 @@
     
         <span>in </span>
         
-    <a class="category-link" href="/categories/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/">leecode刷题复习</a>
+    <a class="category-link" href="/categories/%E6%B5%99%E5%A4%A7%E7%AE%97%E6%B3%95%E4%B8%8E%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B-python%E5%AE%9E%E7%8E%B0/">浙大算法与数据结构课程(python实现)</a>
 
 
     
@@ -800,25 +798,17 @@
 
             </div>
             
-                <div class="postShorten-content">
-                    <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Definition for a binary tree node.</span></span><br><span class="line"><span class="comment"># class TreeNode:</span></span><br><span class="line"><span class="comment">#     def __init__(self, val=0, left=None, right=None):</span></span><br><span class="line"><span class="comment">#         self.val = val</span></span><br><span class="line"><span class="comment">#         self.left = left</span></span><br><span class="line"><span class="comment">#         self.right = right</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">levelOrder</span>(<span class="params">self, root: <span class="type">Optional</span>[TreeNode]</span>) -&gt; <span class="type">List</span>[<span class="type">List</span>[<span class="built_in">int</span>]]:</span><br><span class="line">        result,result_sub,list_ = [],[],[]</span><br><span class="line">        <span class="keyword">if</span> root: list_.append(root)</span><br><span class="line">        <span class="keyword">while</span> list_:</span><br><span class="line">            size = <span class="built_in">len</span>(list_)</span><br><span class="line">            <span class="comment"># print(size)</span></span><br><span class="line">            <span class="keyword">while</span> size:</span><br><span class="line">                root = list_.pop(<span class="number">0</span>)</span><br><span class="line">                result_sub.append(root.val)</span><br><span class="line">                size -= <span class="number">1</span></span><br><span class="line">                <span class="keyword">if</span> root.left:</span><br><span class="line">                    list_.append(root.left)</span><br><span class="line">                <span class="keyword">if</span> root.right:</span><br><span class="line">                    list_.append(root.right) </span><br><span class="line">                <span class="comment"># print(list_)</span></span><br><span class="line">            result.append(result_sub)</span><br><span class="line">            result_sub = []</span><br><span class="line">        <span class="keyword">return</span> result</span><br></pre></td></tr></table></figure>
-
-
+                <div class="postShorten-excerpt">
+                    <figure class="highlight python"><figcaption><span></span></figcaption></figure>
                     
+                        <a
+                            href="/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/11%E4%BA%8C%E5%8F%89%E6%A0%91%E5%B1%82%E5%BA%8F%E9%81%8D%E5%8E%86/"
+                            class="postShorten-excerpt_link link"
+                            aria-label=": 11二叉树层序遍历"
+                        >
+                            Continue reading
+                        </a>
                         
-
-
-                    
-                    
-                        <p>
-                            <a
-                                href="/2021/09/27/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/102.%20%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E5%B1%82%E5%BA%8F%E9%81%8D%E5%8E%86/#post-footer"
-                                class="postShorten-excerpt_link link"
-                                aria-label=""
-                            >
-                                Comment and share
-                            </a>
-                        </p>
                     
                 </div>
             

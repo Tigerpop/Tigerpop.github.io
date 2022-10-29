@@ -1,0 +1,603 @@
+
+<!DOCTYPE html>
+<html lang="en">
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Tiger_pop&#39;s Blog">
+    <title>Mac终端用代理_git-cloing用代理_brew换源 - Tiger_pop&#39;s Blog</title>
+    <meta name="author" content="陈宇韶chenyushao">
+    
+    
+    
+        
+            <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
+        
+    
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"陈宇韶chenyushao","sameAs":["https://github.com/","https://www.linkedin.com/profile/","mailto"]},"articleBody":"​\t\n参考：https://www.zhihu.com/question/27159393\nhttps://kerminate.me/2018/10/22/mac-%E7%BB%88%E7%AB%AF%E5%AE%9E%E7%8E%B0%E7%BF%BB%E5%A2%99/\n\n123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384858687888990919293949596979899100101102103104105106107108109110111112113114115116117118119120121122123124125126127128129130131132133134135136137138139140141142143144145146147148149150151152153154155156157158159160161162163164165166167168169170171172173174175176177178179Mac 终端用代理（默认shell是bash）：方法一：每次用之前输入以下内容 生效，影响面很小（只对当前终端有效）。export http_proxy=http://127.0.0.1:自己的代理端口export https_proxy=https://127.0.0.1:自己的代理端口socks5代理则：export http_proxy=socks5://127.0.0.1:自己的代理端口export https_proxy=socks5://127.0.0.1:自己的代理端口方法二：也可以把终端代理写进.bash_profile，就不用每次打开终端输入上面的内容了。vim ~/.bash_profile改写为function proxy_on()&#123;    export http_proxy=http://127.0.0.1:1087    export https_proxy=http://127.0.0.1:1087    echo -e &quot;已开启代理&quot;&#125;function proxy_off()&#123;    unset http_proxy    unset https_proxy    echo -e &quot;已关闭代理&quot;&#125;运行生效source ~/.bash_profile以后每次只需要 proxy_on 或者proxy_off 就可以切换是否代理了。Mac 终端用代理（升级系统后，默认的shell不再是bash，而是zsh）方法一：重新回到bash版本的shell 中；        echo &quot;$SHELL&quot; # 查看自己的shell版本，可以用 chsh -s /bin/bash 或者 cash -s /bin/zsh 来选择用哪个shell，新开一个终端就是新指定的shell 了。方法二：配置zsh 的代理where proxy 因为我的clashX 端口是7890proxy () &#123;  export http_proxy=&quot;http://127.0.0.1:7890&quot;  export https_proxy=&quot;http://127.0.0.1:7890&quot;  echo &quot;开启代理HTTP Proxy on&quot;&#125;where noproxynoproxy () &#123;  unset http_proxy  unset https_proxy  echo &quot;关闭代理HTTP Proxy off&quot;&#125;以后每次只需要 proxy 或者 noproxy 就可以切换是否代理了。********************************************************************git cloning 用代理，不推荐用全局代理，因为会让访问国内源太慢，推荐只有访问GitHub时用代理。若是 socks5代理的方法，只对访问GitHub时用代理：git config --global http.https://github.com.proxy socks5://127.0.0.1:自己的代理端口git config --global https.https://github.com.proxy socks5://127.0.0.1:自己的代理端口（如果想搞全局代理的话，非socks5情况）git config --global http.proxy http://127.0.0.1:自己的代理端口git config --global https.proxy https://127.0.0.1:自己的代理端口（如果想搞全局代理的话，socks5情况）git config --global http.proxy socks5://127.0.0.1:自己的代理端口git config --global https.proxy socks5://127.0.0.1:自己的代理端口检验是否成功使用代理 （Clash或者trojan记得选全局模式，不然还是会看见是国内ip）curl cip.cc 取消代理，复原：git config --global --unset http.proxygit config --global --unset https.proxy********************************************************************参考：https://blog.csdn.net/weixin_35757704/article/details/112133562https://blog.csdn.net/qq_43213352/article/details/104343627brew 换清华和中科大源，（值得一提的是，如果终端用了代理，访问国内源的意义就不大了，还可能更慢，应视情况而定）：替换brew.git:$ cd &quot;$(brew --repo)&quot;中国科大:$ git remote set-url origin https://mirrors.ustc.edu.cn/brew.git清华大学:$ git remote set-url origin https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/brew.git替换homebrew-core.git:$ cd &quot;$(brew --repo)/Library/Taps/homebrew/homebrew-core&quot;中国科大:$ git remote set-url origin https://mirrors.ustc.edu.cn/homebrew-core.git清华大学:$ git remote set-url origin https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-core.git替换homebrew-bottles:中国科大:$ echo &#x27;export HOMEBREW_BOTTLE_DOMAIN=https://mirrors.ustc.edu.cn/homebrew-bottles&#x27; &gt;&gt; ~/.bash_profile$ source ~/.bash_profile清华大学:$ echo &#x27;export HOMEBREW_BOTTLE_DOMAIN=https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles&#x27; &gt;&gt; ~/.bash_profile$ source ~/.bash_profile应用生效:$ brew update···············································································（若：你之前折腾过不少导致你的Homebrew有点问题，那么可以尝试使用如下方案：）诊断Homebrew的问题:$ brew doctor重置brew.git设置:$ cd &quot;$(brew --repo)&quot;$ git fetch$ git reset --hard origin/masterhomebrew-core.git同理:$ cd &quot;$(brew --repo)/Library/Taps/homebrew/homebrew-core&quot;$ git fetch$ git reset --hard origin/master应用生效:$ brew update ···············································································（某些时候也有换回官方源的需求）重置brew.git:$ cd &quot;$(brew --repo)&quot;$ git remote set-url origin https://github.com/Homebrew/brew.git重置homebrew-core.git:$ cd &quot;$(brew --repo)/Library/Taps/homebrew/homebrew-core&quot;$ git remote set-url origin https://github.com/Homebrew/homebrew-core.git···············································································（若：Mac homebrew报错Error: homebrew-core is a shallow clone.）则：\t删除homebrew-core后更新\tcd /usr/local/Homebrew/Library/Taps/homebrew\trm -rf homebrew-core\tbrew upgrade***************************************************************************如果实在是下载不下来某个文件：如果brew install 工具时下载错误，可以直接从浏览器下载，然后放到下面的目录就可以了。brew 下载的位置在/Users/chenyushao/Library/Caches/Homebrew\n\n","dateCreated":"2022-10-29T15:42:07+08:00","dateModified":"2022-10-29T17:17:53+08:00","datePublished":"2022-10-29T15:42:07+08:00","description":"​\t\n参考：","headline":"Mac终端用代理_git-cloing用代理_brew换源","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"http://example.com/2022/10/29/Mac/Mac%E7%BB%88%E7%AB%AF%E7%94%A8%E4%BB%A3%E7%90%86_git-cloing%E7%94%A8%E4%BB%A3%E7%90%86_brew%E6%8D%A2%E6%BA%90/"},"publisher":{"@type":"Organization","name":"陈宇韶chenyushao","sameAs":["https://github.com/","https://www.linkedin.com/profile/","mailto"]},"url":"http://example.com/2022/10/29/Mac/Mac%E7%BB%88%E7%AB%AF%E7%94%A8%E4%BB%A3%E7%90%86_git-cloing%E7%94%A8%E4%BB%A3%E7%90%86_brew%E6%8D%A2%E6%BA%90/","keywords":"Mac, git, brew, 换源"}</script>
+    <meta name="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="Mac终端用代理_git-cloing用代理_brew换源">
+<meta property="og:url" content="http://example.com/2022/10/29/Mac/Mac%E7%BB%88%E7%AB%AF%E7%94%A8%E4%BB%A3%E7%90%86_git-cloing%E7%94%A8%E4%BB%A3%E7%90%86_brew%E6%8D%A2%E6%BA%90/index.html">
+<meta property="og:site_name" content="Tiger_pop&#39;s Blog">
+<meta property="og:description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2022-10-29T07:42:07.000Z">
+<meta property="article:modified_time" content="2022-10-29T09:17:53.542Z">
+<meta property="article:author" content="陈宇韶chenyushao">
+<meta property="article:tag" content="Mac">
+<meta property="article:tag" content="git">
+<meta property="article:tag" content="brew">
+<meta property="article:tag" content="换源">
+<meta name="twitter:card" content="summary">
+    
+    
+        
+    
+    
+    
+    
+    
+    <!--STYLES-->
+    
+<link rel="stylesheet" href="/assets/css/style-yrbj4x87sme2npnaj5hmxl88fi8ktzpa1hwzrvan2almcpvu5niegj13ryff.min.css">
+
+    <!--STYLES END-->
+    
+
+    
+
+    
+        
+    
+</head>
+
+    <body>
+        <div id="blog">
+            <!-- Define author's picture -->
+
+
+    
+
+<header id="header" data-behavior="4">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <div class="header-title">
+        <a
+            class="header-title-link"
+            href="/"
+            aria-label=""
+        >
+            Tiger_pop&#39;s Blog
+        </a>
+    </div>
+    
+        
+            <a
+                class="header-right-picture "
+                href="#about"
+                aria-label="Open the link: /#about"
+            >
+        
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+<nav id="sidebar" data-behavior="4">
+    <div class="sidebar-container">
+        
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/"
+                            
+                            rel="noopener"
+                            title="Home"
+                        >
+                        <i class="sidebar-button-icon fa fa-home" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Home</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-categories"
+                            
+                            rel="noopener"
+                            title="Categories"
+                        >
+                        <i class="sidebar-button-icon fa fa-bookmark" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Categories</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-tags"
+                            
+                            rel="noopener"
+                            title="Tags"
+                        >
+                        <i class="sidebar-button-icon fa fa-tags" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Tags</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-archives"
+                            
+                            rel="noopener"
+                            title="Archives"
+                        >
+                        <i class="sidebar-button-icon fa fa-archive" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Archives</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="#about"
+                            
+                            rel="noopener"
+                            title="About"
+                        >
+                        <i class="sidebar-button-icon fa fa-question" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">About</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://github.com/"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="GitHub"
+                        >
+                        <i class="sidebar-button-icon fab fa-github" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">GitHub</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://www.linkedin.com/profile/"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="LinkedIn"
+                        >
+                        <i class="sidebar-button-icon fab fa-linkedin" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">LinkedIn</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/mailto"
+                            
+                            rel="noopener"
+                            title="Mail"
+                        >
+                        <i class="sidebar-button-icon fa fa-envelope" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Mail</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/atom.xml"
+                            
+                            rel="noopener"
+                            title="RSS"
+                        >
+                        <i class="sidebar-button-icon fa fa-rss" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">RSS</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+    </div>
+</nav>
+
+            
+            <div id="main" data-behavior="4"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post">
+    
+    
+        <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title">
+            Mac终端用代理_git-cloing用代理_brew换源
+        </h1>
+    
+    
+        <div class="post-meta">
+    <time datetime="2022-10-29T15:42:07+08:00">
+	
+		    Oct 29, 2022
+    	
+    </time>
+    
+        <span>in </span>
+        
+    <a class="category-link" href="/categories/Mac/">Mac</a>
+
+
+    
+</div>
+
+    
+</div>
+
+    
+    <div class="post-content markdown">
+        <div class="main-content-wrap">
+            <p>​	</p>
+<p>参考：<span id="more"></span><br><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/27159393">https://www.zhihu.com/question/27159393</a></p>
+<p><a target="_blank" rel="noopener" href="https://kerminate.me/2018/10/22/mac-%E7%BB%88%E7%AB%AF%E5%AE%9E%E7%8E%B0%E7%BF%BB%E5%A2%99/">https://kerminate.me/2018/10/22/mac-%E7%BB%88%E7%AB%AF%E5%AE%9E%E7%8E%B0%E7%BF%BB%E5%A2%99/</a></p>
+<hr>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">Mac 终端用代理（默认shell是bash）：</span><br><span class="line">方法一：</span><br><span class="line">每次用之前输入以下内容 生效，影响面很小（只对当前终端有效）。</span><br><span class="line">export http_proxy=http://127.0.0.1:自己的代理端口</span><br><span class="line">export https_proxy=https://127.0.0.1:自己的代理端口</span><br><span class="line">socks5代理则：</span><br><span class="line">export http_proxy=socks5://127.0.0.1:自己的代理端口</span><br><span class="line">export https_proxy=socks5://127.0.0.1:自己的代理端口</span><br><span class="line"></span><br><span class="line">方法二：</span><br><span class="line">也可以把终端代理写进.bash_profile，就不用每次打开终端输入上面的内容了。</span><br><span class="line">vim ~/.bash_profile</span><br><span class="line">改写为</span><br><span class="line">function proxy_on()&#123;</span><br><span class="line">    export http_proxy=http://127.0.0.1:1087</span><br><span class="line">    export https_proxy=http://127.0.0.1:1087</span><br><span class="line">    echo -e &quot;已开启代理&quot;</span><br><span class="line">&#125;</span><br><span class="line">function proxy_off()&#123;</span><br><span class="line">    unset http_proxy</span><br><span class="line">    unset https_proxy</span><br><span class="line">    echo -e &quot;已关闭代理&quot;</span><br><span class="line">&#125;</span><br><span class="line">运行生效</span><br><span class="line">source ~/.bash_profile</span><br><span class="line">以后每次只需要 proxy_on 或者proxy_off 就可以切换是否代理了。</span><br><span class="line"></span><br><span class="line">Mac 终端用代理（升级系统后，默认的shell不再是bash，而是zsh）</span><br><span class="line"></span><br><span class="line">方法一：重新回到bash版本的shell 中； </span><br><span class="line">       echo &quot;$SHELL&quot; # 查看自己的shell版本，可以用 chsh -s /bin/bash 或者 cash -s /bin/zsh 来选择用哪个shell，新开一个终端就是新指定的shell 了。</span><br><span class="line"></span><br><span class="line">方法二：配置zsh 的代理</span><br><span class="line"></span><br><span class="line">where proxy 因为我的clashX 端口是7890</span><br><span class="line"></span><br><span class="line">proxy () &#123;</span><br><span class="line">  export http_proxy=&quot;http://127.0.0.1:7890&quot;</span><br><span class="line">  export https_proxy=&quot;http://127.0.0.1:7890&quot;</span><br><span class="line">  echo &quot;开启代理HTTP Proxy on&quot;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">where noproxy</span><br><span class="line"></span><br><span class="line">noproxy () &#123;</span><br><span class="line">  unset http_proxy</span><br><span class="line">  unset https_proxy</span><br><span class="line">  echo &quot;关闭代理HTTP Proxy off&quot;</span><br><span class="line">&#125;</span><br><span class="line">以后每次只需要 proxy 或者 noproxy 就可以切换是否代理了。</span><br><span class="line"></span><br><span class="line">********************************************************************</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">git cloning 用代理，不推荐用全局代理，因为会让访问国内源太慢，推荐只有访问GitHub时用代理。</span><br><span class="line"></span><br><span class="line">若是 socks5代理的方法，只对访问GitHub时用代理：</span><br><span class="line">git config --global http.https://github.com.proxy socks5://127.0.0.1:自己的代理端口</span><br><span class="line">git config --global https.https://github.com.proxy socks5://127.0.0.1:自己的代理端口</span><br><span class="line"></span><br><span class="line">（如果想搞全局代理的话，非socks5情况）</span><br><span class="line">git config --global http.proxy http://127.0.0.1:自己的代理端口</span><br><span class="line">git config --global https.proxy https://127.0.0.1:自己的代理端口</span><br><span class="line">（如果想搞全局代理的话，socks5情况）</span><br><span class="line">git config --global http.proxy socks5://127.0.0.1:自己的代理端口</span><br><span class="line">git config --global https.proxy socks5://127.0.0.1:自己的代理端口</span><br><span class="line"></span><br><span class="line">检验是否成功使用代理 （Clash或者trojan记得选全局模式，不然还是会看见是国内ip）</span><br><span class="line">curl cip.cc </span><br><span class="line"></span><br><span class="line">取消代理，复原：</span><br><span class="line">git config --global --unset http.proxy</span><br><span class="line">git config --global --unset https.proxy</span><br><span class="line"></span><br><span class="line">********************************************************************</span><br><span class="line"></span><br><span class="line">参考：</span><br><span class="line">https://blog.csdn.net/weixin_35757704/article/details/112133562</span><br><span class="line">https://blog.csdn.net/qq_43213352/article/details/104343627</span><br><span class="line"></span><br><span class="line">brew 换清华和中科大源，（值得一提的是，如果终端用了代理，访问国内源的意义就不大了，还可能更慢，应视情况而定）：</span><br><span class="line"></span><br><span class="line">替换brew.git:</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">cd</span> <span class="string">&quot;<span class="subst">$(brew --repo)</span>&quot;</span></span></span><br><span class="line"></span><br><span class="line">中国科大:</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">git remote set-url origin https://mirrors.ustc.edu.cn/brew.git</span></span><br><span class="line"></span><br><span class="line">清华大学:</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">git remote set-url origin https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/brew.git</span></span><br><span class="line"></span><br><span class="line">替换homebrew-core.git:</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">cd</span> <span class="string">&quot;<span class="subst">$(brew --repo)</span>/Library/Taps/homebrew/homebrew-core&quot;</span></span></span><br><span class="line"></span><br><span class="line">中国科大:</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">git remote set-url origin https://mirrors.ustc.edu.cn/homebrew-core.git</span></span><br><span class="line"></span><br><span class="line">清华大学:</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">git remote set-url origin https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-core.git</span></span><br><span class="line"></span><br><span class="line">替换homebrew-bottles:</span><br><span class="line"></span><br><span class="line">中国科大:</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">echo</span> <span class="string">&#x27;export HOMEBREW_BOTTLE_DOMAIN=https://mirrors.ustc.edu.cn/homebrew-bottles&#x27;</span> &gt;&gt; ~/.bash_profile</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">source</span> ~/.bash_profile</span></span><br><span class="line"></span><br><span class="line">清华大学:</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">echo</span> <span class="string">&#x27;export HOMEBREW_BOTTLE_DOMAIN=https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles&#x27;</span> &gt;&gt; ~/.bash_profile</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">source</span> ~/.bash_profile</span></span><br><span class="line"></span><br><span class="line">应用生效:</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">brew update</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">···············································································</span><br><span class="line">（若：你之前折腾过不少导致你的Homebrew有点问题，那么可以尝试使用如下方案：）</span><br><span class="line"></span><br><span class="line">诊断Homebrew的问题:</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">brew doctor</span></span><br><span class="line"></span><br><span class="line">重置brew.git设置:</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">cd</span> <span class="string">&quot;<span class="subst">$(brew --repo)</span>&quot;</span></span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">git fetch</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">git reset --hard origin/master</span></span><br><span class="line"></span><br><span class="line">homebrew-core.git同理:</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">cd</span> <span class="string">&quot;<span class="subst">$(brew --repo)</span>/Library/Taps/homebrew/homebrew-core&quot;</span></span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">git fetch</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">git reset --hard origin/master</span></span><br><span class="line"></span><br><span class="line">应用生效:</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">brew update</span> </span><br><span class="line">···············································································</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">（某些时候也有换回官方源的需求）</span><br><span class="line"></span><br><span class="line">重置brew.git:</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">cd</span> <span class="string">&quot;<span class="subst">$(brew --repo)</span>&quot;</span></span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">git remote set-url origin https://github.com/Homebrew/brew.git</span></span><br><span class="line"></span><br><span class="line">重置homebrew-core.git:</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">cd</span> <span class="string">&quot;<span class="subst">$(brew --repo)</span>/Library/Taps/homebrew/homebrew-core&quot;</span></span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">git remote set-url origin https://github.com/Homebrew/homebrew-core.git</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">···············································································</span><br><span class="line">（若：Mac homebrew报错Error: homebrew-core is a shallow clone.）</span><br><span class="line">则：</span><br><span class="line">	删除homebrew-core后更新</span><br><span class="line">	cd /usr/local/Homebrew/Library/Taps/homebrew</span><br><span class="line">	rm -rf homebrew-core</span><br><span class="line">	brew upgrade</span><br><span class="line"></span><br><span class="line">***************************************************************************</span><br><span class="line"></span><br><span class="line">如果实在是下载不下来某个文件：</span><br><span class="line">如果brew install 工具时下载错误，可以直接从浏览器下载，然后放到下面的目录就可以了。</span><br><span class="line"></span><br><span class="line">brew 下载的位置在</span><br><span class="line">/Users/chenyushao/Library/Caches/Homebrew</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+            
+
+
+        </div>
+    </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
+        
+            <div class="post-footer-tags">
+                <span class="text-color-light text-small">TAGGED IN</span><br/>
+                
+    <a class="tag tag--primary tag--small t-none-link" href="/tags/Mac/" rel="tag">Mac</a> <a class="tag tag--primary tag--small t-none-link" href="/tags/brew/" rel="tag">brew</a> <a class="tag tag--primary tag--small t-none-link" href="/tags/git/" rel="tag">git</a> <a class="tag tag--primary tag--small t-none-link" href="/tags/%E6%8D%A2%E6%BA%90/" rel="tag">换源</a>
+
+            </div>
+        
+        
+            <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2022/10/29/Mac/Mac%E8%BF%9E%E6%8E%A5%E4%B8%8D%E4%B8%8A%E6%89%8B%E6%9C%BA%E7%83%AD%E7%82%B9%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/"
+                    data-tooltip="Mac连接不上手机热点解决办法"
+                    aria-label="PREVIOUS: Mac连接不上手机热点解决办法"
+                >
+                    
+                        <i class="fa fa-angle-left" aria-hidden="true"></i>
+                        <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+                    </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/Linux%E5%86%85%E6%A0%B8%E5%8D%87%E7%BA%A7/"
+                    data-tooltip="linux内核升级"
+                    aria-label="NEXT: linux内核升级"
+                >
+                    
+                        <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                    </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a
+                class="post-action-btn btn btn--default btn-open-shareoptions"
+                href="#btn-open-shareoptions"
+                aria-label="Share this post"
+            >
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://example.com/2022/10/29/Mac/Mac%E7%BB%88%E7%AB%AF%E7%94%A8%E4%BB%A3%E7%90%86_git-cloing%E7%94%A8%E4%BB%A3%E7%90%86_brew%E6%8D%A2%E6%BA%90/"
+                    title="Share on Facebook"
+                    aria-label="Share on Facebook"
+                >
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://twitter.com/intent/tweet?text=http://example.com/2022/10/29/Mac/Mac%E7%BB%88%E7%AB%AF%E7%94%A8%E4%BB%A3%E7%90%86_git-cloing%E7%94%A8%E4%BB%A3%E7%90%86_brew%E6%8D%A2%E6%BA%90/"
+                    title="Share on Twitter"
+                    aria-label="Share on Twitter"
+                >
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://plus.google.com/share?url=http://example.com/2022/10/29/Mac/Mac%E7%BB%88%E7%AB%AF%E7%94%A8%E4%BB%A3%E7%90%86_git-cloing%E7%94%A8%E4%BB%A3%E7%90%86_brew%E6%8D%A2%E6%BA%90/"
+                    title="Share on Google+"
+                    aria-label="Share on Google+"
+                >
+                    <i class="fab fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+        
+        
+            
+        
+    </div>
+</article>
+
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2022 陈宇韶chenyushao. All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2022/10/29/Mac/Mac%E8%BF%9E%E6%8E%A5%E4%B8%8D%E4%B8%8A%E6%89%8B%E6%9C%BA%E7%83%AD%E7%82%B9%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/"
+                    data-tooltip="Mac连接不上手机热点解决办法"
+                    aria-label="PREVIOUS: Mac连接不上手机热点解决办法"
+                >
+                    
+                        <i class="fa fa-angle-left" aria-hidden="true"></i>
+                        <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+                    </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/Linux%E5%86%85%E6%A0%B8%E5%8D%87%E7%BA%A7/"
+                    data-tooltip="linux内核升级"
+                    aria-label="NEXT: linux内核升级"
+                >
+                    
+                        <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                    </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a
+                class="post-action-btn btn btn--default btn-open-shareoptions"
+                href="#btn-open-shareoptions"
+                aria-label="Share this post"
+            >
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://example.com/2022/10/29/Mac/Mac%E7%BB%88%E7%AB%AF%E7%94%A8%E4%BB%A3%E7%90%86_git-cloing%E7%94%A8%E4%BB%A3%E7%90%86_brew%E6%8D%A2%E6%BA%90/"
+                    title="Share on Facebook"
+                    aria-label="Share on Facebook"
+                >
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://twitter.com/intent/tweet?text=http://example.com/2022/10/29/Mac/Mac%E7%BB%88%E7%AB%AF%E7%94%A8%E4%BB%A3%E7%90%86_git-cloing%E7%94%A8%E4%BB%A3%E7%90%86_brew%E6%8D%A2%E6%BA%90/"
+                    title="Share on Twitter"
+                    aria-label="Share on Twitter"
+                >
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://plus.google.com/share?url=http://example.com/2022/10/29/Mac/Mac%E7%BB%88%E7%AB%AF%E7%94%A8%E4%BB%A3%E7%90%86_git-cloing%E7%94%A8%E4%BB%A3%E7%90%86_brew%E6%8D%A2%E6%BA%90/"
+                    title="Share on Google+"
+                    aria-label="Share on Google+"
+                >
+                    <i class="fab fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+                </div>
+                
+    <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+        <i id="btn-close-shareoptions" class="fa fa-times"></i>
+        <ul class="share-options">
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="https://www.facebook.com/sharer/sharer.php?u=http://example.com/2022/10/29/Mac/Mac%E7%BB%88%E7%AB%AF%E7%94%A8%E4%BB%A3%E7%90%86_git-cloing%E7%94%A8%E4%BB%A3%E7%90%86_brew%E6%8D%A2%E6%BA%90/"
+                        aria-label="Share on Facebook"
+                    >
+                        <i class="fab fa-facebook" aria-hidden="true"></i><span>Share on Facebook</span>
+                    </a>
+                </li>
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="https://twitter.com/intent/tweet?text=http://example.com/2022/10/29/Mac/Mac%E7%BB%88%E7%AB%AF%E7%94%A8%E4%BB%A3%E7%90%86_git-cloing%E7%94%A8%E4%BB%A3%E7%90%86_brew%E6%8D%A2%E6%BA%90/"
+                        aria-label="Share on Twitter"
+                    >
+                        <i class="fab fa-twitter" aria-hidden="true"></i><span>Share on Twitter</span>
+                    </a>
+                </li>
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="https://plus.google.com/share?url=http://example.com/2022/10/29/Mac/Mac%E7%BB%88%E7%AB%AF%E7%94%A8%E4%BB%A3%E7%90%86_git-cloing%E7%94%A8%E4%BB%A3%E7%90%86_brew%E6%8D%A2%E6%BA%90/"
+                        aria-label="Share on Google+"
+                    >
+                        <i class="fab fa-google-plus" aria-hidden="true"></i><span>Share on Google+</span>
+                    </a>
+                </li>
+            
+        </ul>
+    </div>
+
+
+            
+        </div>
+        
+
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-times"></i>
+        </div>
+        
+            <h4 id="about-card-name">陈宇韶chenyushao</h4>
+        
+            <div id="about-card-bio"><p>author.bio</p>
+</div>
+        
+        
+            <div id="about-card-job">
+                <i class="fa fa-briefcase"></i>
+                <br/>
+                <p>author.job</p>
+
+            </div>
+        
+        
+    </div>
+</div>
+
+        
+        
+<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
+        <!--SCRIPTS-->
+
+<script src="/assets/js/script-sbgpeqyl6jw5qe60mnfuzifzwky5la4ftiuwmschcdzx2pg5tfpl1pfp13e3.min.js"></script>
+
+<!--SCRIPTS END-->
+
+
+    
+
+
+
+
+    </body>
+</html>

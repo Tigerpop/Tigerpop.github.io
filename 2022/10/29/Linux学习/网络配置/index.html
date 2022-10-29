@@ -1,0 +1,660 @@
+
+<!DOCTYPE html>
+<html lang="en">
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Tiger_pop&#39;s Blog">
+    <title>linux网络配置 - Tiger_pop&#39;s Blog</title>
+    <meta name="author" content="陈宇韶chenyushao">
+    
+    
+    
+        
+            <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
+        
+    
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"陈宇韶chenyushao","sameAs":["https://github.com/","https://www.linkedin.com/profile/","mailto"]},"articleBody":"简介 \n固定IP\n​\t\t\n​\t\tlinux工作中要固定IP。\n1234vim /etc/sysconfig/network-scripts/ifcfg-自己的网卡// 编辑以上文件。// Ubuntu会有点不一样。//注意： Ubuntu20中的ip地址配置文件与Centos中不同，Centos中的配置文件在 /etc/sysconfig/network-scripts/目录下，文件名类似于ifcfg-ens33。而Ubuntu的ip地址配置文件则位于/etc/netplan/目录下，配置文件名为01-network-manager-all.yaml\n\n​\t\tcentos要改4个地方，下面以我之前的为例。\n​\t\t“dhcp” ： 是自动分配IP的意思，要改为”static” 。\n​\t\tIPADDR：192.168.200.100  &#x2F;&#x2F; 固定IP\n​\t\tGATEWAY ： 192.168.200.2  &#x2F;&#x2F;网关\n​\t\tDNS1： 192.168.200.2\n​\t\tONBOOT&#x3D;yes  #设置网卡启动方式为 开机启动 并且可以通过系统服务管理器 systemctl 控制网卡\n​\t\tcentos\n\n​\t\tubuntu 要改的有点不一样。\t\t\t\t\n​\t\t如果Linux是虚拟机，还要改虚拟机设置，打开edit、虚拟机网络编辑器，改子网。\n\n​\t\t另外值得一提的是：在Linux为虚拟机的情况下，虚拟机主机的IP固定为192.168.200.100，GATEWAY ： 192.168.200.2  &#x2F;&#x2F;网关，主机分配给虚拟机的IP自动为192.168.200.1，主机自己在路由器局域网的IP为192.168.31.134 。 两个在不同的网段。\n​\t\tvmnet8是NAT模式。此处仅对网卡vmnet8 进行修改，母机如果是Ubuntu网络中打开就行了。母鸡如果是Mac，如下操作：\nMac 特别篇 （始）———————————————————————————————————\n12sudo vim /Library/Preferences/VMware\\ Fusion/networking # 如下第一幅截图，将 DHCP 设置为 no， 即使用静态IP。 将 SUBNET 修改为自己想用的网段，此处我填的是 192.168.200.0 网段。sudo vim /Library/Preferences/VMware\\ Fusion/vmnet8/nat.conf # 定网关ip和子网掩码netmask。\n\n\n\n查Mac本机的DNS地址 \n1cat /etc/resolv.conf # 看nameserver\n\n\n进入虚拟机,以之前母鸡Mac定好的网段为基础，选一个自己要固定的子网ip，我这里用的是192.168.200.100，网关用刚刚在Mac上定好的192.168.200.2，子网掩码用查到的255.255.255.0， dns用刚刚Mac上找到的192.168.31.1。保持bootproto&#x3D;static，noboot&#x3D;yes。\n12su  # 获取root权限vim /etc/sysconfig/network-scripts/ifcfg-ens33\n\n\n然后 重启母鸡Mac。\nMac 特别篇（终)———————————————————————————————————\n改完了记得重启服务\t\n1234netplan apply    # Ubuntunmcli c reload   # Centos8 service network restart  systemctl restart network # Centos7 \n\n\n\n主机名和hosts映射​\t\thosts 是一个 主机名和IP映射关系文件。\n12hostname  // 查看主机名// 在 /etc/hostname 修改主机名。\n\n​\t\t指定IP地址与主机名之间的对应关系。（Windows和Linux\\macos位置不一样但是都在etc&#x2F;hosts文件中。）\n1234vim /etc/hosts# ip 空格 主机名192.168.31.134 myY400# 意思是 当我们ping myY400 时 ，会自动ping 192.168.31.134\n\n\n\nHosts\\DNS​\tDNS (domain name system) \n\n​\t\t有的坏人就是偷偷改了hosts文件，域名劫持。\n1192.168.31.74 www.baidu.com\n\n​\t\t\n闲聊​\t\t最后说说我的实验环境，我是用一台MacBook Pro写代码，用老电脑装了一个Ubuntu，Ubuntu里面的vmware安装了一个centos8的虚拟机，我想从mac远程登录centos来做实验。\n​\t\t方法一：把虚拟机联网方式从NAT模式改为桥接模式，centos内从&#x2F;etc&#x2F;sysconfig&#x2F;network-scripts&#x2F;ifcfg-自己centos的网卡，  固定好自己的静态IP，直接把虚拟机联入家里路由器的局域网，在mac的finalshell直接远程登录虚拟机。\n​\t\t方法二：Mac 的 finalshell 远程登录Ubuntu，虚拟机还是保持NAT模式，我从finalshell内再 【shh 用户名@虚拟机IP 】 ssh登录到centos里面。\n","dateCreated":"2022-10-29T15:42:07+08:00","dateModified":"2022-10-29T16:36:16+08:00","datePublished":"2022-10-29T15:42:07+08:00","description":"简介","headline":"linux网络配置","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE/"},"publisher":{"@type":"Organization","name":"陈宇韶chenyushao","sameAs":["https://github.com/","https://www.linkedin.com/profile/","mailto"]},"url":"http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE/","keywords":"网络"}</script>
+    <meta name="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="linux网络配置">
+<meta property="og:url" content="http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE/index.html">
+<meta property="og:site_name" content="Tiger_pop&#39;s Blog">
+<meta property="og:description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE/image-20220113201254463-7030863.png">
+<meta property="og:image" content="http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE/image-20220113221033107.png">
+<meta property="og:image" content="http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE/image-20220113210644619.png">
+<meta property="og:image" content="http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE/image-20220114114625705.png">
+<meta property="og:image" content="http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE/%E6%88%AA%E5%B1%8F2022-02-25%2011.10.18.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE/%E6%88%AA%E5%B1%8F2022-02-25%2011.13.51.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE/%E6%88%AA%E5%B1%8F2022-02-25%2011.35.59.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE/%E6%88%AA%E5%B1%8F2022-02-25%2011.51.42.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE/image-20220114104352280.png">
+<meta property="article:published_time" content="2022-10-29T07:42:07.000Z">
+<meta property="article:modified_time" content="2022-10-29T08:36:16.031Z">
+<meta property="article:author" content="陈宇韶chenyushao">
+<meta property="article:tag" content="网络">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE/image-20220113201254463-7030863.png">
+    
+    
+        
+    
+    
+    
+    
+    
+    <!--STYLES-->
+    
+<link rel="stylesheet" href="/assets/css/style-yrbj4x87sme2npnaj5hmxl88fi8ktzpa1hwzrvan2almcpvu5niegj13ryff.min.css">
+
+    <!--STYLES END-->
+    
+
+    
+
+    
+        
+    
+</head>
+
+    <body>
+        <div id="blog">
+            <!-- Define author's picture -->
+
+
+    
+
+<header id="header" data-behavior="4">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <div class="header-title">
+        <a
+            class="header-title-link"
+            href="/"
+            aria-label=""
+        >
+            Tiger_pop&#39;s Blog
+        </a>
+    </div>
+    
+        
+            <a
+                class="header-right-picture "
+                href="#about"
+                aria-label="Open the link: /#about"
+            >
+        
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+<nav id="sidebar" data-behavior="4">
+    <div class="sidebar-container">
+        
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/"
+                            
+                            rel="noopener"
+                            title="Home"
+                        >
+                        <i class="sidebar-button-icon fa fa-home" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Home</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-categories"
+                            
+                            rel="noopener"
+                            title="Categories"
+                        >
+                        <i class="sidebar-button-icon fa fa-bookmark" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Categories</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-tags"
+                            
+                            rel="noopener"
+                            title="Tags"
+                        >
+                        <i class="sidebar-button-icon fa fa-tags" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Tags</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-archives"
+                            
+                            rel="noopener"
+                            title="Archives"
+                        >
+                        <i class="sidebar-button-icon fa fa-archive" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Archives</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="#about"
+                            
+                            rel="noopener"
+                            title="About"
+                        >
+                        <i class="sidebar-button-icon fa fa-question" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">About</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://github.com/"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="GitHub"
+                        >
+                        <i class="sidebar-button-icon fab fa-github" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">GitHub</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://www.linkedin.com/profile/"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="LinkedIn"
+                        >
+                        <i class="sidebar-button-icon fab fa-linkedin" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">LinkedIn</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/mailto"
+                            
+                            rel="noopener"
+                            title="Mail"
+                        >
+                        <i class="sidebar-button-icon fa fa-envelope" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Mail</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/atom.xml"
+                            
+                            rel="noopener"
+                            title="RSS"
+                        >
+                        <i class="sidebar-button-icon fa fa-rss" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">RSS</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+    </div>
+</nav>
+
+            
+            <div id="main" data-behavior="4"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post">
+    
+    
+        <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title">
+            linux网络配置
+        </h1>
+    
+    
+        <div class="post-meta">
+    <time datetime="2022-10-29T15:42:07+08:00">
+	
+		    Oct 29, 2022
+    	
+    </time>
+    
+        <span>in </span>
+        
+    <a class="category-link" href="/categories/Linux/">Linux</a>
+
+
+    
+</div>
+
+    
+</div>
+
+    
+    <div class="post-content markdown">
+        <div class="main-content-wrap">
+            <p>简介 <span id="more"></span></p>
+<h1 id="固定IP"><a href="#固定IP" class="headerlink" title="固定IP"></a>固定IP</h1><p><img src="/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE/image-20220113201254463-7030863.png" alt="image-20220113201254463"></p>
+<p>​		</p>
+<p>​		linux工作中要固定IP。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/sysconfig/network-scripts/ifcfg-自己的网卡</span><br><span class="line">// 编辑以上文件。</span><br><span class="line">// Ubuntu会有点不一样。</span><br><span class="line">//注意： Ubuntu20中的ip地址配置文件与Centos中不同，Centos中的配置文件在 /etc/sysconfig/network-scripts/目录下，文件名类似于ifcfg-ens33。而Ubuntu的ip地址配置文件则位于/etc/netplan/目录下，配置文件名为01-network-manager-all.yaml</span><br></pre></td></tr></table></figure>
+
+<p>​		centos要改4个地方，下面以我之前的为例。</p>
+<p>​		“dhcp” ： 是自动分配IP的意思，要改为”static” 。</p>
+<p>​		IPADDR：192.168.200.100  &#x2F;&#x2F; 固定IP</p>
+<p>​		GATEWAY ： 192.168.200.2  &#x2F;&#x2F;网关</p>
+<p>​		DNS1： 192.168.200.2</p>
+<p>​		ONBOOT&#x3D;yes  #设置网卡启动方式为 开机启动 并且可以通过系统服务管理器 systemctl 控制网卡</p>
+<p>​		centos</p>
+<p><img src="/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE/image-20220113221033107.png" alt="image-20220113221033107"></p>
+<p>​		ubuntu 要改的有点不一样。				<img src="/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE/image-20220113210644619.png" alt="image-20220113210644619"></p>
+<p>​		如果Linux是虚拟机，还要改虚拟机设置，打开edit、虚拟机网络编辑器，改子网。</p>
+<p><img src="/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE/image-20220114114625705.png" alt="image-20220114114625705"></p>
+<p>​		另外值得一提的是：在Linux为虚拟机的情况下，虚拟机主机的IP固定为192.168.200.100，GATEWAY ： 192.168.200.2  &#x2F;&#x2F;网关，主机分配给虚拟机的IP自动为192.168.200.1，主机自己在路由器局域网的IP为192.168.31.134 。 两个在不同的网段。</p>
+<p>​		vmnet8是NAT模式。此处仅对网卡vmnet8 进行修改，母机如果是Ubuntu网络中打开就行了。母鸡如果是Mac，如下操作：</p>
+<p>Mac 特别篇 （始）———————————————————————————————————</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo vim /Library/Preferences/VMware\ Fusion/networking <span class="comment"># 如下第一幅截图，将 DHCP 设置为 no， 即使用静态IP。 将 SUBNET 修改为自己想用的网段，此处我填的是 192.168.200.0 网段。</span></span><br><span class="line">sudo vim /Library/Preferences/VMware\ Fusion/vmnet8/nat.conf <span class="comment"># 定网关ip和子网掩码netmask。</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE/%E6%88%AA%E5%B1%8F2022-02-25%2011.10.18.jpg" alt="截屏2022-02-25 11.10.18"></p>
+<p><img src="/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE/%E6%88%AA%E5%B1%8F2022-02-25%2011.13.51.jpg" alt="截屏2022-02-25 11.13.51"></p>
+<p>查Mac本机的DNS地址 </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cat</span> /etc/resolv.conf <span class="comment"># 看nameserver</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE/%E6%88%AA%E5%B1%8F2022-02-25%2011.35.59.jpg" alt="截屏2022-02-25 11.35.59"></p>
+<p>进入虚拟机,以之前母鸡Mac定好的网段为基础，选一个自己要固定的子网ip，我这里用的是192.168.200.100，网关用刚刚在Mac上定好的192.168.200.2，子网掩码用查到的255.255.255.0， dns用刚刚Mac上找到的192.168.31.1。保持bootproto&#x3D;static，noboot&#x3D;yes。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">su  <span class="comment"># 获取root权限</span></span><br><span class="line">vim /etc/sysconfig/network-scripts/ifcfg-ens33</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE/%E6%88%AA%E5%B1%8F2022-02-25%2011.51.42.jpg" alt="截屏2022-02-25 11.51.42"></p>
+<p>然后 重启母鸡Mac。</p>
+<p>Mac 特别篇（终)———————————————————————————————————</p>
+<p>改完了记得重启服务	</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">netplan apply    <span class="comment"># Ubuntu</span></span><br><span class="line">nmcli c reload   <span class="comment"># Centos8 </span></span><br><span class="line">service network restart  </span><br><span class="line">systemctl restart network <span class="comment"># Centos7 </span></span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="主机名和hosts映射"><a href="#主机名和hosts映射" class="headerlink" title="主机名和hosts映射"></a>主机名和hosts映射</h1><p>​		hosts 是一个 主机名和IP映射关系文件。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hostname  // 查看主机名</span><br><span class="line">// 在 /etc/hostname 修改主机名。</span><br></pre></td></tr></table></figure>
+
+<p>​		指定IP地址与主机名之间的对应关系。（Windows和Linux\macos位置不一样但是都在etc&#x2F;hosts文件中。）</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/hosts</span><br><span class="line"><span class="comment"># ip 空格 主机名</span></span><br><span class="line">192.168.31.134 myY400</span><br><span class="line"><span class="comment"># 意思是 当我们ping myY400 时 ，会自动ping 192.168.31.134</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="Hosts-DNS"><a href="#Hosts-DNS" class="headerlink" title="Hosts\DNS"></a>Hosts\DNS</h1><p>​	DNS (domain name system) </p>
+<p><img src="/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE/image-20220114104352280.png" alt="image-20220114104352280"></p>
+<p>​		有的坏人就是偷偷改了hosts文件，域名劫持。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">192.168.31.74 www.baidu.com</span><br></pre></td></tr></table></figure>
+
+<p>​		</p>
+<h1 id="闲聊"><a href="#闲聊" class="headerlink" title="闲聊"></a>闲聊</h1><p>​		最后说说我的实验环境，我是用一台MacBook Pro写代码，用老电脑装了一个Ubuntu，Ubuntu里面的vmware安装了一个centos8的虚拟机，我想从mac远程登录centos来做实验。</p>
+<p>​		方法一：把虚拟机联网方式从NAT模式改为桥接模式，centos内从&#x2F;etc&#x2F;sysconfig&#x2F;network-scripts&#x2F;ifcfg-自己centos的网卡，  固定好自己的静态IP，直接把虚拟机联入家里路由器的局域网，在mac的finalshell直接远程登录虚拟机。</p>
+<p>​		方法二：Mac 的 finalshell 远程登录Ubuntu，虚拟机还是保持NAT模式，我从finalshell内再 【shh 用户名@虚拟机IP 】 ssh登录到centos里面。</p>
+
+            
+
+
+        </div>
+    </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
+        
+            <div class="post-footer-tags">
+                <span class="text-color-light text-small">TAGGED IN</span><br/>
+                
+    <a class="tag tag--primary tag--small t-none-link" href="/tags/%E7%BD%91%E7%BB%9C/" rel="tag">网络</a>
+
+            </div>
+        
+        
+            <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E7%BD%91%E7%BB%9C%E8%BF%9E%E6%8E%A5%E7%9A%84%E4%B8%89%E7%A7%8D%E6%A8%A1%E5%BC%8F/"
+                    data-tooltip="linux网络连接的三种模式"
+                    aria-label="PREVIOUS: linux网络连接的三种模式"
+                >
+                    
+                        <i class="fa fa-angle-left" aria-hidden="true"></i>
+                        <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+                    </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E8%99%9A%E6%8B%9F%E6%9C%BA%E7%9A%84%E5%85%8B%E9%9A%86/"
+                    data-tooltip="linux虚拟机的克隆"
+                    aria-label="NEXT: linux虚拟机的克隆"
+                >
+                    
+                        <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                    </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a
+                class="post-action-btn btn btn--default btn-open-shareoptions"
+                href="#btn-open-shareoptions"
+                aria-label="Share this post"
+            >
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE/"
+                    title="Share on Facebook"
+                    aria-label="Share on Facebook"
+                >
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://twitter.com/intent/tweet?text=http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE/"
+                    title="Share on Twitter"
+                    aria-label="Share on Twitter"
+                >
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://plus.google.com/share?url=http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE/"
+                    title="Share on Google+"
+                    aria-label="Share on Google+"
+                >
+                    <i class="fab fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+        
+        
+            
+        
+    </div>
+</article>
+
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2022 陈宇韶chenyushao. All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E7%BD%91%E7%BB%9C%E8%BF%9E%E6%8E%A5%E7%9A%84%E4%B8%89%E7%A7%8D%E6%A8%A1%E5%BC%8F/"
+                    data-tooltip="linux网络连接的三种模式"
+                    aria-label="PREVIOUS: linux网络连接的三种模式"
+                >
+                    
+                        <i class="fa fa-angle-left" aria-hidden="true"></i>
+                        <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+                    </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E8%99%9A%E6%8B%9F%E6%9C%BA%E7%9A%84%E5%85%8B%E9%9A%86/"
+                    data-tooltip="linux虚拟机的克隆"
+                    aria-label="NEXT: linux虚拟机的克隆"
+                >
+                    
+                        <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                    </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a
+                class="post-action-btn btn btn--default btn-open-shareoptions"
+                href="#btn-open-shareoptions"
+                aria-label="Share this post"
+            >
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE/"
+                    title="Share on Facebook"
+                    aria-label="Share on Facebook"
+                >
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://twitter.com/intent/tweet?text=http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE/"
+                    title="Share on Twitter"
+                    aria-label="Share on Twitter"
+                >
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://plus.google.com/share?url=http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE/"
+                    title="Share on Google+"
+                    aria-label="Share on Google+"
+                >
+                    <i class="fab fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+                </div>
+                
+    <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+        <i id="btn-close-shareoptions" class="fa fa-times"></i>
+        <ul class="share-options">
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="https://www.facebook.com/sharer/sharer.php?u=http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE/"
+                        aria-label="Share on Facebook"
+                    >
+                        <i class="fab fa-facebook" aria-hidden="true"></i><span>Share on Facebook</span>
+                    </a>
+                </li>
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="https://twitter.com/intent/tweet?text=http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE/"
+                        aria-label="Share on Twitter"
+                    >
+                        <i class="fab fa-twitter" aria-hidden="true"></i><span>Share on Twitter</span>
+                    </a>
+                </li>
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="https://plus.google.com/share?url=http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE/"
+                        aria-label="Share on Google+"
+                    >
+                        <i class="fab fa-google-plus" aria-hidden="true"></i><span>Share on Google+</span>
+                    </a>
+                </li>
+            
+        </ul>
+    </div>
+
+
+            
+        </div>
+        
+
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-times"></i>
+        </div>
+        
+            <h4 id="about-card-name">陈宇韶chenyushao</h4>
+        
+            <div id="about-card-bio"><p>author.bio</p>
+</div>
+        
+        
+            <div id="about-card-job">
+                <i class="fa fa-briefcase"></i>
+                <br/>
+                <p>author.job</p>
+
+            </div>
+        
+        
+    </div>
+</div>
+
+        
+        
+<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
+        <!--SCRIPTS-->
+
+<script src="/assets/js/script-sbgpeqyl6jw5qe60mnfuzifzwky5la4ftiuwmschcdzx2pg5tfpl1pfp13e3.min.js"></script>
+
+<!--SCRIPTS END-->
+
+
+    
+
+
+
+
+    </body>
+</html>

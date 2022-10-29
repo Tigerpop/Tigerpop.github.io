@@ -1,0 +1,610 @@
+
+<!DOCTYPE html>
+<html lang="en">
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Tiger_pop&#39;s Blog">
+    <title>Hexo配合GitHub简易建立博客 - Tiger_pop&#39;s Blog</title>
+    <meta name="author" content="陈宇韶chenyushao">
+    
+    
+    
+        
+            <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
+        
+    
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"陈宇韶chenyushao","sameAs":["https://github.com/","https://www.linkedin.com/profile/","mailto"]},"articleBody":"一、首先 安装工具：最新的稳定版本 nodejs、npm 和 git 。   12345# 一些情况下npm集成在nodejs环境中不需要再装。Mac用户Xcode已经集成了git，找到 Xcode -&gt; 偏好设置 -&gt; locations -&gt; commend line tools，有显示就是git已经有了。# 注意：nodejs的版本尽可能高一点，如果用brew 直接安装的node记得升级，不然后面可能会遇到不必要的麻烦，# 升级nodejs：先看看版本 node -v ； sudo npm cache clean -f  ；sudo npm install -g n；sudo n stable； 验证一下 node -v；npm -v；\n\n\n\n二、用ssh连上github。1234567# ssh-keygen -t rsa -C &quot;你的github注册邮箱&quot;# 按照提示选择一个地方放置 .ssh文件，里面有私钥和公钥。我们接下来要用到的就是这个公钥 .ssh/id_rsa.pub # 将id_rsa.pub 内容拷贝，打开并登陆自己的GitHub，在 setting中找到 SSH and GPG keys 位置 新增 ssh keys，黏贴之前拷贝内容 。# 检查是否成功： ssh -T git@github.com ; 按照提示来操作。\n\n\n\n三、利用hexo在本地生成博客。1234567891011121314151617181920212223242526272829303132\t# npm install hexo-cli -g 安装hexo。\t# hexo init [你想取的名字]。    最好先用git代理，如何git代理可以看我其他文档。注意看hexo init是否成功。\t# 进入根目录添加依赖 npm install hero-deployer-git --save ;再进入刚刚生成的[你想取的名字]文件夹内。\t# 本地检查一下，hexo g ; hexo s ; 打开链接。\t# 如果想换一个 theme，可以在hexo网站找一个自己喜欢的类型下载，如[master]，并放到 [你想取的名字]文件夹/theme 内，然后在[你想取的名字]文件夹 将 _config.yml内 theme：修改为你刚才下载的 [master]，具体步骤在每个主题的github下面一般有指导说明。\t# hexo clean ; hexo g ; hero s;检查页面theme是否改成功了。\t# 修改博客的内容。可以看 hexo 写作的说明文档https://hexo.io/zh-cn/docs/writing ，但是我建议直接typora 编辑完了 直接复制或者拖进来。\t\t# 关于图片 显示 找路径的问题：\t# 在 hexo 的根目录下 用 npm 按照依赖 \tnpm install https://github.com/CodeFalling/hexo-asset-image --save\t# 然后把hexo根目录下的_config.yml中的post_asset_folder设为true，这个配置的意思是每次new post一个博客，会增加一个和博客同名的文件夹用来储存图片。在 typora 的偏好设置中，把&lt;图像设置&gt; 设定为 &lt;复制图片到 ./$&#123;filename&#125;.assets 文件夹&gt;设置好typora图片的相对路径；然后在旧有的 typora md文件中选&lt;格式&gt; &lt;复制所有图片到...&gt; 会新建一个文件夹里面存typora 的引用图片，把这个文件夹的图片都复制到 hexo下source下的同名文件夹中（必须直接在这个文件夹下，不能嵌套），即可正常显示图片。\t# 要调的初始页面的东西都在主题 theme 文件夹内，theme文件夹下的_config.yml 就是调整博客此主题布局等等的内容。\t# 写作步骤注意事项：\t\t\t1、先在theme下的 _config.yml 看看 有哪些page需要新建出来，根据这写要求的page名新建对应的page；\t\t\t2、分类categories 和 标签tags 在 front_matter表头信息中要 额外 写上 type: 类型（分类最好就写categories），以及 layout: &quot;刚刚上面写的类型&quot;，如果没有在表头中设置 layout布局 之后网页的 对应布局的按钮点击就不会有反应。\t\t\t3、每次新建一个博客文章post，都要记得在front_matter写上分类、标签信息像下面这样：categories: - Shelltags:- bash- zsh\t\t# hero new &lt; &gt; 即可，有三种new的文件，一种是默认的post ，一种是page用来跳转到新的页面 ，一种是draft自己打草稿用 。生成文件在 source文件夹里面 。\t# 如果插入一个新的page ,让页面可以跳转 ，记得要在 点击页面里面 的md文件内把 相应的跳转页面写好。比如name：/download/ ，以此类推。可以看官网文档。\n\n\n\n四、发布deploy部署博客到互联网。12345678910111213141516171819202122# ssh -T git@github.com  先ssh 登陆github。 #获取github密码令牌： 在github 的setting中 找到 Developer setting ,Personal access tokens ;生成自己的 “个人 通行 代币”（密码令牌）。一定要记得把 令牌的 所有权限打开，不然令牌过了也没用。# 在GitHub建立一个名为[你的GitHub名.github.io]的仓库。                    # 在 [你想取的名字]文件夹/_config.yml 内修改： 找到 部署deploy: 下方改为： type: git ​\trepository: 刚刚建立的仓库地址.git 。例如 https://github.com/Tigerpop/Tigerpop.github.io.git​\tbranch: main     # 之前也有人用别的，我没有分支，所以直接用main。\t# hexo d ;  部署。\t# 会提示要 输入 你的email信息，或者是GitHub名字， git config --global &quot;你的GitHub注册邮箱&quot; 等等，看提示输入即可。\t# 注意： 在要你输入 github密码的时候，不是输入你的 github 密码，而是输入密码令牌！！！\t# 部署成功后，在GitHub新建立的 [你的GitHub名.github.io]仓库 ，找到setting ，下滑到 GitHub pages，点击Your site is published at 后面的网址，别人访问这个网址就可以看见你的博客了。\n\n​\t\n","dateCreated":"2020-09-05T11:12:11+08:00","dateModified":"2022-10-29T14:54:58+08:00","datePublished":"2020-09-05T11:12:11+08:00","description":"一、首先 安装工具：最新的稳定版本 nodejs、npm 和 git 。","headline":"Hexo配合GitHub简易建立博客","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"http://example.com/2020/09/05/Hexo%E9%85%8D%E5%90%88GitHub%E7%AE%80%E6%98%93%E5%BB%BA%E7%AB%8B%E5%8D%9A%E5%AE%A2/Hexo%E9%85%8D%E5%90%88GitHub%E7%AE%80%E6%98%93%E5%BB%BA%E7%AB%8B%E5%8D%9A%E5%AE%A2/"},"publisher":{"@type":"Organization","name":"陈宇韶chenyushao","sameAs":["https://github.com/","https://www.linkedin.com/profile/","mailto"]},"url":"http://example.com/2020/09/05/Hexo%E9%85%8D%E5%90%88GitHub%E7%AE%80%E6%98%93%E5%BB%BA%E7%AB%8B%E5%8D%9A%E5%AE%A2/Hexo%E9%85%8D%E5%90%88GitHub%E7%AE%80%E6%98%93%E5%BB%BA%E7%AB%8B%E5%8D%9A%E5%AE%A2/","keywords":"git, hexo"}</script>
+    <meta name="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="Hexo配合GitHub简易建立博客">
+<meta property="og:url" content="http://example.com/2020/09/05/Hexo%E9%85%8D%E5%90%88GitHub%E7%AE%80%E6%98%93%E5%BB%BA%E7%AB%8B%E5%8D%9A%E5%AE%A2/Hexo%E9%85%8D%E5%90%88GitHub%E7%AE%80%E6%98%93%E5%BB%BA%E7%AB%8B%E5%8D%9A%E5%AE%A2/index.html">
+<meta property="og:site_name" content="Tiger_pop&#39;s Blog">
+<meta property="og:description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-09-05T03:12:11.000Z">
+<meta property="article:modified_time" content="2022-10-29T06:54:58.788Z">
+<meta property="article:author" content="陈宇韶chenyushao">
+<meta property="article:tag" content="git">
+<meta property="article:tag" content="hexo">
+<meta name="twitter:card" content="summary">
+    
+    
+        
+    
+    
+    
+    
+    
+    <!--STYLES-->
+    
+<link rel="stylesheet" href="/assets/css/style-yrbj4x87sme2npnaj5hmxl88fi8ktzpa1hwzrvan2almcpvu5niegj13ryff.min.css">
+
+    <!--STYLES END-->
+    
+
+    
+
+    
+        
+    
+</head>
+
+    <body>
+        <div id="blog">
+            <!-- Define author's picture -->
+
+
+    
+
+<header id="header" data-behavior="4">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <div class="header-title">
+        <a
+            class="header-title-link"
+            href="/"
+            aria-label=""
+        >
+            Tiger_pop&#39;s Blog
+        </a>
+    </div>
+    
+        
+            <a
+                class="header-right-picture "
+                href="#about"
+                aria-label="Open the link: /#about"
+            >
+        
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+<nav id="sidebar" data-behavior="4">
+    <div class="sidebar-container">
+        
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/"
+                            
+                            rel="noopener"
+                            title="Home"
+                        >
+                        <i class="sidebar-button-icon fa fa-home" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Home</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-categories"
+                            
+                            rel="noopener"
+                            title="Categories"
+                        >
+                        <i class="sidebar-button-icon fa fa-bookmark" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Categories</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-tags"
+                            
+                            rel="noopener"
+                            title="Tags"
+                        >
+                        <i class="sidebar-button-icon fa fa-tags" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Tags</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-archives"
+                            
+                            rel="noopener"
+                            title="Archives"
+                        >
+                        <i class="sidebar-button-icon fa fa-archive" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Archives</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="#about"
+                            
+                            rel="noopener"
+                            title="About"
+                        >
+                        <i class="sidebar-button-icon fa fa-question" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">About</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://github.com/"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="GitHub"
+                        >
+                        <i class="sidebar-button-icon fab fa-github" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">GitHub</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://www.linkedin.com/profile/"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="LinkedIn"
+                        >
+                        <i class="sidebar-button-icon fab fa-linkedin" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">LinkedIn</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/mailto"
+                            
+                            rel="noopener"
+                            title="Mail"
+                        >
+                        <i class="sidebar-button-icon fa fa-envelope" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Mail</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/atom.xml"
+                            
+                            rel="noopener"
+                            title="RSS"
+                        >
+                        <i class="sidebar-button-icon fa fa-rss" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">RSS</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+    </div>
+</nav>
+
+            
+            <div id="main" data-behavior="4"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post">
+    
+    
+        <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title">
+            Hexo配合GitHub简易建立博客
+        </h1>
+    
+    
+        <div class="post-meta">
+    <time datetime="2020-09-05T11:12:11+08:00">
+	
+		    Sep 05, 2020
+    	
+    </time>
+    
+        <span>in </span>
+        
+    <a class="category-link" href="/categories/%E5%8D%9A%E5%AE%A2%E5%88%B6%E4%BD%9C/">博客制作</a>
+
+
+    
+</div>
+
+    
+</div>
+
+    
+    <div class="post-content markdown">
+        <div class="main-content-wrap">
+            <h1 id="一、首先-安装工具：最新的稳定版本-nodejs、npm-和-git-。"><a href="#一、首先-安装工具：最新的稳定版本-nodejs、npm-和-git-。" class="headerlink" title="一、首先 安装工具：最新的稳定版本 nodejs、npm 和 git 。   "></a>一、首先 安装工具：最新的稳定版本 nodejs、npm 和 git 。   <span id="more"></span></h1><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">一些情况下npm集成在nodejs环境中不需要再装。Mac用户Xcode已经集成了git，找到 Xcode -&gt; 偏好设置 -&gt; locations -&gt; commend line tools，有显示就是git已经有了。</span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">注意：nodejs的版本尽可能高一点，如果用brew 直接安装的node记得升级，不然后面可能会遇到不必要的麻烦，</span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">升级nodejs：先看看版本 node -v ； sudo npm cache clean -f  ；sudo npm install -g n；sudo n stable； 验证一下 node -v；npm -v；</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="二、用ssh连上github。"><a href="#二、用ssh连上github。" class="headerlink" title="二、用ssh连上github。"></a>二、用ssh连上github。</h1><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">ssh-keygen -t rsa -C <span class="string">&quot;你的github注册邮箱&quot;</span></span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">按照提示选择一个地方放置 .ssh文件，里面有私钥和公钥。我们接下来要用到的就是这个公钥 .ssh/id_rsa.pub</span> </span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">将id_rsa.pub 内容拷贝，打开并登陆自己的GitHub，在 setting中找到 SSH and GPG keys 位置 新增 ssh keys，黏贴之前拷贝内容 。</span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">检查是否成功： ssh -T git@github.com ; 按照提示来操作。</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="三、利用hexo在本地生成博客。"><a href="#三、利用hexo在本地生成博客。" class="headerlink" title="三、利用hexo在本地生成博客。"></a>三、利用hexo在本地生成博客。</h1><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">	# </span><span class="language-bash">npm install hexo-cli -g 安装hexo。</span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">	# </span><span class="language-bash">hexo init [你想取的名字]。    最好先用git代理，如何git代理可以看我其他文档。注意看hexo init是否成功。</span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">	# </span><span class="language-bash">进入根目录添加依赖 npm install hero-deployer-git --save ;再进入刚刚生成的[你想取的名字]文件夹内。</span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">	# </span><span class="language-bash">本地检查一下，hexo g ; hexo s ; 打开链接。</span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">	# </span><span class="language-bash">如果想换一个 theme，可以在hexo网站找一个自己喜欢的类型下载，如[master]，并放到 [你想取的名字]文件夹/theme 内，然后在[你想取的名字]文件夹 将 _config.yml内 theme：修改为你刚才下载的 [master]，具体步骤在每个主题的github下面一般有指导说明。</span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">	# </span><span class="language-bash">hexo clean ; hexo g ; hero s;检查页面theme是否改成功了。</span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">	# </span><span class="language-bash">修改博客的内容。可以看 hexo 写作的说明文档https://hexo.io/zh-cn/docs/writing ，但是我建议直接typora 编辑完了 直接复制或者拖进来。</span></span><br><span class="line"><span class="meta prompt_">	</span></span><br><span class="line"><span class="meta prompt_">	# </span><span class="language-bash">关于图片 显示 找路径的问题：</span></span><br><span class="line"><span class="meta prompt_">	# </span><span class="language-bash">在 hexo 的根目录下 用 npm 按照依赖</span> </span><br><span class="line">	npm install https://github.com/CodeFalling/hexo-asset-image --save</span><br><span class="line"><span class="meta prompt_">	# </span><span class="language-bash">然后把hexo根目录下的_config.yml中的post_asset_folder设为<span class="literal">true</span>，这个配置的意思是每次new post一个博客，会增加一个和博客同名的文件夹用来储存图片。在 typora 的偏好设置中，把&lt;图像设置&gt; 设定为 &lt;复制图片到 ./<span class="variable">$&#123;filename&#125;</span>.assets 文件夹&gt;设置好typora图片的相对路径；然后在旧有的 typora md文件中选&lt;格式&gt; &lt;复制所有图片到...&gt; 会新建一个文件夹里面存typora 的引用图片，把这个文件夹的图片都复制到 hexo下<span class="built_in">source</span>下的同名文件夹中（必须直接在这个文件夹下，不能嵌套），即可正常显示图片。</span></span><br><span class="line"><span class="meta prompt_">	# </span><span class="language-bash">要调的初始页面的东西都在主题 theme 文件夹内，theme文件夹下的_config.yml 就是调整博客此主题布局等等的内容。</span></span><br><span class="line"><span class="meta prompt_">	# </span><span class="language-bash">写作步骤注意事项：</span></span><br><span class="line">			1、先在theme下的 _config.yml 看看 有哪些page需要新建出来，根据这写要求的page名新建对应的page；</span><br><span class="line">			2、分类categories 和 标签tags 在 front_matter表头信息中要 额外 写上 type: 类型（分类最好就写categories），以及 layout: &quot;刚刚上面写的类型&quot;，如果没有在表头中设置 layout布局 之后网页的 对应布局的按钮点击就不会有反应。</span><br><span class="line">			3、每次新建一个博客文章post，都要记得在front_matter写上分类、标签信息像下面这样：</span><br><span class="line">categories: </span><br><span class="line">- Shell</span><br><span class="line">tags:</span><br><span class="line">- bash</span><br><span class="line">- zsh</span><br><span class="line"><span class="meta prompt_">	</span></span><br><span class="line"><span class="meta prompt_">	# </span><span class="language-bash">hero new &lt; &gt; 即可，有三种new的文件，一种是默认的post ，一种是page用来跳转到新的页面 ，一种是draft自己打草稿用 。生成文件在 <span class="built_in">source</span>文件夹里面 。</span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">	# </span><span class="language-bash">如果插入一个新的page ,让页面可以跳转 ，记得要在 点击页面里面 的md文件内把 相应的跳转页面写好。比如name：/download/ ，以此类推。可以看官网文档。</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="四、发布deploy部署博客到互联网。"><a href="#四、发布deploy部署博客到互联网。" class="headerlink" title="四、发布deploy部署博客到互联网。"></a>四、发布deploy部署博客到互联网。</h1><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">ssh -T git@github.com  先ssh 登陆github。</span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"> #</span><span class="language-bash">获取github密码令牌： 在github 的setting中 找到 Developer setting ,Personal access tokens ;生成自己的 “个人 通行 代币”（密码令牌）。一定要记得把 令牌的 所有权限打开，不然令牌过了也没用。</span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">在GitHub建立一个名为[你的GitHub名.github.io]的仓库。</span>                    </span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">在 [你想取的名字]文件夹/_config.yml 内修改： 找到 部署deploy: 下方改为： <span class="built_in">type</span>: git</span> </span><br><span class="line"></span><br><span class="line">​	repository: 刚刚建立的仓库地址.git 。例如 https://github.com/Tigerpop/Tigerpop.github.io.git</span><br><span class="line">​	branch: main     # 之前也有人用别的，我没有分支，所以直接用main。</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">	# </span><span class="language-bash">hexo d ;  部署。</span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">	# </span><span class="language-bash">会提示要 输入 你的email信息，或者是GitHub名字， git config --global <span class="string">&quot;你的GitHub注册邮箱&quot;</span> 等等，看提示输入即可。</span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">	# </span><span class="language-bash">注意： 在要你输入 github密码的时候，不是输入你的 github 密码，而是输入密码令牌！！！</span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">	# </span><span class="language-bash">部署成功后，在GitHub新建立的 [你的GitHub名.github.io]仓库 ，找到setting ，下滑到 GitHub pages，点击Your site is published at 后面的网址，别人访问这个网址就可以看见你的博客了。</span></span><br></pre></td></tr></table></figure>
+
+<p>​	</p>
+
+            
+
+
+        </div>
+    </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
+        
+            <div class="post-footer-tags">
+                <span class="text-color-light text-small">TAGGED IN</span><br/>
+                
+    <a class="tag tag--primary tag--small t-none-link" href="/tags/git/" rel="tag">git</a> <a class="tag tag--primary tag--small t-none-link" href="/tags/hexo/" rel="tag">hexo</a>
+
+            </div>
+        
+        
+            <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2020/11/12/mysql%E5%AD%A6%E4%B9%A0/mysql%E7%AC%94%E8%AE%B0/"
+                    data-tooltip="mysql笔记"
+                    aria-label="PREVIOUS: mysql笔记"
+                >
+                    
+                        <i class="fa fa-angle-left" aria-hidden="true"></i>
+                        <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+                    </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2020/09/05/git%E5%AD%A6%E4%B9%A0/git%E5%AD%A6%E4%B9%A0/"
+                    data-tooltip="git学习"
+                    aria-label="NEXT: git学习"
+                >
+                    
+                        <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                    </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a
+                class="post-action-btn btn btn--default btn-open-shareoptions"
+                href="#btn-open-shareoptions"
+                aria-label="Share this post"
+            >
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://example.com/2020/09/05/Hexo%E9%85%8D%E5%90%88GitHub%E7%AE%80%E6%98%93%E5%BB%BA%E7%AB%8B%E5%8D%9A%E5%AE%A2/Hexo%E9%85%8D%E5%90%88GitHub%E7%AE%80%E6%98%93%E5%BB%BA%E7%AB%8B%E5%8D%9A%E5%AE%A2/"
+                    title="Share on Facebook"
+                    aria-label="Share on Facebook"
+                >
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://twitter.com/intent/tweet?text=http://example.com/2020/09/05/Hexo%E9%85%8D%E5%90%88GitHub%E7%AE%80%E6%98%93%E5%BB%BA%E7%AB%8B%E5%8D%9A%E5%AE%A2/Hexo%E9%85%8D%E5%90%88GitHub%E7%AE%80%E6%98%93%E5%BB%BA%E7%AB%8B%E5%8D%9A%E5%AE%A2/"
+                    title="Share on Twitter"
+                    aria-label="Share on Twitter"
+                >
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://plus.google.com/share?url=http://example.com/2020/09/05/Hexo%E9%85%8D%E5%90%88GitHub%E7%AE%80%E6%98%93%E5%BB%BA%E7%AB%8B%E5%8D%9A%E5%AE%A2/Hexo%E9%85%8D%E5%90%88GitHub%E7%AE%80%E6%98%93%E5%BB%BA%E7%AB%8B%E5%8D%9A%E5%AE%A2/"
+                    title="Share on Google+"
+                    aria-label="Share on Google+"
+                >
+                    <i class="fab fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+        
+        
+            
+        
+    </div>
+</article>
+
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2022 陈宇韶chenyushao. All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2020/11/12/mysql%E5%AD%A6%E4%B9%A0/mysql%E7%AC%94%E8%AE%B0/"
+                    data-tooltip="mysql笔记"
+                    aria-label="PREVIOUS: mysql笔记"
+                >
+                    
+                        <i class="fa fa-angle-left" aria-hidden="true"></i>
+                        <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+                    </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2020/09/05/git%E5%AD%A6%E4%B9%A0/git%E5%AD%A6%E4%B9%A0/"
+                    data-tooltip="git学习"
+                    aria-label="NEXT: git学习"
+                >
+                    
+                        <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                    </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a
+                class="post-action-btn btn btn--default btn-open-shareoptions"
+                href="#btn-open-shareoptions"
+                aria-label="Share this post"
+            >
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://example.com/2020/09/05/Hexo%E9%85%8D%E5%90%88GitHub%E7%AE%80%E6%98%93%E5%BB%BA%E7%AB%8B%E5%8D%9A%E5%AE%A2/Hexo%E9%85%8D%E5%90%88GitHub%E7%AE%80%E6%98%93%E5%BB%BA%E7%AB%8B%E5%8D%9A%E5%AE%A2/"
+                    title="Share on Facebook"
+                    aria-label="Share on Facebook"
+                >
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://twitter.com/intent/tweet?text=http://example.com/2020/09/05/Hexo%E9%85%8D%E5%90%88GitHub%E7%AE%80%E6%98%93%E5%BB%BA%E7%AB%8B%E5%8D%9A%E5%AE%A2/Hexo%E9%85%8D%E5%90%88GitHub%E7%AE%80%E6%98%93%E5%BB%BA%E7%AB%8B%E5%8D%9A%E5%AE%A2/"
+                    title="Share on Twitter"
+                    aria-label="Share on Twitter"
+                >
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://plus.google.com/share?url=http://example.com/2020/09/05/Hexo%E9%85%8D%E5%90%88GitHub%E7%AE%80%E6%98%93%E5%BB%BA%E7%AB%8B%E5%8D%9A%E5%AE%A2/Hexo%E9%85%8D%E5%90%88GitHub%E7%AE%80%E6%98%93%E5%BB%BA%E7%AB%8B%E5%8D%9A%E5%AE%A2/"
+                    title="Share on Google+"
+                    aria-label="Share on Google+"
+                >
+                    <i class="fab fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+                </div>
+                
+    <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+        <i id="btn-close-shareoptions" class="fa fa-times"></i>
+        <ul class="share-options">
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="https://www.facebook.com/sharer/sharer.php?u=http://example.com/2020/09/05/Hexo%E9%85%8D%E5%90%88GitHub%E7%AE%80%E6%98%93%E5%BB%BA%E7%AB%8B%E5%8D%9A%E5%AE%A2/Hexo%E9%85%8D%E5%90%88GitHub%E7%AE%80%E6%98%93%E5%BB%BA%E7%AB%8B%E5%8D%9A%E5%AE%A2/"
+                        aria-label="Share on Facebook"
+                    >
+                        <i class="fab fa-facebook" aria-hidden="true"></i><span>Share on Facebook</span>
+                    </a>
+                </li>
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="https://twitter.com/intent/tweet?text=http://example.com/2020/09/05/Hexo%E9%85%8D%E5%90%88GitHub%E7%AE%80%E6%98%93%E5%BB%BA%E7%AB%8B%E5%8D%9A%E5%AE%A2/Hexo%E9%85%8D%E5%90%88GitHub%E7%AE%80%E6%98%93%E5%BB%BA%E7%AB%8B%E5%8D%9A%E5%AE%A2/"
+                        aria-label="Share on Twitter"
+                    >
+                        <i class="fab fa-twitter" aria-hidden="true"></i><span>Share on Twitter</span>
+                    </a>
+                </li>
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="https://plus.google.com/share?url=http://example.com/2020/09/05/Hexo%E9%85%8D%E5%90%88GitHub%E7%AE%80%E6%98%93%E5%BB%BA%E7%AB%8B%E5%8D%9A%E5%AE%A2/Hexo%E9%85%8D%E5%90%88GitHub%E7%AE%80%E6%98%93%E5%BB%BA%E7%AB%8B%E5%8D%9A%E5%AE%A2/"
+                        aria-label="Share on Google+"
+                    >
+                        <i class="fab fa-google-plus" aria-hidden="true"></i><span>Share on Google+</span>
+                    </a>
+                </li>
+            
+        </ul>
+    </div>
+
+
+            
+        </div>
+        
+
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-times"></i>
+        </div>
+        
+            <h4 id="about-card-name">陈宇韶chenyushao</h4>
+        
+            <div id="about-card-bio"><p>author.bio</p>
+</div>
+        
+        
+            <div id="about-card-job">
+                <i class="fa fa-briefcase"></i>
+                <br/>
+                <p>author.job</p>
+
+            </div>
+        
+        
+    </div>
+</div>
+
+        
+        
+<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
+        <!--SCRIPTS-->
+
+<script src="/assets/js/script-sbgpeqyl6jw5qe60mnfuzifzwky5la4ftiuwmschcdzx2pg5tfpl1pfp13e3.min.js"></script>
+
+<!--SCRIPTS END-->
+
+
+    
+
+
+
+
+    </body>
+</html>

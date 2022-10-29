@@ -1,0 +1,638 @@
+
+<!DOCTYPE html>
+<html lang="en">
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Tiger_pop&#39;s Blog">
+    <title>linux文件目录指令 - Tiger_pop&#39;s Blog</title>
+    <meta name="author" content="陈宇韶chenyushao">
+    
+    
+    
+        
+            <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
+        
+    
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"陈宇韶chenyushao","sameAs":["https://github.com/","https://www.linkedin.com/profile/","mailto"]},"articleBody":"简介 \n绝对路径相对路径​\t\t绝对路径从 &#x2F;根目录开始；相对路径从当前开始。\n​\t\t直接回到该用户的家目录:     cd ～ \n​\t\t相对路径的案例：        cd ..&#x2F;..&#x2F;root       (从当前上翻两步再找root位置 )\n文件目录类mkdir​\t\t创建一个dog目录：  mkdir &#x2F;home&#x2F;dog \n​\t\t创建多级目录，dog，animal都是新的：  mkdir -p &#x2F;home&#x2F;animal&#x2F;dog\nrm​\t\t删除空目录：   rmdir  要删除的目录\n​\t\t递归： -r\n​\t\t不提示 ：  -f\n​\t\t递归强制删除且不提示： rm -rf  &#x2F;home&#x2F;chen\n​\t\ttouch\t\t\n​\t\t创建空文件：    touch  文件名\ncp​\t\t拷贝到指定目录： cp  &#x2F;home&#x2F;chen&#x2F;hello.txt  &#x2F;home&#x2F;my\n​\t\t强制拷贝覆盖不提示\\cp ：     \\cp -r &#x2F;home&#x2F;chen  &#x2F;opt\nmv​\t\t移动并重命名：  mv   &#x2F;home&#x2F;A.txt   &#x2F;home&#x2F;B.txt\n​\t\t移动：    mv &#x2F;home&#x2F;A.txt   &#x2F;home&#x2F;\n​\t\t移动整个目录bbb： mv   &#x2F;opt&#x2F;bbb  &#x2F;home&#x2F;   \ncat​\t\t查看文件，-n 表示加行号：      cat  -n 文件\n​\t\t可以和管道配合使用：   cat  -n  &#x2F;etc&#x2F;profile | more\nmore​\t\tmore 文件\nless​\t\t查看大文件： less  文件\necho​\t\t输出内容到控制台：   echo 选项  输出内容\n​\t\techo  $PATH\n​\t\techo  $HOSTNAME\n​\t\t也可以结合重定向符号:         覆盖 &gt;  ；  追加  &gt;&gt;\n​\t\t把原本输出到控制台的“hello” 重定向输出到这个文件内：\n​\t\techo   “hello”   &gt;   &#x2F;home&#x2F;chen&#x2F;mydate.txt  \nhead&#x2F;tail​\t\t查看文件的前 多少行&#x2F;倒数多少行。\n​\t\thead  -n  5  &#x2F;etc&#x2F;profile\n      tail  -n  3  /etc/profile\n\n​\t\t实时追踪变更（实时监控）：   -f\n​\t\ttail  -f  文件\n重定向覆盖&gt;&#x2F;重定向追加&gt;&gt;​\t\t把&#x2F;home目录 下的文件列表 写入 &#x2F;home&#x2F;info.txt 中，覆盖写入：\n​\t\tls -l &#x2F;home &gt; &#x2F;home&#x2F;info.txt       (如果info.txt没有回自动创建)\n​\t\t把日历 追加到本不存在的mycal.txt文件中:\n​\t\tcal   &gt;&gt;  mycal.txt\n​\t\t将文件1覆盖文件2：\n​\t\tcat  文件1  &gt;  文件2\nln​\t\t软连接，类似于Windows的快捷方式，存放了链接其它文件的路径。\n​\t\t基本语法： \n​\t\tln  -s  原文件或目录   软链接名\n​\t\t创建完软连接后，只需要   “ cd  软连接名 ” 即可跳转到链接位置的内容，注意：但是pwd还是发现在这个软连接的位置。\nhistory​\t\t查看历史命令。 \n","dateCreated":"2022-10-29T15:42:07+08:00","dateModified":"2022-10-29T16:36:45+08:00","datePublished":"2022-10-29T15:42:07+08:00","description":"简介","headline":"linux文件目录指令","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E6%96%87%E4%BB%B6%E7%9B%AE%E5%BD%95%E6%8C%87%E4%BB%A4/"},"publisher":{"@type":"Organization","name":"陈宇韶chenyushao","sameAs":["https://github.com/","https://www.linkedin.com/profile/","mailto"]},"url":"http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E6%96%87%E4%BB%B6%E7%9B%AE%E5%BD%95%E6%8C%87%E4%BB%A4/","keywords":"linux"}</script>
+    <meta name="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="linux文件目录指令">
+<meta property="og:url" content="http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E6%96%87%E4%BB%B6%E7%9B%AE%E5%BD%95%E6%8C%87%E4%BB%A4/index.html">
+<meta property="og:site_name" content="Tiger_pop&#39;s Blog">
+<meta property="og:description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2022-10-29T07:42:07.000Z">
+<meta property="article:modified_time" content="2022-10-29T08:36:45.474Z">
+<meta property="article:author" content="陈宇韶chenyushao">
+<meta property="article:tag" content="linux">
+<meta name="twitter:card" content="summary">
+    
+    
+        
+    
+    
+    
+    
+    
+    <!--STYLES-->
+    
+<link rel="stylesheet" href="/assets/css/style-yrbj4x87sme2npnaj5hmxl88fi8ktzpa1hwzrvan2almcpvu5niegj13ryff.min.css">
+
+    <!--STYLES END-->
+    
+
+    
+
+    
+        
+    
+</head>
+
+    <body>
+        <div id="blog">
+            <!-- Define author's picture -->
+
+
+    
+
+<header id="header" data-behavior="4">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <div class="header-title">
+        <a
+            class="header-title-link"
+            href="/"
+            aria-label=""
+        >
+            Tiger_pop&#39;s Blog
+        </a>
+    </div>
+    
+        
+            <a
+                class="header-right-picture "
+                href="#about"
+                aria-label="Open the link: /#about"
+            >
+        
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+<nav id="sidebar" data-behavior="4">
+    <div class="sidebar-container">
+        
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/"
+                            
+                            rel="noopener"
+                            title="Home"
+                        >
+                        <i class="sidebar-button-icon fa fa-home" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Home</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-categories"
+                            
+                            rel="noopener"
+                            title="Categories"
+                        >
+                        <i class="sidebar-button-icon fa fa-bookmark" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Categories</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-tags"
+                            
+                            rel="noopener"
+                            title="Tags"
+                        >
+                        <i class="sidebar-button-icon fa fa-tags" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Tags</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-archives"
+                            
+                            rel="noopener"
+                            title="Archives"
+                        >
+                        <i class="sidebar-button-icon fa fa-archive" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Archives</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="#about"
+                            
+                            rel="noopener"
+                            title="About"
+                        >
+                        <i class="sidebar-button-icon fa fa-question" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">About</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://github.com/"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="GitHub"
+                        >
+                        <i class="sidebar-button-icon fab fa-github" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">GitHub</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://www.linkedin.com/profile/"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="LinkedIn"
+                        >
+                        <i class="sidebar-button-icon fab fa-linkedin" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">LinkedIn</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/mailto"
+                            
+                            rel="noopener"
+                            title="Mail"
+                        >
+                        <i class="sidebar-button-icon fa fa-envelope" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Mail</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/atom.xml"
+                            
+                            rel="noopener"
+                            title="RSS"
+                        >
+                        <i class="sidebar-button-icon fa fa-rss" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">RSS</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+    </div>
+</nav>
+
+            
+            <div id="main" data-behavior="4"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post">
+    
+    
+        <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title">
+            linux文件目录指令
+        </h1>
+    
+    
+        <div class="post-meta">
+    <time datetime="2022-10-29T15:42:07+08:00">
+	
+		    Oct 29, 2022
+    	
+    </time>
+    
+        <span>in </span>
+        
+    <a class="category-link" href="/categories/Linux/">Linux</a>
+
+
+    
+</div>
+
+    
+</div>
+
+    
+    <div class="post-content markdown">
+        <div class="main-content-wrap">
+            <p>简介 <span id="more"></span></p>
+<h1 id="绝对路径相对路径"><a href="#绝对路径相对路径" class="headerlink" title="绝对路径相对路径"></a>绝对路径相对路径</h1><p>​		绝对路径从 &#x2F;根目录开始；相对路径从当前开始。</p>
+<p>​		直接回到该用户的家目录:     cd ～ </p>
+<p>​		相对路径的案例：        cd ..&#x2F;..&#x2F;root       (从当前上翻两步再找root位置 )</p>
+<h1 id="文件目录类"><a href="#文件目录类" class="headerlink" title="文件目录类"></a>文件目录类</h1><h2 id="mkdir"><a href="#mkdir" class="headerlink" title="mkdir"></a>mkdir</h2><p>​		创建一个dog目录：  mkdir &#x2F;home&#x2F;dog </p>
+<p>​		创建多级目录，dog，animal都是新的：  mkdir -p &#x2F;home&#x2F;animal&#x2F;dog</p>
+<h2 id="rm"><a href="#rm" class="headerlink" title="rm"></a>rm</h2><p>​		删除空目录：   rmdir  要删除的目录</p>
+<p>​		递归： -r</p>
+<p>​		不提示 ：  -f</p>
+<p>​		递归强制删除且不提示： rm -rf  &#x2F;home&#x2F;chen</p>
+<p>​		touch		</p>
+<p>​		创建空文件：    touch  文件名</p>
+<h2 id="cp"><a href="#cp" class="headerlink" title="cp"></a>cp</h2><p>​		拷贝到指定目录： cp  &#x2F;home&#x2F;chen&#x2F;hello.txt  &#x2F;home&#x2F;my</p>
+<p>​		强制拷贝覆盖不提示\cp ：     \cp -r &#x2F;home&#x2F;chen  &#x2F;opt</p>
+<h2 id="mv"><a href="#mv" class="headerlink" title="mv"></a>mv</h2><p>​		移动并重命名：  mv   &#x2F;home&#x2F;A.txt   &#x2F;home&#x2F;B.txt</p>
+<p>​		移动：    mv &#x2F;home&#x2F;A.txt   &#x2F;home&#x2F;</p>
+<p>​		移动整个目录bbb： mv   &#x2F;opt&#x2F;bbb  &#x2F;home&#x2F;   </p>
+<h2 id="cat"><a href="#cat" class="headerlink" title="cat"></a>cat</h2><p>​		查看文件，-n 表示加行号：      cat  -n 文件</p>
+<p>​		可以和管道配合使用：   cat  -n  &#x2F;etc&#x2F;profile | more</p>
+<h2 id="more"><a href="#more" class="headerlink" title="more"></a>more</h2><p>​		more 文件</p>
+<h2 id="less"><a href="#less" class="headerlink" title="less"></a>less</h2><p>​		查看大文件： less  文件</p>
+<h2 id="echo"><a href="#echo" class="headerlink" title="echo"></a>echo</h2><p>​		输出内容到控制台：   echo 选项  输出内容</p>
+<p>​		echo  $PATH</p>
+<p>​		echo  $HOSTNAME</p>
+<p>​		也可以结合重定向符号:         覆盖 &gt;  ；  追加  &gt;&gt;</p>
+<p>​		把原本输出到控制台的“hello” 重定向输出到这个文件内：</p>
+<p>​		echo   “hello”   &gt;   &#x2F;home&#x2F;chen&#x2F;mydate.txt  </p>
+<h2 id="head-x2F-tail"><a href="#head-x2F-tail" class="headerlink" title="head&#x2F;tail"></a>head&#x2F;tail</h2><p>​		查看文件的前 多少行&#x2F;倒数多少行。</p>
+<p>​		head  -n  5  &#x2F;etc&#x2F;profile</p>
+<pre><code>      tail  -n  3  /etc/profile
+</code></pre>
+<p>​		实时追踪变更（实时监控）：   -f</p>
+<p>​		tail  -f  文件</p>
+<h2 id="重定向覆盖-gt-x2F-重定向追加-gt-gt"><a href="#重定向覆盖-gt-x2F-重定向追加-gt-gt" class="headerlink" title="重定向覆盖&gt;&#x2F;重定向追加&gt;&gt;"></a>重定向覆盖&gt;&#x2F;重定向追加&gt;&gt;</h2><p>​		把&#x2F;home目录 下的文件列表 写入 &#x2F;home&#x2F;info.txt 中，覆盖写入：</p>
+<p>​		ls -l &#x2F;home &gt; &#x2F;home&#x2F;info.txt       (如果info.txt没有回自动创建)</p>
+<p>​		把日历 追加到本不存在的mycal.txt文件中:</p>
+<p>​		cal   &gt;&gt;  mycal.txt</p>
+<p>​		将文件1覆盖文件2：</p>
+<p>​		cat  文件1  &gt;  文件2</p>
+<h2 id="ln"><a href="#ln" class="headerlink" title="ln"></a>ln</h2><p>​		软连接，类似于Windows的快捷方式，存放了链接其它文件的路径。</p>
+<p>​		基本语法： </p>
+<p>​		ln  -s  原文件或目录   软链接名</p>
+<p>​		创建完软连接后，只需要   “ cd  软连接名 ” 即可跳转到链接位置的内容，注意：但是pwd还是发现在这个软连接的位置。</p>
+<h2 id="history"><a href="#history" class="headerlink" title="history"></a>history</h2><p>​		查看历史命令。 </p>
+
+            
+
+
+        </div>
+    </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
+        
+            <div class="post-footer-tags">
+                <span class="text-color-light text-small">TAGGED IN</span><br/>
+                
+    <a class="tag tag--primary tag--small t-none-link" href="/tags/linux/" rel="tag">linux</a>
+
+            </div>
+        
+        
+            <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E6%95%B0%E6%8D%AE%E7%9A%84%E5%A4%87%E4%BB%BD%E5%92%8C%E6%81%A2%E5%A4%8D/"
+                    data-tooltip="linux数据的备份和恢复"
+                    aria-label="PREVIOUS: linux数据的备份和恢复"
+                >
+                    
+                        <i class="fa fa-angle-left" aria-hidden="true"></i>
+                        <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+                    </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E6%96%87%E4%BB%B6%E8%BF%9C%E7%A8%8B%E4%BC%A0%E8%BE%93/"
+                    data-tooltip="linux文件远程传输"
+                    aria-label="NEXT: linux文件远程传输"
+                >
+                    
+                        <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                    </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a
+                class="post-action-btn btn btn--default btn-open-shareoptions"
+                href="#btn-open-shareoptions"
+                aria-label="Share this post"
+            >
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E6%96%87%E4%BB%B6%E7%9B%AE%E5%BD%95%E6%8C%87%E4%BB%A4/"
+                    title="Share on Facebook"
+                    aria-label="Share on Facebook"
+                >
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://twitter.com/intent/tweet?text=http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E6%96%87%E4%BB%B6%E7%9B%AE%E5%BD%95%E6%8C%87%E4%BB%A4/"
+                    title="Share on Twitter"
+                    aria-label="Share on Twitter"
+                >
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://plus.google.com/share?url=http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E6%96%87%E4%BB%B6%E7%9B%AE%E5%BD%95%E6%8C%87%E4%BB%A4/"
+                    title="Share on Google+"
+                    aria-label="Share on Google+"
+                >
+                    <i class="fab fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+        
+        
+            
+        
+    </div>
+</article>
+
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2022 陈宇韶chenyushao. All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E6%95%B0%E6%8D%AE%E7%9A%84%E5%A4%87%E4%BB%BD%E5%92%8C%E6%81%A2%E5%A4%8D/"
+                    data-tooltip="linux数据的备份和恢复"
+                    aria-label="PREVIOUS: linux数据的备份和恢复"
+                >
+                    
+                        <i class="fa fa-angle-left" aria-hidden="true"></i>
+                        <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+                    </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E6%96%87%E4%BB%B6%E8%BF%9C%E7%A8%8B%E4%BC%A0%E8%BE%93/"
+                    data-tooltip="linux文件远程传输"
+                    aria-label="NEXT: linux文件远程传输"
+                >
+                    
+                        <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                    </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a
+                class="post-action-btn btn btn--default btn-open-shareoptions"
+                href="#btn-open-shareoptions"
+                aria-label="Share this post"
+            >
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E6%96%87%E4%BB%B6%E7%9B%AE%E5%BD%95%E6%8C%87%E4%BB%A4/"
+                    title="Share on Facebook"
+                    aria-label="Share on Facebook"
+                >
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://twitter.com/intent/tweet?text=http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E6%96%87%E4%BB%B6%E7%9B%AE%E5%BD%95%E6%8C%87%E4%BB%A4/"
+                    title="Share on Twitter"
+                    aria-label="Share on Twitter"
+                >
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://plus.google.com/share?url=http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E6%96%87%E4%BB%B6%E7%9B%AE%E5%BD%95%E6%8C%87%E4%BB%A4/"
+                    title="Share on Google+"
+                    aria-label="Share on Google+"
+                >
+                    <i class="fab fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+                </div>
+                
+    <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+        <i id="btn-close-shareoptions" class="fa fa-times"></i>
+        <ul class="share-options">
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="https://www.facebook.com/sharer/sharer.php?u=http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E6%96%87%E4%BB%B6%E7%9B%AE%E5%BD%95%E6%8C%87%E4%BB%A4/"
+                        aria-label="Share on Facebook"
+                    >
+                        <i class="fab fa-facebook" aria-hidden="true"></i><span>Share on Facebook</span>
+                    </a>
+                </li>
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="https://twitter.com/intent/tweet?text=http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E6%96%87%E4%BB%B6%E7%9B%AE%E5%BD%95%E6%8C%87%E4%BB%A4/"
+                        aria-label="Share on Twitter"
+                    >
+                        <i class="fab fa-twitter" aria-hidden="true"></i><span>Share on Twitter</span>
+                    </a>
+                </li>
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="https://plus.google.com/share?url=http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E6%96%87%E4%BB%B6%E7%9B%AE%E5%BD%95%E6%8C%87%E4%BB%A4/"
+                        aria-label="Share on Google+"
+                    >
+                        <i class="fab fa-google-plus" aria-hidden="true"></i><span>Share on Google+</span>
+                    </a>
+                </li>
+            
+        </ul>
+    </div>
+
+
+            
+        </div>
+        
+
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-times"></i>
+        </div>
+        
+            <h4 id="about-card-name">陈宇韶chenyushao</h4>
+        
+            <div id="about-card-bio"><p>author.bio</p>
+</div>
+        
+        
+            <div id="about-card-job">
+                <i class="fa fa-briefcase"></i>
+                <br/>
+                <p>author.job</p>
+
+            </div>
+        
+        
+    </div>
+</div>
+
+        
+        
+<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
+        <!--SCRIPTS-->
+
+<script src="/assets/js/script-sbgpeqyl6jw5qe60mnfuzifzwky5la4ftiuwmschcdzx2pg5tfpl1pfp13e3.min.js"></script>
+
+<!--SCRIPTS END-->
+
+
+    
+
+
+
+
+    </body>
+</html>

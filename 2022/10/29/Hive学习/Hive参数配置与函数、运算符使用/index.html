@@ -1,0 +1,814 @@
+
+<!DOCTYPE html>
+<html lang="en">
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Tiger_pop&#39;s Blog">
+    <title>Hive参数配置与函数、运算符使用 - Tiger_pop&#39;s Blog</title>
+    <meta name="author" content="陈宇韶chenyushao">
+    
+    
+    
+        
+            <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
+        
+    
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"陈宇韶chenyushao","sameAs":["https://github.com/","https://www.linkedin.com/profile/","mailto"]},"articleBody":"简介 \n配置属性\n\n\n\n\n\n\n\n在这个会话中，把日志设置为debug，并输出在console控制台上。\n\n运算符\n\n\n123456789101112131415161718192021----------------Hive中关系运算符----------------------------is null空值判断select 1 from dual where &#x27;itcast&#x27; is null;--is not null 非空值判断select 1 from dual where &#x27;itcast&#x27; is not null;--like比较： _表示任意单个字符 %表示任意数量字符--否定比较： NOT A like Bselect 1 from dual where &#x27;itcast&#x27; like &#x27;it_&#x27;;select 1 from dual where &#x27;itcast&#x27; like &#x27;it%&#x27;;select 1 from dual where  &#x27;itcast&#x27; not like &#x27;hadoo_&#x27;;select 1 from dual where  not &#x27;itcast&#x27; like &#x27;hadoo_&#x27;;--rlike：确定字符串是否匹配正则表达式，是REGEXP_LIKE()的同义词。select 1 from dual where &#x27;itcast&#x27; rlike &#x27;^i.*t$&#x27;;select 1 from dual where &#x27;123456&#x27; rlike &#x27;^\\\\d+$&#x27;;  --判断是否全为数字select 1 from dual where &#x27;123456aa&#x27; rlike &#x27;^\\\\d+$&#x27;;--regexp：功能与rlike相同 用于判断字符串是否匹配正则表达式select 1 from dual where &#x27;itcast&#x27; regexp &#x27;^i.*t$&#x27;;\n\n\n\n\n123456789101112131415161718192021222324Hive逻辑运算符--与操作: A AND B   如果A和B均为TRUE，则为TRUE，否则为FALSE。如果A或B为NULL，则为NULL。select 1 from dual where 3&gt;1 and 2&gt;1;--或操作: A OR B   如果A或B或两者均为TRUE，则为TRUE，否则为FALSE。select 1 from dual where 3&gt;1 or 2!=2;--非操作: NOT A 、!A   如果A为FALSE，则为TRUE；如果A为NULL，则为NULL。否则为FALSE。select 1 from dual where not 2&gt;1;select 1 from dual where !2=1;--在:A IN (val1, val2, ...)  如果A等于任何值，则为TRUE。select 1 from dual where 11  in(11,22,33);--不在:A NOT IN (val1, val2, ...) 如果A不等于任何值，则为TRUEselect 1 from dual where 11 not in(22,33,44);--逻辑是否存在: [NOT] EXISTS (subquery)--将主查询的数据，放到子查询中做条件验证，根据验证结果（TRUE 或 FALSE）来决定主查询的数据结果是否得以保留。select A.* from Awhere exists (select B.id from B where A.id = B.id);--其他运算符select &#x27;it&#x27; || &#x27;cast&#x27;;select concat()select `array`(11,22,33)from dual;\n\n\nselect concat (‘a’,’b’); \nfunction\n\n\n\n123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051------------String Functions 字符串函数------------select concat(&quot;angela&quot;,&quot;baby&quot;);--带分隔符字符串连接函数：concat_ws(separator, [string | array(string)]+)select concat_ws(&#x27;.&#x27;, &#x27;www&#x27;, array(&#x27;itcast&#x27;, &#x27;cn&#x27;));--字符串截取函数：substr(str, pos[, len]) 或者  substring(str, pos[, len])select substr(&quot;angelababy&quot;,-2); --pos是从1开始的索引，如果为负数则倒着数select substr(&quot;angelababy&quot;,2,2);--正则表达式替换函数：regexp_replace(str, regexp, rep)select regexp_replace(&#x27;100-200&#x27;, &#x27;(\\\\d+)&#x27;, &#x27;num&#x27;);--正则表达式解析函数：regexp_extract(str, regexp[, idx]) 提取正则匹配到的指定组内容select regexp_extract(&#x27;100-200&#x27;, &#x27;(\\\\d+)-(\\\\d+)&#x27;, 2);--URL解析函数：parse_url 注意要想一次解析出多个 可以使用parse_url_tuple这个UDTF函数select parse_url(&#x27;http://www.itcast.cn/path/p1.php?query=1&#x27;, &#x27;HOST&#x27;);--分割字符串函数: split(str, regex)select split(&#x27;apache hive&#x27;, &#x27;\\\\s+&#x27;);--json解析函数：get_json_object(json_txt, path)--$表示json对象select get_json_object(&#x27;[&#123;&quot;website&quot;:&quot;www.itcast.cn&quot;,&quot;name&quot;:&quot;allenwoon&quot;&#125;, &#123;&quot;website&quot;:&quot;cloud.itcast.com&quot;,&quot;name&quot;:&quot;carbondata 中文文档&quot;&#125;]&#x27;, &#x27;$.[1].website&#x27;);--字符串长度函数：length(str | binary)select length(&quot;angelababy&quot;);--字符串反转函数：reverseselect reverse(&quot;angelababy&quot;);--字符串连接函数：concat(str1, str2, ... strN)--字符串转大写函数：upper,ucaseselect upper(&quot;angelababy&quot;);select ucase(&quot;angelababy&quot;);--字符串转小写函数：lower,lcaseselect lower(&quot;ANGELABABY&quot;);select lcase(&quot;ANGELABABY&quot;);--去空格函数：trim 去除左右两边的空格select trim(&quot; angelababy &quot;);--左边去空格函数：ltrimselect ltrim(&quot; angelababy &quot;);--右边去空格函数：rtrimselect rtrim(&quot; angelababy &quot;);--空格字符串函数：space(n) 返回指定个数空格select space(4);--重复字符串函数：repeat(str, n) 重复str字符串n次select repeat(&quot;angela&quot;,2);--首字符ascii函数：asciiselect ascii(&quot;angela&quot;);  --a对应ASCII 97--左补足函数：lpadselect lpad(&#x27;hi&#x27;, 5, &#x27;??&#x27;);  --???hiselect lpad(&#x27;hi&#x27;, 1, &#x27;??&#x27;);  --h--右补足函数：rpadselect rpad(&#x27;hi&#x27;, 5, &#x27;??&#x27;);--集合查找函数: find_in_set(str,str_array)select find_in_set(&#x27;a&#x27;,&#x27;abc,b,ab,c,def&#x27;);\n\n日期函数\n123456789101112131415161718192021222324252627282930313233343536373839----------- Date Functions 日期函数 -------------------获取当前日期: current_dateselect current_date();--获取当前时间戳: current_timestamp--同一查询中对current_timestamp的所有调用均返回相同的值。select current_timestamp();--获取当前UNIX时间戳函数: unix_timestampselect unix_timestamp();--日期转UNIX时间戳函数: unix_timestampselect unix_timestamp(&quot;2011-12-07 13:01:03&quot;);--指定格式日期转UNIX时间戳函数: unix_timestampselect unix_timestamp(&#x27;20111207 13:01:03&#x27;,&#x27;yyyyMMdd HH:mm:ss&#x27;);--UNIX时间戳转日期函数: from_unixtimeselect from_unixtime(1618238391);select from_unixtime(0, &#x27;yyyy-MM-dd HH:mm:ss&#x27;);--日期比较函数: datediff  日期格式要求&#x27;yyyy-MM-dd HH:mm:ss&#x27; or &#x27;yyyy-MM-dd&#x27;select datediff(&#x27;2012-12-08&#x27;,&#x27;2012-05-09&#x27;);--日期增加函数: date_addselect date_add(&#x27;2012-02-28&#x27;,10);--日期减少函数: date_subselect date_sub(&#x27;2012-01-1&#x27;,10);--抽取日期函数: to_dateselect to_date(&#x27;2009-07-30 04:17:52&#x27;);--日期转年函数: yearselect year(&#x27;2009-07-30 04:17:52&#x27;);--日期转月函数: monthselect month(&#x27;2009-07-30 04:17:52&#x27;);--日期转天函数: dayselect day(&#x27;2009-07-30 04:17:52&#x27;);--日期转小时函数: hourselect hour(&#x27;2009-07-30 04:17:52&#x27;);--日期转分钟函数: minuteselect minute(&#x27;2009-07-30 04:17:52&#x27;);--日期转秒函数: secondselect second(&#x27;2009-07-30 04:17:52&#x27;);--日期转周函数: weekofyear 返回指定日期所示年份第几周select weekofyear(&#x27;2009-07-30 04:17:52&#x27;);\n\n1234567891011121314151617-------Collection Functions 集合函数----------------集合元素size函数: size(Map&lt;K.V&gt;) size(Array&lt;T&gt;)select size(`array`(11,22,33));select size(`map`(&quot;id&quot;,10086,&quot;name&quot;,&quot;zhangsan&quot;,&quot;age&quot;,18));--取map集合keys函数: map_keys(Map&lt;K.V&gt;)select map_keys(`map`(&quot;id&quot;,10086,&quot;name&quot;,&quot;zhangsan&quot;,&quot;age&quot;,18));--取map集合values函数: map_values(Map&lt;K.V&gt;)select map_values(`map`(&quot;id&quot;,10086,&quot;name&quot;,&quot;zhangsan&quot;,&quot;age&quot;,18));--判断数组是否包含指定元素: array_contains(Array&lt;T&gt;, value)select array_contains(`array`(11,22,33),11);select array_contains(`array`(11,22,33),66);--数组排序函数:sort_array(Array&lt;T&gt;)select sort_array(`array`(12,2,32));\n\n123456789101112131415161718192021222324----Mathematical Functions 数学函数---------------取整函数: round  返回double类型的整数值部分 （遵循四舍五入）select round(3.1415926);--指定精度取整函数: round(double a, int d) 返回指定精度d的double类型select round(3.1415926,4);--向下取整函数: floorselect floor(3.1415926);select floor(-3.1415926);--向上取整函数: ceilselect ceil(3.1415926);select ceil(-3.1415926);--取随机数函数: rand 每次执行都不一样 返回一个0到1范围内的随机数select rand();--指定种子取随机数函数: rand(int seed) 得到一个稳定的随机数序列select rand(3);--二进制函数:  bin(BIGINT a)select bin(18);--进制转换函数: conv(BIGINT num, int from_base, int to_base)select conv(17,10,16);--绝对值函数: absselect abs(-3.9);\n\n\n12345678910111213141516171819202122232425262728293031323334353637383940-----Conditional Functions 条件函数--------------------使用之前课程创建好的student表数据select * from student limit 3;describe function extended isnull;--if条件判断: if(boolean testCondition, T valueTrue, T valueFalseOrNull)select if(1=2,100,200);select if(sex =&#x27;男&#x27;,&#x27;M&#x27;,&#x27;W&#x27;) from student limit 3;--空判断函数: isnull( a )select isnull(&quot;allen&quot;);select isnull(null);--非空判断函数: isnotnull ( a )select isnotnull(&quot;allen&quot;);select isnotnull(null);--空值转换函数: nvl(T value, T default_value)select nvl(&quot;allen&quot;,&quot;itcast&quot;);select nvl(null,&quot;itcast&quot;);--非空查找函数: COALESCE(T v1, T v2, ...)--返回参数中的第一个非空值；如果所有值都为NULL，那么返回NULLselect COALESCE(null,11,22,33);select COALESCE(null,null,null,33);select COALESCE(null,null,null);--条件转换函数: CASE a WHEN b THEN c [WHEN d THEN e]* [ELSE f] ENDselect case 100 when 50 then &#x27;tom&#x27; when 100 then &#x27;mary&#x27; else &#x27;tim&#x27; end;select case sex when &#x27;男&#x27; then &#x27;male&#x27; else &#x27;female&#x27; end from student limit 3;--nullif( a, b ):-- 如果a = b，则返回NULL，否则返回一个select nullif(11,11);select nullif(11,12);--assert_true(condition)--如果&#x27;condition&#x27;不为真，则引发异常，否则返回nullSELECT assert_true(11 &gt;= 0);SELECT assert_true(-1 &gt;= 0);\n\n\n\n如果string 转 string 是没有意义的，返回的结果就是null。\n123456789101112131415161718192021222324----Data Masking Functions 数据脱敏函数--------------mask--将查询回的数据，大写字母转换为X，小写字母转换为x，数字转换为n。select mask(&quot;abc123DEF&quot;);select mask(&quot;abc123DEF&quot;,&#x27;-&#x27;,&#x27;.&#x27;,&#x27;^&#x27;); --自定义替换的字母--mask_first_n(string str[, int n]--对前n个进行脱敏替换select mask_first_n(&quot;abc123DEF&quot;,4);--mask_last_n(string str[, int n])select mask_last_n(&quot;abc123DEF&quot;,4);--mask_show_first_n(string str[, int n])--除了前n个字符，其余进行掩码处理select mask_show_first_n(&quot;abc123DEF&quot;,4);--mask_show_last_n(string str[, int n])select mask_show_last_n(&quot;abc123DEF&quot;,4);--mask_hash(string|char|varchar str)--返回字符串的hash编码。select mask_hash(&quot;abc123DEF&quot;);\n\n1234567891011121314151617181920212223242526272829303132333435----- Misc. Functions 其他杂项函数-----------------如果你要调用的java方法所在的jar包不是hive自带的 可以使用add jar添加进来--hive调用java方法: java_method(class, method[, arg1[, arg2..]])select java_method(&quot;java.lang.Math&quot;,&quot;max&quot;,11,22);--反射函数: reflect(class, method[, arg1[, arg2..]])select reflect(&quot;java.lang.Math&quot;,&quot;max&quot;,11,22);-- hive调用python方法：add file  local的位置/py_file.py; select transform(col1,col2,col3...) using &#x27;python py_file.py&#x27; as (out1,out2,out3...) from table;# transform 的参数col1，col2，col3... 作为python脚本的输入，而out1,out2,out3...作为输出字段。利用这个可以把hive自身所带的函数不能或不方便处理的任务，转用python写。毕竟人生苦短我还是喜欢python。--------------------------------------------------------------------------------- hive用python例子# use.py文件内容。import sysimport datetime for line in sys.stdin:                                 //接收输入  line = line.strip()    \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t //去除头尾的空格  userid, movieid, rating, unixtime = line.split(&#x27;\\t&#x27;) //分割一条数据  weekday = datetime.datetime.fromtimestamp(float(unixtime)).isoweekday()//转化unixtime时间戳为日期时间，获取对应的星期值  print &#x27;\\t&#x27;.join([userid, movieid, rating, str(weekday)])//输出清洗后的数据# hive内add file /user/hive/warehouse/use.py;  # 注意 python脚本的路径是没有“” 的！而且路径是local的就行了，不是hdfs的路径。INSERT OVERWRITE TABLE u_data_newSELECT  TRANSFORM (userid, movieid, rating, unixtime)    \t//输入值（基表）  USING &#x27;python weekday_mapper.py&#x27;                  //使用脚本清洗 # 注意写个python 放前面，不然不执行。   AS (userid, movieid, rating, weekday)             //输出值（子表）FROM u_data;   \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t//基表\n\n我在centos搭建的Hadoop集群和hive工具，实验如下：1、创建原始表12345678910drop table t_python_test;create table t_python_test(    id int,    sex string,    age int)row format delimited fields terminated by &quot;\\t&quot;;load data local inpath &#x27;/opt/data/python_test.txt&#x27; into table t_python_test;# 加载数据select * from t_python_test;  # 原表如下\n\n\n2、写python脚本；123456789101112131415# coding:utf-8import systry:    for line in sys.stdin: # python脚本以sys.stdin 读hive输入。其输入是以字段拼接字段而形成的字符串，这样的字符串有多行。        line = line.strip() # 读取一行，去头尾的空格。        [t_id,t_sex,t_age] = line.split(&#x27;\\t&#x27;)         #print( t_id,t_sex,t_age)        if t_sex == &#x27;m&#x27;:            t_age =int(t_age) + 1            t_sex = &#x27;super_m&#x27;        print(&#x27;\\t&#x27;.join([str(t_id),t_sex,str(t_age)])) # python脚本输出一个字符串，hive读取python脚本输出的时候会根据 字段名 自动切分好此字符串。  except    print(&#x27;\\t&#x27;.join([&#x27;0&#x27;,&#x27;modify failed&#x27;,&#x27;0&#x27;]))\n\n​\t\t注意：一定要记得在hive、Hadoop环境之外先用python检查一下有没有什么python编写错误，因为在hive里运行的速度太慢了，每一次排错都要花太多太多的时间，并且报错以后的提示看不到错在哪里，只是简单的说你的自定义脚本有问题Execution Error, return code 20003 from org.apache.hadoop.hive.ql.exec.mr.MapRedTask. An error occurred when trying to close the Operator running your custom script.。\n1cat python_test.txt | python hive_python_test.py  # 在hive以外运行一遍，用来排错。\n\n3、hive调用python脚本12345678910add file /opt/data/hive_python_test.py;  # 添加python文件到hdfs，路径就是本地，没引号drop table t_python_test_new;create table  t_python_test_new as selecttransform(id,sex,age )                   # 从原表中 选这些字段组成str汇成多行，输入脚本using &#x27;python hive_python_test.py&#x27;       # python 运行 python脚本as (id,sex,age)\t\t\t\t\t\t\t\t\t\t\t\t   # 将脚本的输出，按照这里定义的字段切分好。from t_python_test;select * from t_python_test_new;         # 如下\n\n\n网上教学案例\n\n\n\n\n我这里还是选择用python实现，毕竟越傻瓜越方便嘛。\n函数高阶介绍\n\n\n\n\n\n\n\n\n\n\n\n注意：以上的col1 col2 col3 是炸开的udtf表的 字段的名字。\n\n\n\n\n\n\n\n\ncoalsesce函数 将null值 换成0.\n\nstruct类型：\nSTRUCT：STRUCT可以包含不同数据类型的元素。这些元素可以通过”点语法”的方式来得到所需要的元素，比如user是一个STRUCT类型，那么可以通过user.address得到这个用户的地址。\n123create table student_test(id int,info struct&lt;name:string,age:int&gt;)row format delimited fields terminated by &quot;,&quot; collection items terminated by &quot;:&quot;;\n\n文件\n [root@hello110 data]# vi student_test 1001,zhangsan:24 1002,lisi:25 1003,xiaoming:26 1004,dongdong:27\n1234567select   info.name,info.age from student_test;OKname    agezhangsan        24lisi    25xiaoming        26dongdong        27\n\n\nStruct结构用于按字典顺序排序，从左往右地按字段比较。\n\n\n\n\n\n\n注意：左侧的含义，a c 就不属于左侧的定义。\n\n\n用窗口函数聚合 和 普通聚合函数聚合的区别：\n​\t\t方便看清分组的细节，而且即便不用聚合函数，可以select 和分组无关的字段。（这在一般的分组情况下是不可以的）。\n\n注意：窗口函数 over 内的order by 不是全局排序，而是分组内排序了。和普通的order by 作用域不一样。\n\n\n\n注意：一旦窗口函数over内有了 order by 排序 ，sum（） 会变成累计求和。\n\n\n这个窗口表达式的向前几行到当前行 ，或者向后几行，要注意，求和就变成了这个窗口表达式的范围内的求和了。\n\n\n \n\n以上三个窗口排序函数 适合 top N 业务分析。\n\n12345# 需求：找出每个用户访问pv最多的top 3，重复并列不考虑。select * from (select cookieid,createtime,pv,  row_number() over(partition by cookieid order by pv desc) as seq from website_pv_info)tmp where tmp.seq&lt;4;\n\n\n7个要平均分成3份，只能是3、2、2这样分。\n\n\n\n\n\n\n\n\n\n\n","dateCreated":"2022-10-29T15:14:33+08:00","dateModified":"2022-10-29T15:15:56+08:00","datePublished":"2022-10-29T15:14:33+08:00","description":"简介","headline":"Hive参数配置与函数、运算符使用","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/"},"publisher":{"@type":"Organization","name":"陈宇韶chenyushao","sameAs":["https://github.com/","https://www.linkedin.com/profile/","mailto"]},"url":"http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/","keywords":"hive"}</script>
+    <meta name="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="Hive参数配置与函数、运算符使用">
+<meta property="og:url" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/index.html">
+<meta property="og:site_name" content="Tiger_pop&#39;s Blog">
+<meta property="og:description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-09%2015.54.49-7026880.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-09%2015.55.12.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-09%2016.01.59.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-09%2016.05.23.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-09%2016.12.59.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-09%2016.19.15.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-09%2016.20.40.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-09%2016.23.50.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-09%2016.24.42.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-09%2016.27.58.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-09%2016.30.13.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-09%2016.31.33.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-09%2017.00.14.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-09%2017.01.00.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-09%2017.02.45.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-09%2017.24.31.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-09%2017.29.07.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-09%2017.30.37.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-09%2017.32.33.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-09%2017.34.05.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-09%2022.30.31.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-10%2010.54.06.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-10%2010.55.03.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-10%2023.38.15.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-11%2000.08.30.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-10%2011.08.17.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-10%2011.09.04.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-10%2011.11.35.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-10%2011.15.44.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-10%2011.21.57.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-12%2018.00.08.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-12%2018.03.01.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-12%2018.08.30.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-14%2015.23.46.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-14%2015.11.11.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-14%2015.22.53.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-14%2015.24.24.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-14%2015.26.18.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-14%2015.27.11.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-14%2015.32.25.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-14%2015.33.37.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-14%2015.43.28.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-14%2015.50.03.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-14%2015.50.20.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-14%2015.51.29.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-14%2015.53.42.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-14%2015.54.56.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-14%2015.56.13.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-14%2015.58.03.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-14%2015.59.55.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-14%2016.01.51.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-14%2016.16.58.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-14%2016.25.41.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-14%2016.42.12.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-14%2016.43.08.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-14%2016.46.47.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-14%2016.56.32.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-14%2016.57.33.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-14%2019.23.56.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-14%2019.26.16.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-14%2019.30.01.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-14%2020.03.02.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-14%2020.09.14.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-14%2020.59.09.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-14%2021.00.51.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-14%2021.05.03.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-14%2021.11.07.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-14%2021.15.59.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-14%2021.17.05.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-14%2021.19.24.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-14%2021.21.36.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-14%2021.26.35.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-14%2022.06.32.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-14%2022.13.37.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-14%2022.15.22.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-14%2022.21.23.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-14%2022.24.03.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-14%2022.25.49.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-14%2022.35.18.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-14%2022.37.18.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-14%2022.38.46.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-14%2022.39.26.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-14%2022.48.28.jpg">
+<meta property="article:published_time" content="2022-10-29T07:14:33.000Z">
+<meta property="article:modified_time" content="2022-10-29T07:15:56.225Z">
+<meta property="article:author" content="陈宇韶chenyushao">
+<meta property="article:tag" content="hive">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-09%2015.54.49-7026880.jpg">
+    
+    
+        
+    
+    
+    
+    
+    
+    <!--STYLES-->
+    
+<link rel="stylesheet" href="/assets/css/style-yrbj4x87sme2npnaj5hmxl88fi8ktzpa1hwzrvan2almcpvu5niegj13ryff.min.css">
+
+    <!--STYLES END-->
+    
+
+    
+
+    
+        
+    
+</head>
+
+    <body>
+        <div id="blog">
+            <!-- Define author's picture -->
+
+
+    
+
+<header id="header" data-behavior="4">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <div class="header-title">
+        <a
+            class="header-title-link"
+            href="/"
+            aria-label=""
+        >
+            Tiger_pop&#39;s Blog
+        </a>
+    </div>
+    
+        
+            <a
+                class="header-right-picture "
+                href="#about"
+                aria-label="Open the link: /#about"
+            >
+        
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+<nav id="sidebar" data-behavior="4">
+    <div class="sidebar-container">
+        
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/"
+                            
+                            rel="noopener"
+                            title="Home"
+                        >
+                        <i class="sidebar-button-icon fa fa-home" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Home</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-categories"
+                            
+                            rel="noopener"
+                            title="Categories"
+                        >
+                        <i class="sidebar-button-icon fa fa-bookmark" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Categories</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-tags"
+                            
+                            rel="noopener"
+                            title="Tags"
+                        >
+                        <i class="sidebar-button-icon fa fa-tags" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Tags</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-archives"
+                            
+                            rel="noopener"
+                            title="Archives"
+                        >
+                        <i class="sidebar-button-icon fa fa-archive" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Archives</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="#about"
+                            
+                            rel="noopener"
+                            title="About"
+                        >
+                        <i class="sidebar-button-icon fa fa-question" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">About</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://github.com/"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="GitHub"
+                        >
+                        <i class="sidebar-button-icon fab fa-github" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">GitHub</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://www.linkedin.com/profile/"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="LinkedIn"
+                        >
+                        <i class="sidebar-button-icon fab fa-linkedin" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">LinkedIn</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/mailto"
+                            
+                            rel="noopener"
+                            title="Mail"
+                        >
+                        <i class="sidebar-button-icon fa fa-envelope" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Mail</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/atom.xml"
+                            
+                            rel="noopener"
+                            title="RSS"
+                        >
+                        <i class="sidebar-button-icon fa fa-rss" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">RSS</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+    </div>
+</nav>
+
+            
+            <div id="main" data-behavior="4"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post">
+    
+    
+        <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title">
+            Hive参数配置与函数、运算符使用
+        </h1>
+    
+    
+        <div class="post-meta">
+    <time datetime="2022-10-29T15:14:33+08:00">
+	
+		    Oct 29, 2022
+    	
+    </time>
+    
+        <span>in </span>
+        
+    <a class="category-link" href="/categories/hive/">hive</a>
+
+
+    
+</div>
+
+    
+</div>
+
+    
+    <div class="post-content markdown">
+        <div class="main-content-wrap">
+            <p>简介 <span id="more"></span></p>
+<h1 id="配置属性"><a href="#配置属性" class="headerlink" title="配置属性"></a>配置属性</h1><p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-09%2015.54.49-7026880.jpg" alt="截屏2022-03-09 15.54.49"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-09%2015.55.12.jpg" alt="截屏2022-03-09 15.55.12"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-09%2016.01.59.jpg" alt="截屏2022-03-09 16.01.59"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-09%2016.05.23.jpg" alt="截屏2022-03-09 16.05.23"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-09%2016.12.59.jpg" alt="截屏2022-03-09 16.12.59"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-09%2016.19.15.jpg" alt="截屏2022-03-09 16.19.15"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-09%2016.20.40.jpg" alt="截屏2022-03-09 16.20.40"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-09%2016.23.50.jpg" alt="截屏2022-03-09 16.23.50"></p>
+<p>在这个会话中，把日志设置为debug，并输出在console控制台上。</p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-09%2016.24.42.jpg" alt="截屏2022-03-09 16.24.42"></p>
+<h1 id="运算符"><a href="#运算符" class="headerlink" title="运算符"></a>运算符</h1><p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-09%2016.27.58.jpg" alt="截屏2022-03-09 16.27.58"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-09%2016.30.13.jpg" alt="截屏2022-03-09 16.30.13"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-09%2016.31.33.jpg" alt="截屏2022-03-09 16.31.33"></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">----------------Hive中关系运算符--------------------------</span></span><br><span class="line"><span class="comment">--is null空值判断</span></span><br><span class="line"><span class="keyword">select</span> <span class="number">1</span> <span class="keyword">from</span> dual <span class="keyword">where</span> <span class="string">&#x27;itcast&#x27;</span> <span class="keyword">is</span> <span class="keyword">null</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">--is not null 非空值判断</span></span><br><span class="line"><span class="keyword">select</span> <span class="number">1</span> <span class="keyword">from</span> dual <span class="keyword">where</span> <span class="string">&#x27;itcast&#x27;</span> <span class="keyword">is</span> <span class="keyword">not</span> <span class="keyword">null</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">--like比较： _表示任意单个字符 %表示任意数量字符</span></span><br><span class="line"><span class="comment">--否定比较： NOT A like B</span></span><br><span class="line"><span class="keyword">select</span> <span class="number">1</span> <span class="keyword">from</span> dual <span class="keyword">where</span> <span class="string">&#x27;itcast&#x27;</span> <span class="keyword">like</span> <span class="string">&#x27;it_&#x27;</span>;</span><br><span class="line"><span class="keyword">select</span> <span class="number">1</span> <span class="keyword">from</span> dual <span class="keyword">where</span> <span class="string">&#x27;itcast&#x27;</span> <span class="keyword">like</span> <span class="string">&#x27;it%&#x27;</span>;</span><br><span class="line"><span class="keyword">select</span> <span class="number">1</span> <span class="keyword">from</span> dual <span class="keyword">where</span>  <span class="string">&#x27;itcast&#x27;</span> <span class="keyword">not</span> <span class="keyword">like</span> <span class="string">&#x27;hadoo_&#x27;</span>;</span><br><span class="line"><span class="keyword">select</span> <span class="number">1</span> <span class="keyword">from</span> dual <span class="keyword">where</span>  <span class="keyword">not</span> <span class="string">&#x27;itcast&#x27;</span> <span class="keyword">like</span> <span class="string">&#x27;hadoo_&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">--rlike：确定字符串是否匹配正则表达式，是REGEXP_LIKE()的同义词。</span></span><br><span class="line"><span class="keyword">select</span> <span class="number">1</span> <span class="keyword">from</span> dual <span class="keyword">where</span> <span class="string">&#x27;itcast&#x27;</span> rlike <span class="string">&#x27;^i.*t$&#x27;</span>;</span><br><span class="line"><span class="keyword">select</span> <span class="number">1</span> <span class="keyword">from</span> dual <span class="keyword">where</span> <span class="string">&#x27;123456&#x27;</span> rlike <span class="string">&#x27;^\\d+$&#x27;</span>;  <span class="comment">--判断是否全为数字</span></span><br><span class="line"><span class="keyword">select</span> <span class="number">1</span> <span class="keyword">from</span> dual <span class="keyword">where</span> <span class="string">&#x27;123456aa&#x27;</span> rlike <span class="string">&#x27;^\\d+$&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">--regexp：功能与rlike相同 用于判断字符串是否匹配正则表达式</span></span><br><span class="line"><span class="keyword">select</span> <span class="number">1</span> <span class="keyword">from</span> dual <span class="keyword">where</span> <span class="string">&#x27;itcast&#x27;</span> regexp <span class="string">&#x27;^i.*t$&#x27;</span>;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-09%2017.00.14.jpg" alt="截屏2022-03-09 17.00.14"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-09%2017.01.00.jpg" alt="截屏2022-03-09 17.01.00"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-09%2017.02.45.jpg" alt="截屏2022-03-09 17.02.45"></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">Hive逻辑运算符</span><br><span class="line"><span class="comment">--与操作: A AND B   如果A和B均为TRUE，则为TRUE，否则为FALSE。如果A或B为NULL，则为NULL。</span></span><br><span class="line"><span class="keyword">select</span> <span class="number">1</span> <span class="keyword">from</span> dual <span class="keyword">where</span> <span class="number">3</span><span class="operator">&gt;</span><span class="number">1</span> <span class="keyword">and</span> <span class="number">2</span><span class="operator">&gt;</span><span class="number">1</span>;</span><br><span class="line"><span class="comment">--或操作: A OR B   如果A或B或两者均为TRUE，则为TRUE，否则为FALSE。</span></span><br><span class="line"><span class="keyword">select</span> <span class="number">1</span> <span class="keyword">from</span> dual <span class="keyword">where</span> <span class="number">3</span><span class="operator">&gt;</span><span class="number">1</span> <span class="keyword">or</span> <span class="number">2</span><span class="operator">!=</span><span class="number">2</span>;</span><br><span class="line"><span class="comment">--非操作: NOT A 、!A   如果A为FALSE，则为TRUE；如果A为NULL，则为NULL。否则为FALSE。</span></span><br><span class="line"><span class="keyword">select</span> <span class="number">1</span> <span class="keyword">from</span> dual <span class="keyword">where</span> <span class="keyword">not</span> <span class="number">2</span><span class="operator">&gt;</span><span class="number">1</span>;</span><br><span class="line"><span class="keyword">select</span> <span class="number">1</span> <span class="keyword">from</span> dual <span class="keyword">where</span> <span class="operator">!</span><span class="number">2</span><span class="operator">=</span><span class="number">1</span>;</span><br><span class="line"><span class="comment">--在:A IN (val1, val2, ...)  如果A等于任何值，则为TRUE。</span></span><br><span class="line"><span class="keyword">select</span> <span class="number">1</span> <span class="keyword">from</span> dual <span class="keyword">where</span> <span class="number">11</span>  <span class="keyword">in</span>(<span class="number">11</span>,<span class="number">22</span>,<span class="number">33</span>);</span><br><span class="line"><span class="comment">--不在:A NOT IN (val1, val2, ...) 如果A不等于任何值，则为TRUE</span></span><br><span class="line"><span class="keyword">select</span> <span class="number">1</span> <span class="keyword">from</span> dual <span class="keyword">where</span> <span class="number">11</span> <span class="keyword">not</span> <span class="keyword">in</span>(<span class="number">22</span>,<span class="number">33</span>,<span class="number">44</span>);</span><br><span class="line"><span class="comment">--逻辑是否存在: [NOT] EXISTS (subquery)</span></span><br><span class="line"><span class="comment">--将主查询的数据，放到子查询中做条件验证，根据验证结果（TRUE 或 FALSE）来决定主查询的数据结果是否得以保留。</span></span><br><span class="line"><span class="keyword">select</span> A.<span class="operator">*</span> <span class="keyword">from</span> A</span><br><span class="line"><span class="keyword">where</span> <span class="keyword">exists</span> (<span class="keyword">select</span> B.id <span class="keyword">from</span> B <span class="keyword">where</span> A.id <span class="operator">=</span> B.id);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">--其他运算符</span></span><br><span class="line"><span class="keyword">select</span> <span class="string">&#x27;it&#x27;</span> <span class="operator">||</span> <span class="string">&#x27;cast&#x27;</span>;</span><br><span class="line"><span class="keyword">select</span> concat()</span><br><span class="line"></span><br><span class="line"><span class="keyword">select</span> `<span class="keyword">array</span>`(<span class="number">11</span>,<span class="number">22</span>,<span class="number">33</span>)</span><br><span class="line"><span class="keyword">from</span> dual;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-09%2017.24.31.jpg" alt="截屏2022-03-09 17.24.31"></p>
+<p>select concat (‘a’,’b’); </p>
+<h1 id="function"><a href="#function" class="headerlink" title="function"></a>function</h1><p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-09%2017.29.07.jpg" alt="截屏2022-03-09 17.29.07"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-09%2017.30.37.jpg" alt="截屏2022-03-09 17.30.37"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-09%2017.32.33.jpg" alt="截屏2022-03-09 17.32.33"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-09%2017.34.05.jpg" alt="截屏2022-03-09 17.34.05"></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">------------String Functions 字符串函数------------</span></span><br><span class="line"><span class="keyword">select</span> concat(&quot;angela&quot;,&quot;baby&quot;);</span><br><span class="line"><span class="comment">--带分隔符字符串连接函数：concat_ws(separator, [string | array(string)]+)</span></span><br><span class="line"><span class="keyword">select</span> concat_ws(<span class="string">&#x27;.&#x27;</span>, <span class="string">&#x27;www&#x27;</span>, <span class="keyword">array</span>(<span class="string">&#x27;itcast&#x27;</span>, <span class="string">&#x27;cn&#x27;</span>));</span><br><span class="line"><span class="comment">--字符串截取函数：substr(str, pos[, len]) 或者  substring(str, pos[, len])</span></span><br><span class="line"><span class="keyword">select</span> substr(&quot;angelababy&quot;,<span class="number">-2</span>); <span class="comment">--pos是从1开始的索引，如果为负数则倒着数</span></span><br><span class="line"><span class="keyword">select</span> substr(&quot;angelababy&quot;,<span class="number">2</span>,<span class="number">2</span>);</span><br><span class="line"><span class="comment">--正则表达式替换函数：regexp_replace(str, regexp, rep)</span></span><br><span class="line"><span class="keyword">select</span> regexp_replace(<span class="string">&#x27;100-200&#x27;</span>, <span class="string">&#x27;(\\d+)&#x27;</span>, <span class="string">&#x27;num&#x27;</span>);</span><br><span class="line"><span class="comment">--正则表达式解析函数：regexp_extract(str, regexp[, idx]) 提取正则匹配到的指定组内容</span></span><br><span class="line"><span class="keyword">select</span> regexp_extract(<span class="string">&#x27;100-200&#x27;</span>, <span class="string">&#x27;(\\d+)-(\\d+)&#x27;</span>, <span class="number">2</span>);</span><br><span class="line"><span class="comment">--URL解析函数：parse_url 注意要想一次解析出多个 可以使用parse_url_tuple这个UDTF函数</span></span><br><span class="line"><span class="keyword">select</span> parse_url(<span class="string">&#x27;http://www.itcast.cn/path/p1.php?query=1&#x27;</span>, <span class="string">&#x27;HOST&#x27;</span>);</span><br><span class="line"><span class="comment">--分割字符串函数: split(str, regex)</span></span><br><span class="line"><span class="keyword">select</span> split(<span class="string">&#x27;apache hive&#x27;</span>, <span class="string">&#x27;\\s+&#x27;</span>);</span><br><span class="line"><span class="comment">--json解析函数：get_json_object(json_txt, path)</span></span><br><span class="line"><span class="comment">--$表示json对象</span></span><br><span class="line"><span class="keyword">select</span> get_json_object(<span class="string">&#x27;[&#123;&quot;website&quot;:&quot;www.itcast.cn&quot;,&quot;name&quot;:&quot;allenwoon&quot;&#125;, &#123;&quot;website&quot;:&quot;cloud.itcast.com&quot;,&quot;name&quot;:&quot;carbondata 中文文档&quot;&#125;]&#x27;</span>, <span class="string">&#x27;$.[1].website&#x27;</span>);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">--字符串长度函数：length(str | binary)</span></span><br><span class="line"><span class="keyword">select</span> length(&quot;angelababy&quot;);</span><br><span class="line"><span class="comment">--字符串反转函数：reverse</span></span><br><span class="line"><span class="keyword">select</span> reverse(&quot;angelababy&quot;);</span><br><span class="line"><span class="comment">--字符串连接函数：concat(str1, str2, ... strN)</span></span><br><span class="line"><span class="comment">--字符串转大写函数：upper,ucase</span></span><br><span class="line"><span class="keyword">select</span> <span class="built_in">upper</span>(&quot;angelababy&quot;);</span><br><span class="line"><span class="keyword">select</span> ucase(&quot;angelababy&quot;);</span><br><span class="line"><span class="comment">--字符串转小写函数：lower,lcase</span></span><br><span class="line"><span class="keyword">select</span> <span class="built_in">lower</span>(&quot;ANGELABABY&quot;);</span><br><span class="line"><span class="keyword">select</span> lcase(&quot;ANGELABABY&quot;);</span><br><span class="line"><span class="comment">--去空格函数：trim 去除左右两边的空格</span></span><br><span class="line"><span class="keyword">select</span> <span class="built_in">trim</span>(&quot; angelababy &quot;);</span><br><span class="line"><span class="comment">--左边去空格函数：ltrim</span></span><br><span class="line"><span class="keyword">select</span> ltrim(&quot; angelababy &quot;);</span><br><span class="line"><span class="comment">--右边去空格函数：rtrim</span></span><br><span class="line"><span class="keyword">select</span> rtrim(&quot; angelababy &quot;);</span><br><span class="line"><span class="comment">--空格字符串函数：space(n) 返回指定个数空格</span></span><br><span class="line"><span class="keyword">select</span> space(<span class="number">4</span>);</span><br><span class="line"><span class="comment">--重复字符串函数：repeat(str, n) 重复str字符串n次</span></span><br><span class="line"><span class="keyword">select</span> repeat(&quot;angela&quot;,<span class="number">2</span>);</span><br><span class="line"><span class="comment">--首字符ascii函数：ascii</span></span><br><span class="line"><span class="keyword">select</span> ascii(&quot;angela&quot;);  <span class="comment">--a对应ASCII 97</span></span><br><span class="line"><span class="comment">--左补足函数：lpad</span></span><br><span class="line"><span class="keyword">select</span> lpad(<span class="string">&#x27;hi&#x27;</span>, <span class="number">5</span>, <span class="string">&#x27;??&#x27;</span>);  <span class="comment">--???hi</span></span><br><span class="line"><span class="keyword">select</span> lpad(<span class="string">&#x27;hi&#x27;</span>, <span class="number">1</span>, <span class="string">&#x27;??&#x27;</span>);  <span class="comment">--h</span></span><br><span class="line"><span class="comment">--右补足函数：rpad</span></span><br><span class="line"><span class="keyword">select</span> rpad(<span class="string">&#x27;hi&#x27;</span>, <span class="number">5</span>, <span class="string">&#x27;??&#x27;</span>);</span><br><span class="line"><span class="comment">--集合查找函数: find_in_set(str,str_array)</span></span><br><span class="line"><span class="keyword">select</span> find_in_set(<span class="string">&#x27;a&#x27;</span>,<span class="string">&#x27;abc,b,ab,c,def&#x27;</span>);</span><br></pre></td></tr></table></figure>
+
+<p>日期函数</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">----------- Date Functions 日期函数 -----------------</span></span><br><span class="line"><span class="comment">--获取当前日期: current_date</span></span><br><span class="line"><span class="keyword">select</span> <span class="built_in">current_date</span>();</span><br><span class="line"><span class="comment">--获取当前时间戳: current_timestamp</span></span><br><span class="line"><span class="comment">--同一查询中对current_timestamp的所有调用均返回相同的值。</span></span><br><span class="line"><span class="keyword">select</span> <span class="built_in">current_timestamp</span>();</span><br><span class="line"><span class="comment">--获取当前UNIX时间戳函数: unix_timestamp</span></span><br><span class="line"><span class="keyword">select</span> unix_timestamp();</span><br><span class="line"><span class="comment">--日期转UNIX时间戳函数: unix_timestamp</span></span><br><span class="line"><span class="keyword">select</span> unix_timestamp(&quot;2011-12-07 13:01:03&quot;);</span><br><span class="line"><span class="comment">--指定格式日期转UNIX时间戳函数: unix_timestamp</span></span><br><span class="line"><span class="keyword">select</span> unix_timestamp(<span class="string">&#x27;20111207 13:01:03&#x27;</span>,<span class="string">&#x27;yyyyMMdd HH:mm:ss&#x27;</span>);</span><br><span class="line"><span class="comment">--UNIX时间戳转日期函数: from_unixtime</span></span><br><span class="line"><span class="keyword">select</span> from_unixtime(<span class="number">1618238391</span>);</span><br><span class="line"><span class="keyword">select</span> from_unixtime(<span class="number">0</span>, <span class="string">&#x27;yyyy-MM-dd HH:mm:ss&#x27;</span>);</span><br><span class="line"><span class="comment">--日期比较函数: datediff  日期格式要求&#x27;yyyy-MM-dd HH:mm:ss&#x27; or &#x27;yyyy-MM-dd&#x27;</span></span><br><span class="line"><span class="keyword">select</span> datediff(<span class="string">&#x27;2012-12-08&#x27;</span>,<span class="string">&#x27;2012-05-09&#x27;</span>);</span><br><span class="line"><span class="comment">--日期增加函数: date_add</span></span><br><span class="line"><span class="keyword">select</span> date_add(<span class="string">&#x27;2012-02-28&#x27;</span>,<span class="number">10</span>);</span><br><span class="line"><span class="comment">--日期减少函数: date_sub</span></span><br><span class="line"><span class="keyword">select</span> date_sub(<span class="string">&#x27;2012-01-1&#x27;</span>,<span class="number">10</span>);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">--抽取日期函数: to_date</span></span><br><span class="line"><span class="keyword">select</span> to_date(<span class="string">&#x27;2009-07-30 04:17:52&#x27;</span>);</span><br><span class="line"><span class="comment">--日期转年函数: year</span></span><br><span class="line"><span class="keyword">select</span> <span class="keyword">year</span>(<span class="string">&#x27;2009-07-30 04:17:52&#x27;</span>);</span><br><span class="line"><span class="comment">--日期转月函数: month</span></span><br><span class="line"><span class="keyword">select</span> <span class="keyword">month</span>(<span class="string">&#x27;2009-07-30 04:17:52&#x27;</span>);</span><br><span class="line"><span class="comment">--日期转天函数: day</span></span><br><span class="line"><span class="keyword">select</span> <span class="keyword">day</span>(<span class="string">&#x27;2009-07-30 04:17:52&#x27;</span>);</span><br><span class="line"><span class="comment">--日期转小时函数: hour</span></span><br><span class="line"><span class="keyword">select</span> <span class="keyword">hour</span>(<span class="string">&#x27;2009-07-30 04:17:52&#x27;</span>);</span><br><span class="line"><span class="comment">--日期转分钟函数: minute</span></span><br><span class="line"><span class="keyword">select</span> <span class="keyword">minute</span>(<span class="string">&#x27;2009-07-30 04:17:52&#x27;</span>);</span><br><span class="line"><span class="comment">--日期转秒函数: second</span></span><br><span class="line"><span class="keyword">select</span> <span class="keyword">second</span>(<span class="string">&#x27;2009-07-30 04:17:52&#x27;</span>);</span><br><span class="line"><span class="comment">--日期转周函数: weekofyear 返回指定日期所示年份第几周</span></span><br><span class="line"><span class="keyword">select</span> weekofyear(<span class="string">&#x27;2009-07-30 04:17:52&#x27;</span>);</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-------Collection Functions 集合函数--------------</span></span><br><span class="line"><span class="comment">--集合元素size函数: size(Map&lt;K.V&gt;) size(Array&lt;T&gt;)</span></span><br><span class="line"><span class="keyword">select</span> size(`<span class="keyword">array</span>`(<span class="number">11</span>,<span class="number">22</span>,<span class="number">33</span>));</span><br><span class="line"><span class="keyword">select</span> size(`map`(&quot;id&quot;,<span class="number">10086</span>,&quot;name&quot;,&quot;zhangsan&quot;,&quot;age&quot;,<span class="number">18</span>));</span><br><span class="line"></span><br><span class="line"><span class="comment">--取map集合keys函数: map_keys(Map&lt;K.V&gt;)</span></span><br><span class="line"><span class="keyword">select</span> map_keys(`map`(&quot;id&quot;,<span class="number">10086</span>,&quot;name&quot;,&quot;zhangsan&quot;,&quot;age&quot;,<span class="number">18</span>));</span><br><span class="line"></span><br><span class="line"><span class="comment">--取map集合values函数: map_values(Map&lt;K.V&gt;)</span></span><br><span class="line"><span class="keyword">select</span> map_values(`map`(&quot;id&quot;,<span class="number">10086</span>,&quot;name&quot;,&quot;zhangsan&quot;,&quot;age&quot;,<span class="number">18</span>));</span><br><span class="line"></span><br><span class="line"><span class="comment">--判断数组是否包含指定元素: array_contains(Array&lt;T&gt;, value)</span></span><br><span class="line"><span class="keyword">select</span> array_contains(`<span class="keyword">array</span>`(<span class="number">11</span>,<span class="number">22</span>,<span class="number">33</span>),<span class="number">11</span>);</span><br><span class="line"><span class="keyword">select</span> array_contains(`<span class="keyword">array</span>`(<span class="number">11</span>,<span class="number">22</span>,<span class="number">33</span>),<span class="number">66</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">--数组排序函数:sort_array(Array&lt;T&gt;)</span></span><br><span class="line"><span class="keyword">select</span> sort_array(`<span class="keyword">array</span>`(<span class="number">12</span>,<span class="number">2</span>,<span class="number">32</span>));</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">----Mathematical Functions 数学函数-------------</span></span><br><span class="line"><span class="comment">--取整函数: round  返回double类型的整数值部分 （遵循四舍五入）</span></span><br><span class="line"><span class="keyword">select</span> round(<span class="number">3.1415926</span>);</span><br><span class="line"><span class="comment">--指定精度取整函数: round(double a, int d) 返回指定精度d的double类型</span></span><br><span class="line"><span class="keyword">select</span> round(<span class="number">3.1415926</span>,<span class="number">4</span>);</span><br><span class="line"><span class="comment">--向下取整函数: floor</span></span><br><span class="line"><span class="keyword">select</span> <span class="built_in">floor</span>(<span class="number">3.1415926</span>);</span><br><span class="line"><span class="keyword">select</span> <span class="built_in">floor</span>(<span class="number">-3.1415926</span>);</span><br><span class="line"><span class="comment">--向上取整函数: ceil</span></span><br><span class="line"><span class="keyword">select</span> <span class="built_in">ceil</span>(<span class="number">3.1415926</span>);</span><br><span class="line"><span class="keyword">select</span> <span class="built_in">ceil</span>(<span class="number">-3.1415926</span>);</span><br><span class="line"><span class="comment">--取随机数函数: rand 每次执行都不一样 返回一个0到1范围内的随机数</span></span><br><span class="line"><span class="keyword">select</span> rand();</span><br><span class="line"><span class="comment">--指定种子取随机数函数: rand(int seed) 得到一个稳定的随机数序列</span></span><br><span class="line"><span class="keyword">select</span> rand(<span class="number">3</span>);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">--二进制函数:  bin(BIGINT a)</span></span><br><span class="line"><span class="keyword">select</span> bin(<span class="number">18</span>);</span><br><span class="line"><span class="comment">--进制转换函数: conv(BIGINT num, int from_base, int to_base)</span></span><br><span class="line"><span class="keyword">select</span> conv(<span class="number">17</span>,<span class="number">10</span>,<span class="number">16</span>);</span><br><span class="line"><span class="comment">--绝对值函数: abs</span></span><br><span class="line"><span class="keyword">select</span> <span class="built_in">abs</span>(<span class="number">-3.9</span>);</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-09%2022.30.31.jpg" alt="截屏2022-03-09 22.30.31"></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-----Conditional Functions 条件函数------------------</span></span><br><span class="line"><span class="comment">--使用之前课程创建好的student表数据</span></span><br><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> student limit <span class="number">3</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">describe</span> <span class="keyword">function</span> extended isnull;</span><br><span class="line"></span><br><span class="line"><span class="comment">--if条件判断: if(boolean testCondition, T valueTrue, T valueFalseOrNull)</span></span><br><span class="line"><span class="keyword">select</span> if(<span class="number">1</span><span class="operator">=</span><span class="number">2</span>,<span class="number">100</span>,<span class="number">200</span>);</span><br><span class="line"><span class="keyword">select</span> if(sex <span class="operator">=</span><span class="string">&#x27;男&#x27;</span>,<span class="string">&#x27;M&#x27;</span>,<span class="string">&#x27;W&#x27;</span>) <span class="keyword">from</span> student limit <span class="number">3</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">--空判断函数: isnull( a )</span></span><br><span class="line"><span class="keyword">select</span> isnull(&quot;allen&quot;);</span><br><span class="line"><span class="keyword">select</span> isnull(<span class="keyword">null</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">--非空判断函数: isnotnull ( a )</span></span><br><span class="line"><span class="keyword">select</span> isnotnull(&quot;allen&quot;);</span><br><span class="line"><span class="keyword">select</span> isnotnull(<span class="keyword">null</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">--空值转换函数: nvl(T value, T default_value)</span></span><br><span class="line"><span class="keyword">select</span> nvl(&quot;allen&quot;,&quot;itcast&quot;);</span><br><span class="line"><span class="keyword">select</span> nvl(<span class="keyword">null</span>,&quot;itcast&quot;);</span><br><span class="line"><span class="comment">--非空查找函数: COALESCE(T v1, T v2, ...)</span></span><br><span class="line"><span class="comment">--返回参数中的第一个非空值；如果所有值都为NULL，那么返回NULL</span></span><br><span class="line"><span class="keyword">select</span> <span class="built_in">COALESCE</span>(<span class="keyword">null</span>,<span class="number">11</span>,<span class="number">22</span>,<span class="number">33</span>);</span><br><span class="line"><span class="keyword">select</span> <span class="built_in">COALESCE</span>(<span class="keyword">null</span>,<span class="keyword">null</span>,<span class="keyword">null</span>,<span class="number">33</span>);</span><br><span class="line"><span class="keyword">select</span> <span class="built_in">COALESCE</span>(<span class="keyword">null</span>,<span class="keyword">null</span>,<span class="keyword">null</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">--条件转换函数: CASE a WHEN b THEN c [WHEN d THEN e]* [ELSE f] END</span></span><br><span class="line"><span class="keyword">select</span> <span class="keyword">case</span> <span class="number">100</span> <span class="keyword">when</span> <span class="number">50</span> <span class="keyword">then</span> <span class="string">&#x27;tom&#x27;</span> <span class="keyword">when</span> <span class="number">100</span> <span class="keyword">then</span> <span class="string">&#x27;mary&#x27;</span> <span class="keyword">else</span> <span class="string">&#x27;tim&#x27;</span> <span class="keyword">end</span>;</span><br><span class="line"><span class="keyword">select</span> <span class="keyword">case</span> sex <span class="keyword">when</span> <span class="string">&#x27;男&#x27;</span> <span class="keyword">then</span> <span class="string">&#x27;male&#x27;</span> <span class="keyword">else</span> <span class="string">&#x27;female&#x27;</span> <span class="keyword">end</span> <span class="keyword">from</span> student limit <span class="number">3</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">--nullif( a, b ):</span></span><br><span class="line"><span class="comment">-- 如果a = b，则返回NULL，否则返回一个</span></span><br><span class="line"><span class="keyword">select</span> <span class="built_in">nullif</span>(<span class="number">11</span>,<span class="number">11</span>);</span><br><span class="line"><span class="keyword">select</span> <span class="built_in">nullif</span>(<span class="number">11</span>,<span class="number">12</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">--assert_true(condition)</span></span><br><span class="line"><span class="comment">--如果&#x27;condition&#x27;不为真，则引发异常，否则返回null</span></span><br><span class="line"><span class="keyword">SELECT</span> assert_true(<span class="number">11</span> <span class="operator">&gt;=</span> <span class="number">0</span>);</span><br><span class="line"><span class="keyword">SELECT</span> assert_true(<span class="number">-1</span> <span class="operator">&gt;=</span> <span class="number">0</span>);</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-10%2010.54.06.jpg" alt="截屏2022-03-10 10.54.06"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-10%2010.55.03.jpg" alt="截屏2022-03-10 10.55.03"></p>
+<p>如果string 转 string 是没有意义的，返回的结果就是null。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">----Data Masking Functions 数据脱敏函数------------</span></span><br><span class="line"><span class="comment">--mask</span></span><br><span class="line"><span class="comment">--将查询回的数据，大写字母转换为X，小写字母转换为x，数字转换为n。</span></span><br><span class="line"><span class="keyword">select</span> mask(&quot;abc123DEF&quot;);</span><br><span class="line"><span class="keyword">select</span> mask(&quot;abc123DEF&quot;,<span class="string">&#x27;-&#x27;</span>,<span class="string">&#x27;.&#x27;</span>,<span class="string">&#x27;^&#x27;</span>); <span class="comment">--自定义替换的字母</span></span><br><span class="line"></span><br><span class="line"><span class="comment">--mask_first_n(string str[, int n]</span></span><br><span class="line"><span class="comment">--对前n个进行脱敏替换</span></span><br><span class="line"><span class="keyword">select</span> mask_first_n(&quot;abc123DEF&quot;,<span class="number">4</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">--mask_last_n(string str[, int n])</span></span><br><span class="line"><span class="keyword">select</span> mask_last_n(&quot;abc123DEF&quot;,<span class="number">4</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">--mask_show_first_n(string str[, int n])</span></span><br><span class="line"><span class="comment">--除了前n个字符，其余进行掩码处理</span></span><br><span class="line"><span class="keyword">select</span> mask_show_first_n(&quot;abc123DEF&quot;,<span class="number">4</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">--mask_show_last_n(string str[, int n])</span></span><br><span class="line"><span class="keyword">select</span> mask_show_last_n(&quot;abc123DEF&quot;,<span class="number">4</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">--mask_hash(string|char|varchar str)</span></span><br><span class="line"><span class="comment">--返回字符串的hash编码。</span></span><br><span class="line"><span class="keyword">select</span> mask_hash(&quot;abc123DEF&quot;);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">----- Misc. Functions 其他杂项函数---------------</span></span><br><span class="line"></span><br><span class="line"><span class="comment">--如果你要调用的java方法所在的jar包不是hive自带的 可以使用add jar添加进来</span></span><br><span class="line"><span class="comment">--hive调用java方法: java_method(class, method[, arg1[, arg2..]])</span></span><br><span class="line"><span class="keyword">select</span> java_method(&quot;java.lang.Math&quot;,&quot;max&quot;,<span class="number">11</span>,<span class="number">22</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">--反射函数: reflect(class, method[, arg1[, arg2..]])</span></span><br><span class="line"><span class="keyword">select</span> reflect(&quot;java.lang.Math&quot;,&quot;max&quot;,<span class="number">11</span>,<span class="number">22</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">-- hive调用python方法：</span></span><br><span class="line"><span class="keyword">add</span> file  <span class="keyword">local</span>的位置<span class="operator">/</span>py_file.py; </span><br><span class="line"></span><br><span class="line"><span class="keyword">select</span> transform(col1,col2,col3...) <span class="keyword">using</span> <span class="string">&#x27;python py_file.py&#x27;</span> <span class="keyword">as</span> (out1,out2,out3...) <span class="keyword">from</span> <span class="keyword">table</span>;</span><br><span class="line"># transform 的参数col1，col2，col3... 作为python脚本的输入，而out1,out2,out3...作为输出字段。利用这个可以把hive自身所带的函数不能或不方便处理的任务，转用python写。毕竟人生苦短我还是喜欢python。</span><br><span class="line"><span class="comment">-------------------------------------------------------------------------------</span></span><br><span class="line"><span class="comment">-- hive用python例子</span></span><br><span class="line"># use.py文件内容。</span><br><span class="line">import sys</span><br><span class="line">import datetime</span><br><span class="line"> </span><br><span class="line"><span class="keyword">for</span> line <span class="keyword">in</span> sys.stdin:                                 <span class="operator">/</span><span class="operator">/</span>接收输入</span><br><span class="line">  line <span class="operator">=</span> line.strip()    															 <span class="operator">/</span><span class="operator">/</span>去除头尾的空格</span><br><span class="line">  userid, movieid, rating, unixtime <span class="operator">=</span> line.split(<span class="string">&#x27;\t&#x27;</span>) <span class="operator">/</span><span class="operator">/</span>分割一条数据</span><br><span class="line">  weekday <span class="operator">=</span> datetime.datetime.fromtimestamp(<span class="type">float</span>(unixtime)).isoweekday()<span class="operator">/</span><span class="operator">/</span>转化unixtime时间戳为日期时间，获取对应的星期值</span><br><span class="line">  print <span class="string">&#x27;\t&#x27;</span>.<span class="keyword">join</span>([userid, movieid, rating, str(weekday)])<span class="operator">/</span><span class="operator">/</span>输出清洗后的数据</span><br><span class="line"></span><br><span class="line"># hive内</span><br><span class="line"><span class="keyword">add</span> file <span class="operator">/</span><span class="keyword">user</span><span class="operator">/</span>hive<span class="operator">/</span>warehouse<span class="operator">/</span>use.py;  # 注意 python脚本的路径是没有“” 的！而且路径是<span class="keyword">local</span>的就行了，不是hdfs的路径。</span><br><span class="line"></span><br><span class="line"><span class="keyword">INSERT</span> OVERWRITE <span class="keyword">TABLE</span> u_data_new</span><br><span class="line"><span class="keyword">SELECT</span></span><br><span class="line">  TRANSFORM (userid, movieid, rating, unixtime)    	<span class="operator">/</span><span class="operator">/</span>输入值（基表）</span><br><span class="line">  <span class="keyword">USING</span> <span class="string">&#x27;python weekday_mapper.py&#x27;</span>                  <span class="operator">/</span><span class="operator">/</span>使用脚本清洗 # 注意写个python 放前面，不然不执行。 </span><br><span class="line">  <span class="keyword">AS</span> (userid, movieid, rating, weekday)             <span class="operator">/</span><span class="operator">/</span>输出值（子表）</span><br><span class="line"><span class="keyword">FROM</span> u_data;   																			<span class="operator">/</span><span class="operator">/</span>基表</span><br></pre></td></tr></table></figure>
+
+<h2 id="我在centos搭建的Hadoop集群和hive工具，实验如下："><a href="#我在centos搭建的Hadoop集群和hive工具，实验如下：" class="headerlink" title="我在centos搭建的Hadoop集群和hive工具，实验如下："></a>我在centos搭建的Hadoop集群和hive工具，实验如下：</h2><h3 id="1、创建原始表"><a href="#1、创建原始表" class="headerlink" title="1、创建原始表"></a>1、创建原始表</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">drop</span> <span class="keyword">table</span> t_python_test;</span><br><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> t_python_test(</span><br><span class="line">    id <span class="type">int</span>,</span><br><span class="line">    sex string,</span><br><span class="line">    age <span class="type">int</span></span><br><span class="line">)<span class="type">row</span> format delimited fields terminated <span class="keyword">by</span> &quot;\t&quot;;</span><br><span class="line"></span><br><span class="line">load data <span class="keyword">local</span> inpath <span class="string">&#x27;/opt/data/python_test.txt&#x27;</span> <span class="keyword">into</span> <span class="keyword">table</span> t_python_test;</span><br><span class="line"># 加载数据</span><br><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> t_python_test;  # 原表如下</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-10%2023.38.15.jpg" alt="截屏2022-03-10 23.38.15"></p>
+<h3 id="2、写python脚本；"><a href="#2、写python脚本；" class="headerlink" title="2、写python脚本；"></a>2、写python脚本；</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># coding:utf-8</span></span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    <span class="keyword">for</span> line <span class="keyword">in</span> sys.stdin: </span><br><span class="line"><span class="comment"># python脚本以sys.stdin 读hive输入。其输入是以字段拼接字段而形成的字符串，这样的字符串有多行。</span></span><br><span class="line">        line = line.strip() <span class="comment"># 读取一行，去头尾的空格。</span></span><br><span class="line">        [t_id,t_sex,t_age] = line.split(<span class="string">&#x27;\t&#x27;</span>) </span><br><span class="line">        <span class="comment">#print( t_id,t_sex,t_age)</span></span><br><span class="line">        <span class="keyword">if</span> t_sex == <span class="string">&#x27;m&#x27;</span>:</span><br><span class="line">            t_age =<span class="built_in">int</span>(t_age) + <span class="number">1</span></span><br><span class="line">            t_sex = <span class="string">&#x27;super_m&#x27;</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&#x27;\t&#x27;</span>.join([<span class="built_in">str</span>(t_id),t_sex,<span class="built_in">str</span>(t_age)])) </span><br><span class="line"><span class="comment"># python脚本输出一个字符串，hive读取python脚本输出的时候会根据 字段名 自动切分好此字符串。  </span></span><br><span class="line"><span class="keyword">except</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;\t&#x27;</span>.join([<span class="string">&#x27;0&#x27;</span>,<span class="string">&#x27;modify failed&#x27;</span>,<span class="string">&#x27;0&#x27;</span>]))</span><br></pre></td></tr></table></figure>
+
+<p>​		注意：一定要记得在hive、Hadoop环境之外先用python检查一下有没有什么python编写错误，因为在hive里运行的速度太慢了，每一次排错都要花太多太多的时间，并且报错以后的提示看不到错在哪里，只是简单的说你的自定义脚本有问题Execution Error, return code 20003 from org.apache.hadoop.hive.ql.exec.mr.MapRedTask. An error occurred when trying to close the Operator running your custom script.。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cat</span> python_test.txt | python hive_python_test.py  <span class="comment"># 在hive以外运行一遍，用来排错。</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="3、hive调用python脚本"><a href="#3、hive调用python脚本" class="headerlink" title="3、hive调用python脚本"></a>3、hive调用python脚本</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">add</span> file <span class="operator">/</span>opt<span class="operator">/</span>data<span class="operator">/</span>hive_python_test.py;  # 添加python文件到hdfs，路径就是本地，没引号</span><br><span class="line"><span class="keyword">drop</span> <span class="keyword">table</span> t_python_test_new;</span><br><span class="line"></span><br><span class="line"><span class="keyword">create</span> <span class="keyword">table</span>  t_python_test_new <span class="keyword">as</span> <span class="keyword">select</span></span><br><span class="line">transform(id,sex,age )                   # 从原表中 选这些字段组成str汇成多行，输入脚本</span><br><span class="line"><span class="keyword">using</span> <span class="string">&#x27;python hive_python_test.py&#x27;</span>       # python 运行 python脚本</span><br><span class="line"><span class="keyword">as</span> (id,sex,age)												   # 将脚本的输出，按照这里定义的字段切分好。</span><br><span class="line"><span class="keyword">from</span> t_python_test;</span><br><span class="line"></span><br><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> t_python_test_new;         # 如下</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-11%2000.08.30.jpg" alt="截屏2022-03-11 00.08.30"></p>
+<h2 id="网上教学案例"><a href="#网上教学案例" class="headerlink" title="网上教学案例"></a>网上教学案例</h2><p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-10%2011.08.17.jpg" alt="截屏2022-03-10 11.08.17"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-10%2011.09.04.jpg" alt="截屏2022-03-10 11.09.04"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-10%2011.11.35.jpg" alt="截屏2022-03-10 11.11.35"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-10%2011.15.44.jpg" alt="截屏2022-03-10 11.15.44"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-10%2011.21.57.jpg" alt="截屏2022-03-10 11.21.57"></p>
+<p>我这里还是选择用python实现，毕竟越傻瓜越方便嘛。</p>
+<h2 id="函数高阶介绍"><a href="#函数高阶介绍" class="headerlink" title="函数高阶介绍"></a>函数高阶介绍</h2><p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-12%2018.00.08.jpg" alt="截屏2022-03-12 18.00.08"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-12%2018.03.01.jpg" alt="截屏2022-03-12 18.03.01"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-12%2018.08.30.jpg" alt="截屏2022-03-12 18.08.30"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-14%2015.23.46.jpg" alt="截屏2022-03-14 15.23.46"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-14%2015.11.11.jpg" alt="截屏2022-03-14 15.11.11"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-14%2015.22.53.jpg" alt="截屏2022-03-14 15.22.53"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-14%2015.24.24.jpg" alt="截屏2022-03-14 15.24.24"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-14%2015.26.18.jpg" alt="截屏2022-03-14 15.26.18"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-14%2015.27.11.jpg" alt="截屏2022-03-14 15.27.11"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-14%2015.32.25.jpg" alt="截屏2022-03-14 15.32.25"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-14%2015.33.37.jpg" alt="截屏2022-03-14 15.33.37"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-14%2015.43.28.jpg" alt="截屏2022-03-14 15.43.28"></p>
+<p>注意：以上的col1 col2 col3 是炸开的udtf表的 字段的名字。</p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-14%2015.50.03.jpg" alt="截屏2022-03-14 15.50.03"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-14%2015.50.20.jpg" alt="截屏2022-03-14 15.50.20"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-14%2015.51.29.jpg" alt="截屏2022-03-14 15.51.29"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-14%2015.53.42.jpg" alt="截屏2022-03-14 15.53.42"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-14%2015.54.56.jpg" alt="截屏2022-03-14 15.54.56"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-14%2015.56.13.jpg" alt="截屏2022-03-14 15.56.13"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-14%2015.58.03.jpg" alt="截屏2022-03-14 15.58.03"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-14%2015.59.55.jpg" alt="截屏2022-03-14 15.59.55"></p>
+<p>coalsesce函数 将null值 换成0.</p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-14%2016.01.51.jpg" alt="截屏2022-03-14 16.01.51"></p>
+<p>struct类型：</p>
+<p>STRUCT：STRUCT可以包含不同数据类型的元素。这些元素可以通过”点语法”的方式来得到所需要的元素，比如user是一个STRUCT类型，那么可以通过user.address得到这个用户的地址。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> student_test(id <span class="type">int</span>,info struct<span class="operator">&lt;</span>name:string,age:<span class="type">int</span><span class="operator">&gt;</span>)</span><br><span class="line"><span class="type">row</span> format delimited fields terminated <span class="keyword">by</span> &quot;,&quot; </span><br><span class="line">collection items terminated <span class="keyword">by</span> &quot;:&quot;;</span><br></pre></td></tr></table></figure>
+
+<p>文件</p>
+<p> [root@hello110 data]# vi student_test<br> 1001,zhangsan:24<br> 1002,lisi:25<br> 1003,xiaoming:26<br> 1004,dongdong:27</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span>   info.name,info.age <span class="keyword">from</span> student_test;</span><br><span class="line">OK</span><br><span class="line">name    age</span><br><span class="line">zhangsan        <span class="number">24</span></span><br><span class="line">lisi    <span class="number">25</span></span><br><span class="line">xiaoming        <span class="number">26</span></span><br><span class="line">dongdong        <span class="number">27</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-14%2016.16.58.jpg" alt="截屏2022-03-14 16.16.58"></p>
+<p>Struct结构用于按字典顺序排序，从左往右地按字段比较。<img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-14%2016.25.41.jpg" alt="截屏2022-03-14 16.25.41"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-14%2016.42.12.jpg" alt="截屏2022-03-14 16.42.12"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-14%2016.43.08.jpg" alt="截屏2022-03-14 16.43.08"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-14%2016.46.47.jpg" alt="截屏2022-03-14 16.46.47"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-14%2016.56.32.jpg" alt="截屏2022-03-14 16.56.32"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-14%2016.57.33.jpg" alt="截屏2022-03-14 16.57.33"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-14%2019.23.56.jpg" alt="截屏2022-03-14 19.23.56"></p>
+<p>注意：左侧的含义，a c 就不属于左侧的定义。</p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-14%2019.26.16.jpg" alt="截屏2022-03-14 19.26.16"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-14%2019.30.01.jpg" alt="截屏2022-03-14 19.30.01"></p>
+<p>用窗口函数聚合 和 普通聚合函数聚合的区别：</p>
+<p>​		方便看清分组的细节，而且即便不用聚合函数，可以select 和分组无关的字段。（这在一般的分组情况下是不可以的）。</p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-14%2020.03.02.jpg" alt="截屏2022-03-14 20.03.02"></p>
+<p>注意：窗口函数 over 内的order by 不是全局排序，而是分组内排序了。和普通的order by 作用域不一样。</p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-14%2020.09.14.jpg" alt="截屏2022-03-14 20.09.14"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-14%2020.59.09.jpg" alt="截屏2022-03-14 20.59.09"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-14%2021.00.51.jpg" alt="截屏2022-03-14 21.00.51"></p>
+<p>注意：一旦窗口函数over内有了 order by 排序 ，sum（） 会变成累计求和。</p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-14%2021.05.03.jpg" alt="截屏2022-03-14 21.05.03"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-14%2021.11.07.jpg" alt="截屏2022-03-14 21.11.07"></p>
+<p>这个窗口表达式的向前几行到当前行 ，或者向后几行，要注意，求和就变成了这个窗口表达式的范围内的求和了。</p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-14%2021.15.59.jpg" alt="截屏2022-03-14 21.15.59"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-14%2021.17.05.jpg" alt="截屏2022-03-14 21.17.05"></p>
+<p> <img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-14%2021.19.24.jpg" alt="截屏2022-03-14 21.19.24"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-14%2021.21.36.jpg" alt="截屏2022-03-14 21.21.36"></p>
+<p>以上三个窗口排序函数 适合 top N 业务分析。</p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-14%2021.26.35.jpg" alt="截屏2022-03-14 21.26.35"></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># 需求：找出每个用户访问pv最多的top <span class="number">3</span>，重复并列不考虑。</span><br><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> (</span><br><span class="line"><span class="keyword">select</span> cookieid,createtime,pv,</span><br><span class="line">  <span class="built_in">row_number</span>() <span class="keyword">over</span>(<span class="keyword">partition</span> <span class="keyword">by</span> cookieid <span class="keyword">order</span> <span class="keyword">by</span> pv <span class="keyword">desc</span>) <span class="keyword">as</span> seq <span class="keyword">from</span> website_pv_info</span><br><span class="line">)tmp <span class="keyword">where</span> tmp.seq<span class="operator">&lt;</span><span class="number">4</span>;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-14%2022.06.32.jpg" alt="截屏2022-03-14 22.06.32"></p>
+<p>7个要平均分成3份，只能是3、2、2这样分。</p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-14%2022.13.37.jpg" alt="截屏2022-03-14 22.13.37"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-14%2022.15.22.jpg" alt="截屏2022-03-14 22.15.22"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-14%2022.21.23.jpg" alt="截屏2022-03-14 22.21.23"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-14%2022.24.03.jpg" alt="截屏2022-03-14 22.24.03"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-14%2022.25.49.jpg" alt="截屏2022-03-14 22.25.49"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-14%2022.35.18.jpg" alt="截屏2022-03-14 22.35.18"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-14%2022.37.18.jpg" alt="截屏2022-03-14 22.37.18"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-14%2022.38.46.jpg" alt="截屏2022-03-14 22.38.46"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-14%2022.39.26.jpg" alt="截屏2022-03-14 22.39.26"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/%E6%88%AA%E5%B1%8F2022-03-14%2022.48.28.jpg" alt="截屏2022-03-14 22.48.28"></p>
+
+            
+
+
+        </div>
+    </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
+        
+            <div class="post-footer-tags">
+                <span class="text-color-light text-small">TAGGED IN</span><br/>
+                
+    <a class="tag tag--primary tag--small t-none-link" href="/tags/hive/" rel="tag">hive</a>
+
+            </div>
+        
+        
+            <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/hive%E4%BC%98%E5%8C%96%E5%8F%8A%E6%96%B0%E7%89%B9%E6%80%A7/"
+                    data-tooltip="hive优化及新特性"
+                    aria-label="PREVIOUS: hive优化及新特性"
+                >
+                    
+                        <i class="fa fa-angle-left" aria-hidden="true"></i>
+                        <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+                    </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/"
+                    data-tooltip="Hive_SQL数据定义语言_DDL"
+                    aria-label="NEXT: Hive_SQL数据定义语言_DDL"
+                >
+                    
+                        <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                    </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a
+                class="post-action-btn btn btn--default btn-open-shareoptions"
+                href="#btn-open-shareoptions"
+                aria-label="Share this post"
+            >
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/"
+                    title="Share on Facebook"
+                    aria-label="Share on Facebook"
+                >
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://twitter.com/intent/tweet?text=http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/"
+                    title="Share on Twitter"
+                    aria-label="Share on Twitter"
+                >
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://plus.google.com/share?url=http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/"
+                    title="Share on Google+"
+                    aria-label="Share on Google+"
+                >
+                    <i class="fab fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+        
+        
+            
+        
+    </div>
+</article>
+
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2022 陈宇韶chenyushao. All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/hive%E4%BC%98%E5%8C%96%E5%8F%8A%E6%96%B0%E7%89%B9%E6%80%A7/"
+                    data-tooltip="hive优化及新特性"
+                    aria-label="PREVIOUS: hive优化及新特性"
+                >
+                    
+                        <i class="fa fa-angle-left" aria-hidden="true"></i>
+                        <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+                    </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/"
+                    data-tooltip="Hive_SQL数据定义语言_DDL"
+                    aria-label="NEXT: Hive_SQL数据定义语言_DDL"
+                >
+                    
+                        <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                    </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a
+                class="post-action-btn btn btn--default btn-open-shareoptions"
+                href="#btn-open-shareoptions"
+                aria-label="Share this post"
+            >
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/"
+                    title="Share on Facebook"
+                    aria-label="Share on Facebook"
+                >
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://twitter.com/intent/tweet?text=http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/"
+                    title="Share on Twitter"
+                    aria-label="Share on Twitter"
+                >
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://plus.google.com/share?url=http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/"
+                    title="Share on Google+"
+                    aria-label="Share on Google+"
+                >
+                    <i class="fab fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+                </div>
+                
+    <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+        <i id="btn-close-shareoptions" class="fa fa-times"></i>
+        <ul class="share-options">
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="https://www.facebook.com/sharer/sharer.php?u=http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/"
+                        aria-label="Share on Facebook"
+                    >
+                        <i class="fab fa-facebook" aria-hidden="true"></i><span>Share on Facebook</span>
+                    </a>
+                </li>
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="https://twitter.com/intent/tweet?text=http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/"
+                        aria-label="Share on Twitter"
+                    >
+                        <i class="fab fa-twitter" aria-hidden="true"></i><span>Share on Twitter</span>
+                    </a>
+                </li>
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="https://plus.google.com/share?url=http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/"
+                        aria-label="Share on Google+"
+                    >
+                        <i class="fab fa-google-plus" aria-hidden="true"></i><span>Share on Google+</span>
+                    </a>
+                </li>
+            
+        </ul>
+    </div>
+
+
+            
+        </div>
+        
+
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-times"></i>
+        </div>
+        
+            <h4 id="about-card-name">陈宇韶chenyushao</h4>
+        
+            <div id="about-card-bio"><p>author.bio</p>
+</div>
+        
+        
+            <div id="about-card-job">
+                <i class="fa fa-briefcase"></i>
+                <br/>
+                <p>author.job</p>
+
+            </div>
+        
+        
+    </div>
+</div>
+
+        
+        
+<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
+        <!--SCRIPTS-->
+
+<script src="/assets/js/script-sbgpeqyl6jw5qe60mnfuzifzwky5la4ftiuwmschcdzx2pg5tfpl1pfp13e3.min.js"></script>
+
+<!--SCRIPTS END-->
+
+
+    
+
+
+
+
+    </body>
+</html>

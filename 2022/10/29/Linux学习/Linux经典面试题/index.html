@@ -1,0 +1,725 @@
+
+<!DOCTYPE html>
+<html lang="en">
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Tiger_pop&#39;s Blog">
+    <title>linux经典面试题 - Tiger_pop&#39;s Blog</title>
+    <meta name="author" content="陈宇韶chenyushao">
+    
+    
+    
+        
+            <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
+        
+    
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"陈宇韶chenyushao","sameAs":["https://github.com/","https://www.linkedin.com/profile/","mailto"]},"articleBody":"简介 \n\n1cat t.log | cut -d &#x27;/&#x27; -f 3 | sort | uniq -c | sort -nr -k 1    # cut 不能用空格来分割，awk 可以。uniq 可以把相邻的重复的行删除仅保留一行；-c 参数是用来统计相同行数量。sort -nr 从大到小排序，注意：sort 是对行 排序。 可以   man 命令 查看uniq 的相应用法 man uniq。\n\n\n\n\n1netstat -anp | more # 查看端口与协议的对应关系。\n\n\n\n12345 netstat -anp | grep &quot;ESTABLISHED&quot; | awk -F &quot; &quot; &#x27;&#123;print $5&#125;&#x27; | gawk -F &quot;:&quot; &#x27;&#123;print $1&#125;&#x27; | sort | uniq -c | sort -nr# awk/gawk -F &quot;分割标志&quot; &#x27;&#123;print $分割后的第n段&#125;&#x27; # awk 和 cut 很类似，但是awk 用面广一点。netstat -anp | grep &quot;ESTABLISHED&quot; | awk -F &#x27; &#x27; &#x27;&#123;print $5&#125;&#x27; | gawk -F &#x27;:&#x27; &#x27;&#123;print $1&#125;&#x27; | uniq -c | sort -nr -k 1 | awk -F &quot; &quot; &#x27;&#123;print $2&#125;&#x27;\n\n\n\n\n1234567891011121314151617181920212223vim /etc/my.cnf   \t\t\t\t\t\t\t\t\t# 更改mysql的进入密码设置。# my.cof 内添加如下内容：跳过权限表(空密码登录)。skip-grant-tables# 注释掉  validate_password=offsystemctl restart mysqld.service \t\t# 重启mysql服务mysql -u root -p  \t\t\t\t\t\t\t\t  # 空密码登录show databases;  \t\t\t\t\t\t\t\t\t\t# 会看见一个mysql 的数据库use mysql;show tables; \t\t\t\t\t\t\t\t\t\t\t  # 会看见一个user表desc user;\t\t\t\t\t\t\t\t\t\t\t\t  # 找到字段authentication_stringupdate user set authentication_string=password(&quot;mysql654321&quot;) where user=&#x27;root&#x27;;  \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t# 修改此字段更改初始密码为mysql654321flush privileges;  \t\t\t\t\t\t\t\t\t# 刷新mysql source 文件 linux 这样快速生效。exit;vim /etc/my.cof   \t\t\t\t\t\t\t\t\t# 去这里注释掉（空密码登录）# skip-grant-tables  systemctl restart mysqld.servicemysql -u root -p \t\t\t\t\t\t\t\t\t\t# 用新的密码登录。\n\n\n\n\n1cat access.log | awk -F &quot; &quot; &#x27;&#123;print $1&#125;&#x27; | sort | uniq -c | sort -nr | head -n 2\n\n\n\n\n12# 假如要用来监听的，本机网络设备是 ens160tcpdump -i ens160 host 192.168.200.1 and port 22 &gt;&gt; /home/tcpdump.log\n\n\n\n\n123rewrite # 重写ssl     # 安全加密\n\n\n\n\n\n123456789102) 注意事项1、注意权限分离，不要把权限集中在一个部门；2、权限最小化，尽可能少的给权限；3、用sudo 代替 root用户；4、用chatter 锁定一些关键文件夹的修改权限； # chattr +i /etc/passwd 给密码设置加锁，即便是root用户也呀解锁后才能改。chattr -i /etc/passwd 相应的解锁。# which chattr / find / -name chattr 都能找到chattr 脚本的位置，所以还能为了保险起见给chattr 移动位置或者改名，记住位置和新名字即可，复原后就又能解锁了。5、用rootkit hunter 工具检测 利用 rookit 搞的入侵。6、Tripwire 检测文件系统的完整性。\n\n\n\n\n\n12341、能读；不能修改；能删除（因为对上级目录有w的权限）。2、不能读；不能修改；不能删除。（因为上级目录都进不去，什么操作都做不了。）3、能读；不能修改（因为没w权限）；不能删除（因为没有w权限）。4、能读；不能修改（虽然有w权限，但是文件本身是只读的。）；能删除（虽然文件只读，但是上级目录有w权限，就能把文件直接删除。）。\n\n\n\n\n1# 大家直接去看韩顺平老师的讲解吧，太多了，跳过。\n\n\n\n\n12345678netstat     #网络状态监控top\t\t\t\t\t#系统运行状态lsblk\t\t\t\t#看出硬盘分区find\t\t\t\t#查找ps -aux\t\t\t#查看运行进程chkconfig\t\t#查看服务启动状态systemctl\t\t#管理系统服务器\n\n\n\n\n123456topiotop # 可能需要先yum 或者apt install iotopdf -lhnetstatps -aux | grep XXX\n\n\n\n\n\n123456789cat t2.txt | gawk -F &quot; &quot; &#x27;&#123;sum+=$2&#125; END &#123;print sum&#125;&#x27;150# awk脚本，这里不是shell 脚本，没有 $变量 等等写法。而且 BEGIN、END 一定要大写才能生效。关于 awk 脚本，我们需要注意两个关键词 BEGIN 和 END。1、BEGIN&#123; 这里面放的是执行前的语句 &#125;2、END &#123;这里面放的是处理完所有的行后要执行的语句 &#125;3、&#123;这里面放的是处理每一行时要执行的语句&#125;\n\n\n\n\n123456if [ -f 文件名 ]then\techo &quot;存在&quot;else \techo &quot;不存在&quot;fi\n\n\n\n\n123456789 8 7 6 5 4 3 2 10sort -nr t3.txt | awk -F &quot; &quot; &#x27;&#123;sum+=$1;print$1&#125; END &#123;print &quot;和等于：&quot;sum&#125;&#x27;# 注意求和的过程中要 print $1 不然只有最后的求和。如果这个是一行的话 cat t3.txt | xargs -n1 | sort -n | awk -F &quot; &quot; &#x27;BEGIN&#123;sum=0&#125;&#123;sum+=$1;print$1&#125;END&#123;print &quot;sumis&quot; sum&#125;&#x27; | awk &#x27;&#123;a=a&quot; &quot;$1&#125;END&#123;print a&#125;&#x27;# xargs -n1 是把 一行变成一列。然后就能用 sort 的行排序了。# &#123;a=a&quot; &quot;$1&#125;END&#123;print a&#125; 是又把列 转成行了，中间用空格隔开。\n\n\n\n\n12grep -r &quot;cat&quot; /home | cut -d &quot;:&quot; -f 1# grep -r 是连带着所有的内容递归过滤。\n\n\n\n\n123find /home -name &quot;*.*&quot; | wc -lfind /home -name &quot;*.*&quot; | xargs wc -l# find 会自动递归找。 *.* 会把隐藏的也显示。xargs 除了可以进行 行列转换以外，还能 把之前管道的整体内容，转为一行一行 套用到 后面的语句中执行。\n\n\n\n\n1234NginxHaproxykeepalivedLVS\n\n\n\n\n123456789101112vim /root/mail.sh  # 建立sh脚本# mail.sh文件内写入#!/bin/bashcd /var/spool &amp;&amp; /bin/tar -zcvf /home/`date +%Y-%m-%d_%H%M%S`.tar.gz /mail# ； 是都执行、&amp;&amp; 是 前面成功了再执行后面的命令、 ｜｜ 是 前面不成功 再执行后面。crontab -e      # 给sh脚本定时# 写入30 22 * * * /root/mail.sh # 可以检查一下定时文件是否okcrontab -l\n\n\n\n\n\n1234567891、用sudo2、定时自动更新，用阿里云等等。3、apt / yum 等等用国内源替换，或者用代理。4、有必要的端口才在防火墙打开，没用的端口关闭。5、打开最大文件数。vim /etc/profile ulimit -SHn 655356、配置合理的备份策略7、对nginx apache优化。8、用chattr锁定一些关键文件夹文件 /etc/passwd /etc/shadow /etc/inittab。等等。\n\n \n","dateCreated":"2022-10-29T15:42:07+08:00","dateModified":"2022-10-29T16:43:10+08:00","datePublished":"2022-10-29T15:42:07+08:00","description":"简介","headline":"linux经典面试题","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/Linux%E7%BB%8F%E5%85%B8%E9%9D%A2%E8%AF%95%E9%A2%98/"},"publisher":{"@type":"Organization","name":"陈宇韶chenyushao","sameAs":["https://github.com/","https://www.linkedin.com/profile/","mailto"]},"url":"http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/Linux%E7%BB%8F%E5%85%B8%E9%9D%A2%E8%AF%95%E9%A2%98/","keywords":"linux"}</script>
+    <meta name="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="linux经典面试题">
+<meta property="og:url" content="http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/Linux%E7%BB%8F%E5%85%B8%E9%9D%A2%E8%AF%95%E9%A2%98/index.html">
+<meta property="og:site_name" content="Tiger_pop&#39;s Blog">
+<meta property="og:description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/Linux%E7%BB%8F%E5%85%B8%E9%9D%A2%E8%AF%95%E9%A2%98/image-20220120124414838-7031132.png">
+<meta property="og:image" content="http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/Linux%E7%BB%8F%E5%85%B8%E9%9D%A2%E8%AF%95%E9%A2%98/image-20220121152234629.png">
+<meta property="og:image" content="http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/Linux%E7%BB%8F%E5%85%B8%E9%9D%A2%E8%AF%95%E9%A2%98/image-20220121152621661.png">
+<meta property="og:image" content="http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/Linux%E7%BB%8F%E5%85%B8%E9%9D%A2%E8%AF%95%E9%A2%98/image-20220121152501114.png">
+<meta property="og:image" content="http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/Linux%E7%BB%8F%E5%85%B8%E9%9D%A2%E8%AF%95%E9%A2%98/image-20220121184754596.png">
+<meta property="og:image" content="http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/Linux%E7%BB%8F%E5%85%B8%E9%9D%A2%E8%AF%95%E9%A2%98/image-20220121190959996.png">
+<meta property="og:image" content="http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/Linux%E7%BB%8F%E5%85%B8%E9%9D%A2%E8%AF%95%E9%A2%98/image-20220121191322065.png">
+<meta property="og:image" content="http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/Linux%E7%BB%8F%E5%85%B8%E9%9D%A2%E8%AF%95%E9%A2%98/image-20220121191714616.png">
+<meta property="og:image" content="http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/Linux%E7%BB%8F%E5%85%B8%E9%9D%A2%E8%AF%95%E9%A2%98/image-20220121194037639.png">
+<meta property="og:image" content="http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/Linux%E7%BB%8F%E5%85%B8%E9%9D%A2%E8%AF%95%E9%A2%98/image-20220121194312392.png">
+<meta property="og:image" content="http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/Linux%E7%BB%8F%E5%85%B8%E9%9D%A2%E8%AF%95%E9%A2%98/image-20220121194623810.png">
+<meta property="og:image" content="http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/Linux%E7%BB%8F%E5%85%B8%E9%9D%A2%E8%AF%95%E9%A2%98/image-20220121201114476.png">
+<meta property="og:image" content="http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/Linux%E7%BB%8F%E5%85%B8%E9%9D%A2%E8%AF%95%E9%A2%98/image-20220121201055840.png">
+<meta property="og:image" content="http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/Linux%E7%BB%8F%E5%85%B8%E9%9D%A2%E8%AF%95%E9%A2%98/image-20220122115417417.png">
+<meta property="og:image" content="http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/Linux%E7%BB%8F%E5%85%B8%E9%9D%A2%E8%AF%95%E9%A2%98/image-20220122115826281.png">
+<meta property="og:image" content="http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/Linux%E7%BB%8F%E5%85%B8%E9%9D%A2%E8%AF%95%E9%A2%98/image-20220122120120510.png">
+<meta property="og:image" content="http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/Linux%E7%BB%8F%E5%85%B8%E9%9D%A2%E8%AF%95%E9%A2%98/image-20220122120816620.png">
+<meta property="og:image" content="http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/Linux%E7%BB%8F%E5%85%B8%E9%9D%A2%E8%AF%95%E9%A2%98/image-20220122121518491.png">
+<meta property="og:image" content="http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/Linux%E7%BB%8F%E5%85%B8%E9%9D%A2%E8%AF%95%E9%A2%98/image-20220122122108812.png">
+<meta property="og:image" content="http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/Linux%E7%BB%8F%E5%85%B8%E9%9D%A2%E8%AF%95%E9%A2%98/image-20220122122456073.png">
+<meta property="og:image" content="http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/Linux%E7%BB%8F%E5%85%B8%E9%9D%A2%E8%AF%95%E9%A2%98/image-20220122123512597.png">
+<meta property="og:image" content="http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/Linux%E7%BB%8F%E5%85%B8%E9%9D%A2%E8%AF%95%E9%A2%98/image-20220122123913951.png">
+<meta property="og:image" content="http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/Linux%E7%BB%8F%E5%85%B8%E9%9D%A2%E8%AF%95%E9%A2%98/image-20220122124830528.png">
+<meta property="og:image" content="http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/Linux%E7%BB%8F%E5%85%B8%E9%9D%A2%E8%AF%95%E9%A2%98/image-20220122125027094.png">
+<meta property="og:image" content="http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/Linux%E7%BB%8F%E5%85%B8%E9%9D%A2%E8%AF%95%E9%A2%98/image-20220122130803028.png">
+<meta property="og:image" content="http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/Linux%E7%BB%8F%E5%85%B8%E9%9D%A2%E8%AF%95%E9%A2%98/image-20220122170348153.png">
+<meta property="og:image" content="http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/Linux%E7%BB%8F%E5%85%B8%E9%9D%A2%E8%AF%95%E9%A2%98/%E6%88%AA%E5%B1%8F2022-10-26%2017.31.21.jpg">
+<meta property="article:published_time" content="2022-10-29T07:42:07.000Z">
+<meta property="article:modified_time" content="2022-10-29T08:43:10.436Z">
+<meta property="article:author" content="陈宇韶chenyushao">
+<meta property="article:tag" content="linux">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/Linux%E7%BB%8F%E5%85%B8%E9%9D%A2%E8%AF%95%E9%A2%98/image-20220120124414838-7031132.png">
+    
+    
+        
+    
+    
+    
+    
+    
+    <!--STYLES-->
+    
+<link rel="stylesheet" href="/assets/css/style-yrbj4x87sme2npnaj5hmxl88fi8ktzpa1hwzrvan2almcpvu5niegj13ryff.min.css">
+
+    <!--STYLES END-->
+    
+
+    
+
+    
+        
+    
+</head>
+
+    <body>
+        <div id="blog">
+            <!-- Define author's picture -->
+
+
+    
+
+<header id="header" data-behavior="4">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <div class="header-title">
+        <a
+            class="header-title-link"
+            href="/"
+            aria-label=""
+        >
+            Tiger_pop&#39;s Blog
+        </a>
+    </div>
+    
+        
+            <a
+                class="header-right-picture "
+                href="#about"
+                aria-label="Open the link: /#about"
+            >
+        
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+<nav id="sidebar" data-behavior="4">
+    <div class="sidebar-container">
+        
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/"
+                            
+                            rel="noopener"
+                            title="Home"
+                        >
+                        <i class="sidebar-button-icon fa fa-home" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Home</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-categories"
+                            
+                            rel="noopener"
+                            title="Categories"
+                        >
+                        <i class="sidebar-button-icon fa fa-bookmark" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Categories</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-tags"
+                            
+                            rel="noopener"
+                            title="Tags"
+                        >
+                        <i class="sidebar-button-icon fa fa-tags" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Tags</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-archives"
+                            
+                            rel="noopener"
+                            title="Archives"
+                        >
+                        <i class="sidebar-button-icon fa fa-archive" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Archives</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="#about"
+                            
+                            rel="noopener"
+                            title="About"
+                        >
+                        <i class="sidebar-button-icon fa fa-question" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">About</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://github.com/"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="GitHub"
+                        >
+                        <i class="sidebar-button-icon fab fa-github" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">GitHub</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://www.linkedin.com/profile/"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="LinkedIn"
+                        >
+                        <i class="sidebar-button-icon fab fa-linkedin" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">LinkedIn</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/mailto"
+                            
+                            rel="noopener"
+                            title="Mail"
+                        >
+                        <i class="sidebar-button-icon fa fa-envelope" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Mail</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/atom.xml"
+                            
+                            rel="noopener"
+                            title="RSS"
+                        >
+                        <i class="sidebar-button-icon fa fa-rss" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">RSS</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+    </div>
+</nav>
+
+            
+            <div id="main" data-behavior="4"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post">
+    
+    
+        <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title">
+            linux经典面试题
+        </h1>
+    
+    
+        <div class="post-meta">
+    <time datetime="2022-10-29T15:42:07+08:00">
+	
+		    Oct 29, 2022
+    	
+    </time>
+    
+        <span>in </span>
+        
+    <a class="category-link" href="/categories/Linux/">Linux</a>
+
+
+    
+</div>
+
+    
+</div>
+
+    
+    <div class="post-content markdown">
+        <div class="main-content-wrap">
+            <p>简介 <span id="more"></span></p>
+<p><img src="/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/Linux%E7%BB%8F%E5%85%B8%E9%9D%A2%E8%AF%95%E9%A2%98/image-20220120124414838-7031132.png" alt="image-20220120124414838"></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cat</span> t.log | <span class="built_in">cut</span> -d <span class="string">&#x27;/&#x27;</span> -f 3 | <span class="built_in">sort</span> | <span class="built_in">uniq</span> -c | <span class="built_in">sort</span> -nr -k 1    <span class="comment"># cut 不能用空格来分割，awk 可以。uniq 可以把相邻的重复的行删除仅保留一行；-c 参数是用来统计相同行数量。sort -nr 从大到小排序，注意：sort 是对行 排序。 可以   man 命令 查看uniq 的相应用法 man uniq。</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p><img src="/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/Linux%E7%BB%8F%E5%85%B8%E9%9D%A2%E8%AF%95%E9%A2%98/image-20220121152234629.png" alt="image-20220121152234629"></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netstat -anp | more <span class="comment"># 查看端口与协议的对应关系。</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/Linux%E7%BB%8F%E5%85%B8%E9%9D%A2%E8%AF%95%E9%A2%98/image-20220121152621661.png" alt="image-20220121152621661"></p>
+<p><img src="/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/Linux%E7%BB%8F%E5%85%B8%E9%9D%A2%E8%AF%95%E9%A2%98/image-20220121152501114.png" alt="image-20220121152501114"></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"> netstat -anp | grep <span class="string">&quot;ESTABLISHED&quot;</span> | awk -F <span class="string">&quot; &quot;</span> <span class="string">&#x27;&#123;print $5&#125;&#x27;</span> | gawk -F <span class="string">&quot;:&quot;</span> <span class="string">&#x27;&#123;print $1&#125;&#x27;</span> | <span class="built_in">sort</span> | <span class="built_in">uniq</span> -c | <span class="built_in">sort</span> -nr</span><br><span class="line"></span><br><span class="line"><span class="comment"># awk/gawk -F &quot;分割标志&quot; &#x27;&#123;print $分割后的第n段&#125;&#x27; </span></span><br><span class="line"><span class="comment"># awk 和 cut 很类似，但是awk 用面广一点。</span></span><br><span class="line">netstat -anp | grep <span class="string">&quot;ESTABLISHED&quot;</span> | awk -F <span class="string">&#x27; &#x27;</span> <span class="string">&#x27;&#123;print $5&#125;&#x27;</span> | gawk -F <span class="string">&#x27;:&#x27;</span> <span class="string">&#x27;&#123;print $1&#125;&#x27;</span> | <span class="built_in">uniq</span> -c | <span class="built_in">sort</span> -nr -k 1 | awk -F <span class="string">&quot; &quot;</span> <span class="string">&#x27;&#123;print $2&#125;&#x27;</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p><img src="/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/Linux%E7%BB%8F%E5%85%B8%E9%9D%A2%E8%AF%95%E9%A2%98/image-20220121184754596.png" alt="image-20220121184754596"></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/my.cnf   									<span class="comment"># 更改mysql的进入密码设置。</span></span><br><span class="line"><span class="comment"># my.cof 内添加如下内容：跳过权限表(空密码登录)。</span></span><br><span class="line">skip-grant-tables</span><br><span class="line"><span class="comment"># 注释掉  validate_password=off</span></span><br><span class="line"></span><br><span class="line">systemctl restart mysqld.service 		<span class="comment"># 重启mysql服务</span></span><br><span class="line">mysql -u root -p  								  <span class="comment"># 空密码登录</span></span><br><span class="line"></span><br><span class="line">show databases;  										<span class="comment"># 会看见一个mysql 的数据库</span></span><br><span class="line">use mysql;</span><br><span class="line">show tables; 											  <span class="comment"># 会看见一个user表</span></span><br><span class="line">desc user;												  <span class="comment"># 找到字段authentication_string</span></span><br><span class="line"></span><br><span class="line">update user <span class="built_in">set</span> authentication_string=password(<span class="string">&quot;mysql654321&quot;</span>) <span class="built_in">where</span> user=<span class="string">&#x27;root&#x27;</span>;  																		<span class="comment"># 修改此字段更改初始密码为mysql654321</span></span><br><span class="line"></span><br><span class="line">flush privileges;  									<span class="comment"># 刷新mysql source 文件 linux 这样快速生效。</span></span><br><span class="line"><span class="built_in">exit</span>;</span><br><span class="line"></span><br><span class="line">vim /etc/my.cof   									<span class="comment"># 去这里注释掉（空密码登录）</span></span><br><span class="line"><span class="comment"># skip-grant-tables  </span></span><br><span class="line"></span><br><span class="line">systemctl restart mysqld.service</span><br><span class="line">mysql -u root -p 										<span class="comment"># 用新的密码登录。</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p><img src="/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/Linux%E7%BB%8F%E5%85%B8%E9%9D%A2%E8%AF%95%E9%A2%98/image-20220121190959996.png" alt="image-20220121190959996"><img src="/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/Linux%E7%BB%8F%E5%85%B8%E9%9D%A2%E8%AF%95%E9%A2%98/image-20220121191322065.png" alt="image-20220121191322065"></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cat</span> access.log | awk -F <span class="string">&quot; &quot;</span> <span class="string">&#x27;&#123;print $1&#125;&#x27;</span> | <span class="built_in">sort</span> | <span class="built_in">uniq</span> -c | <span class="built_in">sort</span> -nr | <span class="built_in">head</span> -n 2</span><br></pre></td></tr></table></figure>
+
+
+
+<p><img src="/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/Linux%E7%BB%8F%E5%85%B8%E9%9D%A2%E8%AF%95%E9%A2%98/image-20220121191714616.png" alt="image-20220121191714616"></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 假如要用来监听的，本机网络设备是 ens160</span></span><br><span class="line">tcpdump -i ens160 host 192.168.200.1 and port 22 &gt;&gt; /home/tcpdump.log</span><br></pre></td></tr></table></figure>
+
+
+
+<p><img src="/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/Linux%E7%BB%8F%E5%85%B8%E9%9D%A2%E8%AF%95%E9%A2%98/image-20220121194037639.png" alt="image-20220121194037639"></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">rewrite <span class="comment"># 重写</span></span><br><span class="line">ssl     <span class="comment"># 安全加密</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<p><img src="/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/Linux%E7%BB%8F%E5%85%B8%E9%9D%A2%E8%AF%95%E9%A2%98/image-20220121194312392.png" alt="image-20220121194312392"></p>
+<p><img src="/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/Linux%E7%BB%8F%E5%85%B8%E9%9D%A2%E8%AF%95%E9%A2%98/image-20220121194623810.png" alt="image-20220121194623810"></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">2) 注意事项</span><br><span class="line">1、注意权限分离，不要把权限集中在一个部门；</span><br><span class="line">2、权限最小化，尽可能少的给权限；</span><br><span class="line">3、用sudo 代替 root用户；</span><br><span class="line">4、用chatter 锁定一些关键文件夹的修改权限； </span><br><span class="line"><span class="comment"># chattr +i /etc/passwd 给密码设置加锁，即便是root用户也呀解锁后才能改。chattr -i /etc/passwd 相应的解锁。</span></span><br><span class="line"><span class="comment"># which chattr / find / -name chattr 都能找到chattr 脚本的位置，所以还能为了保险起见给chattr 移动位置或者改名，记住位置和新名字即可，复原后就又能解锁了。</span></span><br><span class="line">5、用rootkit hunter 工具检测 利用 rookit 搞的入侵。</span><br><span class="line">6、Tripwire 检测文件系统的完整性。</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<p><img src="/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/Linux%E7%BB%8F%E5%85%B8%E9%9D%A2%E8%AF%95%E9%A2%98/image-20220121201114476.png" alt="image-20220121201114476"></p>
+<p><img src="/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/Linux%E7%BB%8F%E5%85%B8%E9%9D%A2%E8%AF%95%E9%A2%98/image-20220121201055840.png" alt="image-20220121201055840"></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">1、能读；不能修改；能删除（因为对上级目录有w的权限）。</span><br><span class="line">2、不能读；不能修改；不能删除。（因为上级目录都进不去，什么操作都做不了。）</span><br><span class="line">3、能读；不能修改（因为没w权限）；不能删除（因为没有w权限）。</span><br><span class="line">4、能读；不能修改（虽然有w权限，但是文件本身是只读的。）；能删除（虽然文件只读，但是上级目录有w权限，就能把文件直接删除。）。</span><br></pre></td></tr></table></figure>
+
+
+
+<p><img src="/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/Linux%E7%BB%8F%E5%85%B8%E9%9D%A2%E8%AF%95%E9%A2%98/image-20220122115417417.png" alt="image-20220122115417417"></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 大家直接去看韩顺平老师的讲解吧，太多了，跳过。</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p><img src="/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/Linux%E7%BB%8F%E5%85%B8%E9%9D%A2%E8%AF%95%E9%A2%98/image-20220122115826281.png" alt="image-20220122115826281"></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">netstat     <span class="comment">#网络状态监控</span></span><br><span class="line">top					<span class="comment">#系统运行状态</span></span><br><span class="line">lsblk				<span class="comment">#看出硬盘分区</span></span><br><span class="line">find				<span class="comment">#查找</span></span><br><span class="line">ps -aux			<span class="comment">#查看运行进程</span></span><br><span class="line">chkconfig		<span class="comment">#查看服务启动状态</span></span><br><span class="line">systemctl		<span class="comment">#管理系统服务器</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<p><img src="/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/Linux%E7%BB%8F%E5%85%B8%E9%9D%A2%E8%AF%95%E9%A2%98/image-20220122120120510.png" alt="image-20220122120120510"></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">top</span><br><span class="line">iotop <span class="comment"># 可能需要先yum 或者apt install iotop</span></span><br><span class="line"><span class="built_in">df</span> -lh</span><br><span class="line">netstat</span><br><span class="line">ps -aux | grep XXX</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<p><img src="/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/Linux%E7%BB%8F%E5%85%B8%E9%9D%A2%E8%AF%95%E9%A2%98/image-20220122120816620.png" alt="image-20220122120816620"></p>
+<p><img src="/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/Linux%E7%BB%8F%E5%85%B8%E9%9D%A2%E8%AF%95%E9%A2%98/image-20220122121518491.png" alt="image-20220122121518491"></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cat</span> t2.txt | gawk -F <span class="string">&quot; &quot;</span> <span class="string">&#x27;&#123;sum+=$2&#125; END &#123;print sum&#125;&#x27;</span></span><br><span class="line">150</span><br><span class="line"></span><br><span class="line"><span class="comment"># awk脚本，这里不是shell 脚本，没有 $变量 等等写法。而且 BEGIN、END 一定要大写才能生效。</span></span><br><span class="line">关于 awk 脚本，我们需要注意两个关键词 BEGIN 和 END。</span><br><span class="line"></span><br><span class="line">1、BEGIN&#123; 这里面放的是执行前的语句 &#125;</span><br><span class="line">2、END &#123;这里面放的是处理完所有的行后要执行的语句 &#125;</span><br><span class="line">3、&#123;这里面放的是处理每一行时要执行的语句&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p><img src="/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/Linux%E7%BB%8F%E5%85%B8%E9%9D%A2%E8%AF%95%E9%A2%98/image-20220122122108812.png" alt="image-20220122122108812"></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> [ -f 文件名 ]</span><br><span class="line"><span class="keyword">then</span></span><br><span class="line">	<span class="built_in">echo</span> <span class="string">&quot;存在&quot;</span></span><br><span class="line"><span class="keyword">else</span> </span><br><span class="line">	<span class="built_in">echo</span> <span class="string">&quot;不存在&quot;</span></span><br><span class="line"><span class="keyword">fi</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p><img src="/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/Linux%E7%BB%8F%E5%85%B8%E9%9D%A2%E8%AF%95%E9%A2%98/image-20220122122456073.png" alt="image-20220122122456073"></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">9 8 7 6 5 4 3 2 10</span><br><span class="line"><span class="built_in">sort</span> -nr t3.txt | awk -F <span class="string">&quot; &quot;</span> <span class="string">&#x27;&#123;sum+=$1;print$1&#125; END &#123;print &quot;和等于：&quot;sum&#125;&#x27;</span></span><br><span class="line"><span class="comment"># 注意求和的过程中要 print $1 不然只有最后的求和。</span></span><br><span class="line"></span><br><span class="line">如果这个是一行的话 </span><br><span class="line"><span class="built_in">cat</span> t3.txt | xargs -n1 | <span class="built_in">sort</span> -n | awk -F <span class="string">&quot; &quot;</span> <span class="string">&#x27;BEGIN&#123;sum=0&#125;&#123;sum+=$1;print$1&#125;END&#123;print &quot;sumis&quot; sum&#125;&#x27;</span> | awk <span class="string">&#x27;&#123;a=a&quot; &quot;$1&#125;END&#123;print a&#125;&#x27;</span></span><br><span class="line"><span class="comment"># xargs -n1 是把 一行变成一列。然后就能用 sort 的行排序了。</span></span><br><span class="line"><span class="comment"># &#123;a=a&quot; &quot;$1&#125;END&#123;print a&#125; 是又把列 转成行了，中间用空格隔开。</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p><img src="/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/Linux%E7%BB%8F%E5%85%B8%E9%9D%A2%E8%AF%95%E9%A2%98/image-20220122123512597.png" alt="image-20220122123512597"></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">grep -r <span class="string">&quot;cat&quot;</span> /home | <span class="built_in">cut</span> -d <span class="string">&quot;:&quot;</span> -f 1</span><br><span class="line"><span class="comment"># grep -r 是连带着所有的内容递归过滤。</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p><img src="/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/Linux%E7%BB%8F%E5%85%B8%E9%9D%A2%E8%AF%95%E9%A2%98/image-20220122123913951.png" alt="image-20220122123913951"></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">find /home -name <span class="string">&quot;*.*&quot;</span> | <span class="built_in">wc</span> -l</span><br><span class="line">find /home -name <span class="string">&quot;*.*&quot;</span> | xargs <span class="built_in">wc</span> -l</span><br><span class="line"><span class="comment"># find 会自动递归找。 *.* 会把隐藏的也显示。xargs 除了可以进行 行列转换以外，还能 把之前管道的整体内容，转为一行一行 套用到 后面的语句中执行。</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p><img src="/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/Linux%E7%BB%8F%E5%85%B8%E9%9D%A2%E8%AF%95%E9%A2%98/image-20220122124830528.png" alt="image-20220122124830528"></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Nginx</span><br><span class="line">Haproxy</span><br><span class="line">keepalived</span><br><span class="line">LVS</span><br></pre></td></tr></table></figure>
+
+
+
+<p><img src="/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/Linux%E7%BB%8F%E5%85%B8%E9%9D%A2%E8%AF%95%E9%A2%98/image-20220122125027094.png" alt="image-20220122125027094"></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">vim /root/mail.sh  <span class="comment"># 建立sh脚本</span></span><br><span class="line"><span class="comment"># mail.sh文件内写入</span></span><br><span class="line"><span class="comment">#!/bin/bash</span></span><br><span class="line"><span class="built_in">cd</span> /var/spool &amp;&amp; /bin/tar -zcvf /home/`<span class="built_in">date</span> +%Y-%m-%d_%H%M%S`.tar.gz /mail</span><br><span class="line"><span class="comment"># ； 是都执行、&amp;&amp; 是 前面成功了再执行后面的命令、 ｜｜ 是 前面不成功 再执行后面。</span></span><br><span class="line"></span><br><span class="line">crontab -e      <span class="comment"># 给sh脚本定时</span></span><br><span class="line"><span class="comment"># 写入</span></span><br><span class="line">30 22 * * * /root/mail.sh </span><br><span class="line"></span><br><span class="line"><span class="comment"># 可以检查一下定时文件是否ok</span></span><br><span class="line">crontab -l</span><br></pre></td></tr></table></figure>
+
+
+
+<p><img src="/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/Linux%E7%BB%8F%E5%85%B8%E9%9D%A2%E8%AF%95%E9%A2%98/image-20220122130803028.png" alt="image-20220122130803028"></p>
+<p><img src="/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/Linux%E7%BB%8F%E5%85%B8%E9%9D%A2%E8%AF%95%E9%A2%98/image-20220122170348153.png" alt="image-20220122170348153"></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">1、用sudo</span><br><span class="line">2、定时自动更新，用阿里云等等。</span><br><span class="line">3、apt / yum 等等用国内源替换，或者用代理。</span><br><span class="line">4、有必要的端口才在防火墙打开，没用的端口关闭。</span><br><span class="line">5、打开最大文件数。vim /etc/profile <span class="built_in">ulimit</span> -SHn 65535</span><br><span class="line">6、配置合理的备份策略</span><br><span class="line">7、对nginx apache优化。</span><br><span class="line">8、用chattr锁定一些关键文件夹文件 /etc/passwd /etc/shadow /etc/inittab。</span><br><span class="line">等等。</span><br></pre></td></tr></table></figure>
+
+<p> <img src="/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/Linux%E7%BB%8F%E5%85%B8%E9%9D%A2%E8%AF%95%E9%A2%98/%E6%88%AA%E5%B1%8F2022-10-26%2017.31.21.jpg" alt="截屏2022-10-26 17.31.21"></p>
+
+            
+
+
+        </div>
+    </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
+        
+            <div class="post-footer-tags">
+                <span class="text-color-light text-small">TAGGED IN</span><br/>
+                
+    <a class="tag tag--primary tag--small t-none-link" href="/tags/linux/" rel="tag">linux</a>
+
+            </div>
+        
+        
+            <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/Linux%E5%86%85%E6%A0%B8%E5%8D%87%E7%BA%A7/"
+                    data-tooltip="linux内核升级"
+                    aria-label="PREVIOUS: linux内核升级"
+                >
+                    
+                        <i class="fa fa-angle-left" aria-hidden="true"></i>
+                        <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+                    </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/Linux%E7%9B%AE%E5%BD%95%E6%96%87%E4%BB%B6/"
+                    data-tooltip="linux目录文件"
+                    aria-label="NEXT: linux目录文件"
+                >
+                    
+                        <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                    </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a
+                class="post-action-btn btn btn--default btn-open-shareoptions"
+                href="#btn-open-shareoptions"
+                aria-label="Share this post"
+            >
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/Linux%E7%BB%8F%E5%85%B8%E9%9D%A2%E8%AF%95%E9%A2%98/"
+                    title="Share on Facebook"
+                    aria-label="Share on Facebook"
+                >
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://twitter.com/intent/tweet?text=http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/Linux%E7%BB%8F%E5%85%B8%E9%9D%A2%E8%AF%95%E9%A2%98/"
+                    title="Share on Twitter"
+                    aria-label="Share on Twitter"
+                >
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://plus.google.com/share?url=http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/Linux%E7%BB%8F%E5%85%B8%E9%9D%A2%E8%AF%95%E9%A2%98/"
+                    title="Share on Google+"
+                    aria-label="Share on Google+"
+                >
+                    <i class="fab fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+        
+        
+            
+        
+    </div>
+</article>
+
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2022 陈宇韶chenyushao. All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/Linux%E5%86%85%E6%A0%B8%E5%8D%87%E7%BA%A7/"
+                    data-tooltip="linux内核升级"
+                    aria-label="PREVIOUS: linux内核升级"
+                >
+                    
+                        <i class="fa fa-angle-left" aria-hidden="true"></i>
+                        <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+                    </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/Linux%E7%9B%AE%E5%BD%95%E6%96%87%E4%BB%B6/"
+                    data-tooltip="linux目录文件"
+                    aria-label="NEXT: linux目录文件"
+                >
+                    
+                        <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                    </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a
+                class="post-action-btn btn btn--default btn-open-shareoptions"
+                href="#btn-open-shareoptions"
+                aria-label="Share this post"
+            >
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/Linux%E7%BB%8F%E5%85%B8%E9%9D%A2%E8%AF%95%E9%A2%98/"
+                    title="Share on Facebook"
+                    aria-label="Share on Facebook"
+                >
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://twitter.com/intent/tweet?text=http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/Linux%E7%BB%8F%E5%85%B8%E9%9D%A2%E8%AF%95%E9%A2%98/"
+                    title="Share on Twitter"
+                    aria-label="Share on Twitter"
+                >
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://plus.google.com/share?url=http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/Linux%E7%BB%8F%E5%85%B8%E9%9D%A2%E8%AF%95%E9%A2%98/"
+                    title="Share on Google+"
+                    aria-label="Share on Google+"
+                >
+                    <i class="fab fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+                </div>
+                
+    <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+        <i id="btn-close-shareoptions" class="fa fa-times"></i>
+        <ul class="share-options">
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="https://www.facebook.com/sharer/sharer.php?u=http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/Linux%E7%BB%8F%E5%85%B8%E9%9D%A2%E8%AF%95%E9%A2%98/"
+                        aria-label="Share on Facebook"
+                    >
+                        <i class="fab fa-facebook" aria-hidden="true"></i><span>Share on Facebook</span>
+                    </a>
+                </li>
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="https://twitter.com/intent/tweet?text=http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/Linux%E7%BB%8F%E5%85%B8%E9%9D%A2%E8%AF%95%E9%A2%98/"
+                        aria-label="Share on Twitter"
+                    >
+                        <i class="fab fa-twitter" aria-hidden="true"></i><span>Share on Twitter</span>
+                    </a>
+                </li>
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="https://plus.google.com/share?url=http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/Linux%E7%BB%8F%E5%85%B8%E9%9D%A2%E8%AF%95%E9%A2%98/"
+                        aria-label="Share on Google+"
+                    >
+                        <i class="fab fa-google-plus" aria-hidden="true"></i><span>Share on Google+</span>
+                    </a>
+                </li>
+            
+        </ul>
+    </div>
+
+
+            
+        </div>
+        
+
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-times"></i>
+        </div>
+        
+            <h4 id="about-card-name">陈宇韶chenyushao</h4>
+        
+            <div id="about-card-bio"><p>author.bio</p>
+</div>
+        
+        
+            <div id="about-card-job">
+                <i class="fa fa-briefcase"></i>
+                <br/>
+                <p>author.job</p>
+
+            </div>
+        
+        
+    </div>
+</div>
+
+        
+        
+<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
+        <!--SCRIPTS-->
+
+<script src="/assets/js/script-sbgpeqyl6jw5qe60mnfuzifzwky5la4ftiuwmschcdzx2pg5tfpl1pfp13e3.min.js"></script>
+
+<!--SCRIPTS END-->
+
+
+    
+
+
+
+
+    </body>
+</html>

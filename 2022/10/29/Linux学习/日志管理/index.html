@@ -1,0 +1,647 @@
+
+<!DOCTYPE html>
+<html lang="en">
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Tiger_pop&#39;s Blog">
+    <title>linux日志管理 - Tiger_pop&#39;s Blog</title>
+    <meta name="author" content="陈宇韶chenyushao">
+    
+    
+    
+        
+            <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
+        
+    
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"陈宇韶chenyushao","sameAs":["https://github.com/","https://www.linkedin.com/profile/","mailto"]},"articleBody":"简介 \n    系统日志 在 /var/log/ 位置。\n\n\n​\t\tlasllog 最后一次登录信息，只能用专门的 lasllog命令查看，cat 什么的看不了。\n​\t\tulmp 也是 用who 、users 来看。\nsecure实验：\n1234567891011echo &quot;&quot; &gt; secure   # 先清空secure文件内容。# 错误密码 远程登录一次# 再正确密码登录cat secureJan 16 05:33:33 localhost sshd[42564]: Failed password for my_vmware from 192.168.200.1 port 49310 ssh2Jan 16 05:33:46 localhost sshd[42564]: Failed password for my_vmware from 192.168.200.1 port 49310 ssh2Jan 16 05:34:12 localhost sshd[42575]: Accepted password for my_vmware from 192.168.200.1 port 49316 ssh2\n\nrsyslogd日志管理服务​\t\t\n12345ps aux | grep &quot;rsyslog&quot; | grep -v &quot;grep&quot;# 检查是否启动该服务(grep -v 是反向过滤，目的是把grep操作本身去掉。可以用 man grep 看看grep的含义。)systemctl list-unit-files | grep &quot;rsyslog&quot;# 看是不是自启动，日志管理一定要自启动才行。\n\n​\t\t\n\t\n1234567891011# 在/etc/rsyslog.conf 中可见日志文件记录规则。# Log all the mail messages in one place.mail.*                                                  -/var/log/maillog# Everybody gets emergency messages*.emerg                                                 :omusrmsg:*# Save boot messages also to boot.loglocal7.*                                                /var/log/boot.log\n\n\n自定义日志服务​\t\t在&#x2F;etc&#x2F;rsyslog.conf 中添加一个日志文件 &#x2F;var&#x2F;log&#x2F;chen.log ，当sshd服务相关事件发生时，该文件会收到信息并保存。\t\n1234567891011121314151617# 在/etc/rsyslog.conf 增加自定义的日志*.*                   /var/log/chen.log# 利用重定向建立空白文件（小技巧），其实会自动生成 &gt; /var/log/chen.logreboot cat chen.log | grep &quot;sshd&quot;# 可见Jan 17 07:00:43 localhost systemd[1]: Reached target sshd-keygen.target.Jan 17 09:32:59 localhost sshd[1101]: Server listening on 0.0.0.0 port 22.Jan 17 09:32:59 localhost sshd[1101]: Server listening on :: port 22.Jan 17 07:05:10 localhost systemd[1]: Reached target sshd-keygen.target.Jan 17 09:36:27 localhost sshd[1093]: Server listening on 0.0.0.0 port 22.Jan 17 09:36:27 localhost sshd[1093]: Server listening on :: port 22.Jan 17 09:41:01 localhost sshd[3613]: Accepted password for my from 192.168.200.1 port 49560 ssh2Jan 17 09:41:01 localhost sshd[3613]: pam_unix(sshd:session): session opened for user my by (uid=0)\n\n\n\n日志轮替​\t\t旧的日志文件移动并改名，同时建立新的空日志文件，当旧的日志文件超出保存范围，就删除。\n​\t\t\n\n\n自定义日志轮替\n\n​\t\t对前面建立的日志文件&#x2F;var&#x2F;log&#x2F;chen.log 单独建立规则去轮替。\n​\t\t我们用第二种写进 &#x2F;etc&#x2F;logrotate.d 目录的方法。\n1234567891011cd /etc/logrotate.dvim chenlog  # 新建一个规则文件。# 写入如下内容：/var/log/chen.log  # 指定轮替的日志&#123;\tmissingok    # 开启忽略\tdaily        # 按天更替\tcopytruncate \trotate 7\t\t # 保留7份\tnotifempty   # 空的就不更替&#125;\n\n​\t\t之所以rotate 能够进行，是依赖定时任务，在&#x2F;etc&#x2F;cron.daily 目录下有一个logrotate文件，定时执行。\nlog rotate 文件内部如下：\t\n123456789#!/bin/sh  /usr/sbin/logrotate /etc/logrotate.confEXITVALUE=$?if [ $EXITVALUE != 0 ]; then    /usr/bin/logger -t logrotate &quot;ALERT exited abnormally with [$EXITVALUE]&quot;fiexit $EXITVALUE\n\n\n​\t\t\n内存日志​\t\t\n​\t\t\n","dateCreated":"2022-10-29T15:42:07+08:00","dateModified":"2022-10-29T16:33:23+08:00","datePublished":"2022-10-29T15:42:07+08:00","description":"简介","headline":"linux日志管理","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E6%97%A5%E5%BF%97%E7%AE%A1%E7%90%86/"},"publisher":{"@type":"Organization","name":"陈宇韶chenyushao","sameAs":["https://github.com/","https://www.linkedin.com/profile/","mailto"]},"url":"http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E6%97%A5%E5%BF%97%E7%AE%A1%E7%90%86/","keywords":"日志"}</script>
+    <meta name="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="linux日志管理">
+<meta property="og:url" content="http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E6%97%A5%E5%BF%97%E7%AE%A1%E7%90%86/index.html">
+<meta property="og:site_name" content="Tiger_pop&#39;s Blog">
+<meta property="og:description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E6%97%A5%E5%BF%97%E7%AE%A1%E7%90%86/image-20220117210312540-7030727.png">
+<meta property="og:image" content="http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E6%97%A5%E5%BF%97%E7%AE%A1%E7%90%86/image-20220117213248440.png">
+<meta property="og:image" content="http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E6%97%A5%E5%BF%97%E7%AE%A1%E7%90%86/image-20220117214547881.png">
+<meta property="og:image" content="http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E6%97%A5%E5%BF%97%E7%AE%A1%E7%90%86/image-20220117214606185.png">
+<meta property="og:image" content="http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E6%97%A5%E5%BF%97%E7%AE%A1%E7%90%86/image-20220117215328009.png">
+<meta property="og:image" content="http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E6%97%A5%E5%BF%97%E7%AE%A1%E7%90%86/image-20220118091404626.png">
+<meta property="og:image" content="http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E6%97%A5%E5%BF%97%E7%AE%A1%E7%90%86/image-20220118091927977.png">
+<meta property="og:image" content="http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E6%97%A5%E5%BF%97%E7%AE%A1%E7%90%86/image-20220118101103463.png">
+<meta property="og:image" content="http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E6%97%A5%E5%BF%97%E7%AE%A1%E7%90%86/image-20220118101209884.png">
+<meta property="og:image" content="http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E6%97%A5%E5%BF%97%E7%AE%A1%E7%90%86/image-20220118101251197.png">
+<meta property="og:image" content="http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E6%97%A5%E5%BF%97%E7%AE%A1%E7%90%86/image-20220118103601177.png">
+<meta property="og:image" content="http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E6%97%A5%E5%BF%97%E7%AE%A1%E7%90%86/image-20220118104117153.png">
+<meta property="article:published_time" content="2022-10-29T07:42:07.000Z">
+<meta property="article:modified_time" content="2022-10-29T08:33:23.482Z">
+<meta property="article:author" content="陈宇韶chenyushao">
+<meta property="article:tag" content="日志">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E6%97%A5%E5%BF%97%E7%AE%A1%E7%90%86/image-20220117210312540-7030727.png">
+    
+    
+        
+    
+    
+    
+    
+    
+    <!--STYLES-->
+    
+<link rel="stylesheet" href="/assets/css/style-yrbj4x87sme2npnaj5hmxl88fi8ktzpa1hwzrvan2almcpvu5niegj13ryff.min.css">
+
+    <!--STYLES END-->
+    
+
+    
+
+    
+        
+    
+</head>
+
+    <body>
+        <div id="blog">
+            <!-- Define author's picture -->
+
+
+    
+
+<header id="header" data-behavior="4">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <div class="header-title">
+        <a
+            class="header-title-link"
+            href="/"
+            aria-label=""
+        >
+            Tiger_pop&#39;s Blog
+        </a>
+    </div>
+    
+        
+            <a
+                class="header-right-picture "
+                href="#about"
+                aria-label="Open the link: /#about"
+            >
+        
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+<nav id="sidebar" data-behavior="4">
+    <div class="sidebar-container">
+        
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/"
+                            
+                            rel="noopener"
+                            title="Home"
+                        >
+                        <i class="sidebar-button-icon fa fa-home" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Home</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-categories"
+                            
+                            rel="noopener"
+                            title="Categories"
+                        >
+                        <i class="sidebar-button-icon fa fa-bookmark" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Categories</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-tags"
+                            
+                            rel="noopener"
+                            title="Tags"
+                        >
+                        <i class="sidebar-button-icon fa fa-tags" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Tags</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-archives"
+                            
+                            rel="noopener"
+                            title="Archives"
+                        >
+                        <i class="sidebar-button-icon fa fa-archive" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Archives</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="#about"
+                            
+                            rel="noopener"
+                            title="About"
+                        >
+                        <i class="sidebar-button-icon fa fa-question" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">About</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://github.com/"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="GitHub"
+                        >
+                        <i class="sidebar-button-icon fab fa-github" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">GitHub</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://www.linkedin.com/profile/"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="LinkedIn"
+                        >
+                        <i class="sidebar-button-icon fab fa-linkedin" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">LinkedIn</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/mailto"
+                            
+                            rel="noopener"
+                            title="Mail"
+                        >
+                        <i class="sidebar-button-icon fa fa-envelope" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Mail</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/atom.xml"
+                            
+                            rel="noopener"
+                            title="RSS"
+                        >
+                        <i class="sidebar-button-icon fa fa-rss" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">RSS</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+    </div>
+</nav>
+
+            
+            <div id="main" data-behavior="4"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post">
+    
+    
+        <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title">
+            linux日志管理
+        </h1>
+    
+    
+        <div class="post-meta">
+    <time datetime="2022-10-29T15:42:07+08:00">
+	
+		    Oct 29, 2022
+    	
+    </time>
+    
+        <span>in </span>
+        
+    <a class="category-link" href="/categories/Linux/">Linux</a>
+
+
+    
+</div>
+
+    
+</div>
+
+    
+    <div class="post-content markdown">
+        <div class="main-content-wrap">
+            <p>简介 <span id="more"></span></p>
+<pre><code>    系统日志 在 /var/log/ 位置。
+</code></pre>
+<p><img src="/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E6%97%A5%E5%BF%97%E7%AE%A1%E7%90%86/image-20220117210312540-7030727.png" alt="image-20220117210312540"></p>
+<p>​		lasllog 最后一次登录信息，只能用专门的 lasllog命令查看，cat 什么的看不了。</p>
+<p>​		ulmp 也是 用who 、users 来看。</p>
+<h1 id="secure"><a href="#secure" class="headerlink" title="secure"></a>secure</h1><p>实验：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="string">&quot;&quot;</span> &gt; secure   <span class="comment"># 先清空secure文件内容。</span></span><br><span class="line"><span class="comment"># 错误密码 远程登录一次</span></span><br><span class="line"><span class="comment"># 再正确密码登录</span></span><br><span class="line"><span class="built_in">cat</span> secure</span><br><span class="line"></span><br><span class="line">Jan 16 05:33:33 localhost sshd[42564]: Failed password <span class="keyword">for</span> my_vmware from 192.168.200.1 port 49310 ssh2</span><br><span class="line"></span><br><span class="line">Jan 16 05:33:46 localhost sshd[42564]: Failed password <span class="keyword">for</span> my_vmware from 192.168.200.1 port 49310 ssh2</span><br><span class="line"></span><br><span class="line">Jan 16 05:34:12 localhost sshd[42575]: Accepted password <span class="keyword">for</span> my_vmware from 192.168.200.1 port 49316 ssh2</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h1 id="rsyslogd日志管理服务"><a href="#rsyslogd日志管理服务" class="headerlink" title="rsyslogd日志管理服务"></a>rsyslogd日志管理服务</h1><p>​		<img src="/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E6%97%A5%E5%BF%97%E7%AE%A1%E7%90%86/image-20220117213248440.png" alt="image-20220117213248440"></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">ps aux | grep <span class="string">&quot;rsyslog&quot;</span> | grep -v <span class="string">&quot;grep&quot;</span></span><br><span class="line"><span class="comment"># 检查是否启动该服务(grep -v 是反向过滤，目的是把grep操作本身去掉。可以用 man grep 看看grep的含义。)</span></span><br><span class="line">systemctl list-unit-files | grep <span class="string">&quot;rsyslog&quot;</span></span><br><span class="line"><span class="comment"># 看是不是自启动，日志管理一定要自启动才行。</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>​		<img src="/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E6%97%A5%E5%BF%97%E7%AE%A1%E7%90%86/image-20220117214547881.png" alt="image-20220117214547881"></p>
+<p><img src="/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E6%97%A5%E5%BF%97%E7%AE%A1%E7%90%86/image-20220117214606185.png" alt="image-20220117214606185">	</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 在/etc/rsyslog.conf 中可见日志文件记录规则。</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Log all the mail messages in one place.</span></span><br><span class="line">mail.*                                                  -/var/log/maillog</span><br><span class="line"></span><br><span class="line"><span class="comment"># Everybody gets emergency messages</span></span><br><span class="line">*.emerg                                                 :omusrmsg:*</span><br><span class="line"></span><br><span class="line"><span class="comment"># Save boot messages also to boot.log</span></span><br><span class="line">local7.*                                                /var/log/boot.log</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><img src="/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E6%97%A5%E5%BF%97%E7%AE%A1%E7%90%86/image-20220117215328009.png" alt="image-20220117215328009"></p>
+<h2 id="自定义日志服务"><a href="#自定义日志服务" class="headerlink" title="自定义日志服务"></a>自定义日志服务</h2><p>​		在&#x2F;etc&#x2F;rsyslog.conf 中添加一个日志文件 &#x2F;var&#x2F;log&#x2F;chen.log ，当sshd服务相关事件发生时，该文件会收到信息并保存。	</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 在/etc/rsyslog.conf 增加自定义的日志</span></span><br><span class="line">*.*                   /var/log/chen.log</span><br><span class="line"><span class="comment"># 利用重定向建立空白文件（小技巧），其实会自动生成</span></span><br><span class="line"> &gt; /var/log/chen.log</span><br><span class="line"></span><br><span class="line">reboot </span><br><span class="line"><span class="built_in">cat</span> chen.log | grep <span class="string">&quot;sshd&quot;</span></span><br><span class="line"><span class="comment"># 可见</span></span><br><span class="line">Jan 17 07:00:43 localhost systemd[1]: Reached target sshd-keygen.target.</span><br><span class="line">Jan 17 09:32:59 localhost sshd[1101]: Server listening on 0.0.0.0 port 22.</span><br><span class="line">Jan 17 09:32:59 localhost sshd[1101]: Server listening on :: port 22.</span><br><span class="line">Jan 17 07:05:10 localhost systemd[1]: Reached target sshd-keygen.target.</span><br><span class="line">Jan 17 09:36:27 localhost sshd[1093]: Server listening on 0.0.0.0 port 22.</span><br><span class="line">Jan 17 09:36:27 localhost sshd[1093]: Server listening on :: port 22.</span><br><span class="line">Jan 17 09:41:01 localhost sshd[3613]: Accepted password <span class="keyword">for</span> my from 192.168.200.1 port 49560 ssh2</span><br><span class="line">Jan 17 09:41:01 localhost sshd[3613]: pam_unix(sshd:session): session opened <span class="keyword">for</span> user my by (uid=0)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="日志轮替"><a href="#日志轮替" class="headerlink" title="日志轮替"></a>日志轮替</h1><p>​		旧的日志文件移动并改名，同时建立新的空日志文件，当旧的日志文件超出保存范围，就删除。</p>
+<p>​		<img src="/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E6%97%A5%E5%BF%97%E7%AE%A1%E7%90%86/image-20220118091404626.png" alt="image-20220118091404626"></p>
+<p><img src="/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E6%97%A5%E5%BF%97%E7%AE%A1%E7%90%86/image-20220118091927977.png" alt="image-20220118091927977"></p>
+<p><img src="/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E6%97%A5%E5%BF%97%E7%AE%A1%E7%90%86/image-20220118101103463.png" alt="image-20220118101103463"></p>
+<h2 id="自定义日志轮替"><a href="#自定义日志轮替" class="headerlink" title="自定义日志轮替"></a>自定义日志轮替</h2><p><img src="/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E6%97%A5%E5%BF%97%E7%AE%A1%E7%90%86/image-20220118101209884.png" alt="image-20220118101209884"></p>
+<p><img src="/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E6%97%A5%E5%BF%97%E7%AE%A1%E7%90%86/image-20220118101251197.png" alt="image-20220118101251197"></p>
+<p>​		对前面建立的日志文件&#x2F;var&#x2F;log&#x2F;chen.log 单独建立规则去轮替。</p>
+<p>​		我们用第二种写进 &#x2F;etc&#x2F;logrotate.d 目录的方法。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /etc/logrotate.d</span><br><span class="line">vim chenlog  <span class="comment"># 新建一个规则文件。</span></span><br><span class="line"><span class="comment"># 写入如下内容：</span></span><br><span class="line">/var/log/chen.log  <span class="comment"># 指定轮替的日志</span></span><br><span class="line">&#123;</span><br><span class="line">	missingok    <span class="comment"># 开启忽略</span></span><br><span class="line">	daily        <span class="comment"># 按天更替</span></span><br><span class="line">	copytruncate </span><br><span class="line">	rotate 7		 <span class="comment"># 保留7份</span></span><br><span class="line">	notifempty   <span class="comment"># 空的就不更替</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>​		之所以rotate 能够进行，是依赖定时任务，在&#x2F;etc&#x2F;cron.daily 目录下有一个logrotate文件，定时执行。</p>
+<p>log rotate 文件内部如下：	</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/sh</span></span><br><span class="line">  </span><br><span class="line">/usr/sbin/logrotate /etc/logrotate.conf</span><br><span class="line">EXITVALUE=$?</span><br><span class="line"><span class="keyword">if</span> [ <span class="variable">$EXITVALUE</span> != 0 ]; <span class="keyword">then</span></span><br><span class="line">    /usr/bin/logger -t logrotate <span class="string">&quot;ALERT exited abnormally with [<span class="variable">$EXITVALUE</span>]&quot;</span></span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"><span class="built_in">exit</span> <span class="variable">$EXITVALUE</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><img src="/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E6%97%A5%E5%BF%97%E7%AE%A1%E7%90%86/image-20220118103601177.png" alt="image-20220118103601177"></p>
+<p>​		</p>
+<h1 id="内存日志"><a href="#内存日志" class="headerlink" title="内存日志"></a>内存日志</h1><p>​		<img src="/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E6%97%A5%E5%BF%97%E7%AE%A1%E7%90%86/image-20220118104117153.png" alt="image-20220118104117153"></p>
+<p>​		</p>
+
+            
+
+
+        </div>
+    </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
+        
+            <div class="post-footer-tags">
+                <span class="text-color-light text-small">TAGGED IN</span><br/>
+                
+    <a class="tag tag--primary tag--small t-none-link" href="/tags/%E6%97%A5%E5%BF%97/" rel="tag">日志</a>
+
+            </div>
+        
+        
+            <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E6%96%87%E4%BB%B6%E8%BF%9C%E7%A8%8B%E4%BC%A0%E8%BE%93/"
+                    data-tooltip="linux文件远程传输"
+                    aria-label="PREVIOUS: linux文件远程传输"
+                >
+                    
+                        <i class="fa fa-angle-left" aria-hidden="true"></i>
+                        <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+                    </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E6%97%B6%E9%97%B4%E6%97%A5%E6%9C%9F%E7%B1%BB/"
+                    data-tooltip="linux时间日期类"
+                    aria-label="NEXT: linux时间日期类"
+                >
+                    
+                        <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                    </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a
+                class="post-action-btn btn btn--default btn-open-shareoptions"
+                href="#btn-open-shareoptions"
+                aria-label="Share this post"
+            >
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E6%97%A5%E5%BF%97%E7%AE%A1%E7%90%86/"
+                    title="Share on Facebook"
+                    aria-label="Share on Facebook"
+                >
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://twitter.com/intent/tweet?text=http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E6%97%A5%E5%BF%97%E7%AE%A1%E7%90%86/"
+                    title="Share on Twitter"
+                    aria-label="Share on Twitter"
+                >
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://plus.google.com/share?url=http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E6%97%A5%E5%BF%97%E7%AE%A1%E7%90%86/"
+                    title="Share on Google+"
+                    aria-label="Share on Google+"
+                >
+                    <i class="fab fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+        
+        
+            
+        
+    </div>
+</article>
+
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2022 陈宇韶chenyushao. All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E6%96%87%E4%BB%B6%E8%BF%9C%E7%A8%8B%E4%BC%A0%E8%BE%93/"
+                    data-tooltip="linux文件远程传输"
+                    aria-label="PREVIOUS: linux文件远程传输"
+                >
+                    
+                        <i class="fa fa-angle-left" aria-hidden="true"></i>
+                        <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+                    </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E6%97%B6%E9%97%B4%E6%97%A5%E6%9C%9F%E7%B1%BB/"
+                    data-tooltip="linux时间日期类"
+                    aria-label="NEXT: linux时间日期类"
+                >
+                    
+                        <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                    </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a
+                class="post-action-btn btn btn--default btn-open-shareoptions"
+                href="#btn-open-shareoptions"
+                aria-label="Share this post"
+            >
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E6%97%A5%E5%BF%97%E7%AE%A1%E7%90%86/"
+                    title="Share on Facebook"
+                    aria-label="Share on Facebook"
+                >
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://twitter.com/intent/tweet?text=http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E6%97%A5%E5%BF%97%E7%AE%A1%E7%90%86/"
+                    title="Share on Twitter"
+                    aria-label="Share on Twitter"
+                >
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://plus.google.com/share?url=http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E6%97%A5%E5%BF%97%E7%AE%A1%E7%90%86/"
+                    title="Share on Google+"
+                    aria-label="Share on Google+"
+                >
+                    <i class="fab fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+                </div>
+                
+    <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+        <i id="btn-close-shareoptions" class="fa fa-times"></i>
+        <ul class="share-options">
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="https://www.facebook.com/sharer/sharer.php?u=http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E6%97%A5%E5%BF%97%E7%AE%A1%E7%90%86/"
+                        aria-label="Share on Facebook"
+                    >
+                        <i class="fab fa-facebook" aria-hidden="true"></i><span>Share on Facebook</span>
+                    </a>
+                </li>
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="https://twitter.com/intent/tweet?text=http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E6%97%A5%E5%BF%97%E7%AE%A1%E7%90%86/"
+                        aria-label="Share on Twitter"
+                    >
+                        <i class="fab fa-twitter" aria-hidden="true"></i><span>Share on Twitter</span>
+                    </a>
+                </li>
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="https://plus.google.com/share?url=http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E6%97%A5%E5%BF%97%E7%AE%A1%E7%90%86/"
+                        aria-label="Share on Google+"
+                    >
+                        <i class="fab fa-google-plus" aria-hidden="true"></i><span>Share on Google+</span>
+                    </a>
+                </li>
+            
+        </ul>
+    </div>
+
+
+            
+        </div>
+        
+
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-times"></i>
+        </div>
+        
+            <h4 id="about-card-name">陈宇韶chenyushao</h4>
+        
+            <div id="about-card-bio"><p>author.bio</p>
+</div>
+        
+        
+            <div id="about-card-job">
+                <i class="fa fa-briefcase"></i>
+                <br/>
+                <p>author.job</p>
+
+            </div>
+        
+        
+    </div>
+</div>
+
+        
+        
+<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
+        <!--SCRIPTS-->
+
+<script src="/assets/js/script-sbgpeqyl6jw5qe60mnfuzifzwky5la4ftiuwmschcdzx2pg5tfpl1pfp13e3.min.js"></script>
+
+<!--SCRIPTS END-->
+
+
+    
+
+
+
+
+    </body>
+</html>

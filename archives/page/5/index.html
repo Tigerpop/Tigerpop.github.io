@@ -237,7 +237,7 @@
     <section class="postShorten-group main-content-wrap">
     
     
-    <article class="postShorten postShorten--thumbnailimg-bottom">
+    <article class="postShorten postShorten--thumbnailimg-right">
         <div class="postShorten-wrap">
             
             <div class="postShorten-header">
@@ -245,23 +245,23 @@
                     
                         <a
                             class="link-unstyled"
-                            href="/2021/12/17/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/209.%20%E9%95%BF%E5%BA%A6%E6%9C%80%E5%B0%8F%E7%9A%84%E5%AD%90%E6%95%B0%E7%BB%84/"
-                            aria-label=": 209. 长度最小的子数组"
+                            href="/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E5%AE%89%E8%A3%85%E5%8F%8A%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/"
+                            aria-label=": kafka安装及常用命令"
                         >
-                            209. 长度最小的子数组
+                            kafka安装及常用命令
                         </a>
                     
                 </h1>
                 <div class="postShorten-meta">
-    <time datetime="2021-12-17T13:02:10+08:00">
+    <time datetime="2022-10-29T15:40:59+08:00">
 	
-		    Dec 17, 2021
+		    Oct 29, 2022
     	
     </time>
     
         <span>in </span>
         
-    <a class="category-link" href="/categories/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/">leecode刷题复习</a>
+    <a class="category-link" href="/categories/kafka/">kafka</a>
 
 
     
@@ -269,25 +269,17 @@
 
             </div>
             
-                <div class="postShorten-content">
-                    <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">minSubArrayLen</span>(<span class="params">self, target: <span class="built_in">int</span>, nums: <span class="type">List</span>[<span class="built_in">int</span>]</span>) -&gt; <span class="built_in">int</span>:</span><br><span class="line">        <span class="comment"># 1、二分法 分长度，再暴力比较每种长度的和 是否满足条件。耗时较长O(n log n) 时间复杂度。</span></span><br><span class="line">        <span class="comment"># n = len(nums) </span></span><br><span class="line">        <span class="comment"># left = 1</span></span><br><span class="line">        <span class="comment"># right = n</span></span><br><span class="line">        <span class="comment"># def build_arraysum_list(interval :int):</span></span><br><span class="line">        <span class="comment">#     result = []</span></span><br><span class="line">        <span class="comment">#     temp = 0</span></span><br><span class="line">        <span class="comment">#     # python 的切片操作太慢了！！！ 算法题中不能这样简写！！！</span></span><br><span class="line">        <span class="comment">#     # result += [ sum(nums[i:i+interval]) for i in range(0,n-interval+1,1)]</span></span><br><span class="line">        <span class="comment">#     # return max(result)  </span></span><br><span class="line">        <span class="comment">#     for i in range(0,n-interval+1,1):</span></span><br><span class="line">        <span class="comment">#         sum_temp = 0</span></span><br><span class="line">        <span class="comment">#         for ii in range(i,i+interval):</span></span><br><span class="line">        <span class="comment">#             sum_temp += nums[ii]</span></span><br><span class="line">        <span class="comment">#         # sum_temp = sum(nums[i:i+interval]) python 的切片操作太慢了！！！ </span></span><br><span class="line">        <span class="comment">#         while temp&lt;sum_temp:</span></span><br><span class="line">        <span class="comment">#             temp = sum_temp</span></span><br><span class="line">        <span class="comment">#     return temp</span></span><br><span class="line">        <span class="comment"># def search_II(left,right):</span></span><br><span class="line">        <span class="comment">#     while left&lt;=right:</span></span><br><span class="line">        <span class="comment">#         mid = (left+right)&gt;&gt;1</span></span><br><span class="line">        <span class="comment">#         sum_ele = build_arraysum_list(mid)</span></span><br><span class="line">        <span class="comment">#         if sum_ele &gt;= target:</span></span><br><span class="line">        <span class="comment">#             return search_II(left,mid-1)</span></span><br><span class="line">        <span class="comment">#         else:</span></span><br><span class="line">        <span class="comment">#             return search_II(mid+1,right)</span></span><br><span class="line">        <span class="comment">#     return left if left&lt;=n else 0</span></span><br><span class="line">        <span class="comment"># return search_II(left,right)</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># # 2、滑动窗口方法，确定终止指针，根据条件移动起始指针，O(n) 时间复杂度。</span></span><br><span class="line">        i = <span class="number">0</span></span><br><span class="line">        n = <span class="built_in">len</span>(nums)</span><br><span class="line">        windows_length = n</span><br><span class="line">        sum_windows = <span class="number">0</span></span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(n):</span><br><span class="line">            <span class="comment"># sum_windows = sum(nums[i:j+1]) python切片操作太慢！！！</span></span><br><span class="line">            sum_windows += nums[j]</span><br><span class="line">            <span class="keyword">while</span> sum_windows &gt;= target:</span><br><span class="line">                <span class="comment"># 窗口满足条件，记录数据，并移动起始位置。</span></span><br><span class="line">                windows_length = <span class="built_in">min</span>(j-i+<span class="number">1</span>,windows_length)</span><br><span class="line">                sum_windows -= nums[i]</span><br><span class="line">                i += <span class="number">1</span> </span><br><span class="line">        <span class="keyword">return</span> windows_length <span class="keyword">if</span> <span class="built_in">sum</span>(nums)&gt;=target <span class="keyword">else</span> <span class="number">0</span></span><br></pre></td></tr></table></figure>
-
-
+                <div class="postShorten-excerpt">
+                    <p>简介</p>
                     
+                        <a
+                            href="/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E5%AE%89%E8%A3%85%E5%8F%8A%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/"
+                            class="postShorten-excerpt_link link"
+                            aria-label=": kafka安装及常用命令"
+                        >
+                            Continue reading
+                        </a>
                         
-
-
-                    
-                    
-                        <p>
-                            <a
-                                href="/2021/12/17/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/209.%20%E9%95%BF%E5%BA%A6%E6%9C%80%E5%B0%8F%E7%9A%84%E5%AD%90%E6%95%B0%E7%BB%84/#post-footer"
-                                class="postShorten-excerpt_link link"
-                                aria-label=""
-                            >
-                                Comment and share
-                            </a>
-                        </p>
                     
                 </div>
             
@@ -296,7 +288,7 @@
     </article>
     
     
-    <article class="postShorten postShorten--thumbnailimg-bottom">
+    <article class="postShorten postShorten--thumbnailimg-right">
         <div class="postShorten-wrap">
             
             <div class="postShorten-header">
@@ -304,23 +296,23 @@
                     
                         <a
                             class="link-unstyled"
-                            href="/2021/12/17/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/216.%20%E7%BB%84%E5%90%88%E6%80%BB%E5%92%8C%20III/"
-                            aria-label=": 216. 组合总和 III"
+                            href="/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E5%88%86%E5%B8%83%E5%BC%8F%E6%9E%B6%E6%9E%84%E5%8E%9F%E7%90%86/"
+                            aria-label=": kafka分布式架构原理"
                         >
-                            216. 组合总和 III
+                            kafka分布式架构原理
                         </a>
                     
                 </h1>
                 <div class="postShorten-meta">
-    <time datetime="2021-12-17T13:02:10+08:00">
+    <time datetime="2022-10-29T15:40:33+08:00">
 	
-		    Dec 17, 2021
+		    Oct 29, 2022
     	
     </time>
     
         <span>in </span>
         
-    <a class="category-link" href="/categories/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/">leecode刷题复习</a>
+    <a class="category-link" href="/categories/kafka/">kafka</a>
 
 
     
@@ -328,25 +320,17 @@
 
             </div>
             
-                <div class="postShorten-content">
-                    <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>):</span><br><span class="line">        self.path = []</span><br><span class="line">        self.result = []</span><br><span class="line">        self.sum_ = <span class="number">0</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">combinationSum3</span>(<span class="params">self, k: <span class="built_in">int</span>, n: <span class="built_in">int</span></span>) -&gt; <span class="type">List</span>[<span class="type">List</span>[<span class="built_in">int</span>]]:</span><br><span class="line">        <span class="comment"># 首先我们想到 多个 for 循环嵌套的 暴力解法，但是 k个for循环 无法控制这个k的次数。</span></span><br><span class="line">        <span class="comment"># 所以 我们想到了 类似 多叉树 递归 遍历的方法，来实现 k 个for 循环。</span></span><br><span class="line">        <span class="comment"># 但是 我们这里并不是 多叉树的递归，而是自上而下的 一种 按照某种分叉规则 的计算；</span></span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 这里是 组合，不用考虑顺序，分叉规则 就是 往右从大于 list元素和 的 数 继续 取，并递归；</span></span><br><span class="line">        <span class="comment"># 基线条件： 符合题目条件，不超长度；</span></span><br><span class="line">        <span class="comment"># 剪枝实现复杂度的缩减：向下剪枝，sum &gt; 目标值； 向右剪枝：k - list已有的元素个数 = 还需要的元素个数，分叉规则 往右的添加点i 要保证至少还有（还需要的元素个数）个数字能够添加，不然向右找数字已经没有意义了。也就是最后一个有意义的添加位置在  9 - （还需要的元素个数）；但是！ 值得注意的是： 添加点i 所在的元素此时也没有被计入 元素个数，是在 i 的循环内才计入，因此，最后一个有意义的添加位置在  9 - （还需要的元素个数-1）；</span></span><br><span class="line">        <span class="keyword">return</span> self.combinationSum3_(k,n,<span class="number">1</span>)</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">combinationSum3_</span>(<span class="params">self,k,n,start_index</span>):</span><br><span class="line">        size = <span class="built_in">len</span>(self.path)</span><br><span class="line">        <span class="keyword">if</span> size&gt;k: <span class="keyword">return</span>          <span class="comment"># 向下剪枝</span></span><br><span class="line">        <span class="keyword">if</span> size==k:                <span class="comment"># 基线条件</span></span><br><span class="line">            <span class="keyword">if</span> self.sum_ == n:</span><br><span class="line">                <span class="built_in">print</span>(self.path)</span><br><span class="line">                self.result.append(self.path.copy()) <span class="comment"># python 的可变对象特性，用一下浅拷贝。</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(start_index,<span class="number">10</span>-(k-size)+<span class="number">1</span>,<span class="number">1</span>):    <span class="comment"># 向右，事实上 是回溯完之后才会 向右。 原本是 for i in range(start_index,10,1): 变动的是向右剪枝。</span></span><br><span class="line">            self.path.append(i)</span><br><span class="line">            self.sum_ += i </span><br><span class="line">            <span class="comment"># print(self.path)</span></span><br><span class="line">            self.combinationSum3_(k,n,i+<span class="number">1</span>) <span class="comment"># 向下</span></span><br><span class="line">            self.sum_ -= i</span><br><span class="line">            self.path.pop()</span><br><span class="line">        <span class="comment"># print(self.result)</span></span><br><span class="line">        <span class="keyword">return</span> self.result</span><br></pre></td></tr></table></figure>
-
-
+                <div class="postShorten-excerpt">
+                    <p>简介</p>
                     
+                        <a
+                            href="/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E5%88%86%E5%B8%83%E5%BC%8F%E6%9E%B6%E6%9E%84%E5%8E%9F%E7%90%86/"
+                            class="postShorten-excerpt_link link"
+                            aria-label=": kafka分布式架构原理"
+                        >
+                            Continue reading
+                        </a>
                         
-
-
-                    
-                    
-                        <p>
-                            <a
-                                href="/2021/12/17/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/216.%20%E7%BB%84%E5%90%88%E6%80%BB%E5%92%8C%20III/#post-footer"
-                                class="postShorten-excerpt_link link"
-                                aria-label=""
-                            >
-                                Comment and share
-                            </a>
-                        </p>
                     
                 </div>
             
@@ -355,7 +339,7 @@
     </article>
     
     
-    <article class="postShorten postShorten--thumbnailimg-bottom">
+    <article class="postShorten postShorten--thumbnailimg-right">
         <div class="postShorten-wrap">
             
             <div class="postShorten-header">
@@ -363,23 +347,23 @@
                     
                         <a
                             class="link-unstyled"
-                            href="/2021/12/17/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/222.%20%E5%AE%8C%E5%85%A8%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E8%8A%82%E7%82%B9%E4%B8%AA%E6%95%B0/"
-                            aria-label=": 222. 完全二叉树的节点个数"
+                            href="/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/%E5%AE%89%E8%A3%85flume%E6%B6%88%E6%81%AF%E4%BC%A0%E8%BE%93%E6%9E%B6%E6%9E%84/"
+                            aria-label=": 安装flume消息传输架构"
                         >
-                            222. 完全二叉树的节点个数
+                            安装flume消息传输架构
                         </a>
                     
                 </h1>
                 <div class="postShorten-meta">
-    <time datetime="2021-12-17T13:02:10+08:00">
+    <time datetime="2022-10-29T15:39:56+08:00">
 	
-		    Dec 17, 2021
+		    Oct 29, 2022
     	
     </time>
     
         <span>in </span>
         
-    <a class="category-link" href="/categories/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/">leecode刷题复习</a>
+    <a class="category-link" href="/categories/kafka/">kafka</a>
 
 
     
@@ -387,25 +371,17 @@
 
             </div>
             
-                <div class="postShorten-content">
-                    <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Definition for a binary tree node.</span></span><br><span class="line"><span class="comment"># class TreeNode:</span></span><br><span class="line"><span class="comment">#     def __init__(self, val=0, left=None, right=None):</span></span><br><span class="line"><span class="comment">#         self.val = val</span></span><br><span class="line"><span class="comment">#         self.left = left</span></span><br><span class="line"><span class="comment">#         self.right = right</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">countNodes</span>(<span class="params">self, root: <span class="type">Optional</span>[TreeNode]</span>) -&gt; <span class="built_in">int</span>:</span><br><span class="line">        num = <span class="number">0</span></span><br><span class="line">        <span class="keyword">if</span> root != <span class="literal">None</span>:</span><br><span class="line">            num = <span class="number">1</span></span><br><span class="line">            num += self.countNodes(root.left)</span><br><span class="line">            num += self.countNodes(root.right)</span><br><span class="line">        <span class="keyword">return</span> num</span><br></pre></td></tr></table></figure>
-
-
+                <div class="postShorten-excerpt">
+                    <p>简介</p>
                     
+                        <a
+                            href="/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/%E5%AE%89%E8%A3%85flume%E6%B6%88%E6%81%AF%E4%BC%A0%E8%BE%93%E6%9E%B6%E6%9E%84/"
+                            class="postShorten-excerpt_link link"
+                            aria-label=": 安装flume消息传输架构"
+                        >
+                            Continue reading
+                        </a>
                         
-
-
-                    
-                    
-                        <p>
-                            <a
-                                href="/2021/12/17/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/222.%20%E5%AE%8C%E5%85%A8%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E8%8A%82%E7%82%B9%E4%B8%AA%E6%95%B0/#post-footer"
-                                class="postShorten-excerpt_link link"
-                                aria-label=""
-                            >
-                                Comment and share
-                            </a>
-                        </p>
                     
                 </div>
             
@@ -414,7 +390,7 @@
     </article>
     
     
-    <article class="postShorten postShorten--thumbnailimg-bottom">
+    <article class="postShorten postShorten--thumbnailimg-right">
         <div class="postShorten-wrap">
             
             <div class="postShorten-header">
@@ -422,23 +398,23 @@
                     
                         <a
                             class="link-unstyled"
-                            href="/2021/12/17/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/235.%20%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91%E7%9A%84%E6%9C%80%E8%BF%91%E5%85%AC%E5%85%B1%E7%A5%96%E5%85%88/"
-                            aria-label=": 235. 二叉搜索树的最近公共祖先"
+                            href="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/hive%E4%BC%98%E5%8C%96%E5%8F%8A%E6%96%B0%E7%89%B9%E6%80%A7/"
+                            aria-label=": hive优化及新特性"
                         >
-                            235. 二叉搜索树的最近公共祖先
+                            hive优化及新特性
                         </a>
                     
                 </h1>
                 <div class="postShorten-meta">
-    <time datetime="2021-12-17T13:02:10+08:00">
+    <time datetime="2022-10-29T15:17:09+08:00">
 	
-		    Dec 17, 2021
+		    Oct 29, 2022
     	
     </time>
     
         <span>in </span>
         
-    <a class="category-link" href="/categories/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/">leecode刷题复习</a>
+    <a class="category-link" href="/categories/hive/">hive</a>
 
 
     
@@ -446,25 +422,17 @@
 
             </div>
             
-                <div class="postShorten-content">
-                    <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Definition for a binary tree node.</span></span><br><span class="line"><span class="comment"># class TreeNode:</span></span><br><span class="line"><span class="comment">#     def __init__(self, x):</span></span><br><span class="line"><span class="comment">#         self.val = x</span></span><br><span class="line"><span class="comment">#         self.left = None</span></span><br><span class="line"><span class="comment">#         self.right = None</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">lowestCommonAncestor</span>(<span class="params">self, root: <span class="string">&#x27;TreeNode&#x27;</span>, p: <span class="string">&#x27;TreeNode&#x27;</span>, q: <span class="string">&#x27;TreeNode&#x27;</span></span>) -&gt; <span class="string">&#x27;TreeNode&#x27;</span>:</span><br><span class="line">        <span class="comment"># 递归</span></span><br><span class="line">        <span class="keyword">if</span> root==<span class="literal">None</span>: <span class="keyword">return</span> <span class="literal">None</span> </span><br><span class="line">        <span class="keyword">if</span> root.val &gt; p.val <span class="keyword">and</span> root.val &gt; q.val:</span><br><span class="line">            left = self.lowestCommonAncestor(root.left,p,q)</span><br><span class="line">            <span class="keyword">return</span> left </span><br><span class="line">        <span class="keyword">elif</span> root.val &lt; p.val <span class="keyword">and</span> root.val &lt; q.val:</span><br><span class="line">            right = self.lowestCommonAncestor(root.right,p,q)</span><br><span class="line">            <span class="keyword">return</span> right </span><br><span class="line">        <span class="keyword">else</span>:                     <span class="comment"># 在 两点之间。 </span></span><br><span class="line">            <span class="keyword">return</span> root </span><br><span class="line"></span><br><span class="line">        <span class="comment"># 迭代</span></span><br><span class="line">        <span class="comment"># while root!=None:</span></span><br><span class="line">        <span class="comment">#     if root.val &gt; p.val and root.val &gt; q.val:</span></span><br><span class="line">        <span class="comment">#         root = root.left </span></span><br><span class="line">        <span class="comment">#     elif root.val &lt; p.val and root.val &lt; q.val:</span></span><br><span class="line">        <span class="comment">#         root = root.right </span></span><br><span class="line">        <span class="comment">#     else:</span></span><br><span class="line">        <span class="comment">#         return root</span></span><br></pre></td></tr></table></figure>
-
-
+                <div class="postShorten-excerpt">
+                    <p>简介</p>
                     
+                        <a
+                            href="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/hive%E4%BC%98%E5%8C%96%E5%8F%8A%E6%96%B0%E7%89%B9%E6%80%A7/"
+                            class="postShorten-excerpt_link link"
+                            aria-label=": hive优化及新特性"
+                        >
+                            Continue reading
+                        </a>
                         
-
-
-                    
-                    
-                        <p>
-                            <a
-                                href="/2021/12/17/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/235.%20%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91%E7%9A%84%E6%9C%80%E8%BF%91%E5%85%AC%E5%85%B1%E7%A5%96%E5%85%88/#post-footer"
-                                class="postShorten-excerpt_link link"
-                                aria-label=""
-                            >
-                                Comment and share
-                            </a>
-                        </p>
                     
                 </div>
             
@@ -473,7 +441,7 @@
     </article>
     
     
-    <article class="postShorten postShorten--thumbnailimg-bottom">
+    <article class="postShorten postShorten--thumbnailimg-right">
         <div class="postShorten-wrap">
             
             <div class="postShorten-header">
@@ -481,23 +449,23 @@
                     
                         <a
                             class="link-unstyled"
-                            href="/2021/12/17/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/240.%20%E6%90%9C%E7%B4%A2%E4%BA%8C%E7%BB%B4%E7%9F%A9%E9%98%B5%20II/"
-                            aria-label=": 240. 搜索二维矩阵 II"
+                            href="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/"
+                            aria-label=": Hive参数配置与函数、运算符使用"
                         >
-                            240. 搜索二维矩阵 II
+                            Hive参数配置与函数、运算符使用
                         </a>
                     
                 </h1>
                 <div class="postShorten-meta">
-    <time datetime="2021-12-17T13:02:10+08:00">
+    <time datetime="2022-10-29T15:14:33+08:00">
 	
-		    Dec 17, 2021
+		    Oct 29, 2022
     	
     </time>
     
         <span>in </span>
         
-    <a class="category-link" href="/categories/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/">leecode刷题复习</a>
+    <a class="category-link" href="/categories/hive/">hive</a>
 
 
     
@@ -505,25 +473,17 @@
 
             </div>
             
-                <div class="postShorten-content">
-                    <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">searchMatrix</span>(<span class="params">self, matrix: <span class="type">List</span>[<span class="type">List</span>[<span class="built_in">int</span>]], target: <span class="built_in">int</span></span>) -&gt; <span class="built_in">bool</span>:</span><br><span class="line">        <span class="keyword">for</span> row <span class="keyword">in</span> matrix:</span><br><span class="line">            idx = bisect.bisect_left(row,target)</span><br><span class="line">            <span class="keyword">if</span> idx&gt;=<span class="number">0</span> <span class="keyword">and</span> idx&lt;<span class="built_in">len</span>(row) <span class="keyword">and</span> row[idx]==target: </span><br><span class="line">                <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line">        <span class="keyword">return</span> <span class="literal">False</span></span><br></pre></td></tr></table></figure>
-
-
+                <div class="postShorten-excerpt">
+                    <p>简介</p>
                     
+                        <a
+                            href="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/"
+                            class="postShorten-excerpt_link link"
+                            aria-label=": Hive参数配置与函数、运算符使用"
+                        >
+                            Continue reading
+                        </a>
                         
-
-
-                    
-                    
-                        <p>
-                            <a
-                                href="/2021/12/17/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/240.%20%E6%90%9C%E7%B4%A2%E4%BA%8C%E7%BB%B4%E7%9F%A9%E9%98%B5%20II/#post-footer"
-                                class="postShorten-excerpt_link link"
-                                aria-label=""
-                            >
-                                Comment and share
-                            </a>
-                        </p>
                     
                 </div>
             
@@ -532,7 +492,7 @@
     </article>
     
     
-    <article class="postShorten postShorten--thumbnailimg-bottom">
+    <article class="postShorten postShorten--thumbnailimg-right">
         <div class="postShorten-wrap">
             
             <div class="postShorten-header">
@@ -540,23 +500,23 @@
                     
                         <a
                             class="link-unstyled"
-                            href="/2021/12/17/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/226.%20%E7%BF%BB%E8%BD%AC%E4%BA%8C%E5%8F%89%E6%A0%91/"
-                            aria-label=": 226. 翻转二叉树"
+                            href="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/"
+                            aria-label=": Hive_SQL数据定义语言_DDL"
                         >
-                            226. 翻转二叉树
+                            Hive_SQL数据定义语言_DDL
                         </a>
                     
                 </h1>
                 <div class="postShorten-meta">
-    <time datetime="2021-12-17T13:02:10+08:00">
+    <time datetime="2022-10-29T15:11:19+08:00">
 	
-		    Dec 17, 2021
+		    Oct 29, 2022
     	
     </time>
     
         <span>in </span>
         
-    <a class="category-link" href="/categories/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/">leecode刷题复习</a>
+    <a class="category-link" href="/categories/hive/">hive</a>
 
 
     
@@ -564,25 +524,17 @@
 
             </div>
             
-                <div class="postShorten-content">
-                    <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Definition for a binary tree node.</span></span><br><span class="line"><span class="comment"># class TreeNode:</span></span><br><span class="line"><span class="comment">#     def __init__(self, val=0, left=None, right=None):</span></span><br><span class="line"><span class="comment">#         self.val = val</span></span><br><span class="line"><span class="comment">#         self.left = left</span></span><br><span class="line"><span class="comment">#         self.right = right</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">swap</span>(<span class="params">self,root,left,right</span>):</span><br><span class="line">        temp = left</span><br><span class="line">        left = right</span><br><span class="line">        right = temp</span><br><span class="line">        root.left,root.right = left,right  <span class="comment"># 改变树的结构</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">invertTree</span>(<span class="params">self, root: <span class="type">Optional</span>[TreeNode]</span>) -&gt; <span class="type">Optional</span>[TreeNode]:</span><br><span class="line">        <span class="keyword">if</span> root == <span class="literal">None</span>:</span><br><span class="line">            <span class="keyword">return</span> root </span><br><span class="line">        self.swap(root,root.left,root.right) <span class="comment"># 改变树的结构</span></span><br><span class="line">        self.invertTree(root.left)</span><br><span class="line">        self.invertTree(root.right)</span><br><span class="line">        <span class="keyword">return</span> root</span><br></pre></td></tr></table></figure>
-
-
+                <div class="postShorten-excerpt">
+                    <p>简介</p>
                     
+                        <a
+                            href="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/"
+                            class="postShorten-excerpt_link link"
+                            aria-label=": Hive_SQL数据定义语言_DDL"
+                        >
+                            Continue reading
+                        </a>
                         
-
-
-                    
-                    
-                        <p>
-                            <a
-                                href="/2021/12/17/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/226.%20%E7%BF%BB%E8%BD%AC%E4%BA%8C%E5%8F%89%E6%A0%91/#post-footer"
-                                class="postShorten-excerpt_link link"
-                                aria-label=""
-                            >
-                                Comment and share
-                            </a>
-                        </p>
                     
                 </div>
             
@@ -591,7 +543,7 @@
     </article>
     
     
-    <article class="postShorten postShorten--thumbnailimg-bottom">
+    <article class="postShorten postShorten--thumbnailimg-right">
         <div class="postShorten-wrap">
             
             <div class="postShorten-header">
@@ -599,23 +551,23 @@
                     
                         <a
                             class="link-unstyled"
-                            href="/2021/12/17/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/236.%20%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E6%9C%80%E8%BF%91%E5%85%AC%E5%85%B1%E7%A5%96%E5%85%88/"
-                            aria-label=": 236. 二叉树的最近公共祖先"
+                            href="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/"
+                            aria-label=": Hive SQL 数据操控、查询语言 DML、DQL"
                         >
-                            236. 二叉树的最近公共祖先
+                            Hive SQL 数据操控、查询语言 DML、DQL
                         </a>
                     
                 </h1>
                 <div class="postShorten-meta">
-    <time datetime="2021-12-17T13:02:10+08:00">
+    <time datetime="2022-10-29T15:04:10+08:00">
 	
-		    Dec 17, 2021
+		    Oct 29, 2022
     	
     </time>
     
         <span>in </span>
         
-    <a class="category-link" href="/categories/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/">leecode刷题复习</a>
+    <a class="category-link" href="/categories/hive/">hive</a>
 
 
     
@@ -623,25 +575,17 @@
 
             </div>
             
-                <div class="postShorten-content">
-                    <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Definition for a binary tree node.</span></span><br><span class="line"><span class="comment"># class TreeNode:</span></span><br><span class="line"><span class="comment">#     def __init__(self, x):</span></span><br><span class="line"><span class="comment">#         self.val = x</span></span><br><span class="line"><span class="comment">#         self.left = None</span></span><br><span class="line"><span class="comment">#         self.right = None</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">lowestCommonAncestor</span>(<span class="params">self, root: <span class="string">&#x27;TreeNode&#x27;</span>, p: <span class="string">&#x27;TreeNode&#x27;</span>, q: <span class="string">&#x27;TreeNode&#x27;</span></span>) -&gt; <span class="string">&#x27;TreeNode&#x27;</span>:</span><br><span class="line">        <span class="comment"># 基线条件</span></span><br><span class="line">        <span class="keyword">if</span> root==<span class="literal">None</span>: <span class="keyword">return</span> <span class="literal">None</span></span><br><span class="line">        <span class="comment"># 后续 从下往上找 公共点。</span></span><br><span class="line">        left = self.lowestCommonAncestor(root.left,p,q)</span><br><span class="line">        right = self.lowestCommonAncestor(root.right,p,q)</span><br><span class="line">        <span class="keyword">if</span> (left <span class="keyword">and</span> right) <span class="keyword">or</span> root==p <span class="keyword">or</span> root==q:</span><br><span class="line">            <span class="keyword">return</span> root </span><br><span class="line">        <span class="keyword">elif</span> left==<span class="literal">None</span> <span class="keyword">and</span> right==<span class="literal">None</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">None</span></span><br><span class="line">        <span class="keyword">elif</span> left <span class="keyword">and</span> right==<span class="literal">None</span>:</span><br><span class="line">            <span class="keyword">return</span> left </span><br><span class="line">        <span class="keyword">elif</span> left==<span class="literal">None</span> <span class="keyword">and</span> right:</span><br><span class="line">            <span class="keyword">return</span> right</span><br></pre></td></tr></table></figure>
-
-
+                <div class="postShorten-excerpt">
+                    <p>hive sql</p>
                     
+                        <a
+                            href="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/"
+                            class="postShorten-excerpt_link link"
+                            aria-label=": Hive SQL 数据操控、查询语言 DML、DQL"
+                        >
+                            Continue reading
+                        </a>
                         
-
-
-                    
-                    
-                        <p>
-                            <a
-                                href="/2021/12/17/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/236.%20%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E6%9C%80%E8%BF%91%E5%85%AC%E5%85%B1%E7%A5%96%E5%85%88/#post-footer"
-                                class="postShorten-excerpt_link link"
-                                aria-label=""
-                            >
-                                Comment and share
-                            </a>
-                        </p>
                     
                 </div>
             
@@ -650,7 +594,7 @@
     </article>
     
     
-    <article class="postShorten postShorten--thumbnailimg-bottom">
+    <article class="postShorten postShorten--thumbnailimg-right">
         <div class="postShorten-wrap">
             
             <div class="postShorten-header">
@@ -658,23 +602,23 @@
                     
                         <a
                             class="link-unstyled"
-                            href="/2021/12/17/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/257.%20%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E6%89%80%E6%9C%89%E8%B7%AF%E5%BE%84/"
-                            aria-label=": 257. 二叉树的所有路径器"
+                            href="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/centos7%E5%AE%89%E8%A3%85Hadoop/"
+                            aria-label=": centos7安装Hadoop"
                         >
-                            257. 二叉树的所有路径器
+                            centos7安装Hadoop
                         </a>
                     
                 </h1>
                 <div class="postShorten-meta">
-    <time datetime="2021-12-17T13:02:10+08:00">
+    <time datetime="2022-10-29T14:44:42+08:00">
 	
-		    Dec 17, 2021
+		    Oct 29, 2022
     	
     </time>
     
         <span>in </span>
         
-    <a class="category-link" href="/categories/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/">leecode刷题复习</a>
+    <a class="category-link" href="/categories/hive/">hive</a>
 
 
     
@@ -682,25 +626,17 @@
 
             </div>
             
-                <div class="postShorten-content">
-                    <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Definition for a binary tree node.</span></span><br><span class="line"><span class="comment"># class TreeNode:</span></span><br><span class="line"><span class="comment">#     def __init__(self, val=0, left=None, right=None):</span></span><br><span class="line"><span class="comment">#         self.val = val</span></span><br><span class="line"><span class="comment">#         self.left = left</span></span><br><span class="line"><span class="comment">#         self.right = right</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>):</span><br><span class="line">        self.path_list = []</span><br><span class="line">        self.path = []</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">binaryTreePaths</span>(<span class="params">self, root: <span class="type">Optional</span>[TreeNode]</span>) -&gt; <span class="type">List</span>[<span class="built_in">str</span>]:</span><br><span class="line">        self.path.append(<span class="built_in">str</span>(root.val) )</span><br><span class="line">        <span class="keyword">if</span> root.left==<span class="literal">None</span> <span class="keyword">and</span> root.right==<span class="literal">None</span>: <span class="comment"># 叶子结点</span></span><br><span class="line">            self.path_list.append(<span class="string">&#x27;-&gt;&#x27;</span>.join(self.path))</span><br><span class="line">            <span class="keyword">return</span> self.path_list</span><br><span class="line">        <span class="keyword">if</span> root.left:</span><br><span class="line">            self.binaryTreePaths(root.left)</span><br><span class="line">            self.path.pop()  <span class="comment"># 回溯 弹出 </span></span><br><span class="line">        <span class="keyword">if</span> root.right:</span><br><span class="line">            self.binaryTreePaths(root.right)</span><br><span class="line">            self.path.pop()</span><br><span class="line">            <span class="built_in">print</span>(self.path)</span><br><span class="line">        <span class="keyword">return</span> self.path_list</span><br></pre></td></tr></table></figure>
-
-
+                <div class="postShorten-excerpt">
+                    <p>先下载</p>
                     
+                        <a
+                            href="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/centos7%E5%AE%89%E8%A3%85Hadoop/"
+                            class="postShorten-excerpt_link link"
+                            aria-label=": centos7安装Hadoop"
+                        >
+                            Continue reading
+                        </a>
                         
-
-
-                    
-                    
-                        <p>
-                            <a
-                                href="/2021/12/17/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/257.%20%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E6%89%80%E6%9C%89%E8%B7%AF%E5%BE%84/#post-footer"
-                                class="postShorten-excerpt_link link"
-                                aria-label=""
-                            >
-                                Comment and share
-                            </a>
-                        </p>
                     
                 </div>
             
@@ -709,7 +645,7 @@
     </article>
     
     
-    <article class="postShorten postShorten--thumbnailimg-bottom">
+    <article class="postShorten postShorten--thumbnailimg-right">
         <div class="postShorten-wrap">
             
             <div class="postShorten-header">
@@ -717,23 +653,23 @@
                     
                         <a
                             class="link-unstyled"
-                            href="/2021/12/17/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/275.%20H%20%E6%8C%87%E6%95%B0%20II/"
-                            aria-label=": 275. H 指数 II"
+                            href="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/centos7%E5%AE%89%E8%A3%85Hive/"
+                            aria-label=": centos7安装Hive"
                         >
-                            275. H 指数 II
+                            centos7安装Hive
                         </a>
                     
                 </h1>
                 <div class="postShorten-meta">
-    <time datetime="2021-12-17T13:02:10+08:00">
+    <time datetime="2022-10-29T14:41:49+08:00">
 	
-		    Dec 17, 2021
+		    Oct 29, 2022
     	
     </time>
     
         <span>in </span>
         
-    <a class="category-link" href="/categories/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/">leecode刷题复习</a>
+    <a class="category-link" href="/categories/hive/">hive</a>
 
 
     
@@ -741,25 +677,18 @@
 
             </div>
             
-                <div class="postShorten-content">
-                    <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">hIndex</span>(<span class="params">self, citations: <span class="type">List</span>[<span class="built_in">int</span>]</span>) -&gt; <span class="built_in">int</span>:</span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">search_II</span>(<span class="params">check</span>)-&gt;<span class="built_in">int</span>:    <span class="comment"># h篇</span></span><br><span class="line">            left = <span class="number">0</span></span><br><span class="line">            right = <span class="built_in">len</span>(citations)</span><br><span class="line">            <span class="keyword">while</span> left&lt;=right:</span><br><span class="line">                mid = (left+right)&gt;&gt;<span class="number">1</span></span><br><span class="line">                <span class="keyword">if</span> check(mid):</span><br><span class="line">                    left = mid+<span class="number">1</span></span><br><span class="line">                <span class="keyword">else</span>:</span><br><span class="line">                    right = mid-<span class="number">1</span></span><br><span class="line">            <span class="keyword">return</span> right</span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">check</span>(<span class="params">x</span>)-&gt;<span class="built_in">bool</span>:     <span class="comment"># h 次</span></span><br><span class="line">            idx = bisect.bisect_left(citations,x)</span><br><span class="line">            <span class="keyword">if</span> <span class="built_in">len</span>(citations)-idx &gt;= x:</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line">            <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line">        <span class="keyword">return</span> search_II(check)</span><br></pre></td></tr></table></figure>
-
-
+                <div class="postShorten-excerpt">
+                    <pre><code>    安装hive，需要先安装配置好Hadoop，可以看之前的Hadoop安装配置笔记。先启动Hadoop，接下来的操作都是在主节点中进行，我的主节点机器主机名是node01。
+</code></pre>
                     
+                        <a
+                            href="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/centos7%E5%AE%89%E8%A3%85Hive/"
+                            class="postShorten-excerpt_link link"
+                            aria-label=": centos7安装Hive"
+                        >
+                            Continue reading
+                        </a>
                         
-
-
-                    
-                    
-                        <p>
-                            <a
-                                href="/2021/12/17/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/275.%20H%20%E6%8C%87%E6%95%B0%20II/#post-footer"
-                                class="postShorten-excerpt_link link"
-                                aria-label=""
-                            >
-                                Comment and share
-                            </a>
-                        </p>
                     
                 </div>
             
@@ -768,7 +697,7 @@
     </article>
     
     
-    <article class="postShorten postShorten--thumbnailimg-bottom">
+    <article class="postShorten postShorten--thumbnailimg-right">
         <div class="postShorten-wrap">
             
             <div class="postShorten-header">
@@ -776,23 +705,23 @@
                     
                         <a
                             class="link-unstyled"
-                            href="/2021/12/17/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/278.%20%E7%AC%AC%E4%B8%80%E4%B8%AA%E9%94%99%E8%AF%AF%E7%9A%84%E7%89%88%E6%9C%AC/"
-                            aria-label=": 278. 第一个错误的版本"
+                            href="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/"
+                            aria-label=": hive函数应用的案例"
                         >
-                            278. 第一个错误的版本
+                            hive函数应用的案例
                         </a>
                     
                 </h1>
                 <div class="postShorten-meta">
-    <time datetime="2021-12-17T13:02:10+08:00">
+    <time datetime="2022-10-29T14:32:48+08:00">
 	
-		    Dec 17, 2021
+		    Oct 29, 2022
     	
     </time>
     
         <span>in </span>
         
-    <a class="category-link" href="/categories/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/">leecode刷题复习</a>
+    <a class="category-link" href="/categories/hive/">hive</a>
 
 
     
@@ -800,25 +729,17 @@
 
             </div>
             
-                <div class="postShorten-content">
-                    <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># The isBadVersion API is already defined for you.</span></span><br><span class="line"><span class="comment"># def isBadVersion(version: int) -&gt; bool:</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">firstBadVersion</span>(<span class="params">self, n: <span class="built_in">int</span></span>) -&gt; <span class="built_in">int</span>:</span><br><span class="line">        left = <span class="number">1</span></span><br><span class="line">        right = n </span><br><span class="line">        <span class="keyword">while</span> left &lt;= right:</span><br><span class="line">            half = left + (right-left)//<span class="number">2</span></span><br><span class="line">            <span class="keyword">if</span> isBadVersion(half)==<span class="literal">False</span>:</span><br><span class="line">                left = half+<span class="number">1</span></span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                right = half-<span class="number">1</span></span><br><span class="line">        <span class="keyword">return</span> left</span><br></pre></td></tr></table></figure>
-
-
+                <div class="postShorten-excerpt">
+                    <p>hive函数</p>
                     
+                        <a
+                            href="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/"
+                            class="postShorten-excerpt_link link"
+                            aria-label=": hive函数应用的案例"
+                        >
+                            Continue reading
+                        </a>
                         
-
-
-                    
-                    
-                        <p>
-                            <a
-                                href="/2021/12/17/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/278.%20%E7%AC%AC%E4%B8%80%E4%B8%AA%E9%94%99%E8%AF%AF%E7%9A%84%E7%89%88%E6%9C%AC/#post-footer"
-                                class="postShorten-excerpt_link link"
-                                aria-label=""
-                            >
-                                Comment and share
-                            </a>
-                        </p>
                     
                 </div>
             
@@ -852,7 +773,7 @@
             </a>
           </li>
         
-        <li class="pagination-number">page 5 of 18</li>
+        <li class="pagination-number">page 5 of 24</li>
     </ul>
 </div>
 

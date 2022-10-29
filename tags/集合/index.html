@@ -304,65 +304,6 @@
                     
                         <a
                             class="link-unstyled"
-                            href="/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/22%E9%9B%86%E5%90%88%E7%9A%84%E5%B0%8F%E7%99%BD%E4%B8%93%E5%9C%BA/"
-                            aria-label=": 22集合的小白专场"
-                        >
-                            22集合的小白专场
-                        </a>
-                    
-                </h1>
-                <div class="postShorten-meta">
-    <time datetime="2021-09-27T20:00:36+08:00">
-	
-		    Sep 27, 2021
-    	
-    </time>
-    
-        <span>in </span>
-        
-    <a class="category-link" href="/categories/%E6%B5%99%E5%A4%A7%E7%AE%97%E6%B3%95%E4%B8%8E%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B-python%E5%AE%9E%E7%8E%B0/">浙大算法与数据结构课程(python实现)</a>
-
-
-    
-</div>
-
-            </div>
-            
-                <div class="postShorten-content">
-                    <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">《21集合》中find 方法，首先要扫描，找出这个data == x 的结点位置i。</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">最坏情况，list中有n个元素，要找的元素在最后，要找n遍。</span></span><br><span class="line"><span class="string">如果find 方法反复执行n次之后，</span></span><br><span class="line"><span class="string">时间复杂度为 O(N**2)</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">我们之前就说过，看见复杂度为 n**2 想到分治降低到nlog n，看见n想到二分降低到logn，</span></span><br><span class="line"><span class="string">但是这里我们换一个角度，直接改变数据的存储属性结构，省略掉找位置这一步。</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">这题中 data 只存int 数。</span></span><br><span class="line"><span class="string">所以 node 中 data属性 可以省略，只需要 与list脚标对上就行。</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">list中只有parent的值，相当于list里只存parent不用data，node中也不需要额外标注parent属性了。</span></span><br><span class="line"><span class="string">结点node 都没有存在的必要了。</span></span><br><span class="line"><span class="string">就直接免了&quot;首先要扫描，找出这个data == x 的结点位置i&quot;这个步骤。一个列表解决所有。</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">几个 -1 就有几个集合（树）。</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">简化后的node和find 方法。</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">find</span>(<span class="params">x,s=[]</span>):</span><br><span class="line">    <span class="keyword">while</span> s[x] &gt;= <span class="number">0</span>:  <span class="comment"># 找总根结点（集合）</span></span><br><span class="line">        x = s[x]</span><br><span class="line">    <span class="built_in">print</span>(x)</span><br><span class="line">    <span class="keyword">return</span> x</span><br><span class="line"></span><br><span class="line">s = [-<span class="number">1</span>,-<span class="number">1</span>,<span class="number">0</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>]</span><br><span class="line">find(<span class="number">3</span>,s)</span><br><span class="line">find(<span class="number">0</span>,s)</span><br><span class="line">find(<span class="number">2</span>,s)</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-
-                    
-                        
-
-
-                    
-                    
-                        <p>
-                            <a
-                                href="/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/22%E9%9B%86%E5%90%88%E7%9A%84%E5%B0%8F%E7%99%BD%E4%B8%93%E5%9C%BA/#post-footer"
-                                class="postShorten-excerpt_link link"
-                                aria-label=""
-                            >
-                                Comment and share
-                            </a>
-                        </p>
-                    
-                </div>
-            
-        </div>
-        
-    </article>
-    
-    
-    <article class="postShorten postShorten--thumbnailimg-bottom">
-        <div class="postShorten-wrap">
-            
-            <div class="postShorten-header">
-                <h1 class="postShorten-title">
-                    
-                        <a
-                            class="link-unstyled"
                             href="/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/23%E9%9B%86%E5%90%88%E5%B0%8F%E7%99%BD%E4%B8%93%E5%9C%BATSSN%E5%AE%9E%E7%8E%B0/"
                             aria-label=": 23集合小白专场TSSN实现"
                         >
@@ -400,6 +341,65 @@
                         <p>
                             <a
                                 href="/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/23%E9%9B%86%E5%90%88%E5%B0%8F%E7%99%BD%E4%B8%93%E5%9C%BATSSN%E5%AE%9E%E7%8E%B0/#post-footer"
+                                class="postShorten-excerpt_link link"
+                                aria-label=""
+                            >
+                                Comment and share
+                            </a>
+                        </p>
+                    
+                </div>
+            
+        </div>
+        
+    </article>
+    
+    
+    <article class="postShorten postShorten--thumbnailimg-bottom">
+        <div class="postShorten-wrap">
+            
+            <div class="postShorten-header">
+                <h1 class="postShorten-title">
+                    
+                        <a
+                            class="link-unstyled"
+                            href="/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/22%E9%9B%86%E5%90%88%E7%9A%84%E5%B0%8F%E7%99%BD%E4%B8%93%E5%9C%BA/"
+                            aria-label=": 22集合的小白专场"
+                        >
+                            22集合的小白专场
+                        </a>
+                    
+                </h1>
+                <div class="postShorten-meta">
+    <time datetime="2021-09-27T20:00:36+08:00">
+	
+		    Sep 27, 2021
+    	
+    </time>
+    
+        <span>in </span>
+        
+    <a class="category-link" href="/categories/%E6%B5%99%E5%A4%A7%E7%AE%97%E6%B3%95%E4%B8%8E%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B-python%E5%AE%9E%E7%8E%B0/">浙大算法与数据结构课程(python实现)</a>
+
+
+    
+</div>
+
+            </div>
+            
+                <div class="postShorten-content">
+                    <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">《21集合》中find 方法，首先要扫描，找出这个data == x 的结点位置i。</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">最坏情况，list中有n个元素，要找的元素在最后，要找n遍。</span></span><br><span class="line"><span class="string">如果find 方法反复执行n次之后，</span></span><br><span class="line"><span class="string">时间复杂度为 O(N**2)</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">我们之前就说过，看见复杂度为 n**2 想到分治降低到nlog n，看见n想到二分降低到logn，</span></span><br><span class="line"><span class="string">但是这里我们换一个角度，直接改变数据的存储属性结构，省略掉找位置这一步。</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">这题中 data 只存int 数。</span></span><br><span class="line"><span class="string">所以 node 中 data属性 可以省略，只需要 与list脚标对上就行。</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">list中只有parent的值，相当于list里只存parent不用data，node中也不需要额外标注parent属性了。</span></span><br><span class="line"><span class="string">结点node 都没有存在的必要了。</span></span><br><span class="line"><span class="string">就直接免了&quot;首先要扫描，找出这个data == x 的结点位置i&quot;这个步骤。一个列表解决所有。</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">几个 -1 就有几个集合（树）。</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">简化后的node和find 方法。</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">find</span>(<span class="params">x,s=[]</span>):</span><br><span class="line">    <span class="keyword">while</span> s[x] &gt;= <span class="number">0</span>:  <span class="comment"># 找总根结点（集合）</span></span><br><span class="line">        x = s[x]</span><br><span class="line">    <span class="built_in">print</span>(x)</span><br><span class="line">    <span class="keyword">return</span> x</span><br><span class="line"></span><br><span class="line">s = [-<span class="number">1</span>,-<span class="number">1</span>,<span class="number">0</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>]</span><br><span class="line">find(<span class="number">3</span>,s)</span><br><span class="line">find(<span class="number">0</span>,s)</span><br><span class="line">find(<span class="number">2</span>,s)</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+                    
+                        
+
+
+                    
+                    
+                        <p>
+                            <a
+                                href="/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/22%E9%9B%86%E5%90%88%E7%9A%84%E5%B0%8F%E7%99%BD%E4%B8%93%E5%9C%BA/#post-footer"
                                 class="postShorten-excerpt_link link"
                                 aria-label=""
                             >

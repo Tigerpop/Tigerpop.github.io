@@ -1,0 +1,656 @@
+
+<!DOCTYPE html>
+<html lang="en">
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Tiger_pop&#39;s Blog">
+    <title>安装flume消息传输架构 - Tiger_pop&#39;s Blog</title>
+    <meta name="author" content="陈宇韶chenyushao">
+    
+    
+    
+        
+            <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
+        
+    
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"陈宇韶chenyushao","sameAs":["https://github.com/","https://www.linkedin.com/profile/","mailto"]},"articleBody":"简介 \nflume 是个啥？\n\n​\t\t消息传输框架，输出不一定是hdfs 也可以是kafka，输入也可以是kafka，flume常用于 对日志文件的读取，最早开发就是用来对接Hadoop的hdfs的。\n安装配置我在安装配置完 Hadoop的基础上，进行flume的安装配置。先从node01开始。\n下载地址\nhttps://downloads.apache.org/flume/\n解压\n tar -zvxf apache-flume-1.9.0-bin.tar.gz -C /opt\n改个名方便识别\nmv apache-flume-1.9.0-bin flume\nnode01配置环境变量\n123456vim /etc/profileexport FLUME_HOME=/opt/flumeexport PATH=:$FLUME_HONE/binsource /etc/profile   # 生效\n\n修改配置文件\n1234cd flume/confcp flume-env.sh.template flume-env.shvim flume-env.sh# 里面添加java环境变量\n\n\n1234567891011121314151617181920212223242526272829vim slave.conf# 主要作用是监听目录中的新增数据，采集到数据之后，输出到avro （输出到agent）# 注意：Flume agent的运行，主要就是配置source channel sink# 下面的a1就是agent的代号，source叫r1 channel叫c1 sink叫k1 a1.sources = r1a1.sinks = k1a1.channels = c1 #具体定义source  a1.sources.r1.type = spooldir#先创建此目录，保证里面空的  a1.sources.r1.spoolDir = /opt/flume/logs #对于sink的配置描述 使用avro日志做数据的消费，以后用kafka，也要改动这里a1.sinks.k1.type = avro# hostname是最终传给的主机名称或者ip地址a1.sinks.k1.hostname = node01a1.sinks.k1.port = 44444 #对于channel的配置描述 使用文件做数据的临时缓存 这种的安全性要高a1.channels.c1.type = filea1.channels.c1.checkpointDir = /opt/flume/checkpoint # 先创建a1.channels.c1.dataDirs = /opt/flume/data            # 先创建 #通过channel c1将source r1和sink k1关联起来a1.sources.r1.channels = c1a1.sinks.k1.channel = c1\n\n分发 flume 文件夹到node02、node03两台从属机器。\n12scp -r /opt/flume node03:/opt/scp -r /opt/flume node02:/opt/\n\nnode02、node03配置环境变量\n123456vim /etc/profileexport FLUME_HOME=/opt/flumeexport PATH=:$FLUME_HONE/binsource /etc/profile   # 生效\n\n在node01的flume的conf文件夹下创建一个master.conf文件：\n123456789101112131415161718192021222324252627282930313233343536373839404142434445vim master.conf # 获取slave1,2上的数据，聚合起来，传到hdfs上面# 注意：Flume agent的运行，主要就是配置source channel sink# 下面的a1就是agent的代号，source叫r1 channel叫c1 sink叫k1 a1.sources = r1a1.sinks = k1a1.channels = c1 #对于source的配置描述 监听avroa1.sources.r1.type = avro# hostname是最终传给的主机名称或者ip地址a1.sources.r1.bind = node01a1.sources.r1.port = 44444  #定义拦截器，为消息添加时间戳  a1.sources.r1.interceptors = i1  a1.sources.r1.interceptors.i1.type = org.apache.flume.interceptor.TimestampInterceptor$Builder #对于sink的配置描述 传递到hdfs上面a1.sinks.k1.type = hdfs  #集群的nameservers名字#单节点的直接写：hdfs://主机名(ip):9000/xxx a1.sinks.k1.hdfs.path = hdfs://node01:9000/flume/%Y%m%d  a1.sinks.k1.hdfs.filePrefix = events-  a1.sinks.k1.hdfs.fileType = DataStream  #不按照条数生成文件  a1.sinks.k1.hdfs.rollCount = 0  #HDFS上的文件达到128M时生成一个文件  a1.sinks.k1.hdfs.rollSize = 134217728  #HDFS上的文件达到60秒生成一个文件  a1.sinks.k1.hdfs.rollInterval = 60    #对于channel的配置描述 使用内存缓冲区域做数据的临时缓存a1.channels.c1.type = memorya1.channels.c1.capacity = 1000a1.channels.c1.transactionCapacity = 100 #通过channel c1将source r1和sink k1关联起来a1.sources.r1.channels = c1a1.sinks.k1.channel = c1 \n\n\n\n检查是否安装配置成功启动Hadoop、启动zookeeper。\n123456hadoop/bin start-all.sh# zk 每个机器都要手动启动zookeeper/bin zkServer.sh startzookeeper/bin zkServer.sh startzookeeper/bin zkServer.sh start\n\n启动flume集群\n123456cd /opt/flume# master端bin/flume-ng agent -n a1 -c conf -f conf/master.conf -Dflume.root.logger=INFO,console# slave端bin/flume-ng agent -n a1 -c conf -f conf/slave.conf -Dflume.root.logger=INFO,console\n\n在node02 被监听的&#x2F;opt&#x2F;flume&#x2F;logs文件夹中 vim 一个文件\n1234567vim test1chenyushao is a good man!vim test2okokokokok\n\n从属终端node02可见\n\n主机终端node01可见\n\n在Hadoop配置的hdfs监听端口可见\n\n补充：guava版本不一致报错如果运行之后报错如下：\n\n​\t\t报错原因：我的Hadoop的guava 版本和flume 中的guava 版本不一样。\n\n​\t\t解决办法：删除低版本的 guava ，把高版本的 guava 复制一份放在低版本处。\n12345678910rm /opt/flume/lib/guava-11.0.2.jarcp /opt/hadoop/hadoop/share/hadoop/common/lib/guava-27.0-jre.jar /opt/flume/lib/# 把guava文件分发到其他几台机器中。scp -r /opt/hadoop/hadoop/share/hadoop/common/lib/guava-27.0-jre.jar node03:/opt/flume/lib/scp -r /opt/hadoop/hadoop/share/hadoop/common/lib/guava-27.0-jre.jar node02:/opt/flume/lib/# 每台机器上都删除老版本guavarm -rf /opt/flume/lib/guava-11.0.2.jar \n\n","dateCreated":"2022-10-29T15:39:56+08:00","dateModified":"2022-10-29T15:47:47+08:00","datePublished":"2022-10-29T15:39:56+08:00","description":"简介","headline":"安装flume消息传输架构","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"http://example.com/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/%E5%AE%89%E8%A3%85flume%E6%B6%88%E6%81%AF%E4%BC%A0%E8%BE%93%E6%9E%B6%E6%9E%84/"},"publisher":{"@type":"Organization","name":"陈宇韶chenyushao","sameAs":["https://github.com/","https://www.linkedin.com/profile/","mailto"]},"url":"http://example.com/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/%E5%AE%89%E8%A3%85flume%E6%B6%88%E6%81%AF%E4%BC%A0%E8%BE%93%E6%9E%B6%E6%9E%84/","keywords":"flume"}</script>
+    <meta name="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="安装flume消息传输架构">
+<meta property="og:url" content="http://example.com/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/%E5%AE%89%E8%A3%85flume%E6%B6%88%E6%81%AF%E4%BC%A0%E8%BE%93%E6%9E%B6%E6%9E%84/index.html">
+<meta property="og:site_name" content="Tiger_pop&#39;s Blog">
+<meta property="og:description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/%E5%AE%89%E8%A3%85flume%E6%B6%88%E6%81%AF%E4%BC%A0%E8%BE%93%E6%9E%B6%E6%9E%84/%E6%88%AA%E5%B1%8F2022-05-05%2011.04.39-7028830.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/%E5%AE%89%E8%A3%85flume%E6%B6%88%E6%81%AF%E4%BC%A0%E8%BE%93%E6%9E%B6%E6%9E%84/%E6%88%AA%E5%B1%8F2022-05-05%2011.04.57.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/%E5%AE%89%E8%A3%85flume%E6%B6%88%E6%81%AF%E4%BC%A0%E8%BE%93%E6%9E%B6%E6%9E%84/%E6%88%AA%E5%B1%8F2022-05-05%2010.57.19.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/%E5%AE%89%E8%A3%85flume%E6%B6%88%E6%81%AF%E4%BC%A0%E8%BE%93%E6%9E%B6%E6%9E%84/%E6%88%AA%E5%B1%8F2022-05-05%2018.44.24.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/%E5%AE%89%E8%A3%85flume%E6%B6%88%E6%81%AF%E4%BC%A0%E8%BE%93%E6%9E%B6%E6%9E%84/%E6%88%AA%E5%B1%8F2022-05-05%2018.45.16.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/%E5%AE%89%E8%A3%85flume%E6%B6%88%E6%81%AF%E4%BC%A0%E8%BE%93%E6%9E%B6%E6%9E%84/%E6%88%AA%E5%B1%8F2022-05-05%2018.46.32.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/%E5%AE%89%E8%A3%85flume%E6%B6%88%E6%81%AF%E4%BC%A0%E8%BE%93%E6%9E%B6%E6%9E%84/%E6%88%AA%E5%B1%8F2022-05-05%2017.38.13.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/%E5%AE%89%E8%A3%85flume%E6%B6%88%E6%81%AF%E4%BC%A0%E8%BE%93%E6%9E%B6%E6%9E%84/%E6%88%AA%E5%B1%8F2022-05-05%2017.44.34.jpg">
+<meta property="article:published_time" content="2022-10-29T07:39:56.000Z">
+<meta property="article:modified_time" content="2022-10-29T07:47:47.607Z">
+<meta property="article:author" content="陈宇韶chenyushao">
+<meta property="article:tag" content="flume">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/%E5%AE%89%E8%A3%85flume%E6%B6%88%E6%81%AF%E4%BC%A0%E8%BE%93%E6%9E%B6%E6%9E%84/%E6%88%AA%E5%B1%8F2022-05-05%2011.04.39-7028830.jpg">
+    
+    
+        
+    
+    
+    
+    
+    
+    <!--STYLES-->
+    
+<link rel="stylesheet" href="/assets/css/style-yrbj4x87sme2npnaj5hmxl88fi8ktzpa1hwzrvan2almcpvu5niegj13ryff.min.css">
+
+    <!--STYLES END-->
+    
+
+    
+
+    
+        
+    
+</head>
+
+    <body>
+        <div id="blog">
+            <!-- Define author's picture -->
+
+
+    
+
+<header id="header" data-behavior="4">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <div class="header-title">
+        <a
+            class="header-title-link"
+            href="/"
+            aria-label=""
+        >
+            Tiger_pop&#39;s Blog
+        </a>
+    </div>
+    
+        
+            <a
+                class="header-right-picture "
+                href="#about"
+                aria-label="Open the link: /#about"
+            >
+        
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+<nav id="sidebar" data-behavior="4">
+    <div class="sidebar-container">
+        
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/"
+                            
+                            rel="noopener"
+                            title="Home"
+                        >
+                        <i class="sidebar-button-icon fa fa-home" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Home</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-categories"
+                            
+                            rel="noopener"
+                            title="Categories"
+                        >
+                        <i class="sidebar-button-icon fa fa-bookmark" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Categories</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-tags"
+                            
+                            rel="noopener"
+                            title="Tags"
+                        >
+                        <i class="sidebar-button-icon fa fa-tags" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Tags</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-archives"
+                            
+                            rel="noopener"
+                            title="Archives"
+                        >
+                        <i class="sidebar-button-icon fa fa-archive" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Archives</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="#about"
+                            
+                            rel="noopener"
+                            title="About"
+                        >
+                        <i class="sidebar-button-icon fa fa-question" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">About</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://github.com/"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="GitHub"
+                        >
+                        <i class="sidebar-button-icon fab fa-github" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">GitHub</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://www.linkedin.com/profile/"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="LinkedIn"
+                        >
+                        <i class="sidebar-button-icon fab fa-linkedin" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">LinkedIn</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/mailto"
+                            
+                            rel="noopener"
+                            title="Mail"
+                        >
+                        <i class="sidebar-button-icon fa fa-envelope" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Mail</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/atom.xml"
+                            
+                            rel="noopener"
+                            title="RSS"
+                        >
+                        <i class="sidebar-button-icon fa fa-rss" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">RSS</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+    </div>
+</nav>
+
+            
+            <div id="main" data-behavior="4"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post">
+    
+    
+        <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title">
+            安装flume消息传输架构
+        </h1>
+    
+    
+        <div class="post-meta">
+    <time datetime="2022-10-29T15:39:56+08:00">
+	
+		    Oct 29, 2022
+    	
+    </time>
+    
+        <span>in </span>
+        
+    <a class="category-link" href="/categories/kafka/">kafka</a>
+
+
+    
+</div>
+
+    
+</div>
+
+    
+    <div class="post-content markdown">
+        <div class="main-content-wrap">
+            <p>简介 <span id="more"></span></p>
+<h1 id="flume-是个啥？"><a href="#flume-是个啥？" class="headerlink" title="flume 是个啥？"></a>flume 是个啥？</h1><p><img src="/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/%E5%AE%89%E8%A3%85flume%E6%B6%88%E6%81%AF%E4%BC%A0%E8%BE%93%E6%9E%B6%E6%9E%84/%E6%88%AA%E5%B1%8F2022-05-05%2011.04.39-7028830.jpg" alt="截屏2022-05-05 11.04.39"></p>
+<p><img src="/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/%E5%AE%89%E8%A3%85flume%E6%B6%88%E6%81%AF%E4%BC%A0%E8%BE%93%E6%9E%B6%E6%9E%84/%E6%88%AA%E5%B1%8F2022-05-05%2011.04.57.jpg" alt="截屏2022-05-05 11.04.57"></p>
+<p>​		消息传输框架，输出不一定是hdfs 也可以是kafka，输入也可以是kafka，flume常用于 对日志文件的读取，最早开发就是用来对接Hadoop的hdfs的。</p>
+<h1 id="安装配置"><a href="#安装配置" class="headerlink" title="安装配置"></a>安装配置</h1><p>我在安装配置完 Hadoop的基础上，进行flume的安装配置。先从node01开始。</p>
+<p>下载地址</p>
+<p><a target="_blank" rel="noopener" href="https://downloads.apache.org/flume/">https://downloads.apache.org/flume/</a></p>
+<p>解压</p>
+<p><code> tar -zvxf apache-flume-1.9.0-bin.tar.gz -C /opt</code></p>
+<p>改个名方便识别</p>
+<p><code>mv apache-flume-1.9.0-bin flume</code></p>
+<p>node01配置环境变量</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/profile</span><br><span class="line"></span><br><span class="line">export FLUME_HOME=/opt/flume</span><br><span class="line">export PATH=:$FLUME_HONE/bin</span><br><span class="line"></span><br><span class="line">source /etc/profile   # 生效</span><br></pre></td></tr></table></figure>
+
+<p>修改配置文件</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">cd flume/conf</span><br><span class="line">cp flume-env.sh.template flume-env.sh</span><br><span class="line">vim flume-env.sh</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">里面添加java环境变量</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/%E5%AE%89%E8%A3%85flume%E6%B6%88%E6%81%AF%E4%BC%A0%E8%BE%93%E6%9E%B6%E6%9E%84/%E6%88%AA%E5%B1%8F2022-05-05%2010.57.19.jpg" alt="截屏2022-05-05 10.57.19"></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">vim slave.conf</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">主要作用是监听目录中的新增数据，采集到数据之后，输出到avro （输出到agent）</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">注意：Flume agent的运行，主要就是配置<span class="built_in">source</span> channel sink</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">下面的a1就是agent的代号，<span class="built_in">source</span>叫r1 channel叫c1 sink叫k1</span></span><br><span class="line"> </span><br><span class="line">a1.sources = r1</span><br><span class="line">a1.sinks = k1</span><br><span class="line">a1.channels = c1</span><br><span class="line"><span class="meta prompt_"> </span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">具体定义<span class="built_in">source</span></span>  </span><br><span class="line">a1.sources.r1.type = spooldir</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">先创建此目录，保证里面空的</span>  </span><br><span class="line">a1.sources.r1.spoolDir = /opt/flume/logs</span><br><span class="line"><span class="meta prompt_"> </span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">对于sink的配置描述 使用avro日志做数据的消费，以后用kafka，也要改动这里</span></span><br><span class="line">a1.sinks.k1.type = avro</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">hostname是最终传给的主机名称或者ip地址</span></span><br><span class="line">a1.sinks.k1.hostname = node01</span><br><span class="line">a1.sinks.k1.port = 44444</span><br><span class="line"><span class="meta prompt_"> </span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">对于channel的配置描述 使用文件做数据的临时缓存 这种的安全性要高</span></span><br><span class="line">a1.channels.c1.type = file</span><br><span class="line">a1.channels.c1.checkpointDir = /opt/flume/checkpoint # 先创建</span><br><span class="line">a1.channels.c1.dataDirs = /opt/flume/data            # 先创建</span><br><span class="line"><span class="meta prompt_"> </span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">通过channel c1将<span class="built_in">source</span> r1和sink k1关联起来</span></span><br><span class="line">a1.sources.r1.channels = c1</span><br><span class="line">a1.sinks.k1.channel = c1</span><br></pre></td></tr></table></figure>
+
+<p>分发 flume 文件夹到node02、node03两台从属机器。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">scp -r /opt/flume node03:/opt/</span><br><span class="line">scp -r /opt/flume node02:/opt/</span><br></pre></td></tr></table></figure>
+
+<p>node02、node03配置环境变量</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/profile</span><br><span class="line"></span><br><span class="line">export FLUME_HOME=/opt/flume</span><br><span class="line">export PATH=:$FLUME_HONE/bin</span><br><span class="line"></span><br><span class="line">source /etc/profile   # 生效</span><br></pre></td></tr></table></figure>
+
+<p>在node01的flume的conf文件夹下创建一个master.conf文件：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line">vim master.conf </span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">获取slave1,2上的数据，聚合起来，传到hdfs上面</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">注意：Flume agent的运行，主要就是配置<span class="built_in">source</span> channel sink</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">下面的a1就是agent的代号，<span class="built_in">source</span>叫r1 channel叫c1 sink叫k1</span></span><br><span class="line"> </span><br><span class="line">a1.sources = r1</span><br><span class="line">a1.sinks = k1</span><br><span class="line">a1.channels = c1</span><br><span class="line"><span class="meta prompt_"> </span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">对于<span class="built_in">source</span>的配置描述 监听avro</span></span><br><span class="line">a1.sources.r1.type = avro</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">hostname是最终传给的主机名称或者ip地址</span></span><br><span class="line">a1.sources.r1.bind = node01</span><br><span class="line">a1.sources.r1.port = 44444</span><br><span class="line"> </span><br><span class="line"><span class="meta prompt_"> </span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">定义拦截器，为消息添加时间戳</span>  </span><br><span class="line">a1.sources.r1.interceptors = i1  </span><br><span class="line">a1.sources.r1.interceptors.i1.type = org.apache.flume.interceptor.TimestampInterceptor$Builder</span><br><span class="line"><span class="meta prompt_"> </span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">对于sink的配置描述 传递到hdfs上面</span></span><br><span class="line">a1.sinks.k1.type = hdfs  </span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">集群的nameservers名字</span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">单节点的直接写：hdfs://主机名(ip):9000/xxx</span></span><br><span class="line"> </span><br><span class="line">a1.sinks.k1.hdfs.path = hdfs://node01:9000/flume/%Y%m%d  </span><br><span class="line">a1.sinks.k1.hdfs.filePrefix = events-  </span><br><span class="line">a1.sinks.k1.hdfs.fileType = DataStream  </span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">不按照条数生成文件</span>  </span><br><span class="line">a1.sinks.k1.hdfs.rollCount = 0  </span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">HDFS上的文件达到128M时生成一个文件</span>  </span><br><span class="line">a1.sinks.k1.hdfs.rollSize = 134217728  </span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">HDFS上的文件达到60秒生成一个文件</span>  </span><br><span class="line">a1.sinks.k1.hdfs.rollInterval = 60  </span><br><span class="line"> </span><br><span class="line"><span class="meta prompt_"> </span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">对于channel的配置描述 使用内存缓冲区域做数据的临时缓存</span></span><br><span class="line">a1.channels.c1.type = memory</span><br><span class="line">a1.channels.c1.capacity = 1000</span><br><span class="line">a1.channels.c1.transactionCapacity = 100</span><br><span class="line"><span class="meta prompt_"> </span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">通过channel c1将<span class="built_in">source</span> r1和sink k1关联起来</span></span><br><span class="line">a1.sources.r1.channels = c1</span><br><span class="line">a1.sinks.k1.channel = c1 </span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="检查是否安装配置成功"><a href="#检查是否安装配置成功" class="headerlink" title="检查是否安装配置成功"></a>检查是否安装配置成功</h2><p>启动Hadoop、启动zookeeper。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">hadoop/bin start-all.sh</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">zk 每个机器都要手动启动</span></span><br><span class="line">zookeeper/bin zkServer.sh start</span><br><span class="line">zookeeper/bin zkServer.sh start</span><br><span class="line">zookeeper/bin zkServer.sh start</span><br></pre></td></tr></table></figure>
+
+<p>启动flume集群</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">cd /opt/flume</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">master端</span></span><br><span class="line">bin/flume-ng agent -n a1 -c conf -f conf/master.conf -Dflume.root.logger=INFO,console</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">slave端</span></span><br><span class="line">bin/flume-ng agent -n a1 -c conf -f conf/slave.conf -Dflume.root.logger=INFO,console</span><br></pre></td></tr></table></figure>
+
+<p>在node02 被监听的&#x2F;opt&#x2F;flume&#x2F;logs文件夹中 vim 一个文件</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">vim test1</span><br><span class="line"></span><br><span class="line">chenyushao is a good man!</span><br><span class="line"></span><br><span class="line">vim test2</span><br><span class="line"></span><br><span class="line">okokokokok</span><br></pre></td></tr></table></figure>
+
+<p>从属终端node02可见</p>
+<p><img src="/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/%E5%AE%89%E8%A3%85flume%E6%B6%88%E6%81%AF%E4%BC%A0%E8%BE%93%E6%9E%B6%E6%9E%84/%E6%88%AA%E5%B1%8F2022-05-05%2018.44.24.jpg" alt="截屏2022-05-05 18.44.24"></p>
+<p>主机终端node01可见</p>
+<p><img src="/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/%E5%AE%89%E8%A3%85flume%E6%B6%88%E6%81%AF%E4%BC%A0%E8%BE%93%E6%9E%B6%E6%9E%84/%E6%88%AA%E5%B1%8F2022-05-05%2018.45.16.jpg" alt="截屏2022-05-05 18.45.16"></p>
+<p>在Hadoop配置的hdfs监听端口可见</p>
+<p><img src="/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/%E5%AE%89%E8%A3%85flume%E6%B6%88%E6%81%AF%E4%BC%A0%E8%BE%93%E6%9E%B6%E6%9E%84/%E6%88%AA%E5%B1%8F2022-05-05%2018.46.32.jpg" alt="截屏2022-05-05 18.46.32"></p>
+<h2 id="补充：guava版本不一致报错"><a href="#补充：guava版本不一致报错" class="headerlink" title="补充：guava版本不一致报错"></a>补充：guava版本不一致报错</h2><p>如果运行之后报错如下：</p>
+<p><img src="/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/%E5%AE%89%E8%A3%85flume%E6%B6%88%E6%81%AF%E4%BC%A0%E8%BE%93%E6%9E%B6%E6%9E%84/%E6%88%AA%E5%B1%8F2022-05-05%2017.38.13.jpg" alt="截屏2022-05-05 17.38.13"></p>
+<p>​		报错原因：我的Hadoop的guava 版本和flume 中的guava 版本不一样。</p>
+<p><img src="/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/%E5%AE%89%E8%A3%85flume%E6%B6%88%E6%81%AF%E4%BC%A0%E8%BE%93%E6%9E%B6%E6%9E%84/%E6%88%AA%E5%B1%8F2022-05-05%2017.44.34.jpg" alt="截屏2022-05-05 17.44.34"></p>
+<p>​		解决办法：删除低版本的 guava ，把高版本的 guava 复制一份放在低版本处。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">rm /opt/flume/lib/guava-11.0.2.jar</span><br><span class="line"></span><br><span class="line">cp /opt/hadoop/hadoop/share/hadoop/common/lib/guava-27.0-jre.jar /opt/flume/lib/</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">把guava文件分发到其他几台机器中。</span></span><br><span class="line">scp -r /opt/hadoop/hadoop/share/hadoop/common/lib/guava-27.0-jre.jar node03:/opt/flume/lib/</span><br><span class="line">scp -r /opt/hadoop/hadoop/share/hadoop/common/lib/guava-27.0-jre.jar node02:/opt/flume/lib/</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">每台机器上都删除老版本guava</span></span><br><span class="line">rm -rf /opt/flume/lib/guava-11.0.2.jar </span><br></pre></td></tr></table></figure>
+
+
+            
+
+
+        </div>
+    </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
+        
+            <div class="post-footer-tags">
+                <span class="text-color-light text-small">TAGGED IN</span><br/>
+                
+    <a class="tag tag--primary tag--small t-none-link" href="/tags/flume/" rel="tag">flume</a>
+
+            </div>
+        
+        
+            <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E5%88%86%E5%B8%83%E5%BC%8F%E6%9E%B6%E6%9E%84%E5%8E%9F%E7%90%86/"
+                    data-tooltip="kafka分布式架构原理"
+                    aria-label="PREVIOUS: kafka分布式架构原理"
+                >
+                    
+                        <i class="fa fa-angle-left" aria-hidden="true"></i>
+                        <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+                    </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/hive%E4%BC%98%E5%8C%96%E5%8F%8A%E6%96%B0%E7%89%B9%E6%80%A7/"
+                    data-tooltip="hive优化及新特性"
+                    aria-label="NEXT: hive优化及新特性"
+                >
+                    
+                        <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                    </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a
+                class="post-action-btn btn btn--default btn-open-shareoptions"
+                href="#btn-open-shareoptions"
+                aria-label="Share this post"
+            >
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://example.com/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/%E5%AE%89%E8%A3%85flume%E6%B6%88%E6%81%AF%E4%BC%A0%E8%BE%93%E6%9E%B6%E6%9E%84/"
+                    title="Share on Facebook"
+                    aria-label="Share on Facebook"
+                >
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://twitter.com/intent/tweet?text=http://example.com/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/%E5%AE%89%E8%A3%85flume%E6%B6%88%E6%81%AF%E4%BC%A0%E8%BE%93%E6%9E%B6%E6%9E%84/"
+                    title="Share on Twitter"
+                    aria-label="Share on Twitter"
+                >
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://plus.google.com/share?url=http://example.com/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/%E5%AE%89%E8%A3%85flume%E6%B6%88%E6%81%AF%E4%BC%A0%E8%BE%93%E6%9E%B6%E6%9E%84/"
+                    title="Share on Google+"
+                    aria-label="Share on Google+"
+                >
+                    <i class="fab fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+        
+        
+            
+        
+    </div>
+</article>
+
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2022 陈宇韶chenyushao. All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E5%88%86%E5%B8%83%E5%BC%8F%E6%9E%B6%E6%9E%84%E5%8E%9F%E7%90%86/"
+                    data-tooltip="kafka分布式架构原理"
+                    aria-label="PREVIOUS: kafka分布式架构原理"
+                >
+                    
+                        <i class="fa fa-angle-left" aria-hidden="true"></i>
+                        <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+                    </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/hive%E4%BC%98%E5%8C%96%E5%8F%8A%E6%96%B0%E7%89%B9%E6%80%A7/"
+                    data-tooltip="hive优化及新特性"
+                    aria-label="NEXT: hive优化及新特性"
+                >
+                    
+                        <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                    </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a
+                class="post-action-btn btn btn--default btn-open-shareoptions"
+                href="#btn-open-shareoptions"
+                aria-label="Share this post"
+            >
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://example.com/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/%E5%AE%89%E8%A3%85flume%E6%B6%88%E6%81%AF%E4%BC%A0%E8%BE%93%E6%9E%B6%E6%9E%84/"
+                    title="Share on Facebook"
+                    aria-label="Share on Facebook"
+                >
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://twitter.com/intent/tweet?text=http://example.com/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/%E5%AE%89%E8%A3%85flume%E6%B6%88%E6%81%AF%E4%BC%A0%E8%BE%93%E6%9E%B6%E6%9E%84/"
+                    title="Share on Twitter"
+                    aria-label="Share on Twitter"
+                >
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://plus.google.com/share?url=http://example.com/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/%E5%AE%89%E8%A3%85flume%E6%B6%88%E6%81%AF%E4%BC%A0%E8%BE%93%E6%9E%B6%E6%9E%84/"
+                    title="Share on Google+"
+                    aria-label="Share on Google+"
+                >
+                    <i class="fab fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+                </div>
+                
+    <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+        <i id="btn-close-shareoptions" class="fa fa-times"></i>
+        <ul class="share-options">
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="https://www.facebook.com/sharer/sharer.php?u=http://example.com/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/%E5%AE%89%E8%A3%85flume%E6%B6%88%E6%81%AF%E4%BC%A0%E8%BE%93%E6%9E%B6%E6%9E%84/"
+                        aria-label="Share on Facebook"
+                    >
+                        <i class="fab fa-facebook" aria-hidden="true"></i><span>Share on Facebook</span>
+                    </a>
+                </li>
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="https://twitter.com/intent/tweet?text=http://example.com/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/%E5%AE%89%E8%A3%85flume%E6%B6%88%E6%81%AF%E4%BC%A0%E8%BE%93%E6%9E%B6%E6%9E%84/"
+                        aria-label="Share on Twitter"
+                    >
+                        <i class="fab fa-twitter" aria-hidden="true"></i><span>Share on Twitter</span>
+                    </a>
+                </li>
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="https://plus.google.com/share?url=http://example.com/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/%E5%AE%89%E8%A3%85flume%E6%B6%88%E6%81%AF%E4%BC%A0%E8%BE%93%E6%9E%B6%E6%9E%84/"
+                        aria-label="Share on Google+"
+                    >
+                        <i class="fab fa-google-plus" aria-hidden="true"></i><span>Share on Google+</span>
+                    </a>
+                </li>
+            
+        </ul>
+    </div>
+
+
+            
+        </div>
+        
+
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-times"></i>
+        </div>
+        
+            <h4 id="about-card-name">陈宇韶chenyushao</h4>
+        
+            <div id="about-card-bio"><p>author.bio</p>
+</div>
+        
+        
+            <div id="about-card-job">
+                <i class="fa fa-briefcase"></i>
+                <br/>
+                <p>author.job</p>
+
+            </div>
+        
+        
+    </div>
+</div>
+
+        
+        
+<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
+        <!--SCRIPTS-->
+
+<script src="/assets/js/script-sbgpeqyl6jw5qe60mnfuzifzwky5la4ftiuwmschcdzx2pg5tfpl1pfp13e3.min.js"></script>
+
+<!--SCRIPTS END-->
+
+
+    
+
+
+
+
+    </body>
+</html>

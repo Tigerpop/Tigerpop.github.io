@@ -237,6 +237,64 @@
     <section class="postShorten-group main-content-wrap">
     
     
+    <article class="postShorten postShorten--thumbnailimg-bottom">
+        <div class="postShorten-wrap">
+            
+            <div class="postShorten-header">
+                <h1 class="postShorten-title">
+                    
+                        <a
+                            class="link-unstyled"
+                            href="/2022/10/29/conda%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83%E4%B8%AD%E7%94%A8pip%E5%AE%89%E8%A3%85%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9/pycharm%E6%B7%BB%E5%8A%A0anaconda%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83/"
+                            aria-label=": pycharm添加anaconda虚拟环境"
+                        >
+                            pycharm添加anaconda虚拟环境
+                        </a>
+                    
+                </h1>
+                <div class="postShorten-meta">
+    <time datetime="2022-10-29T17:25:01+08:00">
+	
+		    Oct 29, 2022
+    	
+    </time>
+    
+        <span>in </span>
+        
+    <a class="category-link" href="/categories/anaconda/">anaconda</a>
+
+
+    
+</div>
+
+            </div>
+            
+                <div class="postShorten-content">
+                    <p>打开project interpreter，<br>add添加<br>选择system interpreter<br>在文件中选择anaconda 虚拟环境的位置<br>选中虚拟环境的bin&#x2F;python版本<br>添加。</p>
+
+                    
+                        
+
+
+                    
+                    
+                        <p>
+                            <a
+                                href="/2022/10/29/conda%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83%E4%B8%AD%E7%94%A8pip%E5%AE%89%E8%A3%85%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9/pycharm%E6%B7%BB%E5%8A%A0anaconda%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83/#post-footer"
+                                class="postShorten-excerpt_link link"
+                                aria-label=""
+                            >
+                                Comment and share
+                            </a>
+                        </p>
+                    
+                </div>
+            
+        </div>
+        
+    </article>
+    
+    
     <article class="postShorten postShorten--thumbnailimg-right">
         <div class="postShorten-wrap">
             
@@ -280,6 +338,71 @@
                             Continue reading
                         </a>
                         
+                    
+                </div>
+            
+        </div>
+        
+    </article>
+    
+    
+    <article class="postShorten postShorten--thumbnailimg-bottom">
+        <div class="postShorten-wrap">
+            
+            <div class="postShorten-header">
+                <h1 class="postShorten-title">
+                    
+                        <a
+                            class="link-unstyled"
+                            href="/2021/12/15/conda%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83%E4%B8%AD%E7%94%A8pip%E5%AE%89%E8%A3%85%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9/conda%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83%E4%B8%AD%E7%94%A8pip%E5%AE%89%E8%A3%85%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9/"
+                            aria-label=": conda虚拟环境中用pip安装注意事项"
+                        >
+                            conda虚拟环境中用pip安装注意事项
+                        </a>
+                    
+                </h1>
+                <div class="postShorten-meta">
+    <time datetime="2021-12-15T13:02:10+08:00">
+	
+		    Dec 15, 2021
+    	
+    </time>
+    
+        <span>in </span>
+        
+    <a class="category-link" href="/categories/anaconda/">anaconda</a>
+
+
+    
+</div>
+
+            </div>
+            
+                <div class="postShorten-content">
+                    <p>   进入conda 虚拟环境 ，pip最好指定安装位置，到相应虚拟环境的site-package，以防安装位置错乱。</p>
+<p>具体操作流程：</p>
+<ol>
+<li>先进入conda 的虚拟环境，用pip -V 查看 相应虚拟环境里的pip 对应的site-package 位置。<br>例如： &#x2F;Users&#x2F;chenyushao&#x2F;anaconda3&#x2F;envs&#x2F;xgb&#x2F;lib&#x2F;python3.7&#x2F;site-packages&#x2F;pip (python 3.7)</li>
+<li>（以例子说明）在对应的虚拟环境中<br>sudo pip install 【包名】 –target&#x3D;&#x2F;Users&#x2F;chenyushao&#x2F;anaconda3&#x2F;envs&#x2F;xgb&#x2F;lib&#x2F;python3.7&#x2F;site-packages</li>
+</ol>
+<p>（还可以在此基础上补充用清华或者中科院的源提高下载速度）<br>sudo pip install 【包名】 –target&#x3D;&#x2F;Users&#x2F;chenyushao&#x2F;anaconda3&#x2F;envs&#x2F;xgb&#x2F;lib&#x2F;python3.7&#x2F;site-packages -i <a target="_blank" rel="noopener" href="https://pypi.mirrors.ustc.edu.cn/simple">https://pypi.mirrors.ustc.edu.cn/simple</a></p>
+<p>按照 1-2 步骤操作后，就仅在当前虚拟环境中安装了此包，与base的环境、其他环境没有关系。尤其注意：进入虚拟环境后直接pip安装，有可能会安装到base环境的pip下载汇总中，也有可能下载到基础环境的pip下载汇总中。</p>
+
+                    
+                        
+
+
+                    
+                    
+                        <p>
+                            <a
+                                href="/2021/12/15/conda%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83%E4%B8%AD%E7%94%A8pip%E5%AE%89%E8%A3%85%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9/conda%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83%E4%B8%AD%E7%94%A8pip%E5%AE%89%E8%A3%85%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9/#post-footer"
+                                class="postShorten-excerpt_link link"
+                                aria-label=""
+                            >
+                                Comment and share
+                            </a>
+                        </p>
                     
                 </div>
             

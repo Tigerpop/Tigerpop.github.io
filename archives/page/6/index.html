@@ -237,7 +237,7 @@
     <section class="postShorten-group main-content-wrap">
     
     
-    <article class="postShorten postShorten--thumbnailimg-bottom">
+    <article class="postShorten postShorten--thumbnailimg-right">
         <div class="postShorten-wrap">
             
             <div class="postShorten-header">
@@ -245,23 +245,23 @@
                     
                         <a
                             class="link-unstyled"
-                            href="/2021/12/17/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/287.%20%E5%AF%BB%E6%89%BE%E9%87%8D%E5%A4%8D%E6%95%B0/"
-                            aria-label=": 287. 寻找重复数"
+                            href="/2022/10/28/anaconda%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83%E3%80%81jupyternotebook%E8%B7%AF%E5%BE%84%E7%9B%B8%E5%85%B3/anaconda%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83%E3%80%81jupyternotebook%E8%B7%AF%E5%BE%84%E7%9B%B8%E5%85%B3/"
+                            aria-label=": anaconda虚拟环境、jupyternotebook路径相关"
                         >
-                            287. 寻找重复数
+                            anaconda虚拟环境、jupyternotebook路径相关
                         </a>
                     
                 </h1>
                 <div class="postShorten-meta">
-    <time datetime="2021-12-17T13:02:10+08:00">
+    <time datetime="2022-10-28T21:07:36+08:00">
 	
-		    Dec 17, 2021
+		    Oct 28, 2022
     	
     </time>
     
         <span>in </span>
         
-    <a class="category-link" href="/categories/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/">leecode刷题复习</a>
+    <a class="category-link" href="/categories/anaconda/">anaconda</a>
 
 
     
@@ -269,25 +269,17 @@
 
             </div>
             
-                <div class="postShorten-content">
-                    <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">findDuplicate</span>(<span class="params">self, nums: <span class="type">List</span>[<span class="built_in">int</span>]</span>) -&gt; <span class="built_in">int</span>:</span><br><span class="line">        <span class="comment"># 经典的快慢指针 检查环。nums中的值，就是下一个链表节点的索引位置。</span></span><br><span class="line">        <span class="comment"># 由于是假定 值为下一个索引的位置，不是标准意义上带表头head的链表，假定位置时统一平移了。</span></span><br><span class="line">        slow = nums[<span class="number">0</span>]    <span class="comment"># 起始没有 head，nums[0]已移动了一位。 </span></span><br><span class="line">        <span class="comment"># 由于起始索引总是0 而值在1～n，所以不用担心陷入单点死循环的问题。</span></span><br><span class="line">        fast = nums[slow] <span class="comment"># 起始没head， nums[slow]已移动了两位。</span></span><br><span class="line">        <span class="keyword">while</span> slow != fast:</span><br><span class="line">            <span class="keyword">if</span> fast &gt; <span class="built_in">len</span>(nums)-<span class="number">1</span> <span class="keyword">or</span> slow &gt; <span class="built_in">len</span>(nums)-<span class="number">1</span>:</span><br><span class="line">                <span class="keyword">return</span> <span class="string">&quot;没重复数字&quot;</span></span><br><span class="line">            slow = nums[slow]</span><br><span class="line">            fast = nums[nums[fast]]</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;有重复数字，在%d位置&quot;</span>%fast)</span><br><span class="line">        head1 = nums[<span class="number">0</span>]   <span class="comment"># 由于没有起始head指针，找交点时起点都移动一位，效果一样。</span></span><br><span class="line">        head2 = nums[fast] </span><br><span class="line">        <span class="keyword">while</span> head1 != head2:</span><br><span class="line">            head1 = nums[head1]</span><br><span class="line">            head2 = nums[head2]</span><br><span class="line">        <span class="keyword">return</span> head1</span><br></pre></td></tr></table></figure>
-
-
+                <div class="postShorten-excerpt">
+                    <p>import sys<br>print(sys.executable)</p>
                     
+                        <a
+                            href="/2022/10/28/anaconda%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83%E3%80%81jupyternotebook%E8%B7%AF%E5%BE%84%E7%9B%B8%E5%85%B3/anaconda%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83%E3%80%81jupyternotebook%E8%B7%AF%E5%BE%84%E7%9B%B8%E5%85%B3/"
+                            class="postShorten-excerpt_link link"
+                            aria-label=": anaconda虚拟环境、jupyternotebook路径相关"
+                        >
+                            Continue reading
+                        </a>
                         
-
-
-                    
-                    
-                        <p>
-                            <a
-                                href="/2021/12/17/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/287.%20%E5%AF%BB%E6%89%BE%E9%87%8D%E5%A4%8D%E6%95%B0/#post-footer"
-                                class="postShorten-excerpt_link link"
-                                aria-label=""
-                            >
-                                Comment and share
-                            </a>
-                        </p>
                     
                 </div>
             
@@ -296,7 +288,7 @@
     </article>
     
     
-    <article class="postShorten postShorten--thumbnailimg-bottom">
+    <article class="postShorten postShorten--thumbnailimg-right">
         <div class="postShorten-wrap">
             
             <div class="postShorten-header">
@@ -304,23 +296,23 @@
                     
                         <a
                             class="link-unstyled"
-                            href="/2021/12/17/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/300.%20%E6%9C%80%E9%95%BF%E9%80%92%E5%A2%9E%E5%AD%90%E5%BA%8F%E5%88%97/"
-                            aria-label=": 300. 最长递增子序列"
+                            href="/2022/10/28/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/KNN/"
+                            aria-label=": KNNk近邻分类\回归"
                         >
-                            300. 最长递增子序列
+                            KNNk近邻分类\回归
                         </a>
                     
                 </h1>
                 <div class="postShorten-meta">
-    <time datetime="2021-12-17T13:02:10+08:00">
+    <time datetime="2022-10-28T21:07:36+08:00">
 	
-		    Dec 17, 2021
+		    Oct 28, 2022
     	
     </time>
     
         <span>in </span>
         
-    <a class="category-link" href="/categories/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/">leecode刷题复习</a>
+    <a class="category-link" href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/">机器学习</a>
 
 
     
@@ -328,25 +320,17 @@
 
             </div>
             
-                <div class="postShorten-content">
-                    <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">lengthOfLIS</span>(<span class="params">self, nums: <span class="type">List</span>[<span class="built_in">int</span>]</span>) -&gt; <span class="built_in">int</span>:</span><br><span class="line">        <span class="comment"># 我们试试 动态规划方法。</span></span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">len</span>(nums)&lt;=<span class="number">1</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="built_in">len</span>(nums)</span><br><span class="line">        dp = [<span class="number">1</span>]*<span class="built_in">len</span>(nums)</span><br><span class="line">        result = <span class="number">0</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>,<span class="built_in">len</span>(nums)):</span><br><span class="line">            <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>,i):</span><br><span class="line">                <span class="keyword">if</span> nums[i]&gt;nums[j]:</span><br><span class="line">                    dp[i] = <span class="built_in">max</span>(dp[i],dp[j]+<span class="number">1</span>)</span><br><span class="line">            <span class="keyword">if</span> dp[i] &gt; result:</span><br><span class="line">                result = dp[i]</span><br><span class="line">        <span class="keyword">return</span> result</span><br></pre></td></tr></table></figure>
-
-
+                <div class="postShorten-excerpt">
+                    <p>#%% md</p>
                     
+                        <a
+                            href="/2022/10/28/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/KNN/"
+                            class="postShorten-excerpt_link link"
+                            aria-label=": KNNk近邻分类\回归"
+                        >
+                            Continue reading
+                        </a>
                         
-
-
-                    
-                    
-                        <p>
-                            <a
-                                href="/2021/12/17/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/300.%20%E6%9C%80%E9%95%BF%E9%80%92%E5%A2%9E%E5%AD%90%E5%BA%8F%E5%88%97/#post-footer"
-                                class="postShorten-excerpt_link link"
-                                aria-label=""
-                            >
-                                Comment and share
-                            </a>
-                        </p>
                     
                 </div>
             
@@ -355,7 +339,7 @@
     </article>
     
     
-    <article class="postShorten postShorten--thumbnailimg-bottom">
+    <article class="postShorten postShorten--thumbnailimg-right">
         <div class="postShorten-wrap">
             
             <div class="postShorten-header">
@@ -363,23 +347,23 @@
                     
                         <a
                             class="link-unstyled"
-                            href="/2021/12/17/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/350.%20%E4%B8%A4%E4%B8%AA%E6%95%B0%E7%BB%84%E7%9A%84%E4%BA%A4%E9%9B%86%20II/"
-                            aria-label=": 350. 两个数组的交集 II"
+                            href="/2022/10/28/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/k-means/"
+                            aria-label=": k-means聚类分析"
                         >
-                            350. 两个数组的交集 II
+                            k-means聚类分析
                         </a>
                     
                 </h1>
                 <div class="postShorten-meta">
-    <time datetime="2021-12-17T13:02:10+08:00">
+    <time datetime="2022-10-28T21:07:36+08:00">
 	
-		    Dec 17, 2021
+		    Oct 28, 2022
     	
     </time>
     
         <span>in </span>
         
-    <a class="category-link" href="/categories/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/">leecode刷题复习</a>
+    <a class="category-link" href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/">机器学习</a>
 
 
     
@@ -387,25 +371,17 @@
 
             </div>
             
-                <div class="postShorten-content">
-                    <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">intersect</span>(<span class="params">self, nums1: <span class="type">List</span>[<span class="built_in">int</span>], nums2: <span class="type">List</span>[<span class="built_in">int</span>]</span>) -&gt; <span class="type">List</span>[<span class="built_in">int</span>]:</span><br><span class="line">        <span class="comment"># 复杂写法(其实就是把简写的count，拓展成了二方法找出现次数)</span></span><br><span class="line">        <span class="string">&#x27;&#x27;&#x27; </span></span><br><span class="line"><span class="string">        result = []</span></span><br><span class="line"><span class="string">        # 和位置无关，单纯的看元素有无交集，别想复杂了。</span></span><br><span class="line"><span class="string">        inner = set(nums2) &amp; set(nums1)</span></span><br><span class="line"><span class="string">        def find_appear_num(nums,i):</span></span><br><span class="line"><span class="string">            # 计算交集元素出现次数</span></span><br><span class="line"><span class="string">            nums.sort()</span></span><br><span class="line"><span class="string">            # 找右边索引</span></span><br><span class="line"><span class="string">            left = 0 </span></span><br><span class="line"><span class="string">            right = len(nums)-1</span></span><br><span class="line"><span class="string">            while left&lt;=right:  </span></span><br><span class="line"><span class="string">                mid = (left+right)&gt;&gt;1</span></span><br><span class="line"><span class="string">                if nums[mid]&lt;=i: </span></span><br><span class="line"><span class="string">                    left = mid+1</span></span><br><span class="line"><span class="string">                else:</span></span><br><span class="line"><span class="string">                    right = mid-1</span></span><br><span class="line"><span class="string">            last = left</span></span><br><span class="line"><span class="string">            # 找左边索引</span></span><br><span class="line"><span class="string">            left = 0 </span></span><br><span class="line"><span class="string">            right = len(nums)-1</span></span><br><span class="line"><span class="string">            while left&lt;=right:  </span></span><br><span class="line"><span class="string">                mid = (left+right)&gt;&gt;1</span></span><br><span class="line"><span class="string">                if nums[mid]&lt;i:</span></span><br><span class="line"><span class="string">                    left = mid+1</span></span><br><span class="line"><span class="string">                else:</span></span><br><span class="line"><span class="string">                    right = mid-1</span></span><br><span class="line"><span class="string">            pro = right</span></span><br><span class="line"><span class="string">            return last-pro-1 #  求出出现次数</span></span><br><span class="line"><span class="string">        for i in inner:</span></span><br><span class="line"><span class="string">            appear_num = min(find_appear_num(nums1,i),find_appear_num(nums2,i))</span></span><br><span class="line"><span class="string">            # print(i,appear_num,find_appear_num(nums1,i),find_appear_num(nums2,i))</span></span><br><span class="line"><span class="string">            for n in range(appear_num):</span></span><br><span class="line"><span class="string">                result.append(i) </span></span><br><span class="line"><span class="string">        return result</span></span><br><span class="line"><span class="string">        &#x27;&#x27;&#x27;</span></span><br><span class="line">        <span class="comment"># 简写</span></span><br><span class="line">        inner = <span class="built_in">set</span>(nums1) &amp; <span class="built_in">set</span>(nums2)</span><br><span class="line">        result = []</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> inner:</span><br><span class="line">            result += [i]*(<span class="built_in">min</span>(nums1.count(i),nums2.count(i)))</span><br><span class="line">        <span class="keyword">return</span> result</span><br></pre></td></tr></table></figure>
-
-
+                <div class="postShorten-excerpt">
+                    <p>#%% md</p>
                     
+                        <a
+                            href="/2022/10/28/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/k-means/"
+                            class="postShorten-excerpt_link link"
+                            aria-label=": k-means聚类分析"
+                        >
+                            Continue reading
+                        </a>
                         
-
-
-                    
-                    
-                        <p>
-                            <a
-                                href="/2021/12/17/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/350.%20%E4%B8%A4%E4%B8%AA%E6%95%B0%E7%BB%84%E7%9A%84%E4%BA%A4%E9%9B%86%20II/#post-footer"
-                                class="postShorten-excerpt_link link"
-                                aria-label=""
-                            >
-                                Comment and share
-                            </a>
-                        </p>
                     
                 </div>
             
@@ -414,7 +390,7 @@
     </article>
     
     
-    <article class="postShorten postShorten--thumbnailimg-bottom">
+    <article class="postShorten postShorten--thumbnailimg-right">
         <div class="postShorten-wrap">
             
             <div class="postShorten-header">
@@ -422,23 +398,23 @@
                     
                         <a
                             class="link-unstyled"
-                            href="/2021/12/17/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/367.%20%E6%9C%89%E6%95%88%E7%9A%84%E5%AE%8C%E5%85%A8%E5%B9%B3%E6%96%B9%E6%95%B0/"
-                            aria-label=": 367. 有效的完全平方数"
+                            href="/2022/10/28/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/pca/"
+                            aria-label=": PCA主成分分析"
                         >
-                            367. 有效的完全平方数
+                            PCA主成分分析
                         </a>
                     
                 </h1>
                 <div class="postShorten-meta">
-    <time datetime="2021-12-17T13:02:10+08:00">
+    <time datetime="2022-10-28T21:07:36+08:00">
 	
-		    Dec 17, 2021
+		    Oct 28, 2022
     	
     </time>
     
         <span>in </span>
         
-    <a class="category-link" href="/categories/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/">leecode刷题复习</a>
+    <a class="category-link" href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/">机器学习</a>
 
 
     
@@ -446,25 +422,17 @@
 
             </div>
             
-                <div class="postShorten-content">
-                    <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">isPerfectSquare</span>(<span class="params">self, num: <span class="built_in">int</span></span>) -&gt; <span class="built_in">bool</span>:</span><br><span class="line">        left = <span class="number">1</span></span><br><span class="line">        right = num </span><br><span class="line">        <span class="keyword">while</span> left&lt;=right:</span><br><span class="line">            half = left + (right-left)//<span class="number">2</span></span><br><span class="line">            <span class="keyword">if</span> half*half == num:</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">True</span> </span><br><span class="line">            <span class="keyword">elif</span> half*half &gt; num:</span><br><span class="line">                right = half - <span class="number">1</span></span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                left = half + <span class="number">1</span></span><br><span class="line">        <span class="keyword">return</span> <span class="literal">False</span></span><br></pre></td></tr></table></figure>
-
-
+                <div class="postShorten-excerpt">
+                    <p>#%% md</p>
                     
+                        <a
+                            href="/2022/10/28/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/pca/"
+                            class="postShorten-excerpt_link link"
+                            aria-label=": PCA主成分分析"
+                        >
+                            Continue reading
+                        </a>
                         
-
-
-                    
-                    
-                        <p>
-                            <a
-                                href="/2021/12/17/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/367.%20%E6%9C%89%E6%95%88%E7%9A%84%E5%AE%8C%E5%85%A8%E5%B9%B3%E6%96%B9%E6%95%B0/#post-footer"
-                                class="postShorten-excerpt_link link"
-                                aria-label=""
-                            >
-                                Comment and share
-                            </a>
-                        </p>
                     
                 </div>
             
@@ -473,7 +441,7 @@
     </article>
     
     
-    <article class="postShorten postShorten--thumbnailimg-bottom">
+    <article class="postShorten postShorten--thumbnailimg-right">
         <div class="postShorten-wrap">
             
             <div class="postShorten-header">
@@ -481,23 +449,23 @@
                     
                         <a
                             class="link-unstyled"
-                            href="/2021/12/17/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/374.%20%E7%8C%9C%E6%95%B0%E5%AD%97%E5%A4%A7%E5%B0%8F/"
-                            aria-label=": 374. 猜数字大小"
+                            href="/2022/10/28/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/svm/"
+                            aria-label=": SVM"
                         >
-                            374. 猜数字大小
+                            SVM
                         </a>
                     
                 </h1>
                 <div class="postShorten-meta">
-    <time datetime="2021-12-17T13:02:10+08:00">
+    <time datetime="2022-10-28T21:07:36+08:00">
 	
-		    Dec 17, 2021
+		    Oct 28, 2022
     	
     </time>
     
         <span>in </span>
         
-    <a class="category-link" href="/categories/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/">leecode刷题复习</a>
+    <a class="category-link" href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/">机器学习</a>
 
 
     
@@ -505,25 +473,17 @@
 
             </div>
             
-                <div class="postShorten-content">
-                    <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># The guess API is already defined for you.</span></span><br><span class="line"><span class="comment"># @param num, your guess</span></span><br><span class="line"><span class="comment"># @return -1 if my number is lower, 1 if my number is higher, otherwise return 0</span></span><br><span class="line"><span class="comment"># def guess(num: int) -&gt; int:</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">guessNumber</span>(<span class="params">self, n: <span class="built_in">int</span></span>) -&gt; <span class="built_in">int</span>:</span><br><span class="line">        left = <span class="number">1</span></span><br><span class="line">        right = n </span><br><span class="line">        <span class="keyword">while</span> left&lt;=right:</span><br><span class="line">            num = random.randint(left,right)</span><br><span class="line">            compare = guess(num)</span><br><span class="line">            <span class="built_in">print</span>(num,compare)</span><br><span class="line">            <span class="keyword">if</span> compare==<span class="number">1</span>:</span><br><span class="line">                left = num + <span class="number">1</span> </span><br><span class="line">            <span class="keyword">elif</span> compare==-<span class="number">1</span>:</span><br><span class="line">                right = num - <span class="number">1</span></span><br><span class="line">            <span class="keyword">elif</span> compare==<span class="number">0</span>:</span><br><span class="line">                <span class="keyword">return</span> num </span><br><span class="line">            <span class="built_in">print</span>((left,right))</span><br></pre></td></tr></table></figure>
-
-
+                <div class="postShorten-excerpt">
+                    <p>#%% md</p>
                     
+                        <a
+                            href="/2022/10/28/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/svm/"
+                            class="postShorten-excerpt_link link"
+                            aria-label=": SVM"
+                        >
+                            Continue reading
+                        </a>
                         
-
-
-                    
-                    
-                        <p>
-                            <a
-                                href="/2021/12/17/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/374.%20%E7%8C%9C%E6%95%B0%E5%AD%97%E5%A4%A7%E5%B0%8F/#post-footer"
-                                class="postShorten-excerpt_link link"
-                                aria-label=""
-                            >
-                                Comment and share
-                            </a>
-                        </p>
                     
                 </div>
             
@@ -532,7 +492,7 @@
     </article>
     
     
-    <article class="postShorten postShorten--thumbnailimg-bottom">
+    <article class="postShorten postShorten--thumbnailimg-right">
         <div class="postShorten-wrap">
             
             <div class="postShorten-header">
@@ -540,23 +500,23 @@
                     
                         <a
                             class="link-unstyled"
-                            href="/2021/12/17/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/436.%20%E5%AF%BB%E6%89%BE%E5%8F%B3%E5%8C%BA%E9%97%B4/"
-                            aria-label=": 436. 寻找右区间"
+                            href="/2022/10/28/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92/"
+                            aria-label=": 线性回归"
                         >
-                            436. 寻找右区间
+                            线性回归
                         </a>
                     
                 </h1>
                 <div class="postShorten-meta">
-    <time datetime="2021-12-17T13:02:10+08:00">
+    <time datetime="2022-10-28T21:07:36+08:00">
 	
-		    Dec 17, 2021
+		    Oct 28, 2022
     	
     </time>
     
         <span>in </span>
         
-    <a class="category-link" href="/categories/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/">leecode刷题复习</a>
+    <a class="category-link" href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/">机器学习</a>
 
 
     
@@ -564,25 +524,17 @@
 
             </div>
             
-                <div class="postShorten-content">
-                    <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">findRightInterval</span>(<span class="params">self, intervals: <span class="type">List</span>[<span class="type">List</span>[<span class="built_in">int</span>]]</span>) -&gt; <span class="type">List</span>[<span class="built_in">int</span>]:</span><br><span class="line">        ans = []</span><br><span class="line">        tool_list = <span class="built_in">sorted</span>(<span class="built_in">list</span>(<span class="built_in">enumerate</span>(intervals)),key=<span class="keyword">lambda</span> x:x[<span class="number">1</span>][<span class="number">0</span>])</span><br><span class="line">        start_list = []</span><br><span class="line">        <span class="keyword">for</span> ele <span class="keyword">in</span> intervals:</span><br><span class="line">            start_list.append(ele[<span class="number">0</span>])</span><br><span class="line">        start_list.sort()</span><br><span class="line">        <span class="built_in">print</span>(tool_list,<span class="string">&quot;\n&quot;</span>,start_list)</span><br><span class="line">        <span class="keyword">for</span> ele <span class="keyword">in</span> intervals:</span><br><span class="line">            j_idx = bisect.bisect_left(start_list,ele[<span class="number">1</span>])</span><br><span class="line">            <span class="keyword">if</span> j_idx&lt;<span class="built_in">len</span>(tool_list) <span class="keyword">and</span> j_idx&gt;=<span class="number">0</span>:</span><br><span class="line">                ans.append(tool_list[j_idx][<span class="number">0</span>])</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                ans.append(-<span class="number">1</span>)</span><br><span class="line">        <span class="keyword">return</span> ans</span><br></pre></td></tr></table></figure>
-
-
+                <div class="postShorten-excerpt">
+                    <p>#%% md</p>
                     
+                        <a
+                            href="/2022/10/28/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92/"
+                            class="postShorten-excerpt_link link"
+                            aria-label=": 线性回归"
+                        >
+                            Continue reading
+                        </a>
                         
-
-
-                    
-                    
-                        <p>
-                            <a
-                                href="/2021/12/17/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/436.%20%E5%AF%BB%E6%89%BE%E5%8F%B3%E5%8C%BA%E9%97%B4/#post-footer"
-                                class="postShorten-excerpt_link link"
-                                aria-label=""
-                            >
-                                Comment and share
-                            </a>
-                        </p>
                     
                 </div>
             
@@ -591,7 +543,7 @@
     </article>
     
     
-    <article class="postShorten postShorten--thumbnailimg-bottom">
+    <article class="postShorten postShorten--thumbnailimg-right">
         <div class="postShorten-wrap">
             
             <div class="postShorten-header">
@@ -599,23 +551,23 @@
                     
                         <a
                             class="link-unstyled"
-                            href="/2021/12/17/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/404.%20%E5%B7%A6%E5%8F%B6%E5%AD%90%E4%B9%8B%E5%92%8C/"
-                            aria-label=": 404. 左叶子之和"
+                            href="/2022/10/28/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97/"
+                            aria-label=": 随机森林"
                         >
-                            404. 左叶子之和
+                            随机森林
                         </a>
                     
                 </h1>
                 <div class="postShorten-meta">
-    <time datetime="2021-12-17T13:02:10+08:00">
+    <time datetime="2022-10-28T21:07:36+08:00">
 	
-		    Dec 17, 2021
+		    Oct 28, 2022
     	
     </time>
     
         <span>in </span>
         
-    <a class="category-link" href="/categories/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/">leecode刷题复习</a>
+    <a class="category-link" href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/">机器学习</a>
 
 
     
@@ -623,25 +575,17 @@
 
             </div>
             
-                <div class="postShorten-content">
-                    <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Definition for a binary tree node.</span></span><br><span class="line"><span class="comment"># class TreeNode:</span></span><br><span class="line"><span class="comment">#     def __init__(self, val=0, left=None, right=None):</span></span><br><span class="line"><span class="comment">#         self.val = val</span></span><br><span class="line"><span class="comment">#         self.left = left</span></span><br><span class="line"><span class="comment">#         self.right = right</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">sumOfLeftLeaves</span>(<span class="params">self, root: <span class="type">Optional</span>[TreeNode]</span>) -&gt; <span class="built_in">int</span>:</span><br><span class="line">        <span class="keyword">if</span> root==<span class="literal">None</span>:  <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">        <span class="keyword">if</span> root.left==<span class="literal">None</span> <span class="keyword">and</span> root.right==<span class="literal">None</span>: <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">        <span class="comment"># 后序遍历</span></span><br><span class="line">        left_value = self.sumOfLeftLeaves(root.left)</span><br><span class="line">        right_value = self.sumOfLeftLeaves(root.right)</span><br><span class="line">        <span class="keyword">if</span> root.left!=<span class="literal">None</span> <span class="keyword">and</span> root.left.left==<span class="literal">None</span> <span class="keyword">and</span> root.left.right==<span class="literal">None</span>:</span><br><span class="line">            left_value = root.left.val </span><br><span class="line">        left_sum = left_value + right_value</span><br><span class="line">        <span class="keyword">return</span> left_sum</span><br></pre></td></tr></table></figure>
-
-
+                <div class="postShorten-excerpt">
+                    <p>#%% md</p>
                     
+                        <a
+                            href="/2022/10/28/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97/"
+                            class="postShorten-excerpt_link link"
+                            aria-label=": 随机森林"
+                        >
+                            Continue reading
+                        </a>
                         
-
-
-                    
-                    
-                        <p>
-                            <a
-                                href="/2021/12/17/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/404.%20%E5%B7%A6%E5%8F%B6%E5%AD%90%E4%B9%8B%E5%92%8C/#post-footer"
-                                class="postShorten-excerpt_link link"
-                                aria-label=""
-                            >
-                                Comment and share
-                            </a>
-                        </p>
                     
                 </div>
             
@@ -650,7 +594,7 @@
     </article>
     
     
-    <article class="postShorten postShorten--thumbnailimg-bottom">
+    <article class="postShorten postShorten--thumbnailimg-right">
         <div class="postShorten-wrap">
             
             <div class="postShorten-header">
@@ -658,23 +602,23 @@
                     
                         <a
                             class="link-unstyled"
-                            href="/2021/12/17/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/441.%20%E6%8E%92%E5%88%97%E7%A1%AC%E5%B8%81/"
-                            aria-label=": 441. 排列硬币"
+                            href="/2022/10/28/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92/"
+                            aria-label=": 逻辑回归"
                         >
-                            441. 排列硬币
+                            逻辑回归
                         </a>
                     
                 </h1>
                 <div class="postShorten-meta">
-    <time datetime="2021-12-17T13:02:10+08:00">
+    <time datetime="2022-10-28T21:07:36+08:00">
 	
-		    Dec 17, 2021
+		    Oct 28, 2022
     	
     </time>
     
         <span>in </span>
         
-    <a class="category-link" href="/categories/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/">leecode刷题复习</a>
+    <a class="category-link" href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/">机器学习</a>
 
 
     
@@ -682,25 +626,17 @@
 
             </div>
             
-                <div class="postShorten-content">
-                    <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">arrangeCoins</span>(<span class="params">self, n: <span class="built_in">int</span></span>) -&gt; <span class="built_in">int</span>:</span><br><span class="line">        left = <span class="number">1</span></span><br><span class="line">        right = n</span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">search_II</span>(<span class="params">left,right</span>):</span><br><span class="line">            <span class="keyword">while</span> left&lt;=right:</span><br><span class="line">                half = (left+right)//<span class="number">2</span></span><br><span class="line">                <span class="keyword">if</span> (half+<span class="number">1</span>)*half//<span class="number">2</span> &lt;= n <span class="keyword">and</span> n &lt; (half+<span class="number">1</span>)*(half+<span class="number">2</span>)//<span class="number">2</span>:</span><br><span class="line">                    <span class="keyword">return</span> half</span><br><span class="line">                <span class="keyword">elif</span> n &lt; (half+<span class="number">1</span>)*half//<span class="number">2</span>:</span><br><span class="line">                    <span class="keyword">return</span> search_II(left,half-<span class="number">1</span>)</span><br><span class="line">                <span class="keyword">else</span>:</span><br><span class="line">                    <span class="keyword">return</span> search_II(half+<span class="number">1</span>,right)</span><br><span class="line">        <span class="keyword">return</span> search_II(left,right)</span><br></pre></td></tr></table></figure>
-
-
+                <div class="postShorten-excerpt">
+                    <p>#%% md</p>
                     
+                        <a
+                            href="/2022/10/28/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92/"
+                            class="postShorten-excerpt_link link"
+                            aria-label=": 逻辑回归"
+                        >
+                            Continue reading
+                        </a>
                         
-
-
-                    
-                    
-                        <p>
-                            <a
-                                href="/2021/12/17/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/441.%20%E6%8E%92%E5%88%97%E7%A1%AC%E5%B8%81/#post-footer"
-                                class="postShorten-excerpt_link link"
-                                aria-label=""
-                            >
-                                Comment and share
-                            </a>
-                        </p>
                     
                 </div>
             
@@ -709,7 +645,7 @@
     </article>
     
     
-    <article class="postShorten postShorten--thumbnailimg-bottom">
+    <article class="postShorten postShorten--thumbnailimg-right">
         <div class="postShorten-wrap">
             
             <div class="postShorten-header">
@@ -717,23 +653,23 @@
                     
                         <a
                             class="link-unstyled"
-                            href="/2021/12/17/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/450.%20%E5%88%A0%E9%99%A4%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91%E4%B8%AD%E7%9A%84%E8%8A%82%E7%82%B9/"
-                            aria-label=": 450. 删除二叉搜索树中的节点"
+                            href="/2022/10/28/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E5%86%B3%E7%AD%96%E6%A0%91/"
+                            aria-label=": 决策树"
                         >
-                            450. 删除二叉搜索树中的节点
+                            决策树
                         </a>
                     
                 </h1>
                 <div class="postShorten-meta">
-    <time datetime="2021-12-17T13:02:10+08:00">
+    <time datetime="2022-10-28T21:00:18+08:00">
 	
-		    Dec 17, 2021
+		    Oct 28, 2022
     	
     </time>
     
         <span>in </span>
         
-    <a class="category-link" href="/categories/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/">leecode刷题复习</a>
+    <a class="category-link" href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/">机器学习</a>
 
 
     
@@ -741,25 +677,17 @@
 
             </div>
             
-                <div class="postShorten-content">
-                    <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Definition for a binary tree node.</span></span><br><span class="line"><span class="comment"># class TreeNode:</span></span><br><span class="line"><span class="comment">#     def __init__(self, val=0, left=None, right=None):</span></span><br><span class="line"><span class="comment">#         self.val = val</span></span><br><span class="line"><span class="comment">#         self.left = left</span></span><br><span class="line"><span class="comment">#         self.right = right</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">deleteNode</span>(<span class="params">self, root: <span class="type">Optional</span>[TreeNode], key: <span class="built_in">int</span></span>) -&gt; <span class="type">Optional</span>[TreeNode]:</span><br><span class="line">        <span class="comment"># 基线条件</span></span><br><span class="line">        <span class="keyword">if</span> root==<span class="literal">None</span>: <span class="keyword">return</span> <span class="literal">None</span> <span class="comment"># 没有找到要删除的点。</span></span><br><span class="line">        <span class="keyword">if</span> root.val==key:          <span class="comment"># 有找到要删除的点。 </span></span><br><span class="line">            <span class="keyword">if</span> root.left==<span class="literal">None</span> <span class="keyword">and</span> root.right==<span class="literal">None</span>: <span class="comment"># 在叶子结点</span></span><br><span class="line">                <span class="keyword">return</span> <span class="literal">None</span></span><br><span class="line">            <span class="keyword">elif</span> root.left==<span class="literal">None</span> <span class="keyword">and</span> root.right:     </span><br><span class="line">                <span class="keyword">return</span> root.right </span><br><span class="line">            <span class="keyword">elif</span> root.left <span class="keyword">and</span> root.right==<span class="literal">None</span>:</span><br><span class="line">                <span class="keyword">return</span> root.left</span><br><span class="line">            <span class="keyword">else</span>:                                    <span class="comment"># 左右儿子都不空</span></span><br><span class="line">                cur = root.left</span><br><span class="line">                <span class="keyword">while</span> cur.right:                     <span class="comment"># 把右儿子拼接到左儿子的最大节点右侧。</span></span><br><span class="line">                    cur = cur.right </span><br><span class="line">                cur.right = root.right </span><br><span class="line">                <span class="keyword">return</span> root.left                     <span class="comment"># 删除</span></span><br><span class="line">        <span class="comment"># 递归遍历 重建bst结构</span></span><br><span class="line">        <span class="keyword">if</span> root.val &gt; key:</span><br><span class="line">            root.left = self.deleteNode(root.left,key)</span><br><span class="line">        <span class="keyword">elif</span> root.val &lt; key:</span><br><span class="line">            root.right = self.deleteNode(root.right,key)</span><br><span class="line">        <span class="keyword">return</span> root</span><br></pre></td></tr></table></figure>
-
-
+                <div class="postShorten-excerpt">
+                    <p>#%% md</p>
                     
+                        <a
+                            href="/2022/10/28/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E5%86%B3%E7%AD%96%E6%A0%91/"
+                            class="postShorten-excerpt_link link"
+                            aria-label=": 决策树"
+                        >
+                            Continue reading
+                        </a>
                         
-
-
-                    
-                    
-                        <p>
-                            <a
-                                href="/2021/12/17/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/450.%20%E5%88%A0%E9%99%A4%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91%E4%B8%AD%E7%9A%84%E8%8A%82%E7%82%B9/#post-footer"
-                                class="postShorten-excerpt_link link"
-                                aria-label=""
-                            >
-                                Comment and share
-                            </a>
-                        </p>
                     
                 </div>
             
@@ -768,7 +696,7 @@
     </article>
     
     
-    <article class="postShorten postShorten--thumbnailimg-bottom">
+    <article class="postShorten postShorten--thumbnailimg-right">
         <div class="postShorten-wrap">
             
             <div class="postShorten-header">
@@ -776,23 +704,23 @@
                     
                         <a
                             class="link-unstyled"
-                            href="/2021/12/17/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/501.%20%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91%E4%B8%AD%E7%9A%84%E4%BC%97%E6%95%B0%20/"
-                            aria-label=": 501. 二叉搜索树中的众数 "
+                            href="/2022/10/28/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0/c%E8%AF%AD%E8%A8%80/"
+                            aria-label=": c语言"
                         >
-                            501. 二叉搜索树中的众数 
+                            c语言
                         </a>
                     
                 </h1>
                 <div class="postShorten-meta">
-    <time datetime="2021-12-17T13:02:10+08:00">
+    <time datetime="2022-10-28T20:09:40+08:00">
 	
-		    Dec 17, 2021
+		    Oct 28, 2022
     	
     </time>
     
         <span>in </span>
         
-    <a class="category-link" href="/categories/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/">leecode刷题复习</a>
+    <a class="category-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0/">操作系统学习</a>
 
 
     
@@ -800,25 +728,17 @@
 
             </div>
             
-                <div class="postShorten-content">
-                    <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Definition for a binary tree node.</span></span><br><span class="line"><span class="comment"># class TreeNode:</span></span><br><span class="line"><span class="comment">#     def __init__(self, val=0, left=None, right=None):</span></span><br><span class="line"><span class="comment">#         self.val = val</span></span><br><span class="line"><span class="comment">#         self.left = left</span></span><br><span class="line"><span class="comment">#         self.right = right</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>):</span><br><span class="line">        self.maxValue = <span class="number">0</span></span><br><span class="line">        self.count = <span class="number">0</span></span><br><span class="line">        self.pre = <span class="literal">None</span></span><br><span class="line">        self.result = [] </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">findMode</span>(<span class="params">self, root: <span class="type">Optional</span>[TreeNode]</span>) -&gt; <span class="type">List</span>[<span class="built_in">int</span>]:</span><br><span class="line">        <span class="keyword">if</span> root==<span class="literal">None</span>: </span><br><span class="line">            <span class="keyword">return</span> </span><br><span class="line">        self.findMode(root.left)</span><br><span class="line">        <span class="keyword">if</span> self.pre==<span class="literal">None</span>: </span><br><span class="line">            self.count = <span class="number">1</span></span><br><span class="line">        <span class="keyword">if</span> self.pre!=<span class="literal">None</span> <span class="keyword">and</span> root.val==self.pre.val:</span><br><span class="line">            self.count += <span class="number">1</span></span><br><span class="line">            <span class="comment"># print(&#x27;!!!&#x27;)</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            self.count = <span class="number">1</span></span><br><span class="line">        self.pre = root </span><br><span class="line">        <span class="keyword">if</span> self.maxValue == self.count:</span><br><span class="line">            self.result.append(root.val)</span><br><span class="line">        <span class="keyword">elif</span> self.maxValue &lt; self.count:</span><br><span class="line">            self.maxValue = self.count </span><br><span class="line">            self.result = [root.val] </span><br><span class="line">        <span class="comment"># print(self.result,self.maxValue,self.count)</span></span><br><span class="line">        self.findMode(root.right)</span><br><span class="line">        <span class="keyword">return</span> self.result</span><br></pre></td></tr></table></figure>
-
-
+                <div class="postShorten-excerpt">
+                    <p>​		对于程序员来说内存可以简化成这样一种东西：</p>
                     
+                        <a
+                            href="/2022/10/28/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0/c%E8%AF%AD%E8%A8%80/"
+                            class="postShorten-excerpt_link link"
+                            aria-label=": c语言"
+                        >
+                            Continue reading
+                        </a>
                         
-
-
-                    
-                    
-                        <p>
-                            <a
-                                href="/2021/12/17/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/501.%20%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91%E4%B8%AD%E7%9A%84%E4%BC%97%E6%95%B0%20/#post-footer"
-                                class="postShorten-excerpt_link link"
-                                aria-label=""
-                            >
-                                Comment and share
-                            </a>
-                        </p>
                     
                 </div>
             
@@ -852,7 +772,7 @@
             </a>
           </li>
         
-        <li class="pagination-number">page 6 of 18</li>
+        <li class="pagination-number">page 6 of 24</li>
     </ul>
 </div>
 
