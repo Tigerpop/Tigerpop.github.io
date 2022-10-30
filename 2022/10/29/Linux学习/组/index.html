@@ -127,6 +127,8 @@
 
         <div class="site-overview-wrap sidebar-panel">
           <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="陈宇韶chenyushao"
+      src="/images/my.jpg">
   <p class="site-author-name" itemprop="name">陈宇韶chenyushao</p>
   <div class="site-description" itemprop="description">爱学习、爱工作、爱生活</div>
 </div>
@@ -187,7 +189,7 @@
     <link itemprop="mainEntityOfPage" href="http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E7%BB%84/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="image" content="/images/my.jpg">
       <meta itemprop="name" content="陈宇韶chenyushao">
     </span>
 
@@ -238,28 +240,28 @@
     
     <div class="post-body" itemprop="articleBody">
         <p>简介 <span id="more"></span></p>
-<h1 id="创建组"><a href="#创建组" class="headerlink" title="创建组"></a>创建组</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">su - root // 先进入root用户 才能干下面的所有操作。</span><br></pre></td></tr></table></figure>
+<h1 id="创建组"><a href="#创建组" class="headerlink" title="创建组"></a>创建组</h1><figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">su - root <span class="regexp">//</span> 先进入root用户 才能干下面的所有操作。</span><br></pre></td></tr></table></figure>
 
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">groupadd 组名</span><br></pre></td></tr></table></figure>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">groupadd</span> 组名</span><br></pre></td></tr></table></figure>
 
 <h1 id="新建用户时添加到组"><a href="#新建用户时添加到组" class="headerlink" title="新建用户时添加到组"></a>新建用户时添加到组</h1><p>​		useradd -g 组名 用户名</p>
 <h1 id="修改文件所在组"><a href="#修改文件所在组" class="headerlink" title="修改文件所在组"></a>修改文件所在组</h1><p>​		change group  就是chgrp</p>
 <p>​		哪个用户创建了文件，该文件初始状态就和那个用户在同一个分组。	</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chgrp 组名 文件名      // 改的是文件的分组，不是改用户分组。</span><br></pre></td></tr></table></figure>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chgrp 组名 文件名      <span class="regexp">//</span> 改的是文件的分组，不是改用户分组。</span><br></pre></td></tr></table></figure>
 
 <p>以下就是在root用户下，把原本chen创建的pc.tar.gz改到了boy分组内。		<img src="/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E7%BB%84/image-20220111202027262-7031026.png" alt="image-20220111202027262"></p>
 <p><img src="/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E7%BB%84/image-20220111202046079.png" alt="image-20220111202046079"></p>
 <h1 id="修改用户所在组"><a href="#修改用户所在组" class="headerlink" title="修改用户所在组"></a>修改用户所在组</h1><p>​		先查看用户组</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">id 用户名</span><br></pre></td></tr></table></figure>
+<figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">id</span> 用户名</span><br></pre></td></tr></table></figure>
 
 <p>​		检查有没有我们想创建的组是否存在</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cat /etc/group | grep chen         </span><br><span class="line"></span><br><span class="line">// 看看chen分组是否存在。先把组的信息显示到终端 用管道 配合过滤 看看有没有chen分组，没有就groupadd 一个。</span><br></pre></td></tr></table></figure>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cat <span class="regexp">/etc/g</span>roup | grep chen         </span><br><span class="line"></span><br><span class="line"><span class="regexp">//</span> 看看chen分组是否存在。先把组的信息显示到终端 用管道 配合过滤 看看有没有chen分组，没有就groupadd 一个。</span><br></pre></td></tr></table></figure>
 
 <p>​		改变用户组</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">usermod -g 新组名 用户名</span><br></pre></td></tr></table></figure>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">usermod</span> -g 新组名 用户名</span><br></pre></td></tr></table></figure>
 
 <p>​		改变用户登录的初始目录（用户需要有进入到新目录的权限才行）</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">usermod -d 目录名 用户名</span><br></pre></td></tr></table></figure>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">usermod</span> -d 目录名 用户名</span><br></pre></td></tr></table></figure>
 
 
     </div>

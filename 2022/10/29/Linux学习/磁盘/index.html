@@ -131,6 +131,8 @@
 
         <div class="site-overview-wrap sidebar-panel">
           <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="陈宇韶chenyushao"
+      src="/images/my.jpg">
   <p class="site-author-name" itemprop="name">陈宇韶chenyushao</p>
   <div class="site-description" itemprop="description">爱学习、爱工作、爱生活</div>
 </div>
@@ -191,7 +193,7 @@
     <link itemprop="mainEntityOfPage" href="http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E7%A3%81%E7%9B%98/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="image" content="/images/my.jpg">
       <meta itemprop="name" content="陈宇韶chenyushao">
     </span>
 
@@ -245,7 +247,7 @@
 <h1 id="磁盘挂载"><a href="#磁盘挂载" class="headerlink" title="磁盘挂载"></a>磁盘挂载</h1><p>​		磁盘分区挂载到目录下。</p>
 <p><img src="/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E7%A3%81%E7%9B%98/image-20220113143800382-7030379.png" alt="image-20220113143800382"></p>
 <p>​		</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">lsblk //查看磁盘分配情况</span><br><span class="line">lsblk -f</span><br><span class="line">// UUID 分区唯一标识符</span><br><span class="line">// MOUNTPOINT 挂载点</span><br></pre></td></tr></table></figure>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">lsblk <span class="regexp">//</span>查看磁盘分配情况</span><br><span class="line">lsblk -f</span><br><span class="line"><span class="regexp">//</span> UUID 分区唯一标识符</span><br><span class="line"><span class="regexp">//</span> MOUNTPOINT 挂载点</span><br></pre></td></tr></table></figure>
 
 <p>​		加入一块硬盘，分区，并临时挂载（重启以后挂载失效）。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">//先加入一块新的sd类型磁盘</span><br><span class="line">//reboot 重启，重启后就能识别磁盘。</span><br><span class="line">fdisk /dev/sdb // 给识别的磁盘分区，按提示操作即可，记得w保存。</span><br><span class="line">// 再lsblk -f 可见多了一个 sdbX 。但是还没有uuid 没有 MOUNTPOINT 挂载点。</span><br><span class="line">mkfs -t ext4 /dev/sdb1新分区  //格式化生成UUID。</span><br><span class="line"><span class="built_in">mkdir</span> 文件夹a</span><br><span class="line">mount /dev/sdb1 文件夹a  // 把分区分好的磁盘挂载到文件夹，就有了挂载点。</span><br></pre></td></tr></table></figure>
@@ -259,7 +261,7 @@
 
 
 <h1 id="磁盘情况查询"><a href="#磁盘情况查询" class="headerlink" title="磁盘情况查询"></a>磁盘情况查询</h1><p>​		查询磁盘占用情况</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df -h</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">df</span> -h</span><br></pre></td></tr></table></figure>
 
 <p>​		查询目录占用情况</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">du</span> -h 目录               //仅仅查子目录情况，儿子孙子等等全部都列出来。</span><br><span class="line"><span class="built_in">du</span> -sh                  //列出文件夹（包括儿子孙子等等）总的占空间大小</span><br><span class="line"><span class="built_in">du</span> -h --max-depth=1 目录 //仅仅从目录往下查1个深度 子目录情况。</span><br><span class="line"><span class="built_in">du</span> -ha --max-depth=1 目录 // 同上，但是显示全部文件情况。</span><br><span class="line"><span class="built_in">du</span> -hac --max-depth=1 目录 // 同上，汇总。</span><br></pre></td></tr></table></figure>

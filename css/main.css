@@ -185,7 +185,7 @@ body {
   box-sizing: border-box;
   color: var(--text-color);
   font-family: Lato, 'PingFang SC', 'Microsoft YaHei', sans-serif;
-  font-size: 1em;
+  font-size: 14px;
   line-height: 2;
   min-height: 100%;
   position: relative;
@@ -197,7 +197,7 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: Lato, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  font-family: KaiTi, "Microsoft YaHei", Georgia, sans;
   font-weight: bold;
   line-height: 1.5;
   margin: 30px 0 15px;
@@ -390,7 +390,7 @@ figure.highlight .table-container {
   background-image: linear-gradient(#fcfcfc, #eee);
   border: 1px solid #d5d5d5;
   border-radius: 3px;
-  font-size: 0.8125em;
+  font-size: 0.75em;
   right: 4px;
   top: 8px;
 }
@@ -429,7 +429,7 @@ pre figcaption a:hover {
 }
 pre,
 code {
-  font-family: consolas, Menlo, monospace, 'PingFang SC', 'Microsoft YaHei';
+  font-family: Consolas, Monaco, Menlo, monospace;
 }
 code {
   border-radius: 3px;
@@ -1146,7 +1146,7 @@ header.header {
 }
 .site-subtitle {
   color: #999;
-  font-size: 0.8125em;
+  font-size: 0.75em;
   margin: 10px 0;
 }
 .use-motion .site-title,
@@ -1215,7 +1215,7 @@ header.header {
 .menu-item a {
   border-bottom: 0;
   display: block;
-  font-size: 0.8125em;
+  font-size: 0.75em;
   transition: border-color 0.2s ease-in-out;
 }
 .menu-item a:hover,
@@ -1272,6 +1272,7 @@ header.header {
   border: 2px solid #333;
   max-width: 96px;
   padding: 2px;
+  border-radius: 50%;
 }
 .site-author-name {
   color: #f5f5f5;
@@ -1284,7 +1285,7 @@ header.header {
   margin-top: 5px;
 }
 .links-of-author a {
-  font-size: 0.8125em;
+  font-size: 0.75em;
 }
 .links-of-author .fa,
 .links-of-author .fab,
@@ -1315,7 +1316,7 @@ header.header {
   margin-right: 5px;
 }
 .links-of-blogroll {
-  font-size: 0.8125em;
+  font-size: 0.75em;
 }
 .links-of-blogroll-title {
   font-size: 0.875em;
@@ -1649,10 +1650,6 @@ header.header {
   position: fixed;
   z-index: 30;
   left: 30px;
-  width: 24px;
-}
-.back-to-top span {
-  display: none;
 }
 @media (max-width: 991px) {
   .back-to-top {
@@ -1772,7 +1769,7 @@ header.header {
   border: 1px solid #fff;
   left: -6px;
   position: absolute;
-  top: 0.75em;
+  top: 0.65em;
   transition: background 0.2s ease-in-out;
   border-radius: 50%;
   content: ' ';
@@ -1787,7 +1784,7 @@ header.header {
 }
 .posts-collapse .post-content .post-meta-container {
   display: inline;
-  font-size: 0.75em;
+  font-size: 0.65em;
   margin-right: 10px;
 }
 .posts-collapse .post-content .post-title {
@@ -1999,7 +1996,7 @@ header.header {
 .posts-expand .post-meta-container {
   color: #999;
   font-family: Lato, 'PingFang SC', 'Microsoft YaHei', sans-serif;
-  font-size: 0.75em;
+  font-size: 0.65em;
   margin-top: 3px;
 }
 .posts-expand .post-meta-container .post-description {
@@ -2051,7 +2048,7 @@ header.header {
   top: 2px;
 }
 .post-nav-item .fa {
-  font-size: 0.75em;
+  font-size: 0.65em;
 }
 .post-nav-item:first-child .fa {
   margin-right: 5px;
@@ -2082,7 +2079,7 @@ header.header {
 }
 .post-tags a {
   display: inline-block;
-  font-size: 0.8125em;
+  font-size: 0.75em;
 }
 .post-tags a:not(:last-child) {
   margin-right: 10px;
@@ -2323,7 +2320,7 @@ header.header {
   }
 }
 ul.breadcrumb {
-  font-size: 0.75em;
+  font-size: 0.65em;
   list-style: none;
   margin: 1em 0;
   padding: 0 2em;
@@ -2555,7 +2552,7 @@ ul.breadcrumb li:last-child {
   vertical-align: middle;
 }
 .links-of-author a::before {
-  background: #0e83e7;
+  background: #faffdd;
   display: inline-block;
   margin-right: 3px;
   transform: translateY(-2px);
