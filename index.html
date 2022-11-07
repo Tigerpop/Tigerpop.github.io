@@ -130,7 +130,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">305</span>
+          <span class="site-state-item-count">311</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -170,6 +170,494 @@
 
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/11/07/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/%E7%89%9B%E5%AE%A2%E5%8D%8E%E4%B8%BAHJ35%E8%9B%87%E5%BD%A2%E7%9F%A9%E9%98%B5/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/my.jpg">
+      <meta itemprop="name" content="陈宇韶chenyushao">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tiger_pop's Blog">
+      <meta itemprop="description" content="爱学习、爱工作、爱生活;         微信号: Tiger_and_master;         手机号码:18515678348 ">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | Tiger_pop's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2022/11/07/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/%E7%89%9B%E5%AE%A2%E5%8D%8E%E4%B8%BAHJ35%E8%9B%87%E5%BD%A2%E7%9F%A9%E9%98%B5/" class="post-title-link" itemprop="url">牛客华为HJ35蛇形矩阵</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2022-11-07 21:09:56 / 修改时间：21:20:50" itemprop="dateCreated datePublished" datetime="2022-11-07T21:09:56+08:00">2022-11-07</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">leecode刷题复习</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">a = <span class="built_in">int</span>(<span class="built_in">input</span>())</span><br><span class="line"><span class="comment"># print(a)</span></span><br><span class="line">result = []</span><br><span class="line">pre_0 = <span class="number">1</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(a):      <span class="comment"># 先把每行第一个确定好，然后用最后一行+1 补充到上面一行,迭代。</span></span><br><span class="line">    path = []</span><br><span class="line">    path.append(i+pre_0)</span><br><span class="line">    pre_0 = path[<span class="number">0</span>]</span><br><span class="line">    result.append(path)</span><br><span class="line">    <span class="comment"># print(path)</span></span><br><span class="line"><span class="comment"># print(result)</span></span><br><span class="line">below = []</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(a-<span class="number">1</span>,-<span class="number">1</span>,-<span class="number">1</span>):  <span class="comment"># 用最后一行+1 补充到上面一行,迭代。</span></span><br><span class="line">    <span class="keyword">if</span> below != []:</span><br><span class="line">        result[i].extend(below)</span><br><span class="line">        below = <span class="built_in">map</span>(<span class="keyword">lambda</span> x:x+<span class="number">1</span>,result[i])</span><br><span class="line">        <span class="comment"># print(below) # 可见 &lt;map object at 0x7fbbf85eff10&gt; 要主动转list。</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        below = <span class="built_in">map</span>(<span class="keyword">lambda</span> x:x+<span class="number">1</span>,result[i])</span><br><span class="line"><span class="comment"># print(result)</span></span><br><span class="line"><span class="comment"># 输出</span></span><br><span class="line"><span class="keyword">for</span> value <span class="keyword">in</span> result:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27; &#x27;</span>.join(<span class="built_in">map</span>(<span class="built_in">str</span>,value)))</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/11/07/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/%E7%89%9B%E5%AE%A2%E5%8D%8E%E4%B8%BAHJ23%E5%88%A0%E9%99%A4%E5%AD%97%E7%AC%A6%E4%B8%B2%E4%B8%AD%E5%87%BA%E7%8E%B0%E6%AC%A1%E6%95%B0%E6%9C%80%E5%B0%91%E7%9A%84%E5%AD%97%E7%AC%A6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/my.jpg">
+      <meta itemprop="name" content="陈宇韶chenyushao">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tiger_pop's Blog">
+      <meta itemprop="description" content="爱学习、爱工作、爱生活;         微信号: Tiger_and_master;         手机号码:18515678348 ">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | Tiger_pop's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2022/11/07/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/%E7%89%9B%E5%AE%A2%E5%8D%8E%E4%B8%BAHJ23%E5%88%A0%E9%99%A4%E5%AD%97%E7%AC%A6%E4%B8%B2%E4%B8%AD%E5%87%BA%E7%8E%B0%E6%AC%A1%E6%95%B0%E6%9C%80%E5%B0%91%E7%9A%84%E5%AD%97%E7%AC%A6/" class="post-title-link" itemprop="url">牛客华为HJ23删除字符串中出现次数最少的字符</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2022-11-07 21:09:33 / 修改时间：21:14:02" itemprop="dateCreated datePublished" datetime="2022-11-07T21:09:33+08:00">2022-11-07</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">leecode刷题复习</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <pre><code>    愚蠢的写法。不用python自带的方法，啥都自己写一遍，脑子都用在排错。
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 愚蠢的写法。不用python自带的方法，啥都自己写一遍，脑子都用在排错。</span></span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"></span><br><span class="line">raw_data = [] </span><br><span class="line">less_dict = &#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> line <span class="keyword">in</span> sys.stdin:</span><br><span class="line">    a = line.split()</span><br><span class="line">    <span class="comment"># print(a[0])</span></span><br><span class="line">    raw_data = <span class="built_in">list</span>(a[<span class="number">0</span>])</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> raw_data:</span><br><span class="line">    <span class="keyword">if</span> i <span class="keyword">not</span> <span class="keyword">in</span> less_dict.keys():</span><br><span class="line">        less_dict[i] = <span class="number">1</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        less_dict[i] += <span class="number">1</span> </span><br><span class="line"></span><br><span class="line"><span class="comment"># print(less_dict)</span></span><br><span class="line"><span class="comment"># 在字典内 找出最小的几个。</span></span><br><span class="line">temp = []</span><br><span class="line"><span class="keyword">for</span> key,value <span class="keyword">in</span> less_dict.items():</span><br><span class="line">    <span class="keyword">if</span> temp == []:</span><br><span class="line">        temp.append((key,value))</span><br><span class="line">        last_value = value </span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">if</span> value &lt; last_value:</span><br><span class="line">            temp.pop()</span><br><span class="line">            temp.append((key,value))</span><br><span class="line">            last_value = value </span><br><span class="line">        <span class="keyword">elif</span> value == last_value: </span><br><span class="line">            temp.append((key,value))</span><br><span class="line">    <span class="comment"># print(temp)</span></span><br><span class="line"><span class="comment"># print(temp)</span></span><br><span class="line">small_str = <span class="string">&#x27;&#x27;</span>.join([ _[<span class="number">0</span>] <span class="keyword">for</span> _ <span class="keyword">in</span> temp])</span><br><span class="line"><span class="comment"># print(small_str,&#x27;ok&#x27;)</span></span><br><span class="line"></span><br><span class="line">i ,result = <span class="number">0</span>,[]</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span>  <span class="built_in">range</span>(<span class="built_in">len</span>(raw_data)):</span><br><span class="line">    <span class="keyword">if</span> raw_data[i] <span class="keyword">not</span> <span class="keyword">in</span> small_str:</span><br><span class="line">        result.append(raw_data[i])</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;&#x27;</span>.join(result))</span><br></pre></td></tr></table></figure>
+
+
+
+<p>​		聪明的写法，利用python 各种str和dict方法，集中注意力在思路上，简洁；</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 聪明的写法，利用python 各种str和dict方法，集中注意力在思路上，简洁；</span></span><br><span class="line"><span class="keyword">import</span> sys </span><br><span class="line"></span><br><span class="line">a = <span class="built_in">input</span>()     <span class="comment"># 原始str</span></span><br><span class="line"><span class="comment"># print(a)</span></span><br><span class="line"></span><br><span class="line">c = &#123;&#125;          <span class="comment"># 构建 出现次数的字典；</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> a:</span><br><span class="line">    c[i] = a.count(i)</span><br><span class="line"><span class="comment"># print(c)</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> key,value <span class="keyword">in</span> c.items():     <span class="comment"># 根据 次数字典，在原始str内 把最少的用“”替换掉。</span></span><br><span class="line">    <span class="keyword">if</span> value == <span class="built_in">min</span>(c.values()):</span><br><span class="line">        a = a.replace(key,<span class="string">&quot;&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(a)</span><br></pre></td></tr></table></figure>
+
+
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/11/07/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/%E7%89%9B%E5%AE%A2%E5%8D%8E%E4%B8%BAHJ22-%E6%B1%BD%E6%B0%B4%E7%93%B6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/my.jpg">
+      <meta itemprop="name" content="陈宇韶chenyushao">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tiger_pop's Blog">
+      <meta itemprop="description" content="爱学习、爱工作、爱生活;         微信号: Tiger_and_master;         手机号码:18515678348 ">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | Tiger_pop's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2022/11/07/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/%E7%89%9B%E5%AE%A2%E5%8D%8E%E4%B8%BAHJ22-%E6%B1%BD%E6%B0%B4%E7%93%B6/" class="post-title-link" itemprop="url">牛客华为HJ22_汽水瓶</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2022-11-07 21:09:07 / 修改时间：21:13:30" itemprop="dateCreated datePublished" datetime="2022-11-07T21:09:07+08:00">2022-11-07</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">leecode刷题复习</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="keyword">def</span> <span class="title function_">w_b</span>(<span class="params">a</span>):</span><br><span class="line">    result = []</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">water_bottle</span>(<span class="params">a,result</span>):</span><br><span class="line">        <span class="keyword">if</span> a==<span class="number">2</span>: </span><br><span class="line">            result.append(<span class="number">1</span>)</span><br><span class="line">            <span class="keyword">return</span>  </span><br><span class="line">        <span class="keyword">if</span> a==<span class="number">1</span> <span class="keyword">or</span> a==<span class="number">0</span>:</span><br><span class="line">            <span class="keyword">return</span>  </span><br><span class="line">        water,bottle = a//<span class="number">3</span>,a%<span class="number">3</span></span><br><span class="line">        result.append(water)</span><br><span class="line">        water_bottle(water+bottle,result)</span><br><span class="line">        <span class="keyword">return</span> result</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">sum</span>(water_bottle(a,result))</span><br><span class="line">    </span><br><span class="line"><span class="keyword">for</span> line <span class="keyword">in</span> sys.stdin:</span><br><span class="line">    a = line.split()</span><br><span class="line">    a = <span class="built_in">int</span>(a[<span class="number">0</span>])</span><br><span class="line">    <span class="keyword">if</span> a==<span class="number">0</span>: <span class="keyword">break</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        result = w_b(a)</span><br><span class="line">        <span class="built_in">print</span>(result)</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/11/07/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/%E7%89%9B%E5%AE%A2%E5%8D%8E%E4%B8%BAHJ17-%E5%9D%90%E6%A0%87%E7%A7%BB%E5%8A%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/my.jpg">
+      <meta itemprop="name" content="陈宇韶chenyushao">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tiger_pop's Blog">
+      <meta itemprop="description" content="爱学习、爱工作、爱生活;         微信号: Tiger_and_master;         手机号码:18515678348 ">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | Tiger_pop's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2022/11/07/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/%E7%89%9B%E5%AE%A2%E5%8D%8E%E4%B8%BAHJ17-%E5%9D%90%E6%A0%87%E7%A7%BB%E5%8A%A8/" class="post-title-link" itemprop="url">牛客华为HJ17_坐标移动</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2022-11-07 21:08:55 / 修改时间：21:13:09" itemprop="dateCreated datePublished" datetime="2022-11-07T21:08:55+08:00">2022-11-07</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">leecode刷题复习</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> sys, re </span><br><span class="line">set_asdw = <span class="built_in">set</span>(<span class="string">&#x27;ASDW&#x27;</span>)</span><br><span class="line">set_num = <span class="built_in">set</span>(<span class="string">&quot;1234567890&quot;</span>)</span><br><span class="line">set_all = <span class="built_in">set</span>(<span class="string">&#x27;ASDW1234567890&#x27;</span>)</span><br><span class="line">distance = [] </span><br><span class="line"><span class="keyword">class</span> <span class="title class_">test</span>():</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>):</span><br><span class="line">        self.temp = []</span><br><span class="line">        self.j = <span class="number">0</span></span><br><span class="line">        self.x_change = <span class="number">0</span></span><br><span class="line">        self.y_change = <span class="number">0</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">judge</span>(<span class="params">self,value</span>):</span><br><span class="line">        self.x_change,self.y_change = <span class="number">0</span>,<span class="number">0</span>    <span class="comment"># 每一次 juged 都会 有一个可能的判断，根据true false来看 用不用而已。</span></span><br><span class="line">        <span class="keyword">if</span> value == <span class="literal">None</span>: <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line">        i = <span class="number">0</span></span><br><span class="line">        <span class="keyword">while</span> i&lt;<span class="built_in">len</span>(value):   <span class="comment"># 只让 i 落在 字母上。</span></span><br><span class="line">            <span class="keyword">if</span> value[i] <span class="keyword">not</span> <span class="keyword">in</span> set_asdw:</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">False</span> </span><br><span class="line">            <span class="keyword">if</span> i == <span class="built_in">len</span>(value)-<span class="number">1</span>:  <span class="comment"># 保证 不是字母结尾。</span></span><br><span class="line">                <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line">            <span class="keyword">if</span> value[i+<span class="number">1</span>] <span class="keyword">not</span> <span class="keyword">in</span> set_num:</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line">            <span class="keyword">if</span> i+<span class="number">2</span>&lt;<span class="built_in">len</span>(value) <span class="keyword">and</span> value[i+<span class="number">2</span>] <span class="keyword">not</span> <span class="keyword">in</span> set_all:</span><br><span class="line">                <span class="built_in">print</span>(<span class="string">&#x27;ok,i is:&#x27;</span>,i)</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">False</span> </span><br><span class="line">            self.j = i+<span class="number">1</span>  <span class="comment"># 找到下一个 字符位置，循环开始上面的判断。</span></span><br><span class="line">            <span class="keyword">while</span> self.j&lt;<span class="built_in">len</span>(value) <span class="keyword">and</span> value[self.j] <span class="keyword">in</span> set_num:</span><br><span class="line">                self.temp.append(value[self.j])   <span class="comment"># 把每个字母后面带着的数字找出来，方便后续。</span></span><br><span class="line">                self.j += <span class="number">1</span></span><br><span class="line">                <span class="keyword">if</span> self.j-i &gt;=<span class="number">4</span>: <span class="keyword">return</span> <span class="literal">False</span> </span><br><span class="line">            </span><br><span class="line">            <span class="comment"># 可能的移动</span></span><br><span class="line">            <span class="keyword">if</span> value[i] == <span class="string">&quot;A&quot;</span>: self.x_change -= <span class="built_in">int</span>(<span class="string">&#x27;&#x27;</span>.join(self.temp))</span><br><span class="line">            <span class="keyword">if</span> value[i] == <span class="string">&quot;D&quot;</span>: self.x_change += <span class="built_in">int</span>(<span class="string">&#x27;&#x27;</span>.join(self.temp))</span><br><span class="line">            <span class="keyword">if</span> value[i] == <span class="string">&quot;W&quot;</span>: self.y_change += <span class="built_in">int</span>(<span class="string">&#x27;&#x27;</span>.join(self.temp))</span><br><span class="line">            <span class="keyword">if</span> value[i] == <span class="string">&quot;S&quot;</span>: self.y_change -= <span class="built_in">int</span>(<span class="string">&#x27;&#x27;</span>.join(self.temp))</span><br><span class="line"></span><br><span class="line">            self.temp = []   </span><br><span class="line">            i = self.j  </span><br><span class="line">        <span class="keyword">return</span> <span class="literal">True</span> </span><br><span class="line"><span class="comment"># t = test()</span></span><br><span class="line"><span class="comment"># j = t.judge(&#x27;S1A10&#x27;)</span></span><br><span class="line"><span class="comment"># print(j)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">main</span>():</span><br><span class="line">    [x,y] = <span class="number">0</span>,<span class="number">0</span></span><br><span class="line">    t = test()</span><br><span class="line">    <span class="keyword">for</span> line <span class="keyword">in</span> sys.stdin:</span><br><span class="line">        a = line.split(<span class="string">&#x27;;&#x27;</span>)</span><br><span class="line">        a.pop()</span><br><span class="line">        <span class="keyword">for</span> value <span class="keyword">in</span> a:</span><br><span class="line">            <span class="keyword">if</span> t.judge(value):</span><br><span class="line">                x += t.x_change</span><br><span class="line">                y += t.y_change</span><br><span class="line">    <span class="built_in">print</span>(<span class="built_in">str</span>(x)+<span class="string">&#x27;,&#x27;</span>+<span class="built_in">str</span>(y))</span><br><span class="line">    </span><br><span class="line"><span class="keyword">if</span> __name__==<span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    main()</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/11/07/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/%E7%89%9B%E5%AE%A2%E5%8D%8E%E4%B8%BAHJ16-%E8%B4%AD%E7%89%A9%E5%8D%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/my.jpg">
+      <meta itemprop="name" content="陈宇韶chenyushao">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tiger_pop's Blog">
+      <meta itemprop="description" content="爱学习、爱工作、爱生活;         微信号: Tiger_and_master;         手机号码:18515678348 ">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | Tiger_pop's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2022/11/07/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/%E7%89%9B%E5%AE%A2%E5%8D%8E%E4%B8%BAHJ16-%E8%B4%AD%E7%89%A9%E5%8D%95/" class="post-title-link" itemprop="url">牛客华为HJ16_购物单</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2022-11-07 21:08:35 / 修改时间：21:12:13" itemprop="dateCreated datePublished" datetime="2022-11-07T21:08:35+08:00">2022-11-07</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">leecode刷题复习</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> sys <span class="comment"># 典型的 01 背包问题，只取一次。</span></span><br><span class="line"><span class="comment"># 制作主副件 数据结构</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">build_structure</span>():</span><br><span class="line">    N,m = <span class="built_in">input</span>().split()</span><br><span class="line">    N,m = <span class="built_in">int</span>(N)//<span class="number">10</span>,<span class="built_in">int</span>(m)</span><br><span class="line">    values,utility = [[<span class="number">0</span> <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">3</span>)] <span class="keyword">for</span> s <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>,m+<span class="number">1</span>)],\</span><br><span class="line">    [[<span class="number">0</span> <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">3</span>)]  <span class="keyword">for</span> s <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>,m+<span class="number">1</span>)]</span><br><span class="line">    i = <span class="number">1</span></span><br><span class="line">    <span class="keyword">for</span> line <span class="keyword">in</span> sys.stdin:</span><br><span class="line">        a = line.split()</span><br><span class="line">        v,p,q = <span class="built_in">int</span>(a[<span class="number">0</span>])//<span class="number">10</span>,<span class="built_in">int</span>(a[<span class="number">1</span>]),<span class="built_in">int</span>(a[<span class="number">2</span>])</span><br><span class="line">        <span class="comment"># print(v,p,q)</span></span><br><span class="line">        <span class="keyword">if</span> q != <span class="number">0</span>: <span class="comment"># 附件是 跟在 主键后面。 这个存储结构 模仿的描述图片。可以清晰看见主附件结构。</span></span><br><span class="line">            <span class="keyword">if</span> values[q][<span class="number">1</span>]==<span class="number">0</span>:  <span class="comment"># 附件 1 </span></span><br><span class="line">                values[q][<span class="number">1</span>] = v</span><br><span class="line">                utility[q][<span class="number">1</span>] = p*v</span><br><span class="line">            <span class="keyword">else</span>:                   <span class="comment"># 附件 2</span></span><br><span class="line">                values[q][<span class="number">2</span>] = v</span><br><span class="line">                utility[q][<span class="number">2</span>] = p*v</span><br><span class="line">        <span class="keyword">else</span>:                       <span class="comment"># 主件</span></span><br><span class="line">            values[i][<span class="number">0</span>] = v</span><br><span class="line">            utility[i][<span class="number">0</span>] = p*v</span><br><span class="line">        i += <span class="number">1</span></span><br><span class="line">    <span class="keyword">return</span> values,utility,N,m</span><br><span class="line"></span><br><span class="line"><span class="comment"># d[i][j] 定义为 背包为j容量 ，0-i 产品中任选一个，的效用。</span></span><br><span class="line"><span class="comment"># 初始化</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">init_d</span>():</span><br><span class="line">    d = [ [ <span class="number">0</span> <span class="keyword">for</span> b <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">32001</span>) ] <span class="keyword">for</span> a <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">61</span>)]    </span><br><span class="line">    <span class="keyword">return</span> d</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">bag_0_1</span>(<span class="params">d,values,utility,N,m</span>):   </span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>,m+<span class="number">1</span>):          <span class="comment">#  物件</span></span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>,N+<span class="number">1</span>):      <span class="comment">#  背包                    </span></span><br><span class="line">            d[i][j] = d[i-<span class="number">1</span>][j]     <span class="comment">#  没有满足任何件,取不到 i ; </span></span><br><span class="line">            <span class="keyword">if</span> j &gt;= values[i][<span class="number">0</span>]:   <span class="comment">#  仅仅满足主件</span></span><br><span class="line">                d[i][j] = <span class="built_in">max</span>(d[i][j],d[i-<span class="number">1</span>][j-values[i][<span class="number">0</span>]] + utility[i][<span class="number">0</span>] )</span><br><span class="line">            <span class="keyword">if</span> j &gt;= values[i][<span class="number">0</span>]+values[i][<span class="number">1</span>]:  <span class="comment"># 满足主件 + 第 1 个附件 这里不取的时候，是 d[i][j]，d[i][j] 指的是 上一个if 的结果，像冒泡一样层层递进。</span></span><br><span class="line">                d[i][j] = <span class="built_in">max</span>(d[i][j],d[i-<span class="number">1</span>][j-values[i][<span class="number">0</span>]-values[i][<span class="number">1</span>]] + utility[i][<span class="number">0</span>]+utility[i][<span class="number">1</span>])</span><br><span class="line">            <span class="keyword">if</span> j &gt;= values[i][<span class="number">0</span>]+values[i][<span class="number">2</span>]:   <span class="comment"># 满足主件 + 第 2 个附件</span></span><br><span class="line">                d[i][j] = <span class="built_in">max</span>(d[i][j],d[i-<span class="number">1</span>][j-values[i][<span class="number">0</span>]-values[i][<span class="number">2</span>]] + utility[i][<span class="number">0</span>]+utility[i][<span class="number">2</span>])</span><br><span class="line">            <span class="keyword">if</span> j &gt;= values[i][<span class="number">0</span>]+values[i][<span class="number">1</span>]+values[i][<span class="number">2</span>]:  <span class="comment"># 满足主件 + 第 1 和 第 2 个附件</span></span><br><span class="line">                d[i][j] = <span class="built_in">max</span>(d[i][j],d[i-<span class="number">1</span>][j-values[i][<span class="number">0</span>]-values[i][<span class="number">1</span>]-values[i][<span class="number">2</span>]] + utility[i][<span class="number">0</span>]+utility[i][<span class="number">1</span>]+utility[i][<span class="number">2</span>] )</span><br><span class="line">            <span class="comment"># print(&#x27;ok this is &#x27;,d[i][j])</span></span><br><span class="line">            <span class="comment"># result = d[i][j]</span></span><br><span class="line">            <span class="comment"># 从 5 种情况中找出最大 的 utility 效用。每种情况下 又分 取到这样的i 和没取到这样的 i 两种情况，取他们的最大值，注意 取不到的情况 就是退回到 上一个 if 语句下的 d[i][j] 了，因为他们是环环相扣的，目的就是找出 5种情况下的最大值。</span></span><br><span class="line">    <span class="keyword">return</span> d[i][j]</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__==<span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    d = init_d()</span><br><span class="line">    values,utility,N,m = build_structure()</span><br><span class="line">    result = bag_0_1(d,values,utility,N,m)*<span class="number">10</span></span><br><span class="line">    <span class="built_in">print</span>(result)</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/11/07/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/746%E4%BD%BF%E7%94%A8%E6%9C%80%E5%B0%8F%E8%8A%B1%E8%B4%B9%E7%88%AC%E6%A5%BC%E6%A2%AF/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/my.jpg">
+      <meta itemprop="name" content="陈宇韶chenyushao">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tiger_pop's Blog">
+      <meta itemprop="description" content="爱学习、爱工作、爱生活;         微信号: Tiger_and_master;         手机号码:18515678348 ">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | Tiger_pop's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2022/11/07/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/746%E4%BD%BF%E7%94%A8%E6%9C%80%E5%B0%8F%E8%8A%B1%E8%B4%B9%E7%88%AC%E6%A5%BC%E6%A2%AF/" class="post-title-link" itemprop="url">746使用最小花费爬楼梯</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2022-11-07 21:07:33 / 修改时间：21:10:54" itemprop="dateCreated datePublished" datetime="2022-11-07T21:07:33+08:00">2022-11-07</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">leecode刷题复习</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">minCostClimbingStairs</span>(<span class="params">self, cost: <span class="type">List</span>[<span class="built_in">int</span>]</span>) -&gt; <span class="built_in">int</span>:</span><br><span class="line">    <span class="comment"># 例子1中，题意说的 台阶 0，1，2 之后，其实还有一个终点台阶，这里明确一下。</span></span><br><span class="line">    <span class="comment"># 设定 d[i] 为到第i级 台阶 的花销；</span></span><br><span class="line">    <span class="comment"># 初始化,题意中 0 和 1 可以是起始台阶，所以可以不用花销；</span></span><br><span class="line">    d = [ <span class="number">0</span> <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(cost)+<span class="number">1</span>)]</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">2</span>,<span class="built_in">len</span>(cost)+<span class="number">1</span>):                <span class="comment"># 爬楼梯遍历 一定是从 0 到 大；</span></span><br><span class="line">        d[i] = <span class="built_in">min</span>(d[i-<span class="number">1</span>]+cost[i-<span class="number">1</span>],d[i-<span class="number">2</span>]+cost[i-<span class="number">2</span>]) <span class="comment"># 走两级 和 走一级 台阶 花销的最小值；</span></span><br><span class="line">        <span class="comment"># print(d[i])</span></span><br><span class="line">    <span class="keyword">return</span> d[-<span class="number">1</span>]</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -515,536 +1003,8 @@
 
 
 
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/10/29/windows_ubuntu%E5%8F%8C%E7%B3%BB%E7%BB%9F/Ubuntu%E4%B8%8A%E5%AE%89%E8%A3%85gpu%E7%9A%84xgoost%E4%BB%A5%E5%8F%8A%E9%85%8D%E7%BD%AEcuda%E7%AD%89/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/my.jpg">
-      <meta itemprop="name" content="陈宇韶chenyushao">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tiger_pop's Blog">
-      <meta itemprop="description" content="爱学习、爱工作、爱生活;         微信号: Tiger_and_master;         手机号码:18515678348 ">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Tiger_pop's Blog">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2022/10/29/windows_ubuntu%E5%8F%8C%E7%B3%BB%E7%BB%9F/Ubuntu%E4%B8%8A%E5%AE%89%E8%A3%85gpu%E7%9A%84xgoost%E4%BB%A5%E5%8F%8A%E9%85%8D%E7%BD%AEcuda%E7%AD%89/" class="post-title-link" itemprop="url">Ubuntu上安装gpu的xgoost以及配置cuda等</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-      
-
-      <time title="创建时间：2022-10-29 23:10:16 / 修改时间：23:18:37" itemprop="dateCreated datePublished" datetime="2022-10-29T23:10:16+08:00">2022-10-29</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/windows-ubuntu%E5%8F%8C%E7%B3%BB%E7%BB%9F/" itemprop="url" rel="index"><span itemprop="name">windows_ubuntu双系统</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>这是文章开头，显示在主页面，详情请点击此处。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2022/10/29/windows_ubuntu%E5%8F%8C%E7%B3%BB%E7%BB%9F/Ubuntu%E4%B8%8A%E5%AE%89%E8%A3%85gpu%E7%9A%84xgoost%E4%BB%A5%E5%8F%8A%E9%85%8D%E7%BD%AEcuda%E7%AD%89/">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/10/29/windows_ubuntu%E5%8F%8C%E7%B3%BB%E7%BB%9F/ubuntu%E6%89%A9%E5%AE%B9/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/my.jpg">
-      <meta itemprop="name" content="陈宇韶chenyushao">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tiger_pop's Blog">
-      <meta itemprop="description" content="爱学习、爱工作、爱生活;         微信号: Tiger_and_master;         手机号码:18515678348 ">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Tiger_pop's Blog">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2022/10/29/windows_ubuntu%E5%8F%8C%E7%B3%BB%E7%BB%9F/ubuntu%E6%89%A9%E5%AE%B9/" class="post-title-link" itemprop="url">ubuntu扩容</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-      
-
-      <time title="创建时间：2022-10-29 23:09:57 / 修改时间：23:18:37" itemprop="dateCreated datePublished" datetime="2022-10-29T23:09:57+08:00">2022-10-29</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/windows-ubuntu%E5%8F%8C%E7%B3%BB%E7%BB%9F/" itemprop="url" rel="index"><span itemprop="name">windows_ubuntu双系统</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>这是文章开头，显示在主页面，详情请点击此处。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2022/10/29/windows_ubuntu%E5%8F%8C%E7%B3%BB%E7%BB%9F/ubuntu%E6%89%A9%E5%AE%B9/">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/10/29/spark%E5%AD%A6%E4%B9%A0/spark-%E5%86%B3%E7%AD%96%E6%A0%91-%E7%9B%B8%E4%BA%B2%E5%86%B3%E7%AD%96%E6%A1%88%E4%BE%8B/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/my.jpg">
-      <meta itemprop="name" content="陈宇韶chenyushao">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tiger_pop's Blog">
-      <meta itemprop="description" content="爱学习、爱工作、爱生活;         微信号: Tiger_and_master;         手机号码:18515678348 ">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Tiger_pop's Blog">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2022/10/29/spark%E5%AD%A6%E4%B9%A0/spark-%E5%86%B3%E7%AD%96%E6%A0%91-%E7%9B%B8%E4%BA%B2%E5%86%B3%E7%AD%96%E6%A1%88%E4%BE%8B/" class="post-title-link" itemprop="url">spark_决策树-相亲决策案例</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2022-10-29 22:44:07" itemprop="dateCreated datePublished" datetime="2022-10-29T22:44:07+08:00">2022-10-29</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2022-10-30 01:55:32" itemprop="dateModified" datetime="2022-10-30T01:55:32+08:00">2022-10-30</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/spark/" itemprop="url" rel="index"><span itemprop="name">spark</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>这是文章开头，显示在主页面，详情请点击此处。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2022/10/29/spark%E5%AD%A6%E4%B9%A0/spark-%E5%86%B3%E7%AD%96%E6%A0%91-%E7%9B%B8%E4%BA%B2%E5%86%B3%E7%AD%96%E6%A1%88%E4%BE%8B/">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/10/29/spark%E5%AD%A6%E4%B9%A0/sparkstreaming-%E5%86%85%E6%B6%B5structurestreaming/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/my.jpg">
-      <meta itemprop="name" content="陈宇韶chenyushao">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tiger_pop's Blog">
-      <meta itemprop="description" content="爱学习、爱工作、爱生活;         微信号: Tiger_and_master;         手机号码:18515678348 ">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Tiger_pop's Blog">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2022/10/29/spark%E5%AD%A6%E4%B9%A0/sparkstreaming-%E5%86%85%E6%B6%B5structurestreaming/" class="post-title-link" itemprop="url">sparkstreaming_内涵structurestreaming</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2022-10-29 22:42:11" itemprop="dateCreated datePublished" datetime="2022-10-29T22:42:11+08:00">2022-10-29</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2022-10-30 02:13:28" itemprop="dateModified" datetime="2022-10-30T02:13:28+08:00">2022-10-30</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/spark/" itemprop="url" rel="index"><span itemprop="name">spark</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>这是文章开头，显示在主页面，详情请点击此处。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2022/10/29/spark%E5%AD%A6%E4%B9%A0/sparkstreaming-%E5%86%85%E6%B6%B5structurestreaming/">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/10/29/spark%E5%AD%A6%E4%B9%A0/SparkSQL/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/my.jpg">
-      <meta itemprop="name" content="陈宇韶chenyushao">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tiger_pop's Blog">
-      <meta itemprop="description" content="爱学习、爱工作、爱生活;         微信号: Tiger_and_master;         手机号码:18515678348 ">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Tiger_pop's Blog">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2022/10/29/spark%E5%AD%A6%E4%B9%A0/SparkSQL/" class="post-title-link" itemprop="url">SparkSQL</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-      
-
-      <time title="创建时间：2022-10-29 22:41:37 / 修改时间：23:00:20" itemprop="dateCreated datePublished" datetime="2022-10-29T22:41:37+08:00">2022-10-29</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/spark/" itemprop="url" rel="index"><span itemprop="name">spark</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>这是文章开头，显示在主页面，详情请点击此处。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2022/10/29/spark%E5%AD%A6%E4%B9%A0/SparkSQL/">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/10/29/spark%E5%AD%A6%E4%B9%A0/spark%E5%9F%BA%E7%A1%80%E5%85%A5%E9%97%A8%E5%8F%8A%E5%AE%89%E8%A3%85%E9%83%A8%E7%BD%B2/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/my.jpg">
-      <meta itemprop="name" content="陈宇韶chenyushao">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tiger_pop's Blog">
-      <meta itemprop="description" content="爱学习、爱工作、爱生活;         微信号: Tiger_and_master;         手机号码:18515678348 ">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Tiger_pop's Blog">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2022/10/29/spark%E5%AD%A6%E4%B9%A0/spark%E5%9F%BA%E7%A1%80%E5%85%A5%E9%97%A8%E5%8F%8A%E5%AE%89%E8%A3%85%E9%83%A8%E7%BD%B2/" class="post-title-link" itemprop="url">spark基础入门及安装部署</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-      
-
-      <time title="创建时间：2022-10-29 22:41:18 / 修改时间：22:57:11" itemprop="dateCreated datePublished" datetime="2022-10-29T22:41:18+08:00">2022-10-29</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/spark/" itemprop="url" rel="index"><span itemprop="name">spark</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>这是文章开头，显示在主页面，详情请点击此处。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2022/10/29/spark%E5%AD%A6%E4%B9%A0/spark%E5%9F%BA%E7%A1%80%E5%85%A5%E9%97%A8%E5%8F%8A%E5%AE%89%E8%A3%85%E9%83%A8%E7%BD%B2/">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/31/">31</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/32/">32</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 </div>
