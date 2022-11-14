@@ -10085,4 +10085,43 @@ plt.show()
         <category>leecode刷题复习</category>
       </categories>
   </entry>
+  <entry>
+    <title>343整数拆分</title>
+    <url>/2022/11/14/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/343%E6%95%B4%E6%95%B0%E6%8B%86%E5%88%86/</url>
+    <content><![CDATA[<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">integerBreak</span>(<span class="params">self, n: <span class="built_in">int</span></span>) -&gt; <span class="built_in">int</span>:</span><br><span class="line">        <span class="comment"># 动态规划，设定d[i] 为将i拆分后，能够得到的最大乘积数；</span></span><br><span class="line">        <span class="comment"># 拆成两个是 j*(i-j); 拆成三个以及三个以上是 j*d[i-j]，因为 d[i-j]递归拆下去至少是两个;</span></span><br><span class="line">        <span class="comment"># 初始化</span></span><br><span class="line">        d = [<span class="number">0</span> <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(n+<span class="number">1</span>)]</span><br><span class="line">        d[<span class="number">0</span>],d[<span class="number">1</span>],d[<span class="number">2</span>] = <span class="number">0</span>,<span class="number">0</span>,<span class="number">1</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">3</span>,n+<span class="number">1</span>):   <span class="comment"># 对每一个i 都试着切分，取出最大的结果。</span></span><br><span class="line">            <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>,i):</span><br><span class="line">                d[i] = <span class="built_in">max</span>(d[i],j*(i-j),j*d[i-j])</span><br><span class="line">        <span class="keyword">return</span> d[n]</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>leecode刷题复习</category>
+      </categories>
+      <tags>
+        <tag>动态规划</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>96不同的二叉搜索树</title>
+    <url>/2022/11/14/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/96%E4%B8%8D%E5%90%8C%E7%9A%84%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91/</url>
+    <content><![CDATA[<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">numTrees</span>(<span class="params">self, n: <span class="built_in">int</span></span>) -&gt; <span class="built_in">int</span>:</span><br><span class="line">        <span class="comment"># 一道经典的动态规划题；</span></span><br><span class="line">        <span class="comment"># 直接根据题目问题定义 d[i] = i 个节点 对应的二叉搜索树种类数；</span></span><br><span class="line">        <span class="comment"># 任意个数的节点的总的二叉搜索树种树，总能以之前的节点数的二叉搜索树 推到而来；</span></span><br><span class="line">        <span class="comment"># 如果能够固定 根节点 ，那可能出现的二叉搜索树种类数量就有一个确定的关系：</span></span><br><span class="line">        <span class="comment"># 可能种数 = 左边节点数对应的种数 * 右边节点数对应的种数；</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># 由于搜索树的 左边一定比 根 小，右边一定比 根大，以三个节点为例子分析：分为三种情况</span></span><br><span class="line">        <span class="comment"># 情况一：1 为根；情况二：2为根；情况三：3为根；  </span></span><br><span class="line">        <span class="comment"># 情况一中，1 的左边是 0个节点，右边是2个节点；         种数 = d[0]*d[3-0-1=2]    </span></span><br><span class="line">        <span class="comment"># 情况二中：2 的左边是 1个节点，右边是 1 个节点；       种数 = d[1]*d[3-1-1=1]</span></span><br><span class="line">        <span class="comment"># 情况三中：3的左边是2个节点，右边是0 个节点；          种数 = d[2]*d[3-2-1=0]</span></span><br><span class="line">        <span class="comment"># 三种情况 求和才是 总的种类数；</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># 初始化： d[0] = 1 ; d[1] = 1; 但是 d的其他元素都要从0初始化，因为d涉及到累加求和；</span></span><br><span class="line">        <span class="comment"># 同时 d[1] = 1; 也不应该写出来，因为涉及到累加求和，d[1] 应该要推算出来才能保证结果正确；</span></span><br><span class="line">        <span class="comment"># 遍历顺序，考虑到递推公式是从小推大，所以从小遍历即可；</span></span><br><span class="line">        d = [<span class="number">0</span> <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(n+<span class="number">1</span>)]</span><br><span class="line">        d[<span class="number">0</span>] = <span class="number">1</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>,n+<span class="number">1</span>):        <span class="comment"># 针对每一个i ，都有多种情况用 左边节点数 j 分开讨论汇总；</span></span><br><span class="line">            <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(i):        <span class="comment"># j 总是在 [0-i) 的左闭右开区间内；</span></span><br><span class="line">                d[i] += d[j]*d[i-j-<span class="number">1</span>]</span><br><span class="line">            <span class="comment"># print(d[i])     # 打印 检查;</span></span><br><span class="line">        <span class="keyword">return</span> d[n]</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>leecode刷题复习</category>
+      </categories>
+      <tags>
+        <tag>动态规划</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>牛客华为HJ71字符串通配符</title>
+    <url>/2022/11/14/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/%E7%89%9B%E5%AE%A2%E5%8D%8E%E4%B8%BAHJ71%E5%AD%97%E7%AC%A6%E4%B8%B2%E9%80%9A%E9%85%8D%E7%AC%A6/</url>
+    <content><![CDATA[<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 上下 两个字符串完全 一致才能返回true。</span></span><br><span class="line"><span class="comment"># 而不是 下面 串 包括上面的串就行。</span></span><br><span class="line"><span class="comment"># 可以通过 改变正则的模式匹配 ，利用正则避开复杂的算法过程。题目主要是把正则模式中的 数量关系定义改了。那我们就把 正则按照他们的要求修改一下就好了。</span></span><br><span class="line"><span class="keyword">import</span> re </span><br><span class="line">a,b = <span class="built_in">input</span>(),<span class="built_in">input</span>()</span><br><span class="line">a = a.lower() <span class="comment"># 因为不区分大小写，a和b我们统一成小写。</span></span><br><span class="line">b = b.lower()</span><br><span class="line"><span class="comment"># print(a)</span></span><br><span class="line">a = a.replace( <span class="string">&#x27;.&#x27;</span>,<span class="string">&#x27;\.&#x27;</span>).replace(<span class="string">&#x27;?&#x27;</span>,<span class="string">&#x27;[A-Za-z0-9]&#123;1&#125;&#x27;</span>).replace(<span class="string">&#x27;*&#x27;</span>,<span class="string">&#x27;[A-Za-z0-9]*&#x27;</span>)</span><br><span class="line">result = re.findall(a,b)</span><br><span class="line"><span class="comment"># print(a,b)</span></span><br><span class="line"><span class="keyword">if</span> b <span class="keyword">in</span> result:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;true&#x27;</span>)</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;false&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>leecode刷题复习</category>
+      </categories>
+      <tags>
+        <tag>正则化</tag>
+      </tags>
+  </entry>
 </search>
