@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2022-11-25T12:37:52.389Z</updated>
+  <updated>2022-11-28T14:11:49.792Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,52 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>322零钱兑换</title>
+    <link href="http://example.com/2022/11/28/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/322%E9%9B%B6%E9%92%B1%E5%85%91%E6%8D%A2/"/>
+    <id>http://example.com/2022/11/28/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/322%E9%9B%B6%E9%92%B1%E5%85%91%E6%8D%A2/</id>
+    <published>2022-11-28T14:10:27.000Z</published>
+    <updated>2022-11-28T14:11:49.792Z</updated>
+    
+    <content type="html"><![CDATA[<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">coinChange</span>(<span class="params">self, coins: <span class="type">List</span>[<span class="built_in">int</span>], amount: <span class="built_in">int</span></span>) -&gt; <span class="built_in">int</span>:</span><br><span class="line">        <span class="comment"># 经典的 完全背包问题，在固定背包容量情况下，求凑满背包 最少的物品数；</span></span><br><span class="line">        <span class="comment"># 设定 d[j] 为 j容量下， 凑满背包 最少物品数为 d[j]；</span></span><br><span class="line">        <span class="comment"># 完全背包还是 要正序遍历 背包，参考 《518零钱兑换II》</span></span><br><span class="line">        <span class="comment"># d[j] = 有i物品和没i物品的最少值 = min( d[j-weight[i]]+1 , d[j] )</span></span><br><span class="line">        <span class="comment"># 注意初始化为了不让 min 导致值被覆盖，所以初始化为 一个很大的值。只有d[0]=0</span></span><br><span class="line">        d = [<span class="number">2</span>**<span class="number">31</span>-<span class="number">1</span> <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(amount+<span class="number">1</span>)]</span><br><span class="line">        d[<span class="number">0</span>]=<span class="number">0</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(coins)):</span><br><span class="line">            <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(coins[i],amount+<span class="number">1</span>):</span><br><span class="line">                d[j] = <span class="built_in">min</span>(d[j],d[j-coins[i]]+<span class="number">1</span>)</span><br><span class="line">                <span class="comment"># print(d)</span></span><br><span class="line">        <span class="keyword">if</span> d[amount]==<span class="number">2</span>**<span class="number">31</span>-<span class="number">1</span>:       <span class="comment"># 递推公式没起作用，找不到对应的最小数量。</span></span><br><span class="line">            <span class="keyword">return</span> -<span class="number">1</span></span><br><span class="line">        <span class="keyword">return</span> d[amount]</span><br></pre></td></tr></table></figure>]]></content>
+    
+    
+    <summary type="html">这是文章开头，显示在主页面，详情请点击此处。</summary>
+    
+    
+    
+    <category term="leecode刷题复习" scheme="http://example.com/categories/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/"/>
+    
+    
+    <category term="动态规划" scheme="http://example.com/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/"/>
+    
+    <category term="完全背包" scheme="http://example.com/tags/%E5%AE%8C%E5%85%A8%E8%83%8C%E5%8C%85/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>377组合总和Ⅳ</title>
+    <link href="http://example.com/2022/11/28/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/377%E7%BB%84%E5%90%88%E6%80%BB%E5%92%8C%E2%85%A3/"/>
+    <id>http://example.com/2022/11/28/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/377%E7%BB%84%E5%90%88%E6%80%BB%E5%92%8C%E2%85%A3/</id>
+    <published>2022-11-28T14:08:54.000Z</published>
+    <updated>2022-11-28T14:10:10.762Z</updated>
+    
+    <content type="html"><![CDATA[<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">combinationSum4</span>(<span class="params">self, nums: <span class="type">List</span>[<span class="built_in">int</span>], target: <span class="built_in">int</span></span>) -&gt; <span class="built_in">int</span>:</span><br><span class="line">        <span class="comment"># 又是固定 背包容量 target，求 有多少种方法凑。</span></span><br><span class="line">        <span class="comment"># 非常类似于 《518零钱兑换二》，也是一个这样的完全背包问题，但是这里凑法和顺序有关，属于排列而不是组合，因此遍历顺序不会先固定物品，因此先遍历背包再遍历物品，由于是完全背包拿的次数不限，背包是正序遍历。</span></span><br><span class="line">        d = [<span class="number">0</span> <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(target+<span class="number">1</span>)]</span><br><span class="line">        d[<span class="number">0</span>] = <span class="number">1</span></span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>,target+<span class="number">1</span>):</span><br><span class="line">            <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(nums)):</span><br><span class="line">                <span class="keyword">if</span> j&gt;=nums[i]:         <span class="comment"># 还是要保证 j-weight[i]&gt;=0 这是递推公式先决条件</span></span><br><span class="line">                    d[j] += d[j-nums[i]]</span><br><span class="line">                <span class="comment"># print(d)         </span></span><br><span class="line">        <span class="keyword">return</span> d[target]</span><br></pre></td></tr></table></figure>]]></content>
+    
+    
+    <summary type="html">这是文章开头，显示在主页面，详情请点击此处。</summary>
+    
+    
+    
+    <category term="leecode刷题复习" scheme="http://example.com/categories/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/"/>
+    
+    
+    <category term="动态规划" scheme="http://example.com/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/"/>
+    
+    <category term="完全背包" scheme="http://example.com/tags/%E5%AE%8C%E5%85%A8%E8%83%8C%E5%8C%85/"/>
+    
+  </entry>
   
   <entry>
     <title>SQL143每份试卷每月作答数和截止当月的作答总数</title>
@@ -387,44 +433,6 @@
     <updated>2022-11-11T14:54:26.300Z</updated>
     
     <content type="html"><![CDATA[<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 非常典型的滑动窗口题目。</span></span><br><span class="line"><span class="comment"># 在长串 上有一个游走的虚拟 窗口，将窗口内的内容和 短的串比较，看看有多少个重复元素。</span></span><br><span class="line"><span class="comment"># 窗口的 左边索引是l ，右边索引是r。</span></span><br><span class="line"><span class="comment"># 但是我自己动手写了一遍，发现滑动窗口的写法并不好写。于是换动态规划来写。</span></span><br><span class="line"><span class="comment"># 换动态规划：</span></span><br><span class="line"><span class="comment"># 设定 d[i][j] 为 a[i-1] b[j-1] 结尾的字符串的公共子串长度；</span></span><br><span class="line"><span class="comment"># 则 d[i][j] 在 a[i-1] == b[j-1] 情况下，需要更新 为 d[i][j] = d[i-1][j-1] + 1</span></span><br><span class="line"><span class="comment"># 这种在 某种情况下更新的 递推公式，往往最大值不会出现在最后，需要max求结果。</span></span><br><span class="line"></span><br><span class="line">a,b = <span class="built_in">input</span>(),<span class="built_in">input</span>()</span><br><span class="line">d = [[ <span class="number">0</span> <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(b)+<span class="number">1</span>)] <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(a)+<span class="number">1</span>)] <span class="comment"># 初始化 </span></span><br><span class="line">result = [<span class="number">0</span>]</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>,<span class="built_in">len</span>(a)+<span class="number">1</span>):</span><br><span class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>,<span class="built_in">len</span>(b)+<span class="number">1</span>):</span><br><span class="line">        <span class="keyword">if</span> a[i-<span class="number">1</span>] == b[j-<span class="number">1</span>]:</span><br><span class="line">            d[i][j] = d[i-<span class="number">1</span>][j-<span class="number">1</span>] + <span class="number">1</span></span><br><span class="line">            result.append(d[i][j])</span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">max</span>(result))</span><br></pre></td></tr></table></figure>]]></content>
-    
-    
-    <summary type="html">这是文章开头，显示在主页面，详情请点击此处。</summary>
-    
-    
-    
-    <category term="leecode刷题复习" scheme="http://example.com/categories/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/"/>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>牛客华为HJ77火车进站</title>
-    <link href="http://example.com/2022/11/11/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/%E7%89%9B%E5%AE%A2%E5%8D%8E%E4%B8%BAHJ77%E7%81%AB%E8%BD%A6%E8%BF%9B%E7%AB%99/"/>
-    <id>http://example.com/2022/11/11/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/%E7%89%9B%E5%AE%A2%E5%8D%8E%E4%B8%BAHJ77%E7%81%AB%E8%BD%A6%E8%BF%9B%E7%AB%99/</id>
-    <published>2022-11-11T14:53:04.000Z</published>
-    <updated>2022-11-11T14:53:39.925Z</updated>
-    
-    <content type="html"><![CDATA[<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 这道题目考了俩个 考点：</span></span><br><span class="line"><span class="comment"># 1、dfs回溯算法 写全排列 参考 leecode 46. 全排列</span></span><br><span class="line"><span class="comment"># 2、判断是否为合法栈输出 参考 leecode 946. 验证栈序列</span></span><br><span class="line"><span class="comment"># 我在这里直接用两个方法 封装起来了,把判断是否合法 嵌入回溯算法中，不然用两个方法前后相衔接的方式写，会超时。。</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">dfs</span>(<span class="params">values,nums</span>):</span><br><span class="line">    path,result,used = [],[],[<span class="literal">False</span> <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(nums)]</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">dfs_inner</span>(<span class="params">values</span>):</span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">len</span>(path)==nums:</span><br><span class="line">            <span class="keyword">if</span> illegal(path.copy()):     <span class="comment"># 把判断是否合法 嵌入回溯算法中，不然用两个方法前后相衔接的方式写，会超时。</span></span><br><span class="line">                result.append(path.copy())</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(nums):</span><br><span class="line">            <span class="keyword">if</span> used[i]==<span class="literal">True</span>:</span><br><span class="line">                <span class="keyword">continue</span> </span><br><span class="line">            used[i] = <span class="literal">True</span> </span><br><span class="line">            path.append(values[i])</span><br><span class="line">            dfs_inner(values)       <span class="comment"># 排列和组合这里有区别，这里是排列。</span></span><br><span class="line">            path.pop()</span><br><span class="line">            used[i] = <span class="literal">False</span> </span><br><span class="line">    dfs_inner(values)</span><br><span class="line">    <span class="keyword">return</span> result </span><br><span class="line">        </span><br><span class="line"><span class="keyword">def</span> <span class="title function_">illegal</span>(<span class="params">result</span>)-&gt;<span class="built_in">bool</span>:            <span class="comment"># 模拟入栈、出栈，判断出栈顺序是否合理.</span></span><br><span class="line">    stack_ = []</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> values:   <span class="comment"># 入栈</span></span><br><span class="line">        stack_.append(i)</span><br><span class="line">        <span class="keyword">while</span> stack_!=[] <span class="keyword">and</span> stack_[-<span class="number">1</span>]==result[<span class="number">0</span>]: <span class="comment"># 栈顶==出栈值，栈和出栈序列一起弹出;</span></span><br><span class="line">            stack_.pop()</span><br><span class="line">            result.pop(<span class="number">0</span>)</span><br><span class="line">    <span class="keyword">if</span> stack_==[]: </span><br><span class="line">        <span class="keyword">return</span> <span class="literal">True</span> </span><br><span class="line">    <span class="keyword">else</span>: <span class="keyword">return</span> <span class="literal">False</span> </span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__==<span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    nums = <span class="built_in">int</span>(<span class="built_in">input</span>())</span><br><span class="line">    values = <span class="built_in">input</span>().split(<span class="string">&#x27; &#x27;</span>)</span><br><span class="line"></span><br><span class="line">    result_all = <span class="built_in">sorted</span>(dfs(values,nums))</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> result_all:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&#x27; &#x27;</span>.join(i))</span><br><span class="line"></span><br></pre></td></tr></table></figure>]]></content>
-    
-    
-    <summary type="html">这是文章开头，显示在主页面，详情请点击此处。</summary>
-    
-    
-    
-    <category term="leecode刷题复习" scheme="http://example.com/categories/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/"/>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>946验证栈序列</title>
-    <link href="http://example.com/2022/11/11/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/946%E9%AA%8C%E8%AF%81%E6%A0%88%E5%BA%8F%E5%88%97/"/>
-    <id>http://example.com/2022/11/11/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/946%E9%AA%8C%E8%AF%81%E6%A0%88%E5%BA%8F%E5%88%97/</id>
-    <published>2022-11-11T14:51:36.000Z</published>
-    <updated>2022-11-11T14:52:53.707Z</updated>
-    
-    <content type="html"><![CDATA[<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">validateStackSequences</span>(<span class="params">self, pushed: <span class="type">List</span>[<span class="built_in">int</span>], popped: <span class="type">List</span>[<span class="built_in">int</span>]</span>) -&gt; <span class="built_in">bool</span>:</span><br><span class="line">        <span class="comment"># 入栈 出栈 模拟</span></span><br><span class="line">        stack_ = []</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> pushed:</span><br><span class="line">            stack_.append(i)</span><br><span class="line">            <span class="keyword">while</span> <span class="built_in">len</span>(stack_)!= <span class="number">0</span> <span class="keyword">and</span> stack_[-<span class="number">1</span>] == popped[<span class="number">0</span>]:</span><br><span class="line">                stack_.pop()</span><br><span class="line">                popped.pop(<span class="number">0</span>)</span><br><span class="line">        <span class="keyword">if</span> stack_==[]:</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">True</span> </span><br><span class="line">        <span class="keyword">else</span>: <span class="keyword">return</span> <span class="literal">False</span> </span><br></pre></td></tr></table></figure>]]></content>
     
     
     <summary type="html">这是文章开头，显示在主页面，详情请点击此处。</summary>

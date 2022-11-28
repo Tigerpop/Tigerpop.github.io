@@ -10331,4 +10331,32 @@ plt.show()
         <tag>窗口函数</tag>
       </tags>
   </entry>
+  <entry>
+    <title>322零钱兑换</title>
+    <url>/2022/11/28/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/322%E9%9B%B6%E9%92%B1%E5%85%91%E6%8D%A2/</url>
+    <content><![CDATA[<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">coinChange</span>(<span class="params">self, coins: <span class="type">List</span>[<span class="built_in">int</span>], amount: <span class="built_in">int</span></span>) -&gt; <span class="built_in">int</span>:</span><br><span class="line">        <span class="comment"># 经典的 完全背包问题，在固定背包容量情况下，求凑满背包 最少的物品数；</span></span><br><span class="line">        <span class="comment"># 设定 d[j] 为 j容量下， 凑满背包 最少物品数为 d[j]；</span></span><br><span class="line">        <span class="comment"># 完全背包还是 要正序遍历 背包，参考 《518零钱兑换II》</span></span><br><span class="line">        <span class="comment"># d[j] = 有i物品和没i物品的最少值 = min( d[j-weight[i]]+1 , d[j] )</span></span><br><span class="line">        <span class="comment"># 注意初始化为了不让 min 导致值被覆盖，所以初始化为 一个很大的值。只有d[0]=0</span></span><br><span class="line">        d = [<span class="number">2</span>**<span class="number">31</span>-<span class="number">1</span> <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(amount+<span class="number">1</span>)]</span><br><span class="line">        d[<span class="number">0</span>]=<span class="number">0</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(coins)):</span><br><span class="line">            <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(coins[i],amount+<span class="number">1</span>):</span><br><span class="line">                d[j] = <span class="built_in">min</span>(d[j],d[j-coins[i]]+<span class="number">1</span>)</span><br><span class="line">                <span class="comment"># print(d)</span></span><br><span class="line">        <span class="keyword">if</span> d[amount]==<span class="number">2</span>**<span class="number">31</span>-<span class="number">1</span>:       <span class="comment"># 递推公式没起作用，找不到对应的最小数量。</span></span><br><span class="line">            <span class="keyword">return</span> -<span class="number">1</span></span><br><span class="line">        <span class="keyword">return</span> d[amount]</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>leecode刷题复习</category>
+      </categories>
+      <tags>
+        <tag>动态规划</tag>
+        <tag>完全背包</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>377组合总和Ⅳ</title>
+    <url>/2022/11/28/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/377%E7%BB%84%E5%90%88%E6%80%BB%E5%92%8C%E2%85%A3/</url>
+    <content><![CDATA[<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">combinationSum4</span>(<span class="params">self, nums: <span class="type">List</span>[<span class="built_in">int</span>], target: <span class="built_in">int</span></span>) -&gt; <span class="built_in">int</span>:</span><br><span class="line">        <span class="comment"># 又是固定 背包容量 target，求 有多少种方法凑。</span></span><br><span class="line">        <span class="comment"># 非常类似于 《518零钱兑换二》，也是一个这样的完全背包问题，但是这里凑法和顺序有关，属于排列而不是组合，因此遍历顺序不会先固定物品，因此先遍历背包再遍历物品，由于是完全背包拿的次数不限，背包是正序遍历。</span></span><br><span class="line">        d = [<span class="number">0</span> <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(target+<span class="number">1</span>)]</span><br><span class="line">        d[<span class="number">0</span>] = <span class="number">1</span></span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>,target+<span class="number">1</span>):</span><br><span class="line">            <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(nums)):</span><br><span class="line">                <span class="keyword">if</span> j&gt;=nums[i]:         <span class="comment"># 还是要保证 j-weight[i]&gt;=0 这是递推公式先决条件</span></span><br><span class="line">                    d[j] += d[j-nums[i]]</span><br><span class="line">                <span class="comment"># print(d)         </span></span><br><span class="line">        <span class="keyword">return</span> d[target]</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>leecode刷题复习</category>
+      </categories>
+      <tags>
+        <tag>动态规划</tag>
+        <tag>完全背包</tag>
+      </tags>
+  </entry>
 </search>
