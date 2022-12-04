@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2022-12-03T03:33:30.291Z</updated>
+  <updated>2022-12-04T13:20:38.643Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,46 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>安装生物信息用到的包遇到的问题</title>
+    <link href="http://example.com/2022/12/04/%E7%94%9F%E7%89%A9%E4%BF%A1%E6%81%AF%E6%8A%80%E6%9C%AF%E5%85%A5%E9%97%A8/%E5%AE%89%E8%A3%85%E7%94%9F%E7%89%A9%E4%BF%A1%E6%81%AF%E7%94%A8%E5%88%B0%E7%9A%84%E5%8C%85%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98/"/>
+    <id>http://example.com/2022/12/04/%E7%94%9F%E7%89%A9%E4%BF%A1%E6%81%AF%E6%8A%80%E6%9C%AF%E5%85%A5%E9%97%A8/%E5%AE%89%E8%A3%85%E7%94%9F%E7%89%A9%E4%BF%A1%E6%81%AF%E7%94%A8%E5%88%B0%E7%9A%84%E5%8C%85%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98/</id>
+    <published>2022-12-04T13:04:32.000Z</published>
+    <updated>2022-12-04T13:20:38.643Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="遇到的问题"><a href="#遇到的问题" class="headerlink" title="遇到的问题"></a>遇到的问题</h1><h2 id="sudo-conda-找不到命令"><a href="#sudo-conda-找不到命令" class="headerlink" title="sudo conda 找不到命令"></a><code>sudo conda</code> 找不到命令</h2><p>​在用户的<code>./bashrc</code>文件下添加</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">alias sudo=&quot;sudo env PATH=$PATH&quot;</span><br></pre></td></tr></table></figure><h2 id="multiqc工具包下载失败，或不匹配报错"><a href="#multiqc工具包下载失败，或不匹配报错" class="headerlink" title="multiqc工具包下载失败，或不匹配报错"></a><code>multiqc</code>工具包下载失败，或不匹配报错</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo conda install -c bioconda -c conda-forge multiqc</span><br></pre></td></tr></table></figure>]]></content>
+    
+    
+    <summary type="html">这是文章开头，显示在主页面，详情请点击此处。</summary>
+    
+    
+    
+    <category term="生物信息技术入门" scheme="http://example.com/categories/%E7%94%9F%E7%89%A9%E4%BF%A1%E6%81%AF%E6%8A%80%E6%9C%AF%E5%85%A5%E9%97%A8/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>198打家劫舍</title>
+    <link href="http://example.com/2022/12/04/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/198%E6%89%93%E5%AE%B6%E5%8A%AB%E8%88%8D/"/>
+    <id>http://example.com/2022/12/04/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/198%E6%89%93%E5%AE%B6%E5%8A%AB%E8%88%8D/</id>
+    <published>2022-12-04T13:00:47.000Z</published>
+    <updated>2022-12-04T13:02:04.833Z</updated>
+    
+    <content type="html"><![CDATA[<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">rob</span>(<span class="params">self, nums: <span class="type">List</span>[<span class="built_in">int</span>]</span>) -&gt; <span class="built_in">int</span>:</span><br><span class="line">        <span class="comment"># 一道经典的 动态规划题。</span></span><br><span class="line">        <span class="comment"># d[j] 定义为 到 j 号房间为止，能够偷窃到的最高金额;</span></span><br><span class="line">        <span class="comment"># d[j] 有两种情况：</span></span><br><span class="line">        <span class="comment"># 情况一： 取到j号房间的钱了，那之前抢劫的房间就只能考虑到 j-2 号房间，因为不能连续房间抢劫。</span></span><br><span class="line">        <span class="comment"># 情况二： 没有取到j号房间的钱，那之前抢劫的房间能考虑到 j-1 号房间。</span></span><br><span class="line">        <span class="comment"># d[j] = max(情况一,情况二) = max(d[j-2]+j号房间的钱,d[j-1])</span></span><br><span class="line">        <span class="comment"># 遍历顺序 从小到大即可</span></span><br><span class="line">        <span class="comment"># 初始化 d[0] = 0号的钱。 d[1] = max(1号，0号)</span></span><br><span class="line">        d = [<span class="number">0</span> <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(nums))]</span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">len</span>(nums)==<span class="number">1</span>: <span class="keyword">return</span> nums[<span class="number">0</span>]</span><br><span class="line">        <span class="keyword">elif</span> <span class="built_in">len</span>(nums)==<span class="number">2</span>: <span class="keyword">return</span> <span class="built_in">max</span>(nums[<span class="number">0</span>],nums[<span class="number">1</span>])</span><br><span class="line">        d[<span class="number">0</span>],d[<span class="number">1</span>] = nums[<span class="number">0</span>],<span class="built_in">max</span>(nums[<span class="number">0</span>],nums[<span class="number">1</span>])</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">2</span>,<span class="built_in">len</span>(nums)):</span><br><span class="line">            d[i] = <span class="built_in">max</span>(d[i-<span class="number">2</span>]+nums[i],d[i-<span class="number">1</span>])</span><br><span class="line">            <span class="built_in">print</span>(d)</span><br><span class="line">        <span class="keyword">return</span> d[<span class="built_in">len</span>(nums)-<span class="number">1</span>]</span><br></pre></td></tr></table></figure>]]></content>
+    
+    
+    <summary type="html">这是文章开头，显示在主页面，详情请点击此处。</summary>
+    
+    
+    
+    <category term="leecode刷题复习" scheme="http://example.com/categories/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/"/>
+    
+    
+    <category term="动态规划" scheme="http://example.com/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/"/>
+    
+  </entry>
   
   <entry>
     <title>279完全平方数</title>
@@ -407,48 +447,6 @@
     
     
     <category term="动态规划" scheme="http://example.com/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>343整数拆分</title>
-    <link href="http://example.com/2022/11/14/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/343%E6%95%B4%E6%95%B0%E6%8B%86%E5%88%86/"/>
-    <id>http://example.com/2022/11/14/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/343%E6%95%B4%E6%95%B0%E6%8B%86%E5%88%86/</id>
-    <published>2022-11-14T14:10:24.000Z</published>
-    <updated>2022-11-14T14:13:01.847Z</updated>
-    
-    <content type="html"><![CDATA[<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">integerBreak</span>(<span class="params">self, n: <span class="built_in">int</span></span>) -&gt; <span class="built_in">int</span>:</span><br><span class="line">        <span class="comment"># 动态规划，设定d[i] 为将i拆分后，能够得到的最大乘积数；</span></span><br><span class="line">        <span class="comment"># 拆成两个是 j*(i-j); 拆成三个以及三个以上是 j*d[i-j]，因为 d[i-j]递归拆下去至少是两个;</span></span><br><span class="line">        <span class="comment"># 初始化</span></span><br><span class="line">        d = [<span class="number">0</span> <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(n+<span class="number">1</span>)]</span><br><span class="line">        d[<span class="number">0</span>],d[<span class="number">1</span>],d[<span class="number">2</span>] = <span class="number">0</span>,<span class="number">0</span>,<span class="number">1</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">3</span>,n+<span class="number">1</span>):   <span class="comment"># 对每一个i 都试着切分，取出最大的结果。</span></span><br><span class="line">            <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>,i):</span><br><span class="line">                d[i] = <span class="built_in">max</span>(d[i],j*(i-j),j*d[i-j])</span><br><span class="line">        <span class="keyword">return</span> d[n]</span><br></pre></td></tr></table></figure>]]></content>
-    
-    
-    <summary type="html">这是文章开头，显示在主页面，详情请点击此处。</summary>
-    
-    
-    
-    <category term="leecode刷题复习" scheme="http://example.com/categories/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/"/>
-    
-    
-    <category term="动态规划" scheme="http://example.com/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>牛客华为HJ71字符串通配符</title>
-    <link href="http://example.com/2022/11/14/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/%E7%89%9B%E5%AE%A2%E5%8D%8E%E4%B8%BAHJ71%E5%AD%97%E7%AC%A6%E4%B8%B2%E9%80%9A%E9%85%8D%E7%AC%A6/"/>
-    <id>http://example.com/2022/11/14/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/%E7%89%9B%E5%AE%A2%E5%8D%8E%E4%B8%BAHJ71%E5%AD%97%E7%AC%A6%E4%B8%B2%E9%80%9A%E9%85%8D%E7%AC%A6/</id>
-    <published>2022-11-14T14:09:47.000Z</published>
-    <updated>2022-11-14T14:13:49.211Z</updated>
-    
-    <content type="html"><![CDATA[<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 上下 两个字符串完全 一致才能返回true。</span></span><br><span class="line"><span class="comment"># 而不是 下面 串 包括上面的串就行。</span></span><br><span class="line"><span class="comment"># 可以通过 改变正则的模式匹配 ，利用正则避开复杂的算法过程。题目主要是把正则模式中的 数量关系定义改了。那我们就把 正则按照他们的要求修改一下就好了。</span></span><br><span class="line"><span class="keyword">import</span> re </span><br><span class="line">a,b = <span class="built_in">input</span>(),<span class="built_in">input</span>()</span><br><span class="line">a = a.lower() <span class="comment"># 因为不区分大小写，a和b我们统一成小写。</span></span><br><span class="line">b = b.lower()</span><br><span class="line"><span class="comment"># print(a)</span></span><br><span class="line">a = a.replace( <span class="string">&#x27;.&#x27;</span>,<span class="string">&#x27;\.&#x27;</span>).replace(<span class="string">&#x27;?&#x27;</span>,<span class="string">&#x27;[A-Za-z0-9]&#123;1&#125;&#x27;</span>).replace(<span class="string">&#x27;*&#x27;</span>,<span class="string">&#x27;[A-Za-z0-9]*&#x27;</span>)</span><br><span class="line">result = re.findall(a,b)</span><br><span class="line"><span class="comment"># print(a,b)</span></span><br><span class="line"><span class="keyword">if</span> b <span class="keyword">in</span> result:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;true&#x27;</span>)</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;false&#x27;</span>)</span><br></pre></td></tr></table></figure>]]></content>
-    
-    
-    <summary type="html">这是文章开头，显示在主页面，详情请点击此处。</summary>
-    
-    
-    
-    <category term="leecode刷题复习" scheme="http://example.com/categories/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/"/>
-    
-    
-    <category term="正则化" scheme="http://example.com/tags/%E6%AD%A3%E5%88%99%E5%8C%96/"/>
     
   </entry>
   
