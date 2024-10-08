@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2024-09-29T07:59:15.536Z</updated>
+  <updated>2024-10-08T09:07:11.803Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,29 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>ubuntu拓展目录大小</title>
+    <link href="http://example.com/2024/10/08/Linux%E5%AD%A6%E4%B9%A0/ubuntu%E6%8B%93%E5%B1%95%E7%9B%AE%E5%BD%95%E5%A4%A7%E5%B0%8F/"/>
+    <id>http://example.com/2024/10/08/Linux%E5%AD%A6%E4%B9%A0/ubuntu%E6%8B%93%E5%B1%95%E7%9B%AE%E5%BD%95%E5%A4%A7%E5%B0%8F/</id>
+    <published>2024-10-08T04:12:07.000Z</published>
+    <updated>2024-10-08T09:07:11.803Z</updated>
+    
+    <content type="html"><![CDATA[<p>简介 <span id="more"></span></p><h1 id="前提："><a href="#前提：" class="headerlink" title="前提："></a>前提：</h1><p>硬盘500g，只显示100g可用。</p><h1 id="处理："><a href="#处理：" class="headerlink" title="处理："></a>处理：</h1><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">sudo vgdisplay <span class="comment">#查看卷组和逻辑卷的情况</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 假设您的逻辑卷名称是 ubuntu--vg-ubuntu--lv（从之前的 lsblk 输出中推）</span></span><br><span class="line">sudo lvextend -l +100%FREE /dev/ubuntu-vg/ubuntu-lv</span><br><span class="line"></span><br><span class="line"><span class="comment"># 还需要扩展文件系统以使用新的空间。假设根目录使用的是 ext4 文件系统（从之前的 lsblk 输出可以看到）</span></span><br><span class="line">sudo resize2fs /dev/ubuntu-vg/ubuntu-lv</span><br><span class="line"></span><br><span class="line"><span class="comment"># 确认文件系统是否已经成功扩展</span></span><br><span class="line"><span class="built_in">df</span> -h /</span><br><span class="line"></span><br></pre></td></tr></table></figure><p>补充</p><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 如果显示类型为 xfs，那么您可以使用以下命令扩展文件系统</span></span><br><span class="line">sudo xfs_growfs /</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用的是 Btrfs 文件系统，您可以使用 btrfs 工具进行扩展</span></span><br><span class="line">sudo btrfs filesystem resize max /</span><br><span class="line"></span><br></pre></td></tr></table></figure><h1 id="总结："><a href="#总结：" class="headerlink" title="总结："></a>总结：</h1><p>ext4 文件系统：使用 resize2fs 扩展。<br>XFS 文件系统：使用 xfs_growfs 扩展。<br>Btrfs 文件系统：使用 btrfs filesystem resize 扩展。</p>]]></content>
+    
+    
+    <summary type="html">这是文章开头，显示在主页面，详情请点击此处。</summary>
+    
+    
+    
+    <category term="Linux" scheme="http://example.com/categories/Linux/"/>
+    
+    
+    <category term="ubuntu" scheme="http://example.com/tags/ubuntu/"/>
+    
+    <category term="扩容" scheme="http://example.com/tags/%E6%89%A9%E5%AE%B9/"/>
+    
+  </entry>
   
   <entry>
     <title>GPU服务器软件笔记</title>
@@ -434,29 +457,6 @@
     
     
     <category term="动态规划" scheme="http://example.com/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>279完全平方数</title>
-    <link href="http://example.com/2022/12/03/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/279%E5%AE%8C%E5%85%A8%E5%B9%B3%E6%96%B9%E6%95%B0/"/>
-    <id>http://example.com/2022/12/03/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/279%E5%AE%8C%E5%85%A8%E5%B9%B3%E6%96%B9%E6%95%B0/</id>
-    <published>2022-12-03T03:31:14.000Z</published>
-    <updated>2022-12-03T03:33:30.291Z</updated>
-    
-    <content type="html"><![CDATA[<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">numSquares</span>(<span class="params">self, n: <span class="built_in">int</span></span>) -&gt; <span class="built_in">int</span>:</span><br><span class="line">        <span class="comment"># 还是一个完全背包的问题，装满背包的最小物品数量。</span></span><br><span class="line">        <span class="comment"># d[j] 是 j容量 下 能装满的最小的数量。</span></span><br><span class="line">        d = [<span class="number">10</span>**<span class="number">4</span> <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(n+<span class="number">1</span>)]</span><br><span class="line">        d[<span class="number">0</span>] = <span class="number">0</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>,n+<span class="number">1</span>):</span><br><span class="line">            <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(i**<span class="number">2</span>,n+<span class="number">1</span>):</span><br><span class="line">                d[j] = <span class="built_in">min</span>(d[j-i**<span class="number">2</span>]+<span class="number">1</span>,d[j])</span><br><span class="line">                <span class="comment"># print(d)</span></span><br><span class="line">        <span class="keyword">return</span> d[-<span class="number">1</span>]</span><br><span class="line">        </span><br></pre></td></tr></table></figure>]]></content>
-    
-    
-    <summary type="html">这是文章开头，显示在主页面，详情请点击此处。</summary>
-    
-    
-    
-    <category term="leecode刷题复习" scheme="http://example.com/categories/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/"/>
-    
-    
-    <category term="动态规划" scheme="http://example.com/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/"/>
-    
-    <category term="完全背包" scheme="http://example.com/tags/%E5%AE%8C%E5%85%A8%E8%83%8C%E5%8C%85/"/>
     
   </entry>
   

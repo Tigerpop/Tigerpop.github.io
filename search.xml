@@ -11101,4 +11101,26 @@ elif (zscore_rightdev &lt; g.sell) and (len(context.portfolio.positions.keys()) 
         <tag>窗口函数</tag>
       </tags>
   </entry>
+  <entry>
+    <title>ubuntu拓展目录大小</title>
+    <url>/2024/10/08/Linux%E5%AD%A6%E4%B9%A0/ubuntu%E6%8B%93%E5%B1%95%E7%9B%AE%E5%BD%95%E5%A4%A7%E5%B0%8F/</url>
+    <content><![CDATA[<p>简介 <span id="more"></span></p>
+<h1 id="前提："><a href="#前提：" class="headerlink" title="前提："></a>前提：</h1><p>硬盘500g，只显示100g可用。</p>
+<h1 id="处理："><a href="#处理：" class="headerlink" title="处理："></a>处理：</h1><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">sudo vgdisplay <span class="comment">#查看卷组和逻辑卷的情况</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 假设您的逻辑卷名称是 ubuntu--vg-ubuntu--lv（从之前的 lsblk 输出中推）</span></span><br><span class="line">sudo lvextend -l +100%FREE /dev/ubuntu-vg/ubuntu-lv</span><br><span class="line"></span><br><span class="line"><span class="comment"># 还需要扩展文件系统以使用新的空间。假设根目录使用的是 ext4 文件系统（从之前的 lsblk 输出可以看到）</span></span><br><span class="line">sudo resize2fs /dev/ubuntu-vg/ubuntu-lv</span><br><span class="line"></span><br><span class="line"><span class="comment"># 确认文件系统是否已经成功扩展</span></span><br><span class="line"><span class="built_in">df</span> -h /</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>补充</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 如果显示类型为 xfs，那么您可以使用以下命令扩展文件系统</span></span><br><span class="line">sudo xfs_growfs /</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用的是 Btrfs 文件系统，您可以使用 btrfs 工具进行扩展</span></span><br><span class="line">sudo btrfs filesystem resize max /</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="总结："><a href="#总结：" class="headerlink" title="总结："></a>总结：</h1><p>ext4 文件系统：使用 resize2fs 扩展。<br>XFS 文件系统：使用 xfs_growfs 扩展。<br>Btrfs 文件系统：使用 btrfs filesystem resize 扩展。</p>
+]]></content>
+      <categories>
+        <category>Linux</category>
+      </categories>
+      <tags>
+        <tag>ubuntu</tag>
+        <tag>扩容</tag>
+      </tags>
+  </entry>
 </search>
