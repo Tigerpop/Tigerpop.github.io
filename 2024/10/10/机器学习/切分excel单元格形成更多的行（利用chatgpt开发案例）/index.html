@@ -19,22 +19,24 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.13.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="背景：我想实现这样的效果（原始）  （处理后）  实践利用chatgpt缩短开发时间 向chatpgt提问1、不可用阶段1咱们一步一步来，python实现，先运行这个脚本，命令端口 要求输入 excel 文件位置（包括文件名），以及待处理的 字段名称。  1234567891011121314151617181920212223import pandas as pddef process_exce">
+    <meta name="description" content="这是文章开头，显示在主页面，详情请点击此处。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Tiger_pop&#39;s Blog">
+<meta property="og:title" content="切分excel单元格形成更多的行（利用chatgpt开发案例）">
 <meta property="og:url" content="http://example.com/2024/10/10/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E5%88%87%E5%88%86excel%E5%8D%95%E5%85%83%E6%A0%BC%E5%BD%A2%E6%88%90%E6%9B%B4%E5%A4%9A%E7%9A%84%E8%A1%8C%EF%BC%88%E5%88%A9%E7%94%A8chatgpt%E5%BC%80%E5%8F%91%E6%A1%88%E4%BE%8B%EF%BC%89/index.html">
 <meta property="og:site_name" content="Tiger_pop&#39;s Blog">
-<meta property="og:description" content="背景：我想实现这样的效果（原始）  （处理后）  实践利用chatgpt缩短开发时间 向chatpgt提问1、不可用阶段1咱们一步一步来，python实现，先运行这个脚本，命令端口 要求输入 excel 文件位置（包括文件名），以及待处理的 字段名称。  1234567891011121314151617181920212223import pandas as pddef process_exce">
+<meta property="og:description" content="这是文章开头，显示在主页面，详情请点击此处。">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://example.com/2024/10/10/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E5%88%87%E5%88%86excel%E5%8D%95%E5%85%83%E6%A0%BC%E5%BD%A2%E6%88%90%E6%9B%B4%E5%A4%9A%E7%9A%84%E8%A1%8C%EF%BC%88%E5%88%A9%E7%94%A8chatgpt%E5%BC%80%E5%8F%91%E6%A1%88%E4%BE%8B%EF%BC%89/58e2c3c89ef9df119d685e8fee77bdf.png">
 <meta property="og:image" content="http://example.com/2024/10/10/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E5%88%87%E5%88%86excel%E5%8D%95%E5%85%83%E6%A0%BC%E5%BD%A2%E6%88%90%E6%9B%B4%E5%A4%9A%E7%9A%84%E8%A1%8C%EF%BC%88%E5%88%A9%E7%94%A8chatgpt%E5%BC%80%E5%8F%91%E6%A1%88%E4%BE%8B%EF%BC%89/bc587e457de3aa64435646efb6fc2fa.png">
 <meta property="og:image" content="http://example.com/2024/10/10/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E5%88%87%E5%88%86excel%E5%8D%95%E5%85%83%E6%A0%BC%E5%BD%A2%E6%88%90%E6%9B%B4%E5%A4%9A%E7%9A%84%E8%A1%8C%EF%BC%88%E5%88%A9%E7%94%A8chatgpt%E5%BC%80%E5%8F%91%E6%A1%88%E4%BE%8B%EF%BC%89/8e4d28f62933af62272db0ef6ca4ea1.png">
 <meta property="og:image" content="http://example.com/2024/10/10/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E5%88%87%E5%88%86excel%E5%8D%95%E5%85%83%E6%A0%BC%E5%BD%A2%E6%88%90%E6%9B%B4%E5%A4%9A%E7%9A%84%E8%A1%8C%EF%BC%88%E5%88%A9%E7%94%A8chatgpt%E5%BC%80%E5%8F%91%E6%A1%88%E4%BE%8B%EF%BC%89/58e2c3c89ef9df119d685e8fee77bdf.png">
 <meta property="og:image" content="http://example.com/2024/10/10/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E5%88%87%E5%88%86excel%E5%8D%95%E5%85%83%E6%A0%BC%E5%BD%A2%E6%88%90%E6%9B%B4%E5%A4%9A%E7%9A%84%E8%A1%8C%EF%BC%88%E5%88%A9%E7%94%A8chatgpt%E5%BC%80%E5%8F%91%E6%A1%88%E4%BE%8B%EF%BC%89/bc587e457de3aa64435646efb6fc2fa.png">
-<meta property="article:published_time" content="2024-10-10T01:20:55.126Z">
-<meta property="article:modified_time" content="2024-10-10T02:26:47.844Z">
+<meta property="article:published_time" content="2024-10-10T02:35:24.000Z">
+<meta property="article:modified_time" content="2024-10-10T02:36:33.052Z">
 <meta property="article:author" content="陈宇韶chenyushao">
-<meta property="article:tag" content="生命在于运动">
+<meta property="article:tag" content="chatgpt">
+<meta property="article:tag" content="pandas">
+<meta property="article:tag" content="excel">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http://example.com/2024/10/10/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E5%88%87%E5%88%86excel%E5%8D%95%E5%85%83%E6%A0%BC%E5%BD%A2%E6%88%90%E6%9B%B4%E5%A4%9A%E7%9A%84%E8%A1%8C%EF%BC%88%E5%88%A9%E7%94%A8chatgpt%E5%BC%80%E5%8F%91%E6%A1%88%E4%BE%8B%EF%BC%89/58e2c3c89ef9df119d685e8fee77bdf.png">
 
@@ -43,10 +45,10 @@
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2024/10/10/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E5%88%87%E5%88%86excel%E5%8D%95%E5%85%83%E6%A0%BC%E5%BD%A2%E6%88%90%E6%9B%B4%E5%A4%9A%E7%9A%84%E8%A1%8C%EF%BC%88%E5%88%A9%E7%94%A8chatgpt%E5%BC%80%E5%8F%91%E6%A1%88%E4%BE%8B%EF%BC%89/","path":"2024/10/10/机器学习/切分excel单元格形成更多的行（利用chatgpt开发案例）/","title":""}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2024/10/10/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E5%88%87%E5%88%86excel%E5%8D%95%E5%85%83%E6%A0%BC%E5%BD%A2%E6%88%90%E6%9B%B4%E5%A4%9A%E7%9A%84%E8%A1%8C%EF%BC%88%E5%88%A9%E7%94%A8chatgpt%E5%BC%80%E5%8F%91%E6%A1%88%E4%BE%8B%EF%BC%89/","path":"2024/10/10/机器学习/切分excel单元格形成更多的行（利用chatgpt开发案例）/","title":"切分excel单元格形成更多的行（利用chatgpt开发案例）"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title> | Tiger_pop's Blog</title>
+<title>切分excel单元格形成更多的行（利用chatgpt开发案例） | Tiger_pop's Blog</title>
   
 
 
@@ -150,7 +152,7 @@
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">122</span>
+        <span class="site-state-item-count">125</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -202,12 +204,12 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | Tiger_pop's Blog">
-      <meta itemprop="description" content="">
+      <meta itemprop="name" content="切分excel单元格形成更多的行（利用chatgpt开发案例） | Tiger_pop's Blog">
+      <meta itemprop="description" content="这是文章开头，显示在主页面，详情请点击此处。">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          
+          切分excel单元格形成更多的行（利用chatgpt开发案例）
         </h1>
 
         <div class="post-meta-container">
@@ -219,12 +221,22 @@
       <span class="post-meta-item-text">发表于</span>
       
 
-      <time title="创建时间：2024-10-10 09:20:55 / 修改时间：10:26:47" itemprop="dateCreated datePublished" datetime="2024-10-10T09:20:55+08:00">2024-10-10</time>
+      <time title="创建时间：2024-10-10 10:35:24 / 修改时间：10:36:33" itemprop="dateCreated datePublished" datetime="2024-10-10T10:35:24+08:00">2024-10-10</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a>
+        </span>
     </span>
 
   
 </div>
 
+            <div class="post-description">这是文章开头，显示在主页面，详情请点击此处。</div>
         </div>
       </header>
 
@@ -321,6 +333,11 @@
     
 
     <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/chatgpt/" rel="tag"># chatgpt</a>
+              <a href="/tags/pandas/" rel="tag"># pandas</a>
+              <a href="/tags/excel/" rel="tag"># excel</a>
+          </div>
 
         
 

@@ -11124,7 +11124,7 @@ elif (zscore_rightdev &lt; g.sell) and (len(context.portfolio.positions.keys()) 
       </tags>
   </entry>
   <entry>
-    <title></title>
+    <title>切分excel单元格形成更多的行（利用chatgpt开发案例）</title>
     <url>/2024/10/10/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E5%88%87%E5%88%86excel%E5%8D%95%E5%85%83%E6%A0%BC%E5%BD%A2%E6%88%90%E6%9B%B4%E5%A4%9A%E7%9A%84%E8%A1%8C%EF%BC%88%E5%88%A9%E7%94%A8chatgpt%E5%BC%80%E5%8F%91%E6%A1%88%E4%BE%8B%EF%BC%89/</url>
     <content><![CDATA[<h1 id="背景："><a href="#背景：" class="headerlink" title="背景："></a>背景：</h1><p>我想实现这样的效果<br>（原始）</p>
 <p><img src="/2024/10/10/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E5%88%87%E5%88%86excel%E5%8D%95%E5%85%83%E6%A0%BC%E5%BD%A2%E6%88%90%E6%9B%B4%E5%A4%9A%E7%9A%84%E8%A1%8C%EF%BC%88%E5%88%A9%E7%94%A8chatgpt%E5%BC%80%E5%8F%91%E6%A1%88%E4%BE%8B%EF%BC%89/58e2c3c89ef9df119d685e8fee77bdf.png" alt="58e2c3c89ef9df119d685e8fee77bdf"></p>
@@ -11208,5 +11208,13 @@ elif (zscore_rightdev &lt; g.sell) and (len(context.portfolio.positions.keys()) 
 <p>但是，需要对总体流程有一定的了解。</p>
 <p><strong>这意味着以后的学习和工作中，对大框架结构的学习和对大致流程的掌握非常非常重要，而对具体的技法要求降低，不要把太多精力放在耗时的细节问题上</strong></p>
 ]]></content>
+      <categories>
+        <category>机器学习</category>
+      </categories>
+      <tags>
+        <tag>chatgpt</tag>
+        <tag>pandas</tag>
+        <tag>excel</tag>
+      </tags>
   </entry>
 </search>
