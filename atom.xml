@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2024-10-10T02:36:33.052Z</updated>
+  <updated>2024-10-13T14:30:34.311Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,29 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Ventoy工具</title>
+    <link href="http://example.com/2024/10/13/%E8%A3%85%E6%9C%BA/ventoy%E5%B7%A5%E5%85%B7/"/>
+    <id>http://example.com/2024/10/13/%E8%A3%85%E6%9C%BA/ventoy%E5%B7%A5%E5%85%B7/</id>
+    <published>2024-10-13T03:32:10.000Z</published>
+    <updated>2024-10-13T14:30:34.311Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>​我之前用的rufu 工具一个u盘只能制作一个 系统启动盘，我买了一堆u盘，挺搞笑的。</p><p>​其实用这个 ventoy 工具 制作u盘就可以让一个u盘制作成多系统安装工具，一个u盘就可以进入多个不同的系统，像什么 clonezilla Windows7 Windows10 Windows11 ubuntu centos 等等啦。</p><h1 id="下载使用"><a href="#下载使用" class="headerlink" title="下载使用"></a>下载使用</h1><h2 id="下载"><a href="#下载" class="headerlink" title="下载"></a>下载</h2><p>​下载网址：      (<a href="https://www.ventoy.net/cn/">https://www.ventoy.net/cn/</a>)</p><p><img src="/2024/10/13/%E8%A3%85%E6%9C%BA/ventoy%E5%B7%A5%E5%85%B7/%E6%88%AA%E5%B1%8F2024-10-13%2021.37.30.jpg" alt="截屏2024-10-13 21.37.30"></p><h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><p><img src="/2024/10/13/%E8%A3%85%E6%9C%BA/ventoy%E5%B7%A5%E5%85%B7/1728826068849.jpg" alt="1728826068849"></p><p>右边 <code>设备内部Ventoy</code> 指的是 你准备做成 系统启动盘的u盘。</p><p><img src="/2024/10/13/%E8%A3%85%E6%9C%BA/ventoy%E5%B7%A5%E5%85%B7/2b3b9696779f971f80a659446915fb0.jpg" alt="2b3b9696779f971f80a659446915fb0"></p><p>有的老机器 是 用 MBR，但是这里推荐都用 GPT把，在 启动设备的 bios 中选择 UEFI标注的的那个U盘启动，这个挺重要的。</p><p><img src="/2024/10/13/%E8%A3%85%E6%9C%BA/ventoy%E5%B7%A5%E5%85%B7/6db4e84b7ae6384f692166a62ba773a.png" alt="6db4e84b7ae6384f692166a62ba773a"></p><p>推荐把U盘做成 exfat格式，这样通用性好很多，方便除了作系统以外 存储文件。</p><p>然后u盘制作好啦，仅仅需要把ISO文件放进u盘就好啦。</p><p>以下是 通过 ventoy启动的u盘例子</p><p><img src="/2024/10/13/%E8%A3%85%E6%9C%BA/ventoy%E5%B7%A5%E5%85%B7/111.jpg" alt="111"></p><h1 id="典型案例"><a href="#典型案例" class="headerlink" title="典型案例"></a>典型案例</h1><p>出现的问题  <code>“Windows 无法安装到这个磁盘，选中的 磁盘采用 GPT 分区形式 ”</code></p><p>磁盘是 GPT 分区形式，就要用UEFI来启动u盘，此时开机的bios 要打开 UEFI选项，然后bios 的boot 中也可能有两个 u盘选项，我们记得选 EFI 或者 UEFI前缀的那个u盘。</p><h1 id="补充-：clonezilla"><a href="#补充-：clonezilla" class="headerlink" title="补充 ：clonezilla"></a>补充 ：clonezilla</h1><p>推荐一下 一个有用的工具  ，可以克隆磁盘a到磁盘b、 恢复磁盘巴拉巴拉等等 很多事情。</p><p><strong>Clonezilla</strong></p><p>(<a href="https://clonezilla.org/downloads.php">https://clonezilla.org/downloads.php</a>)</p><p><img src="/2024/10/13/%E8%A3%85%E6%9C%BA/ventoy%E5%B7%A5%E5%85%B7/baad0f58040d1cbfca98fa20a827a1f.png" alt="baad0f58040d1cbfca98fa20a827a1f"></p><p>这里推荐 基于ubuntu或者 debian 开发的 stable稳定版。</p><p>(<a href="https://clonezilla.org/downloads/download.php?branch=alternative">https://clonezilla.org/downloads/download.php?branch=alternative</a>)</p><p><img src="/2024/10/13/%E8%A3%85%E6%9C%BA/ventoy%E5%B7%A5%E5%85%B7/af3c243f051f31c65e236318e470135.png" alt="af3c243f051f31c65e236318e470135"></p><p>这里记得选 ISO格式的文件，这样它就能被扔进 ventoy 制作的u盘中使用啦。</p>]]></content>
+    
+    
+    <summary type="html">这是文章开头，显示在主页面，详情请点击此处。</summary>
+    
+    
+    
+    <category term="装机" scheme="http://example.com/categories/%E8%A3%85%E6%9C%BA/"/>
+    
+    
+    <category term="ventoy" scheme="http://example.com/tags/ventoy/"/>
+    
+    <category term="clonezilla" scheme="http://example.com/tags/clonezilla/"/>
+    
+  </entry>
   
   <entry>
     <title>切分excel单元格形成更多的行（利用chatgpt开发案例）</title>
@@ -442,25 +465,6 @@
     
     
     <category term="动态规划" scheme="http://example.com/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>安装生物信息用到的包遇到的问题</title>
-    <link href="http://example.com/2022/12/04/%E7%94%9F%E7%89%A9%E4%BF%A1%E6%81%AF%E6%8A%80%E6%9C%AF%E5%85%A5%E9%97%A8/%E5%AE%89%E8%A3%85%E7%94%9F%E7%89%A9%E4%BF%A1%E6%81%AF%E7%94%A8%E5%88%B0%E7%9A%84%E5%8C%85%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98/"/>
-    <id>http://example.com/2022/12/04/%E7%94%9F%E7%89%A9%E4%BF%A1%E6%81%AF%E6%8A%80%E6%9C%AF%E5%85%A5%E9%97%A8/%E5%AE%89%E8%A3%85%E7%94%9F%E7%89%A9%E4%BF%A1%E6%81%AF%E7%94%A8%E5%88%B0%E7%9A%84%E5%8C%85%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98/</id>
-    <published>2022-12-04T13:04:32.000Z</published>
-    <updated>2022-12-04T13:20:38.643Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="遇到的问题"><a href="#遇到的问题" class="headerlink" title="遇到的问题"></a>遇到的问题</h1><h2 id="sudo-conda-找不到命令"><a href="#sudo-conda-找不到命令" class="headerlink" title="sudo conda 找不到命令"></a><code>sudo conda</code> 找不到命令</h2><p>​在用户的<code>./bashrc</code>文件下添加</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">alias sudo=&quot;sudo env PATH=$PATH&quot;</span><br></pre></td></tr></table></figure><h2 id="multiqc工具包下载失败，或不匹配报错"><a href="#multiqc工具包下载失败，或不匹配报错" class="headerlink" title="multiqc工具包下载失败，或不匹配报错"></a><code>multiqc</code>工具包下载失败，或不匹配报错</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo conda install -c bioconda -c conda-forge multiqc</span><br></pre></td></tr></table></figure>]]></content>
-    
-    
-    <summary type="html">这是文章开头，显示在主页面，详情请点击此处。</summary>
-    
-    
-    
-    <category term="生物信息技术入门" scheme="http://example.com/categories/%E7%94%9F%E7%89%A9%E4%BF%A1%E6%81%AF%E6%8A%80%E6%9C%AF%E5%85%A5%E9%97%A8/"/>
-    
     
   </entry>
   
