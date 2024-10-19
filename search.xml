@@ -11299,19 +11299,24 @@ elif (zscore_rightdev &lt; g.sell) and (len(context.portfolio.positions.keys()) 
 
 <p>此时 <code>lsblk -f</code> 可见 sda磁盘的下面多了一个 sda1的分区，而且格式为 xfs；sdb磁盘的下面多了一个 sdb1的分区，而且格式为 xfs。</p>
 <p><img src="/2024/10/15/%E8%A3%85%E6%9C%BA/%E4%B8%A4%E4%B8%AA20T%E7%A1%AC%E7%9B%98%E5%81%9Araid/1729002987963.jpg" alt="1729002987963"></p>
-<h1 id="raid"><a href="#raid" class="headerlink" title="raid"></a>raid</h1><h2 id="制作raid设备"><a href="#制作raid设备" class="headerlink" title="制作raid设备"></a>制作raid设备</h2><h3 id="（一）选择制作做raid1"><a href="#（一）选择制作做raid1" class="headerlink" title="（一）选择制作做raid1"></a>（一）选择制作做raid1</h3><p>20T 和20T作 raid1是一个备份，可以防止数据丢失，但是空间只用的上20T了。</p>
+<h1 id="raid"><a href="#raid" class="headerlink" title="raid"></a>raid</h1><h2 id="制作raid设备"><a href="#制作raid设备" class="headerlink" title="制作raid设备"></a>制作raid设备</h2><p>在你创建 RAID  阵列时，新的 RAID 阵列会覆盖原有的数据，这样所有多个磁盘上的数据都会被清理干净。</p>
+<h3 id="（一）选择制作做raid1"><a href="#（一）选择制作做raid1" class="headerlink" title="（一）选择制作做raid1"></a>（一）选择制作做raid1</h3><p>20T 和20T作 raid1是一个备份，可以防止数据丢失，但是空间只用的上20T了。</p>
 <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">sudo apt update</span><br><span class="line">sudo apt install mdadm</span><br><span class="line"></span><br><span class="line"><span class="comment">#  /dev/md0 是 RAID 设备的名称。</span></span><br><span class="line"><span class="comment">#  --level=1 指定 RAID 级别为 1。</span></span><br><span class="line"><span class="comment">#  --raid-devices=2 指定 RAID 中的设备数量。</span></span><br><span class="line">sudo mdadm --create --verbose /dev/md0 --level=1 --raid-devices=2 /dev/sda1 /dev/sdb1</span><br></pre></td></tr></table></figure>
 
 <h3 id="（二）选择制作做raid0"><a href="#（二）选择制作做raid0" class="headerlink" title="（二）选择制作做raid0"></a>（二）选择制作做raid0</h3><p>20T 和20T作 raid0是纯粹的扩大空间，空间40T了。</p>
 <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">sudo apt update</span><br><span class="line">sudo apt install mdadm</span><br><span class="line"></span><br><span class="line"><span class="comment">#  /dev/md0 是 RAID 设备的名称。</span></span><br><span class="line"><span class="comment">#  --level=0 指定 RAID 级别为 0。</span></span><br><span class="line"><span class="comment">#  --raid-devices=2 指定 RAID 中的设备数量。</span></span><br><span class="line">sudo mdadm --create --verbose /dev/md0 --level=0 --raid-devices=2 /dev/sda1 /dev/sdb1</span><br></pre></td></tr></table></figure>
 
+<h3 id="（三）选择制作做raid5"><a href="#（三）选择制作做raid5" class="headerlink" title="（三）选择制作做raid5"></a>（三）选择制作做raid5</h3><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">sudo apt update</span><br><span class="line">sudo apt install mdadm</span><br><span class="line"></span><br><span class="line"><span class="comment">#  /dev/md0 是 RAID 设备的名称。</span></span><br><span class="line"><span class="comment">#  --level=0 指定 RAID 级别为 5。</span></span><br><span class="line"><span class="comment">#  --raid-devices=4 指定 RAID 中的设备数量。</span></span><br><span class="line">sudo mdadm --create /dev/md0 --level=5 --raid-devices=4 /dev/sda1 /dev/sdb1 /dev/sdc1 /dev/sdd1</span><br></pre></td></tr></table></figure>
+
+
+
 <h2 id="格式化raid设备"><a href="#格式化raid设备" class="headerlink" title="格式化raid设备"></a>格式化raid设备</h2><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">sudo mkfs.xfs /dev/md0</span><br></pre></td></tr></table></figure>
 
 <h2 id="创建挂载点"><a href="#创建挂载点" class="headerlink" title="创建挂载点"></a>创建挂载点</h2><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">sudo <span class="built_in">mkdir</span> -p /data_raid</span><br></pre></td></tr></table></figure>
 
-<h2 id="1、选择临时挂载"><a href="#1、选择临时挂载" class="headerlink" title="1、选择临时挂载"></a>1、选择临时挂载</h2><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">sudo mount /dev/md0 /data_raid</span><br></pre></td></tr></table></figure>
+<h2 id="1、选择临时挂载"><a href="#1、选择临时挂载" class="headerlink" title="1、选择临时挂载"></a>1、选择临时挂载</h2><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">sudo mount /dev/md0 /data_raid</span><br><span class="line"></span><br><span class="line"><span class="comment"># 如果出现 </span></span><br><span class="line"><span class="comment"># mount: /data_raid: can&#x27;t read superblock on /dev/md0.</span></span><br><span class="line">sudo mdadm --detail /dev/md0 <span class="comment"># 看state 状态：是不是在 recovering</span></span><br><span class="line"><span class="built_in">cat</span> /proc/mdstat <span class="comment"># 看恢复进度</span></span><br><span class="line"><span class="comment"># 等恢复进度 100% ，再去挂载。恢复可能会很久。</span></span><br></pre></td></tr></table></figure>
 
-<h2 id="2、选择永久性挂载"><a href="#2、选择永久性挂载" class="headerlink" title="2、选择永久性挂载"></a>2、选择永久性挂载</h2><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">sudo blkid /dev/md0 <span class="comment"># 获取raid设备的uuid。</span></span><br><span class="line"></span><br><span class="line">sudo vim /etc/fstab</span><br><span class="line"><span class="comment"># 加入 如下行</span></span><br><span class="line">UUID=95fd8893-38e2-XXXX-804c-f0999571XXXX /data_raid xfs defaults,nofail 0 0</span><br><span class="line"><span class="comment">#  raid设备的uuid </span></span><br><span class="line"><span class="comment">#  挂载点</span></span><br><span class="line"><span class="comment">#  xfs  为raid设备的格式</span></span><br><span class="line"><span class="comment">#  defaults：这是挂载选项的组合，表示使用系统的默认设置，包括读写权限、自动挂载等。</span></span><br><span class="line"><span class="comment">#  nofail：允许在启动时，如果这个挂载点无法挂载（例如设备不存在），系统仍然能够正常启动。没有这个选项，系统可能会在挂载失败时停止启动。</span></span><br><span class="line"><span class="comment">#  第一个 0 表示该文件系统不应该被 dump 工具备份。</span></span><br><span class="line"><span class="comment">#  第二个 0 指定该文件系统在启动时的检查顺序。0 表示不进行检查。值为 1 表示在启动时优先检查该文件系统，值为 2 表示依次检查。</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 重新挂载所有文件系统</span></span><br><span class="line">sudo mount -a</span><br></pre></td></tr></table></figure>
+<h2 id="2、选择永久性挂载"><a href="#2、选择永久性挂载" class="headerlink" title="2、选择永久性挂载"></a>2、选择永久性挂载</h2><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">sudo blkid /dev/md0 <span class="comment"># 获取raid设备的uuid。</span></span><br><span class="line"></span><br><span class="line">sudo vim /etc/fstab</span><br><span class="line"><span class="comment"># 加入 如下行</span></span><br><span class="line">UUID=98fae9c1-4ea5-4b4c-9b98-d81d4d5e3c44 /data_raid xfs defaults,nofail 0 0</span><br><span class="line"><span class="comment">#  raid设备的uuid </span></span><br><span class="line"><span class="comment">#  挂载点</span></span><br><span class="line"><span class="comment">#  xfs  为raid设备的格式</span></span><br><span class="line"><span class="comment">#  defaults：这是挂载选项的组合，表示使用系统的默认设置，包括读写权限、自动挂载等。</span></span><br><span class="line"><span class="comment">#  nofail：允许在启动时，如果这个挂载点无法挂载（例如设备不存在），系统仍然能够正常启动。没有这个选项，系统可能会在挂载失败时停止启动。</span></span><br><span class="line"><span class="comment">#  第一个 0 表示该文件系统不应该被 dump 工具备份。</span></span><br><span class="line"><span class="comment">#  第二个 0 指定该文件系统在启动时的检查顺序。0 表示不进行检查。值为 1 表示在启动时优先检查该文件系统，值为 2 表示依次检查。</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 重新挂载所有文件系统</span></span><br><span class="line">sudo mount -a</span><br><span class="line"></span><br><span class="line"><span class="comment"># 如果出现 </span></span><br><span class="line"><span class="comment"># mount: /data_raid: can&#x27;t read superblock on /dev/md0.</span></span><br><span class="line">sudo mdadm --detail /dev/md0 <span class="comment"># 看state 状态：是不是在 recovering</span></span><br><span class="line"><span class="built_in">cat</span> /proc/mdstat <span class="comment"># 看恢复进度</span></span><br><span class="line"><span class="comment"># 等恢复进度 100% ，再去挂载。恢复可能会很久。</span></span><br></pre></td></tr></table></figure>
 
 <h2 id="检查-RAID-阵列的状态"><a href="#检查-RAID-阵列的状态" class="headerlink" title="检查 RAID 阵列的状态"></a>检查 RAID 阵列的状态</h2><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cat</span> /proc/mdstat <span class="comment"># 如果创建成功，会看到 /dev/md0（raid设备） 的信息</span></span><br></pre></td></tr></table></figure>
 
@@ -11327,6 +11332,8 @@ elif (zscore_rightdev &lt; g.sell) and (len(context.portfolio.positions.keys()) 
 
 <p><img src="/2024/10/15/%E8%A3%85%E6%9C%BA/%E4%B8%A4%E4%B8%AA20T%E7%A1%AC%E7%9B%98%E5%81%9Araid/1729002547062.jpg" alt="1729002547062"></p>
 <p><img src="/2024/10/15/%E8%A3%85%E6%9C%BA/%E4%B8%A4%E4%B8%AA20T%E7%A1%AC%E7%9B%98%E5%81%9Araid/1729004403164.jpg" alt="1729004403164"></p>
+<h1 id="删除raid设备"><a href="#删除raid设备" class="headerlink" title="删除raid设备"></a>删除raid设备</h1><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 看看 有没有md0</span></span><br><span class="line">lsblk</span><br><span class="line"></span><br><span class="line"><span class="comment"># 检查当前RAID阵列</span></span><br><span class="line">sudo mdadm --detail /dev/md0 </span><br><span class="line"></span><br><span class="line"><span class="comment"># 停止现有的RAID阵列（这一步会停止现有的 RAID 阵列。如果阵列正在运行，数据访问会中断。）</span></span><br><span class="line">sudo mdadm --stop /dev/md0</span><br><span class="line"></span><br><span class="line"><span class="comment">#  删除现有的RAID阵列（这一步会将 RAID 阵列从系统中移除，这意味着系统不再识别该 RAID 阵列。）</span></span><br><span class="line">sudo mdadm --remove /dev/md0</span><br><span class="line"></span><br><span class="line"><span class="comment"># 删除设备上的RAID元数据</span></span><br><span class="line"><span class="comment"># （由于 RAID 阵列的破坏，阵列上的数据将不可访问。即使物理数据可能仍然存在于磁盘分区中，但由于没有 RAID 的支持，无法直接访问和恢复这些数据。）</span></span><br><span class="line">sudo mdadm --zero-superblock /dev/sda1</span><br><span class="line">sudo mdadm --zero-superblock /dev/sdb1</span><br><span class="line">sudo mdadm --zero-superblock /dev/sdc1</span><br><span class="line">sudo mdadm --zero-superblock /dev/sdd1</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
 ]]></content>
       <categories>
         <category>装机</category>
@@ -11341,6 +11348,7 @@ elif (zscore_rightdev &lt; g.sell) and (len(context.portfolio.positions.keys()) 
     <content><![CDATA[<h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>正常情况下，我在登录虚拟机并且在网页前端登录用户，挂载光驱之后，df -h 可以看见出现一个光驱文件夹。</p>
 <p><img src="/2024/10/16/%E8%A3%85%E6%9C%BA/%E5%9C%A8%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AE%89%E8%A3%85%E5%8D%8E%E4%B8%89castools%E5%B7%A5%E5%85%B7%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98/1729043550725.jpg" alt="1729043550725"></p>
 <p><img src="/2024/10/16/%E8%A3%85%E6%9C%BA/%E5%9C%A8%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AE%89%E8%A3%85%E5%8D%8E%E4%B8%89castools%E5%B7%A5%E5%85%B7%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98/1729043674042.jpg" alt="1729043674042"></p>
+<p>当然，如果你的系统是server版本可能没有前端显示，就需要手动挂载一下光驱，方法就和挂载磁盘一样的就是添加一个设备而已。</p>
 <h1 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h1><p>进入这个目录 ，安装 CAStools 工具，遇到报错</p>
 <p><code>sudo bash CAS_tools_install.sh Selecting previously unselected package qemu-ga.(Reading database ... 175535 files and directories currently installed.)Preparing to unpack .../qemu-ga-10.1.6.2-0ubuntu13_amd64.deb ...Unpacking qemu-ga (10.1.6.2) ...dpkg: error processing archive /media/jlsf/agenttools/linux/x86/castools/qemu-ga-10.1.6.2-0ubuntu13_amd64.deb (--install): trying to overwrite &#39;/usr/sbin/qemu-ga&#39;, which is also in package qemu-guest-agent 1:4.2-3ubuntu6.29dpkg-deb: error: paste subprocess was killed by signal (Broken pipe)Processing triggers for systemd (245.4-4ubuntu3.20) ...Errors were encountered while processing: /media/jlsf/agenttools/linux/x86/castools/qemu-ga-10.1.6.2-0ubuntu13_amd64.deb</code></p>
 <p><img src="/2024/10/16/%E8%A3%85%E6%9C%BA/%E5%9C%A8%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AE%89%E8%A3%85%E5%8D%8E%E4%B8%89castools%E5%B7%A5%E5%85%B7%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98/12.png" alt="12"></p>
@@ -11356,5 +11364,67 @@ elif (zscore_rightdev &lt; g.sell) and (len(context.portfolio.positions.keys()) 
         <tag>castools</tag>
         <tag>包冲突</tag>
       </tags>
+  </entry>
+  <entry>
+    <title></title>
+    <url>/2024/10/18/%E8%A3%85%E6%9C%BA/%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE%E5%85%B1%E4%BA%AB%E5%AD%98%E5%82%A8%E7%9A%84%E8%BF%87%E7%A8%8B/</url>
+    <content><![CDATA[<h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>记录服务器集群添加新机器后，这台新机器是找不到共享存储的，以下就是让它找到共享存储的过程。</p>
+<h1 id="总体逻辑"><a href="#总体逻辑" class="headerlink" title="总体逻辑"></a>总体逻辑</h1><ol>
+<li><strong>服务器HBA卡连接到FC交换机上</strong>    </li>
+<li><strong>FC交换机上配置zone</strong>    </li>
+<li><strong>存储上添加主机LUN映射</strong>   </li>
+<li><strong>超融合平台添加新主机 这个在存储设备中 添加 新主机的LUN 映射</strong></li>
+</ol>
+<p>​		</p>
+<p>​		在存储设备中添加新主机的LUN（逻辑单元号）映射是指将存储设备中的特定存储卷（LUN）分配给特定主机，以便该主机可以访问这些存储资源。这一过程通常用于存储区域网络（SAN）中，以实现主机与存储设备之间的有效通信和数据存取。</p>
+<h3 id="1-服务器HBA卡连接到FC交换机上"><a href="#1-服务器HBA卡连接到FC交换机上" class="headerlink" title="1. 服务器HBA卡连接到FC交换机上"></a>1. 服务器HBA卡连接到FC交换机上</h3><p><strong>HBA（Host Bus Adapter）卡</strong>是连接服务器与存储网络的重要组件。HBA卡将服务器的SCSI或SATA接口转换为光纤通道（FC）信号，使服务器能够通过FC网络访问存储设备。</p>
+<ul>
+<li><p><strong>连接目的</strong>：通过HBA卡，服务器可以将数据发送到FC交换机，从而与存储设备进行通信。</p>
+</li>
+<li><p><strong>操作要求</strong>：确保HBA卡正确安装在服务器中，并通过光纤线缆与FC交换机相连。</p>
+<p><img src="/2024/10/18/%E8%A3%85%E6%9C%BA/%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE%E5%85%B1%E4%BA%AB%E5%AD%98%E5%82%A8%E7%9A%84%E8%BF%87%E7%A8%8B/image-20241019204901472.png" alt="image-20241019204901472"></p>
+</li>
+</ul>
+<p><img src="/2024/10/18/%E8%A3%85%E6%9C%BA/%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE%E5%85%B1%E4%BA%AB%E5%AD%98%E5%82%A8%E7%9A%84%E8%BF%87%E7%A8%8B/image-20241019204934143.png" alt="image-20241019204934143"></p>
+<h3 id="2-FC交换机上配置zone"><a href="#2-FC交换机上配置zone" class="headerlink" title="2. FC交换机上配置zone"></a>2. FC交换机上配置zone</h3><p><strong>Zone</strong>是FC交换机中的一种配置，旨在控制设备之间的访问权限。</p>
+<ul>
+<li><p><strong>配置目的</strong>：通过将特定的HBA卡和存储设备分配到同一个zone中，可以实现它们之间的通信。相应地，将不在同一zone中的设备隔离，以提高安全性。</p>
+</li>
+<li><p><strong>操作要求</strong>：通常需要在FC交换机的管理界面中，创建一个zone，并将服务器的HBA和相应的存储LUN添加到该zone中。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 先进入连接存储和服务器 FC交换机 ；</span><br><span class="line"># 可以通过 FC交换机的console控制口 在笔记本用一根 console 转 USB口的线连接；</span><br><span class="line"># 以Windows为例</span><br><span class="line"># 进入 【我的电脑】【管理】【设备管理器】【端口】看看 带serial的是哪一个口，比如说COM3等；</span><br><span class="line"># 进入 笔记本中的 xshell 或者其他远程工具，【串口】选择刚才的端口如 COM3，【波特率】用默认的9600，【协议】不用ssh改用serial；</span><br><span class="line"># 用 光交换机的 账号密码登录；</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p>先通过 <code>switchshow</code> 命令看看 新加的服务器是不是在端口识别出来了，注意是从 0 开始计数，16 就是 第17个端口显示了连接。</p>
+<p><img src="/2024/10/18/%E8%A3%85%E6%9C%BA/%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE%E5%85%B1%E4%BA%AB%E5%AD%98%E5%82%A8%E7%9A%84%E8%BF%87%E7%A8%8B/image-20241019210336106.png" alt="image-20241019210336106"></p>
+<p>用 <code>cfgshwo</code> 命令查看 zone的情况；</p>
+<p>注意：  每一个 zone，  例如 【server10_cf5010】 是一个的zone名称，是自定义命名的只是为了方便自己记忆理解，下面的 【cf5010】是存储，【server10】是服务器，它们都是自定义的下面有解释；</p>
+<p><img src="/2024/10/18/%E8%A3%85%E6%9C%BA/%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE%E5%85%B1%E4%BA%AB%E5%AD%98%E5%82%A8%E7%9A%84%E8%BF%87%E7%A8%8B/image-20241019210402111.png" alt="image-20241019210402111"></p>
+<p>可见 alias（别名）解释了上面的 命名，如 【cf5010】是交换机ID为1的20号、21号、22号、23号四个端口的别名；【server10】其实就是 FC交换机的 ID为1 的9号端口的别名。 </p>
+<p><img src="/2024/10/18/%E8%A3%85%E6%9C%BA/%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE%E5%85%B1%E4%BA%AB%E5%AD%98%E5%82%A8%E7%9A%84%E8%BF%87%E7%A8%8B/%E6%88%AA%E5%B1%8F2024-10-19%2021.22.07.jpg" alt="截屏2024-10-19 21.22.07"></p>
+<p>说的糙一点就是一个zone 就是把两个端口的通信建立起来；</p>
+<h3 id="3-存储上添加主机LUN映射"><a href="#3-存储上添加主机LUN映射" class="headerlink" title="3. 存储上添加主机LUN映射"></a>3. 存储上添加主机LUN映射</h3><p><strong>LUN（Logical Unit Number）映射</strong>是将存储设备中的逻辑单元（如硬盘卷）分配给特定主机的过程。</p>
+<ul>
+<li><strong>映射目的</strong>：使特定的服务器能够访问某个存储卷（LUN）。这可以确保只有授权的主机可以访问敏感数据，并优化存储资源的使用。</li>
+<li><strong>操作要求</strong>：在存储设备的管理界面中，选择要映射的LUN，并将其与前面配置的主机进行关联。可能还需设置访问权限。</li>
+</ul>
+<p>我这里是通过 web的管理页面进去</p>
+<p>在这个【Data Access】建立一个 host对象（就是服务器），对象内属性【initiators】（发起者）就是服务器中的HAB口，属性【volumes】5 对应存储中的卷的数量，意思是1号主机节点对象，对应了存储中划好的5个卷；</p>
+<p><img src="/2024/10/18/%E8%A3%85%E6%9C%BA/%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE%E5%85%B1%E4%BA%AB%E5%AD%98%E5%82%A8%E7%9A%84%E8%BF%87%E7%A8%8B/%E6%88%AA%E5%B1%8F2024-10-19%2021.39.18.jpg" alt="截屏2024-10-19 21.39.18"></p>
+<h4 id="3-1、设置主机对象"><a href="#3-1、设置主机对象" class="headerlink" title="3-1、设置主机对象"></a>3-1、设置主机对象</h4><p>在存储上要为新服务器 设置一个 host对象。点【Data Access】上的➕，这里的名字也是自定义的方便自己看，target port All 指的是 存储作为目标 开放所有端口，【initiators】 发起人 当然是 HBA卡啦，我们只有一张HBA卡的话，为了方便记忆，就可以写成initiators1，【WWPN】 就是 在FC交换机中 <code>switchshow</code> 命令中看到的 protol 对应的 服务器的 一长串 10:XX:XX:XX… 的编号。</p>
+<p><img src="/2024/10/18/%E8%A3%85%E6%9C%BA/%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE%E5%85%B1%E4%BA%AB%E5%AD%98%E5%82%A8%E7%9A%84%E8%BF%87%E7%A8%8B/%E6%88%AA%E5%B1%8F2024-10-19%2021.48.32.jpg" alt="截屏2024-10-19 21.48.32"></p>
+<h4 id="3-2、作卷到主机对象的映射"><a href="#3-2、作卷到主机对象的映射" class="headerlink" title="3-2、作卷到主机对象的映射"></a>3-2、作卷到主机对象的映射</h4><p>在【Data Storage】 存储中一个一个编辑 volume卷的内容，点 笔的图标；</p>
+<p><img src="/2024/10/18/%E8%A3%85%E6%9C%BA/%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE%E5%85%B1%E4%BA%AB%E5%AD%98%E5%82%A8%E7%9A%84%E8%BF%87%E7%A8%8B/%E6%88%AA%E5%B1%8F2024-10-19%2021.57.36.jpg" alt="截屏2024-10-19 21.57.36"></p>
+<p>一步一步 next ，找到 出现添加主机的页面，为这个卷 添加 前面设置的 主机节点对象；</p>
+<p><img src="/2024/10/18/%E8%A3%85%E6%9C%BA/%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE%E5%85%B1%E4%BA%AB%E5%AD%98%E5%82%A8%E7%9A%84%E8%BF%87%E7%A8%8B/%E6%88%AA%E5%B1%8F2024-10-19%2021.59.38.jpg" alt="截屏2024-10-19 21.59.38"></p>
+<p><img src="/2024/10/18/%E8%A3%85%E6%9C%BA/%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE%E5%85%B1%E4%BA%AB%E5%AD%98%E5%82%A8%E7%9A%84%E8%BF%87%E7%A8%8B/%E6%88%AA%E5%B1%8F2024-10-19%2022.01.56.jpg" alt="截屏2024-10-19 22.01.56"></p>
+<p>记得save保存。</p>
+<h3 id="4-超融合平台添加新主机"><a href="#4-超融合平台添加新主机" class="headerlink" title="4. 超融合平台添加新主机"></a>4. 超融合平台添加新主机</h3><p><strong>超融合平台</strong>是一种将计算、存储和网络资源整合到单一系统中的解决方案，通常用于简化数据中心的管理。</p>
+<ul>
+<li><strong>添加目的</strong>：在超融合平台上注册新的主机，以便它可以利用存储和计算资源。这通常涉及将新主机纳入集群，使其能够访问共享存储。</li>
+<li><strong>操作要求</strong>：在超融合平台的管理界面中，选择“添加主机”或类似选项，输入新主机的相关信息（如IP地址、访问凭证等），并确保它能够访问之前配置的存储和网络资源。</li>
+</ul>
+<p>在主机集群的【存储】栏，一个卷一个卷的 去【发现主机】</p>
+<p><img src="/2024/10/18/%E8%A3%85%E6%9C%BA/%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE%E5%85%B1%E4%BA%AB%E5%AD%98%E5%82%A8%E7%9A%84%E8%BF%87%E7%A8%8B/%E6%88%AA%E5%B1%8F2024-10-19%2022.06.47.jpg" alt="截屏2024-10-19 22.06.47"></p>
+<p><img src="/2024/10/18/%E8%A3%85%E6%9C%BA/%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE%E5%85%B1%E4%BA%AB%E5%AD%98%E5%82%A8%E7%9A%84%E8%BF%87%E7%A8%8B/%E6%88%AA%E5%B1%8F2024-10-19%2022.08.57.jpg" alt="截屏2024-10-19 22.08.57"></p>
+]]></content>
   </entry>
 </search>

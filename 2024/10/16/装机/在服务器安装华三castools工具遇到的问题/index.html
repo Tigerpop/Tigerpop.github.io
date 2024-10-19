@@ -31,7 +31,7 @@
 <meta property="og:image" content="http://example.com/2024/10/16/%E8%A3%85%E6%9C%BA/%E5%9C%A8%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AE%89%E8%A3%85%E5%8D%8E%E4%B8%89castools%E5%B7%A5%E5%85%B7%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98/12.png">
 <meta property="og:image" content="http://example.com/2024/10/16/%E8%A3%85%E6%9C%BA/%E5%9C%A8%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AE%89%E8%A3%85%E5%8D%8E%E4%B8%89castools%E5%B7%A5%E5%85%B7%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98/1.png">
 <meta property="article:published_time" content="2024-10-16T07:32:10.000Z">
-<meta property="article:modified_time" content="2024-10-16T02:14:30.743Z">
+<meta property="article:modified_time" content="2024-10-18T01:05:02.794Z">
 <meta property="article:author" content="陈宇韶chenyushao">
 <meta property="article:tag" content="castools">
 <meta property="article:tag" content="包冲突">
@@ -139,7 +139,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">370</span>
+          <span class="site-state-item-count">371</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -217,9 +217,15 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
-      
 
-      <time title="创建时间：2024-10-16 15:32:10 / 修改时间：10:14:30" itemprop="dateCreated datePublished" datetime="2024-10-16T15:32:10+08:00">2024-10-16</time>
+      <time title="创建时间：2024-10-16 15:32:10" itemprop="dateCreated datePublished" datetime="2024-10-16T15:32:10+08:00">2024-10-16</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-10-18 09:05:02" itemprop="dateModified" datetime="2024-10-18T09:05:02+08:00">2024-10-18</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -245,6 +251,7 @@
         <h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>正常情况下，我在登录虚拟机并且在网页前端登录用户，挂载光驱之后，df -h 可以看见出现一个光驱文件夹。</p>
 <p><img src="/2024/10/16/%E8%A3%85%E6%9C%BA/%E5%9C%A8%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AE%89%E8%A3%85%E5%8D%8E%E4%B8%89castools%E5%B7%A5%E5%85%B7%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98/1729043550725.jpg" alt="1729043550725"></p>
 <p><img src="/2024/10/16/%E8%A3%85%E6%9C%BA/%E5%9C%A8%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AE%89%E8%A3%85%E5%8D%8E%E4%B8%89castools%E5%B7%A5%E5%85%B7%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98/1729043674042.jpg" alt="1729043674042"></p>
+<p>当然，如果你的系统是server版本可能没有前端显示，就需要手动挂载一下光驱，方法就和挂载磁盘一样的就是添加一个设备而已。</p>
 <h1 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h1><p>进入这个目录 ，安装 CAStools 工具，遇到报错</p>
 <p><code>sudo bash CAS_tools_install.sh Selecting previously unselected package qemu-ga.(Reading database ... 175535 files and directories currently installed.)Preparing to unpack .../qemu-ga-10.1.6.2-0ubuntu13_amd64.deb ...Unpacking qemu-ga (10.1.6.2) ...dpkg: error processing archive /media/jlsf/agenttools/linux/x86/castools/qemu-ga-10.1.6.2-0ubuntu13_amd64.deb (--install): trying to overwrite &#39;/usr/sbin/qemu-ga&#39;, which is also in package qemu-guest-agent 1:4.2-3ubuntu6.29dpkg-deb: error: paste subprocess was killed by signal (Broken pipe)Processing triggers for systemd (245.4-4ubuntu3.20) ...Errors were encountered while processing: /media/jlsf/agenttools/linux/x86/castools/qemu-ga-10.1.6.2-0ubuntu13_amd64.deb</code></p>
 <p><img src="/2024/10/16/%E8%A3%85%E6%9C%BA/%E5%9C%A8%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AE%89%E8%A3%85%E5%8D%8E%E4%B8%89castools%E5%B7%A5%E5%85%B7%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98/12.png" alt="12"></p>
@@ -274,6 +281,9 @@
                 </a>
             </div>
             <div class="post-nav-item">
+                <a href="/2024/10/18/%E8%A3%85%E6%9C%BA/%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE%E5%85%B1%E4%BA%AB%E5%AD%98%E5%82%A8%E7%9A%84%E8%BF%87%E7%A8%8B/" rel="next" title="">
+                   <i class="fa fa-chevron-right"></i>
+                </a>
             </div>
           </div>
     </footer>
