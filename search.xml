@@ -11434,4 +11434,34 @@ elif (zscore_rightdev &lt; g.sell) and (len(context.portfolio.positions.keys()) 
         <tag>交换机</tag>
       </tags>
   </entry>
+  <entry>
+    <title>服务器集群添加GPU</title>
+    <url>/2024/10/20/%E8%A3%85%E6%9C%BA/%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%9B%86%E7%BE%A4%E6%B7%BB%E5%8A%A0GPU/</url>
+    <content><![CDATA[<h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>我加了一台服务器到服务器集群中，服务器中有两张GPU卡，我需要将这两张卡添入服务器下的两个虚拟机中使用。</p>
+<h1 id="理论"><a href="#理论" class="headerlink" title="理论"></a>理论</h1><p><strong>vGPU</strong>： 虚拟化了一堆Nvidia的卡给一群机器用，就需要英伟达要授权，死贵的。</p>
+<p><strong>GPU</strong> ：仅仅能给自己机器上用，比如服务器下有两个虚拟机，两张显卡，这两张显卡就只能被这两个虚拟机用，服务器之外的别的服务器是用不了这两GPU的。</p>
+<p><strong>iommu</strong> ：I0MMU是一个内存管理单元Q机制，它可以实现把设备访问的虚拟地址(VA)转化成物理地址(PA);说人话就是开了它虚拟机才能访问到物理机的硬件，如显卡。</p>
+<h1 id="网页版实操"><a href="#网页版实操" class="headerlink" title="网页版实操"></a>网页版实操</h1><p>如有看见了ECC开启了要先关闭ECC，没有就跳过。</p>
+<p><img src="/2024/10/20/%E8%A3%85%E6%9C%BA/%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%9B%86%E7%BE%A4%E6%B7%BB%E5%8A%A0GPU/%E8%A6%81%E5%9C%A8%E6%B7%BB%E5%8A%A0%E5%AE%8C%E7%A1%AC%E4%BB%B6%E5%86%8D%E5%90%AF%E5%8A%A8ECC.jpg" alt="要在添加完硬件再启动ECC"></p>
+<p>在物理机设置打开 iommu，让虚拟机可以访问到GPU。</p>
+<p><img src="/2024/10/20/%E8%A3%85%E6%9C%BA/%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%9B%86%E7%BE%A4%E6%B7%BB%E5%8A%A0GPU/%E9%AB%98%E7%BA%A7%E8%AE%BE%E7%BD%AE.jpg" alt="高级设置"> </p>
+<p>保存、重启。</p>
+<p><img src="/2024/10/20/%E8%A3%85%E6%9C%BA/%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%9B%86%E7%BE%A4%E6%B7%BB%E5%8A%A0GPU/%E5%8A%A0GPU%E7%A1%AC%E4%BB%B6.jpg" alt="加GPU硬件"></p>
+<p><img src="/2024/10/20/%E8%A3%85%E6%9C%BA/%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%9B%86%E7%BE%A4%E6%B7%BB%E5%8A%A0GPU/%E5%8A%A02.jpg" alt="加2"></p>
+<p><img src="/2024/10/20/%E8%A3%85%E6%9C%BA/%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%9B%86%E7%BE%A4%E6%B7%BB%E5%8A%A0GPU/%E5%8A%A03.jpg" alt="加3"></p>
+<p><img src="/2024/10/20/%E8%A3%85%E6%9C%BA/%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%9B%86%E7%BE%A4%E6%B7%BB%E5%8A%A0GPU/%E5%8A%A04.jpg" alt="加4"></p>
+<p><img src="/2024/10/20/%E8%A3%85%E6%9C%BA/%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%9B%86%E7%BE%A4%E6%B7%BB%E5%8A%A0GPU/%E5%8A%A05.jpg" alt="加5"></p>
+<p><img src="/2024/10/20/%E8%A3%85%E6%9C%BA/%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%9B%86%E7%BE%A4%E6%B7%BB%E5%8A%A0GPU/%E5%8A%A06.jpg" alt="加6"></p>
+<p><img src="/2024/10/20/%E8%A3%85%E6%9C%BA/%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%9B%86%E7%BE%A4%E6%B7%BB%E5%8A%A0GPU/%E5%8A%A07.jpg" alt="加7"></p>
+<p><img src="/2024/10/20/%E8%A3%85%E6%9C%BA/%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%9B%86%E7%BE%A4%E6%B7%BB%E5%8A%A0GPU/../%E9%AB%98%E7%BA%A7%E8%AE%BE%E7%BD%AE.jpg" alt="高级设置"></p>
+<p>检查</p>
+<p><img src="/2024/10/20/%E8%A3%85%E6%9C%BA/%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%9B%86%E7%BE%A4%E6%B7%BB%E5%8A%A0GPU/%E6%A3%80%E6%9F%A5.jpg" alt="检查"></p>
+]]></content>
+      <categories>
+        <category>装机</category>
+      </categories>
+      <tags>
+        <tag>GPU</tag>
+      </tags>
+  </entry>
 </search>
