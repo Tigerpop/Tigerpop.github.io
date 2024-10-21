@@ -11286,8 +11286,9 @@ elif (zscore_rightdev &lt; g.sell) and (len(context.portfolio.positions.keys()) 
   </entry>
   <entry>
     <title>两个20T硬盘做raid</title>
-    <url>/2024/10/15/%E8%A3%85%E6%9C%BA/%E4%B8%A4%E4%B8%AA20T%E7%A1%AC%E7%9B%98%E5%81%9Araid/</url>
-    <content><![CDATA[<h1 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h1><h2 id="识别"><a href="#识别" class="headerlink" title="识别"></a>识别</h2><p>拿到硬盘以后，首先还是要识别一下硬盘。</p>
+    <url>/2024/10/21/%E8%A3%85%E6%9C%BA/%E4%B8%A4%E4%B8%AA20T%E7%A1%AC%E7%9B%98%E5%81%9Araid/</url>
+    <content><![CDATA[<h1 id="先说结论"><a href="#先说结论" class="headerlink" title="先说结论"></a>先说结论</h1><p>不推荐这样在系统层面作raid，因为性能发挥不出来。以下所有都是自娱自乐，干活还得是在bios层面先做好raid，系统直接识别成一个盘，性能才能发挥出来。</p>
+<h1 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h1><h2 id="识别"><a href="#识别" class="headerlink" title="识别"></a>识别</h2><p>拿到硬盘以后，首先还是要识别一下硬盘。</p>
 <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">lsblk</span><br><span class="line"></span><br><span class="line">lsblk -f</span><br><span class="line"></span><br><span class="line">sudo blkid</span><br></pre></td></tr></table></figure>
 
 <p>一般可以看见多了一个 sda 或者sdb 的磁盘，我的两块磁盘都是20T的比较大。</p>
@@ -11298,7 +11299,7 @@ elif (zscore_rightdev &lt; g.sell) and (len(context.portfolio.positions.keys()) 
 <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 16T单个文件分界线，大盘推荐 xfs 格式。</span></span><br><span class="line">sudo apt update</span><br><span class="line">sudo apt install xfsprogs</span><br><span class="line">sudo mkfs.xfs /dev/sda1 <span class="comment"># 你的磁盘下的分区如sda1 sda2 或者 sdb1、sdc1等等。</span></span><br></pre></td></tr></table></figure>
 
 <p>此时 <code>lsblk -f</code> 可见 sda磁盘的下面多了一个 sda1的分区，而且格式为 xfs；sdb磁盘的下面多了一个 sdb1的分区，而且格式为 xfs。</p>
-<p><img src="/2024/10/15/%E8%A3%85%E6%9C%BA/%E4%B8%A4%E4%B8%AA20T%E7%A1%AC%E7%9B%98%E5%81%9Araid/1729002987963.jpg" alt="1729002987963"></p>
+<p><img src="/2024/10/21/%E8%A3%85%E6%9C%BA/%E4%B8%A4%E4%B8%AA20T%E7%A1%AC%E7%9B%98%E5%81%9Araid/1729002987963.jpg" alt="1729002987963"></p>
 <h1 id="raid"><a href="#raid" class="headerlink" title="raid"></a>raid</h1><h2 id="制作raid设备"><a href="#制作raid设备" class="headerlink" title="制作raid设备"></a>制作raid设备</h2><p>在你创建 RAID  阵列时，新的 RAID 阵列会覆盖原有的数据，这样所有多个磁盘上的数据都会被清理干净。</p>
 <h3 id="（一）选择制作做raid1"><a href="#（一）选择制作做raid1" class="headerlink" title="（一）选择制作做raid1"></a>（一）选择制作做raid1</h3><p>20T 和20T作 raid1是一个备份，可以防止数据丢失，但是空间只用的上20T了。</p>
 <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">sudo apt update</span><br><span class="line">sudo apt install mdadm</span><br><span class="line"></span><br><span class="line"><span class="comment">#  /dev/md0 是 RAID 设备的名称。</span></span><br><span class="line"><span class="comment">#  --level=1 指定 RAID 级别为 1。</span></span><br><span class="line"><span class="comment">#  --raid-devices=2 指定 RAID 中的设备数量。</span></span><br><span class="line">sudo mdadm --create --verbose /dev/md0 --level=1 --raid-devices=2 /dev/sda1 /dev/sdb1</span><br></pre></td></tr></table></figure>
@@ -11320,19 +11321,31 @@ elif (zscore_rightdev &lt; g.sell) and (len(context.portfolio.positions.keys()) 
 
 <h2 id="检查-RAID-阵列的状态"><a href="#检查-RAID-阵列的状态" class="headerlink" title="检查 RAID 阵列的状态"></a>检查 RAID 阵列的状态</h2><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cat</span> /proc/mdstat <span class="comment"># 如果创建成功，会看到 /dev/md0（raid设备） 的信息</span></span><br></pre></td></tr></table></figure>
 
-<p><img src="/2024/10/15/%E8%A3%85%E6%9C%BA/%E4%B8%A4%E4%B8%AA20T%E7%A1%AC%E7%9B%98%E5%81%9Araid/daa382604b1efef131d4b878318c935.png" alt="daa382604b1efef131d4b878318c935"></p>
+<p><img src="/2024/10/21/%E8%A3%85%E6%9C%BA/%E4%B8%A4%E4%B8%AA20T%E7%A1%AC%E7%9B%98%E5%81%9Araid/daa382604b1efef131d4b878318c935.png" alt="daa382604b1efef131d4b878318c935"></p>
 <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">lsblk -f</span><br></pre></td></tr></table></figure>
 
-<p><img src="/2024/10/15/%E8%A3%85%E6%9C%BA/%E4%B8%A4%E4%B8%AA20T%E7%A1%AC%E7%9B%98%E5%81%9Araid/1729002280504.jpg" alt="1729002280504"></p>
-<p><img src="/2024/10/15/%E8%A3%85%E6%9C%BA/%E4%B8%A4%E4%B8%AA20T%E7%A1%AC%E7%9B%98%E5%81%9Araid/1729004340071.jpg" alt="1729004340071"></p>
+<p><img src="/2024/10/21/%E8%A3%85%E6%9C%BA/%E4%B8%A4%E4%B8%AA20T%E7%A1%AC%E7%9B%98%E5%81%9Araid/1729002280504.jpg" alt="1729002280504"></p>
+<p><img src="/2024/10/21/%E8%A3%85%E6%9C%BA/%E4%B8%A4%E4%B8%AA20T%E7%A1%AC%E7%9B%98%E5%81%9Araid/1729004340071.jpg" alt="1729004340071"></p>
 <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">sudo blkid /dev/md0 <span class="comment"># 查看挂载情况</span></span><br></pre></td></tr></table></figure>
 
-<p><img src="/2024/10/15/%E8%A3%85%E6%9C%BA/%E4%B8%A4%E4%B8%AA20T%E7%A1%AC%E7%9B%98%E5%81%9Araid/1729002433599.jpg" alt="1729002433599"></p>
+<p><img src="/2024/10/21/%E8%A3%85%E6%9C%BA/%E4%B8%A4%E4%B8%AA20T%E7%A1%AC%E7%9B%98%E5%81%9Araid/1729002433599.jpg" alt="1729002433599"></p>
 <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="built_in">df</span> -h </span><br></pre></td></tr></table></figure>
 
-<p><img src="/2024/10/15/%E8%A3%85%E6%9C%BA/%E4%B8%A4%E4%B8%AA20T%E7%A1%AC%E7%9B%98%E5%81%9Araid/1729002547062.jpg" alt="1729002547062"></p>
-<p><img src="/2024/10/15/%E8%A3%85%E6%9C%BA/%E4%B8%A4%E4%B8%AA20T%E7%A1%AC%E7%9B%98%E5%81%9Araid/1729004403164.jpg" alt="1729004403164"></p>
+<p><img src="/2024/10/21/%E8%A3%85%E6%9C%BA/%E4%B8%A4%E4%B8%AA20T%E7%A1%AC%E7%9B%98%E5%81%9Araid/1729002547062.jpg" alt="1729002547062"></p>
+<p><img src="/2024/10/21/%E8%A3%85%E6%9C%BA/%E4%B8%A4%E4%B8%AA20T%E7%A1%AC%E7%9B%98%E5%81%9Araid/1729004403164.jpg" alt="1729004403164"></p>
 <h1 id="删除raid设备"><a href="#删除raid设备" class="headerlink" title="删除raid设备"></a>删除raid设备</h1><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 看看 有没有md0</span></span><br><span class="line">lsblk</span><br><span class="line"></span><br><span class="line"><span class="comment"># 检查当前RAID阵列</span></span><br><span class="line">sudo mdadm --detail /dev/md0 </span><br><span class="line"></span><br><span class="line"><span class="comment"># 停止现有的RAID阵列（这一步会停止现有的 RAID 阵列。如果阵列正在运行，数据访问会中断。）</span></span><br><span class="line">sudo mdadm --stop /dev/md0</span><br><span class="line"></span><br><span class="line"><span class="comment">#  删除现有的RAID阵列（这一步会将 RAID 阵列从系统中移除，这意味着系统不再识别该 RAID 阵列。）</span></span><br><span class="line">sudo mdadm --remove /dev/md0</span><br><span class="line"></span><br><span class="line"><span class="comment"># 删除设备上的RAID元数据</span></span><br><span class="line"><span class="comment"># （由于 RAID 阵列的破坏，阵列上的数据将不可访问。即使物理数据可能仍然存在于磁盘分区中，但由于没有 RAID 的支持，无法直接访问和恢复这些数据。）</span></span><br><span class="line">sudo mdadm --zero-superblock /dev/sda1</span><br><span class="line">sudo mdadm --zero-superblock /dev/sdb1</span><br><span class="line">sudo mdadm --zero-superblock /dev/sdc1</span><br><span class="line">sudo mdadm --zero-superblock /dev/sdd1</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h1 id="期间可能遇到的问题"><a href="#期间可能遇到的问题" class="headerlink" title="期间可能遇到的问题"></a>期间可能遇到的问题</h1><p>遇到 <code>  wrong fs type, bad option, bad superblock on /dev/vdc1</code> 等等类似的 xfs 挂载失败 的问题，</p>
+<h2 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h2><p><strong>参考</strong>：</p>
+<p>中间出处：	<a href="https://armstrong.viyf.org/articles/2023/08/mount-wrong-fs-type-bad-option-bad-superblock.shtml">https://armstrong.viyf.org/articles/2023/08/mount-wrong-fs-type-bad-option-bad-superblock.shtml</a></p>
+<p>源出处：	<a href="https://serverfault.com/questions/948408/mount-wrong-fs-type-bad-option-bad-superblock-on-dev-xvdf1-missing-codepage">https://serverfault.com/questions/948408/mount-wrong-fs-type-bad-option-bad-superblock-on-dev-xvdf1-missing-codepage</a></p>
+<p><strong>原因</strong>：XFS 为了防止同一个文件系统被多次挂载，在格式化硬盘并创建文件系统时会给文件系统打上 UUID。挂载分区时，XFS 检测到当前挂载了相同 UUID 的分区，就会拒绝执行挂载。</p>
+<p><strong>结论</strong>，解决方法就是 不用uuid挂载。</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 临时挂载</span></span><br><span class="line">sudo mount -o defaults,nouuid /dev/vdc1 /data</span><br><span class="line"></span><br><span class="line"><span class="comment"># 永久挂载</span></span><br><span class="line"><span class="comment"># 在 /etc/fstab 中写入</span></span><br><span class="line">/dev/vdc1   /data   xfs   defaults,nouuid   0   0</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
 ]]></content>
       <categories>
@@ -11340,6 +11353,7 @@ elif (zscore_rightdev &lt; g.sell) and (len(context.portfolio.positions.keys()) 
       </categories>
       <tags>
         <tag>raid</tag>
+        <tag>挂载</tag>
       </tags>
   </entry>
   <entry>
@@ -11453,7 +11467,6 @@ elif (zscore_rightdev &lt; g.sell) and (len(context.portfolio.positions.keys()) 
 <p><img src="/2024/10/20/%E8%A3%85%E6%9C%BA/%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%9B%86%E7%BE%A4%E6%B7%BB%E5%8A%A0GPU/%E5%8A%A05.jpg" alt="加5"></p>
 <p><img src="/2024/10/20/%E8%A3%85%E6%9C%BA/%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%9B%86%E7%BE%A4%E6%B7%BB%E5%8A%A0GPU/%E5%8A%A06.jpg" alt="加6"></p>
 <p><img src="/2024/10/20/%E8%A3%85%E6%9C%BA/%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%9B%86%E7%BE%A4%E6%B7%BB%E5%8A%A0GPU/%E5%8A%A07.jpg" alt="加7"></p>
-<p><img src="/2024/10/20/%E8%A3%85%E6%9C%BA/%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%9B%86%E7%BE%A4%E6%B7%BB%E5%8A%A0GPU/../%E9%AB%98%E7%BA%A7%E8%AE%BE%E7%BD%AE.jpg" alt="高级设置"></p>
 <p>检查</p>
 <p><img src="/2024/10/20/%E8%A3%85%E6%9C%BA/%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%9B%86%E7%BE%A4%E6%B7%BB%E5%8A%A0GPU/%E6%A3%80%E6%9F%A5.jpg" alt="检查"></p>
 ]]></content>
@@ -11462,6 +11475,49 @@ elif (zscore_rightdev &lt; g.sell) and (len(context.portfolio.positions.keys()) 
       </categories>
       <tags>
         <tag>GPU</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>bios内作raid</title>
+    <url>/2024/10/21/%E8%A3%85%E6%9C%BA/bios%E5%86%85%E4%BD%9Craid/</url>
+    <content><![CDATA[<h1 id="一、bios内设置raid"><a href="#一、bios内设置raid" class="headerlink" title="一、bios内设置raid"></a>一、bios内设置raid</h1><p>1.开机连续点击 F10 进入 BIOS，选择【UEFI Drivers】。如果硬盘连接的是 SATA</p>
+<p>接口，选择【intel(R)RSTe SATA Controller】选项。如果连接的是 Ssata 接口选择</p>
+<p>【inter(R)RSTe Ssata Controller】选项</p>
+<p><img src="/2024/10/21/%E8%A3%85%E6%9C%BA/bios%E5%86%85%E4%BD%9Craid/1.jpg" alt="1"></p>
+<p>2.进入后选择【Create RAID Volume】，可以创建新的 RAID。</p>
+<p><img src="/2024/10/21/%E8%A3%85%E6%9C%BA/bios%E5%86%85%E4%BD%9Craid/2.jpg" alt="2"></p>
+<p>3.【RAID Level】处选择需要设置的 RAID 级别</p>
+<p><img src="/2024/10/21/%E8%A3%85%E6%9C%BA/bios%E5%86%85%E4%BD%9Craid/3.jpg" alt="3"></p>
+<p>4.在硬盘信息下方，可选择想要创建新 RAID 的硬盘。</p>
+<p><img src="/2024/10/21/%E8%A3%85%E6%9C%BA/bios%E5%86%85%E4%BD%9Craid/4.jpg" alt="4"></p>
+<p>5.如果需要使用哪块硬盘，就将哪块硬盘下方选框中改成【X】。</p>
+<p><img src="/2024/10/21/%E8%A3%85%E6%9C%BA/bios%E5%86%85%E4%BD%9Craid/5.jpg" alt="5"></p>
+<p>6.点击硬盘信息后面的【问号】，可以查看对应硬盘的详细信息</p>
+<p><img src="/2024/10/21/%E8%A3%85%E6%9C%BA/bios%E5%86%85%E4%BD%9Craid/6.jpg" alt="6"></p>
+<p>7.选择完需要组成 RAID 的硬盘后，点击下方【Create Volume】创建 RAID</p>
+<p><img src="/2024/10/21/%E8%A3%85%E6%9C%BA/bios%E5%86%85%E4%BD%9Craid/7.jpg" alt="7"></p>
+<p>8.创建完成后会自动返回到上一级界面，在创建 RAID 下面会多出来一行刚刚创建的 RAID 信息</p>
+<p><img src="/2024/10/21/%E8%A3%85%E6%9C%BA/bios%E5%86%85%E4%BD%9Craid/8.jpg" alt="8"></p>
+<h1 id="二、磁盘格式化、挂载"><a href="#二、磁盘格式化、挂载" class="headerlink" title="二、磁盘格式化、挂载"></a>二、磁盘格式化、挂载</h1><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">lsblk -f <span class="comment"># 查看</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/2024/10/21/%E8%A3%85%E6%9C%BA/bios%E5%86%85%E4%BD%9Craid/pp.jpg" alt="pp"></p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">sudo mkfs.xfs /dev/mdXXXXX <span class="comment"># 格式化</span></span><br><span class="line"></span><br><span class="line">sudo <span class="built_in">mkdir</span> -p XXXXX <span class="comment"># 建挂载点文件夹</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 临时挂载</span></span><br><span class="line">sudo mount /mdXXXXX /XXXXX</span><br><span class="line"><span class="comment"># 永久挂载</span></span><br><span class="line">sudo vim /etc/fstab </span><br><span class="line">/dev/mdXXXXX /data_raid xfs defaults,nofail 0 0 <span class="comment"># 写入这个</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/2024/10/21/%E8%A3%85%E6%9C%BA/bios%E5%86%85%E4%BD%9Craid/pp2.png" alt="pp2"></p>
+<h1 id="三、期间可能遇到的问题"><a href="#三、期间可能遇到的问题" class="headerlink" title="三、期间可能遇到的问题"></a>三、期间可能遇到的问题</h1><p>遇到 <code>  wrong fs type, bad option, bad superblock on /dev/vdc1</code> 等等类似的 xfs 挂载失败 的问题，</p>
+<h2 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h2><p><strong>参考</strong>：</p>
+<p>中间出处：	<a href="https://armstrong.viyf.org/articles/2023/08/mount-wrong-fs-type-bad-option-bad-superblock.shtml">https://armstrong.viyf.org/articles/2023/08/mount-wrong-fs-type-bad-option-bad-superblock.shtml</a></p>
+<p>源出处：	<a href="https://serverfault.com/questions/948408/mount-wrong-fs-type-bad-option-bad-superblock-on-dev-xvdf1-missing-codepage">https://serverfault.com/questions/948408/mount-wrong-fs-type-bad-option-bad-superblock-on-dev-xvdf1-missing-codepage</a></p>
+<p><strong>原因</strong>：XFS 为了防止同一个文件系统被多次挂载，在格式化硬盘并创建文件系统时会给文件系统打上 UUID。挂载分区时，XFS 检测到当前挂载了相同 UUID 的分区，就会拒绝执行挂载。</p>
+<p><strong>结论</strong>，解决方法就是 不用uuid挂载。</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 临时挂载</span></span><br><span class="line">sudo mount -o defaults,nouuid /dev/vdc1 /data</span><br><span class="line"></span><br><span class="line"><span class="comment"># 永久挂载</span></span><br><span class="line"><span class="comment"># 在 /etc/fstab 中写入</span></span><br><span class="line">/dev/vdc1   /data   xfs   defaults,nouuid   0   0</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>装机</category>
+      </categories>
+      <tags>
+        <tag>raid</tag>
       </tags>
   </entry>
 </search>
