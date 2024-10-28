@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2024-10-25T06:21:25.336Z</updated>
+  <updated>2024-10-28T06:57:15.677Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,27 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>ubuntu双系统中boot找不到Windows</title>
+    <link href="http://example.com/2024/10/28/windows_ubuntu%E5%8F%8C%E7%B3%BB%E7%BB%9F/ubuntu%E5%8F%8C%E7%B3%BB%E7%BB%9F%E4%B8%ADboot%E6%89%BE%E4%B8%8D%E5%88%B0Windows/"/>
+    <id>http://example.com/2024/10/28/windows_ubuntu%E5%8F%8C%E7%B3%BB%E7%BB%9F/ubuntu%E5%8F%8C%E7%B3%BB%E7%BB%9F%E4%B8%ADboot%E6%89%BE%E4%B8%8D%E5%88%B0Windows/</id>
+    <published>2024-10-28T15:15:36.000Z</published>
+    <updated>2024-10-28T06:57:15.677Z</updated>
+    
+    <content type="html"><![CDATA[<p>简介 <span id="more"></span></p><h1 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h1><p><strong>在 Ubuntu、Windows双系统，GNU GRUB 中看不见Windows的boot选项。</strong></p><h1 id="解决步骤"><a href="#解决步骤" class="headerlink" title="解决步骤"></a>解决步骤</h1><p>进入ubuntu系统，Ubuntu 和别的系统组成了多系统，最好要以Ubuntu为主。</p><p>1、编辑 &#x2F;etc&#x2F;default&#x2F;grub </p><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">GRUB DEFAULT=0</span><br><span class="line">GRUB TIMEOUT STYLE=menu      <span class="comment"># 改成 menu</span></span><br><span class="line">GRUB TIMEOUT=20              <span class="comment"># 时间改久一点</span></span><br><span class="line">GRUB DISTRIBUTOR=<span class="string">&#x27; lsb release -i -s 2&gt; /dev/null I I echo Debian</span></span><br><span class="line"><span class="string">GRUB_ CMDLINE LINUX DEFAULT=&quot;quiet splash system.unified croup hierarchy=0&quot;</span></span><br><span class="line"><span class="string">GRUB CMDLINE LINUX=&quot;&quot;</span></span><br><span class="line"><span class="string">GRUB DISABLE OS PROBER=false # 没有就添加</span></span><br></pre></td></tr></table></figure><p>2、sudo update-grub  更新引导菜单</p><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo update-grub  <span class="comment"># 运行完可见 found Windows boot manager on XXXXX ... done</span></span><br></pre></td></tr></table></figure><p>3、重新启动可见GNU GRUB 中多了一个Windows选项。</p>]]></content>
+    
+    
+    <summary type="html">这是文章开头，显示在主页面，详情请点击此处。</summary>
+    
+    
+    
+    <category term="windows_ubuntu双系统" scheme="http://example.com/categories/windows-ubuntu%E5%8F%8C%E7%B3%BB%E7%BB%9F/"/>
+    
+    
+    <category term="boot" scheme="http://example.com/tags/boot/"/>
+    
+  </entry>
   
   <entry>
     <title>检查cuda_pytorch_nvidia安装情况脚本</title>
@@ -446,27 +467,6 @@
     <category term="下载" scheme="http://example.com/tags/%E4%B8%8B%E8%BD%BD/"/>
     
     <category term="annie" scheme="http://example.com/tags/annie/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>IP基础相关学习</title>
-    <link href="http://example.com/2023/10/18/%E7%BD%91%E7%BB%9C%E5%AD%A6%E4%B9%A0/IP%E5%9F%BA%E7%A1%80%E7%9B%B8%E5%85%B3%E5%AD%A6%E4%B9%A0/"/>
-    <id>http://example.com/2023/10/18/%E7%BD%91%E7%BB%9C%E5%AD%A6%E4%B9%A0/IP%E5%9F%BA%E7%A1%80%E7%9B%B8%E5%85%B3%E5%AD%A6%E4%B9%A0/</id>
-    <published>2023-10-18T00:30:20.000Z</published>
-    <updated>2023-10-20T01:04:58.869Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="IPv4-的构成"><a href="#IPv4-的构成" class="headerlink" title="IPv4 的构成"></a>IPv4 的构成</h1><p>​IP 是由 <strong>网络号 + 主机号</strong> 构成的。</p><p>​由子网掩码来实现 网络号和主机号的划分。 </p><p>​</p>]]></content>
-    
-    
-    <summary type="html">这是文章开头，显示在主页面，详情请点击此处。</summary>
-    
-    
-    
-    <category term="网络学习" scheme="http://example.com/categories/%E7%BD%91%E7%BB%9C%E5%AD%A6%E4%B9%A0/"/>
-    
-    
-    <category term="IP" scheme="http://example.com/tags/IP/"/>
     
   </entry>
   
