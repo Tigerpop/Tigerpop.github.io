@@ -28,7 +28,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://example.com/2024/11/07/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/pytorch%E7%9A%84%E5%A4%9AGPU%E8%AE%AD%E7%BB%83/ddp.jpg">
 <meta property="article:published_time" content="2024-11-07T08:58:30.000Z">
-<meta property="article:modified_time" content="2024-11-07T12:14:48.065Z">
+<meta property="article:modified_time" content="2024-11-11T00:46:05.047Z">
 <meta property="article:author" content="陈宇韶chenyushao">
 <meta property="article:tag" content="GPU">
 <meta property="article:tag" content="torch">
@@ -214,9 +214,15 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
-      
 
-      <time title="创建时间：2024-11-07 16:58:30 / 修改时间：20:14:48" itemprop="dateCreated datePublished" datetime="2024-11-07T16:58:30+08:00">2024-11-07</time>
+      <time title="创建时间：2024-11-07 16:58:30" itemprop="dateCreated datePublished" datetime="2024-11-07T16:58:30+08:00">2024-11-07</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-11-11 08:46:05" itemprop="dateModified" datetime="2024-11-11T08:46:05+08:00">2024-11-11</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -314,6 +320,7 @@
 <p><code>start_ddp.sh</code> 平时运行它、修改它就好了。</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># ---------------------------------------------</span></span><br><span class="line"><span class="comment"># 分布式训练启动脚本</span></span><br><span class="line"><span class="comment"># </span></span><br><span class="line"><span class="comment"># 当使用 torch.distributed.launch 启动时：</span></span><br><span class="line"><span class="comment"># 1. 这个命令会自动启动n个进程(n=nproc_per_node指定的数量)</span></span><br><span class="line"><span class="comment"># 2. 每个进程都会运行同一个Python脚本(multi_gpu_process.py)</span></span><br><span class="line"><span class="comment"># 3. 每个进程会被自动分配一个local_rank(0,1,2,3...)</span></span><br><span class="line"><span class="comment"># 4. 每个进程会被自动分配到对应的GPU上</span></span><br><span class="line"><span class="comment"># ---------------------------------------------</span></span><br><span class="line"></span><br><span class="line">torchrun \</span><br><span class="line">   --nproc_per_node=2 \</span><br><span class="line">   --master_port=29501 \</span><br><span class="line">   ddp5_env_check.py \</span><br><span class="line">   --n_gpus=2 \</span><br><span class="line">   --batch_size=32 \</span><br><span class="line">   --epochs=10 \</span><br><span class="line">   --num_workers=4 \</span><br><span class="line">   --iterations=800</span><br><span class="line"></span><br><span class="line"><span class="comment"># ---------------------------------------------</span></span><br><span class="line"><span class="comment"># 参数说明：</span></span><br><span class="line"><span class="comment"># --nproc_per_node: 要启动的进程数，通常等于GPU数量</span></span><br><span class="line"><span class="comment"># --master_port: 主进程的通信端口</span></span><br><span class="line"><span class="comment"># --n_gpus: 传递给Python脚本的GPU数量参数</span></span><br><span class="line"><span class="comment"># --batch_size: 每个GPU的批处理大小</span></span><br><span class="line"><span class="comment"># --epochs: 训练轮数</span></span><br><span class="line"><span class="comment"># --num_workers: 数据加载的工作进程数</span></span><br><span class="line"><span class="comment"># --iterations: 每张图片的处理迭代次数</span></span><br><span class="line"><span class="comment"># ---------------------------------------------</span></span><br></pre></td></tr></table></figure>
 
+<p> 以上 例子 需要说明的是 ddp 方式 来做 多进程的 GPU 操作，是不存在主进程的，实际是 用 rank0 所在的进程兼职了主进程，它一边运行着自己的GPU训练一边兼职了主进程的活。所以 我们上面写的 统计 总共用时的写法 是不准确的，事实上也只会 体现出 rank0的 运行时间，但是 我没有想看那么精确 也就没有改了。</p>
 
     </div>
 
