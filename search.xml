@@ -5379,7 +5379,9 @@
 <p><img src="/2024/10/30/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BD%AF%E4%BB%B6%E7%AC%94%E8%AE%B0/image-20240926094301173.png" alt="image-20240926094301173"></p>
 <p>​		如遇到 辅助风扇报错可暂时不处理；</p>
 <p><img src="/2024/10/30/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BD%AF%E4%BB%B6%E7%AC%94%E8%AE%B0/image-20240926093920689.png" alt="image-20240926093920689"></p>
-<h1 id="三、安装ubuntu"><a href="#三、安装ubuntu" class="headerlink" title="三、安装ubuntu"></a>三、安装ubuntu</h1><p>​		选语言；</p>
+<h1 id="三、安装ubuntu"><a href="#三、安装ubuntu" class="headerlink" title="三、安装ubuntu"></a>三、安装ubuntu</h1><p>​	<img src="/2024/10/30/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BD%AF%E4%BB%B6%E7%AC%94%E8%AE%B0/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20241120172957.jpg" alt="微信图片_20241120172957"></p>
+<p>​	配置的时候最好用AMT这个网口，Ubuntu 安装完毕以后 把网线再查回非AMT的网口，下面装Ubuntu的过程我们都是插在AMT口操作的。</p>
+<p>选语言；</p>
 <p><img src="/2024/10/30/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BD%AF%E4%BB%B6%E7%AC%94%E8%AE%B0/%E6%88%AA%E5%B1%8F2024-09-26%2009.46.28.jpg" alt="截屏2024-09-26 09.46.28"></p>
 <p>​		选键盘布局</p>
 <p><img src="/2024/10/30/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BD%AF%E4%BB%B6%E7%AC%94%E8%AE%B0/%E6%88%AA%E5%B1%8F2024-09-26%2009.47.08.jpg" alt="截屏2024-09-26 09.47.08"></p>
