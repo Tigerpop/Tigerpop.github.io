@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="b9e3dd28-aff8-4459-9ab9-5f4d05b277d0" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/themes/next/source/images/my.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/themes/next/_config.yml" beforeDir="false" afterPath="$PROJECT_DIR$/themes/next/_config.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/themes/next/source/css/_variables/base.styl" beforeDir="false" afterPath="$PROJECT_DIR$/themes/next/source/css/_variables/base.styl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/themes/next/source/js/utils.js" beforeDir="false" afterPath="$PROJECT_DIR$/themes/next/source/js/utils.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/themes/tranquilpeak/_config.yml" beforeDir="false" afterPath="$PROJECT_DIR$/themes/tranquilpeak/_config.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/themes/tranquilpeak/layout/_partial/head.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/themes/tranquilpeak/layout/_partial/head.ejs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/themes/tranquilpeak/layout/_partial/script.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/themes/tranquilpeak/layout/_partial/script.ejs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/themes/tranquilpeak/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/themes/tranquilpeak/package-lock.json" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/themes/next" />
+  </component>
+  <component name="JupyterTrust" id="50d503c9-e301-454a-b927-028671bd88d2" />
+  <component name="ProjectId" id="2Gg3TAnay0MFwK4AdkptLTlzwuY" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.path.for.package.eslint" value="project" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="nodejs_package_manager_path" value="npm" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/source/_posts/annie教程" />
+      <recent name="$PROJECT_DIR$/source/_posts/leecode刷题复习" />
+      <recent name="$PROJECT_DIR$/source/_posts/生物信息技术入门" />
+      <recent name="$PROJECT_DIR$/source/_posts/anaconda安装在移动硬盘" />
+      <recent name="$PROJECT_DIR$/source/_posts/生物信息技术" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/source/_posts/生物信息技术入门/anaconda安装在移动硬盘" />
+      <recent name="$PROJECT_DIR$/themes/next/source/images" />
+      <recent name="$PROJECT_DIR$/source/_posts/spark学习/sparkstreaming-内涵structurestreaming" />
+      <recent name="$PROJECT_DIR$/source/_posts/spark学习/SparkSQL" />
+      <recent name="$PROJECT_DIR$/source/_posts/spark学习/spark基础入门及安装部署" />
+    </key>
+  </component>
+  <component name="ServiceViewManager">
+    <option name="viewStates">
+      <list>
+        <serviceView>
+          <treeState>
+            <expand />
+            <select />
+          </treeState>
+        </serviceView>
+      </list>
+    </option>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="b9e3dd28-aff8-4459-9ab9-5f4d05b277d0" name="Default Changelist" comment="" />
+      <created>1666796404510</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1666796404510</updated>
+      <workItem from="1666796416532" duration="60902000" />
+      <workItem from="1667063291000" duration="15424000" />
+      <workItem from="1667464188947" duration="1775000" />
+      <workItem from="1667826394564" duration="1015000" />
+      <workItem from="1667827807073" duration="4414000" />
+      <workItem from="1668434907724" duration="669000" />
+      <workItem from="1668613670847" duration="897000" />
+      <workItem from="1668928068967" duration="122000" />
+      <workItem from="1668928987015" duration="383000" />
+      <workItem from="1669378721772" duration="1346000" />
+      <workItem from="1669644451313" duration="391000" />
+      <workItem from="1669734388122" duration="586000" />
+      <workItem from="1670037609252" duration="1011000" />
+      <workItem from="1670158787639" duration="1010000" />
+      <workItem from="1670930332395" duration="673000" />
+      <workItem from="1671601337401" duration="491000" />
+      <workItem from="1700637232357" duration="1572000" />
+      <workItem from="1700639272403" duration="190000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="580" y="213" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1667051330773">
+      <screen x="0" y="25" width="1440" height="875" />
+    </state>
+    <state x="580" y="213" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.25.1440.875@0.25.1440.875" timestamp="1667051330773" />
+    <state x="694" y="188" key="RollbackChangesDialog" timestamp="1666800103521">
+      <screen x="0" y="25" width="1440" height="875" />
+    </state>
+    <state x="694" y="188" key="RollbackChangesDialog/0.25.1440.875@0.25.1440.875" timestamp="1666800103521" />
+    <state x="425" y="98" key="SettingsEditor" timestamp="1666965645098">
+      <screen x="0" y="25" width="1440" height="875" />
+    </state>
+    <state x="425" y="98" key="SettingsEditor/0.25.1440.875@0.25.1440.875" timestamp="1666965645098" />
+    <state x="859" y="346" key="com.intellij.ide.util.TipDialog" timestamp="1671601808045">
+      <screen x="0" y="25" width="1920" height="1055" />
+    </state>
+    <state x="644" y="291" key="com.intellij.ide.util.TipDialog/0.25.1440.875/1440.25.1920.1055@0.25.1440.875" timestamp="1670930344379" />
+    <state x="644" y="291" key="com.intellij.ide.util.TipDialog/0.25.1440.875@0.25.1440.875" timestamp="1670158788118" />
+    <state x="859" y="346" key="com.intellij.ide.util.TipDialog/0.25.1920.1055@0.25.1920.1055" timestamp="1671601808045" />
+    <state x="612" y="214" width="670" height="676" key="search.everywhere.popup" timestamp="1666801973127">
+      <screen x="0" y="25" width="1440" height="875" />
+    </state>
+    <state x="612" y="214" width="670" height="676" key="search.everywhere.popup/0.25.1440.875@0.25.1440.875" timestamp="1666801973127" />
+  </component>
+</project>
