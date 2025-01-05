@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha256-AbA177XfpSnFEvgpYu1jMygiLabzPCJCRIBtR5jGc0k=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.13.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="41拓扑排序">
+<meta property="og:url" content="http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/41%E6%8B%93%E6%89%91%E6%8E%92%E5%BA%8F/index.html">
+<meta property="og:site_name" content="Tiger_pop&#39;s Blog">
+<meta property="og:description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-09-27T12:00:36.000Z">
+<meta property="article:modified_time" content="2022-10-28T15:57:20.893Z">
+<meta property="article:author" content="陈宇韶chenyushao">
+<meta property="article:tag" content="排序">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/41%E6%8B%93%E6%89%91%E6%8E%92%E5%BA%8F/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/41%E6%8B%93%E6%89%91%E6%8E%92%E5%BA%8F/","path":"2021/09/27/数据结构_浙江大学/41拓扑排序/","title":"41拓扑排序"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>41拓扑排序 | Tiger_pop's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="Tiger_pop's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Tiger_pop's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">tiger_pop 的博客</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-overview-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="陈宇韶chenyushao"
+      src="/images/my.jpg">
+  <p class="site-author-name" itemprop="name">陈宇韶chenyushao</p>
+  <div class="site-description" itemprop="description">爱学习、爱工作、爱生活;         微信号: Tiger_and_master;         手机号码:18515678348 </div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">378</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">24</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">138</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/41%E6%8B%93%E6%89%91%E6%8E%92%E5%BA%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/my.jpg">
+      <meta itemprop="name" content="陈宇韶chenyushao">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tiger_pop's Blog">
+      <meta itemprop="description" content="爱学习、爱工作、爱生活;         微信号: Tiger_and_master;         手机号码:18515678348 ">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="41拓扑排序 | Tiger_pop's Blog">
+      <meta itemprop="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          41拓扑排序
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2021-09-27 20:00:36" itemprop="dateCreated datePublished" datetime="2021-09-27T20:00:36+08:00">2021-09-27</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2022-10-28 23:57:20" itemprop="dateModified" datetime="2022-10-28T23:57:20+08:00">2022-10-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%B5%99%E5%A4%A7%E7%AE%97%E6%B3%95%E4%B8%8E%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B-python%E5%AE%9E%E7%8E%B0/" itemprop="url" rel="index"><span itemprop="name">浙大算法与数据结构课程(python实现)</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+            <div class="post-description">这是文章开头，显示在主页面，详情请点击此处。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">AOV 网络 Activity On Vertex Network</span></span><br><span class="line"><span class="string">    用顶点表示活动，用边表示活动之间的优先顺序，这样的图就是AOV网。</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">拓扑序：如果图中v 到 w有一条有向路径，则v 一定排在 w之前。</span></span><br><span class="line"><span class="string">        满足此条件的顶点序列称为拓扑序。</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">拓扑排序：获得一个拓扑序的过程。</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">AOV 如果有合理的拓扑序，则必定是 有向、无环、图。</span></span><br><span class="line"><span class="string">（Directed、 Acyclic、 Graph, ADG ）</span></span><br><span class="line"><span class="string">    因为，如果有一个cyclic环 ，v就必须在v开始前结束，逻辑矛盾。</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">拓扑排序大概描述：</span></span><br><span class="line"><span class="string">没有前驱顶点的点，它的入度 都是 0 ，</span></span><br><span class="line"><span class="string">每次选择 入度 为 0 的点，</span></span><br><span class="line"><span class="string">并将其从图中抹掉，</span></span><br><span class="line"><span class="string">加入一个队列。</span></span><br><span class="line"><span class="string">当把原来的点摸光的时候，一个拓扑序的队列 就产生了。</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">拓扑排序 基础算法伪代码：</span></span><br><span class="line"><span class="string">def TopSort():</span></span><br><span class="line"><span class="string">    for count in range(v_num):           # /* O(V) */</span></span><br><span class="line"><span class="string">        v = 未输出 的 入度为0 的顶点        # /* O(V) */</span></span><br><span class="line"><span class="string">        if 这样的v 不存在,且还有未输出的点：</span></span><br><span class="line"><span class="string">            Error 图中有回路, 无法完成拓扑排序。</span></span><br><span class="line"><span class="string">            break</span></span><br><span class="line"><span class="string">        输出v、或者记录v的输出序号</span></span><br><span class="line"><span class="string">       for v 的每个邻接点 w：</span></span><br><span class="line"><span class="string">            Indegree[w] -= 1   # 通过下一个结点的入度-1，完成对上一个结点的抹除操作。</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">如果   v = 未输出 的 入度为0 的顶点</span></span><br><span class="line"><span class="string">用遍历所有结点的方法，总的 T = O(V**2)</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">改进：</span></span><br><span class="line"><span class="string">    随时将入度 为0 的点 放到一个容器里,以下代码用队列这种容器存</span></span><br><span class="line"><span class="string">    （输出顶点那步的时间复杂度变成常数级，因为只是从容器中输出。）</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">拓扑排序 改进算法伪代码：</span></span><br><span class="line"><span class="string">def TopSort():</span></span><br><span class="line"><span class="string">    for 图中每个顶点 v：</span></span><br><span class="line"><span class="string">        if Indegree[v] == 0:  #如果入度为0</span></span><br><span class="line"><span class="string">            Enqueue(v,Q)      # 入队列</span></span><br><span class="line"><span class="string">    while !IsEmpty(Q):</span></span><br><span class="line"><span class="string">        v = Dequeue(Q)</span></span><br><span class="line"><span class="string">        输出，或者记录v的输出序号</span></span><br><span class="line"><span class="string">        count ++</span></span><br><span class="line"><span class="string">        for v 的每个邻接点 w：</span></span><br><span class="line"><span class="string">            if --Indegree[w] == 0:</span></span><br><span class="line"><span class="string">                Enqueue(w,Q)</span></span><br><span class="line"><span class="string">    if count != v_num:   # 图中依然有点未输出。</span></span><br><span class="line"><span class="string">        Error 图中有回路</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">每个点完成出入队列一次 O(V)</span></span><br><span class="line"><span class="string">每个点完成找邻接点，遍历边。O(E)</span></span><br><span class="line"><span class="string">时间复杂度为 O(V + E)</span></span><br><span class="line"><span class="string">稀疏图 O(V + E)</span></span><br><span class="line"><span class="string">稠密图 O(V + V**2)</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">以上算法 还能用于检验，图是否是 有向无环图DAG 。</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">1\数学1</span></span><br><span class="line"><span class="string">      -&gt; 3\高数</span></span><br><span class="line"><span class="string">2\数学2           --</span></span><br><span class="line"><span class="string">                    --&gt; 4\操作系统</span></span><br><span class="line"><span class="string">                   --</span></span><br><span class="line"><span class="string">6\数据结构 -&gt; 5\算法</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Graph</span>():</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self,n_vertices,data</span>):    <span class="comment"># 注意这里传入的是一个data类，而不是data类的实例化，实例化在init内完成。</span></span><br><span class="line">        self._n_vertices = n_vertices</span><br><span class="line">        self.G = [[] <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(self._n_vertices)]</span><br><span class="line">        self.data = data(n_vertices)       <span class="comment"># 实例化一个data类，作为图的一个属性。</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">add_edge</span>(<span class="params">self,pro_vertices,new_vertices,edge_weight</span>):</span><br><span class="line">        self.G[pro_vertices].append(&#123;new_vertices:edge_weight&#125;)</span><br><span class="line">        self.data.indegree[new_vertices] += <span class="number">1</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">show_Graph</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(self._n_vertices):</span><br><span class="line">            <span class="built_in">print</span>(self.G[i])</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&#x27;入度的list为：&#x27;</span>,self.data.indegree)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 每一个结点内，存有的信息包括1、指向的下一个结点。2、入度的数量。</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 我这里繁琐一点，用图表示结构，用data存储结点的入度。</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">data</span>():</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self,n_vertices</span>):</span><br><span class="line">        self.indegree = [<span class="number">0</span> <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(n_vertices)]</span><br><span class="line"></span><br><span class="line">graph = Graph(<span class="number">6</span>,data)</span><br><span class="line">graph.add_edge(<span class="number">0</span>,<span class="number">2</span>,<span class="number">1</span>) <span class="comment"># v - w - weight</span></span><br><span class="line">graph.add_edge(<span class="number">1</span>,<span class="number">2</span>,<span class="number">1</span>)</span><br><span class="line">graph.add_edge(<span class="number">2</span>,<span class="number">3</span>,<span class="number">1</span>)</span><br><span class="line">graph.add_edge(<span class="number">4</span>,<span class="number">3</span>,<span class="number">1</span>)</span><br><span class="line">graph.add_edge(<span class="number">5</span>,<span class="number">4</span>,<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># graph.add_edge(3,1,1)  # 加上这一条边就有闭环的回路了。</span></span><br><span class="line"></span><br><span class="line">graph.show_Graph()</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">TopSort</span>():</span><br><span class="line">    Q = []</span><br><span class="line">    out = []</span><br><span class="line">    count = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> v <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(graph.G)):</span><br><span class="line">        <span class="keyword">if</span> graph.data.indegree[v] == <span class="number">0</span>:</span><br><span class="line">            Enqueue(v,Q)</span><br><span class="line">    <span class="built_in">print</span>(Q)</span><br><span class="line">    <span class="keyword">while</span> IsEmpty(Q) == <span class="literal">False</span>:</span><br><span class="line">        v = Dequeue(Q)</span><br><span class="line">        out.append(v)</span><br><span class="line">        <span class="built_in">print</span>(v)</span><br><span class="line">        count += <span class="number">1</span></span><br><span class="line">        <span class="keyword">for</span> w <span class="keyword">in</span> near_Node(v):</span><br><span class="line">            graph.data.indegree[w] -= <span class="number">1</span></span><br><span class="line">            <span class="keyword">if</span> graph.data.indegree[w] == <span class="number">0</span>:</span><br><span class="line">                Enqueue(w,Q)</span><br><span class="line">    <span class="keyword">if</span> count != <span class="built_in">len</span>(graph.G):</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&#x27;图中有回路，无法拓扑序。&#x27;</span></span><br><span class="line">    <span class="keyword">return</span> out</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">Enqueue</span>(<span class="params">v,Q</span>):</span><br><span class="line">    Q.append(v)</span><br><span class="line"><span class="keyword">def</span> <span class="title function_">Dequeue</span>(<span class="params">Q</span>):</span><br><span class="line">    <span class="keyword">return</span> Q.pop(<span class="number">0</span>)</span><br><span class="line"><span class="keyword">def</span> <span class="title function_">IsEmpty</span>(<span class="params">Q</span>):</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">len</span>(Q) == <span class="number">0</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">near_Node</span>(<span class="params">v,list_=[]</span>):</span><br><span class="line">    <span class="keyword">if</span> graph.G[v] != []:</span><br><span class="line">        list_ = [key <span class="keyword">for</span> dic <span class="keyword">in</span> graph.G[v] <span class="keyword">for</span> key <span class="keyword">in</span> dic.keys()]</span><br><span class="line">    <span class="keyword">return</span> list_</span><br><span class="line"></span><br><span class="line"><span class="comment"># a = near_Node(3)</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># print(a)</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ ==<span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    out = TopSort()</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;为有向无环图DAG，拓扑序为：&#x27;</span>,out)</span><br><span class="line">    <span class="comment"># print(&#x27;加上最后一条边后，结果变为：\n&#x27;,out)</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 注意</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># # for w in []:</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># # 以上情况根本不会运行。</span></span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%8E%92%E5%BA%8F/" rel="tag"># 排序</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/43%E5%9B%BE%E4%B9%A0%E9%A2%98%E4%B8%80%EF%BC%8C%E6%A0%B8%E5%BF%83%E7%AE%97%E6%B3%95/" rel="prev" title="43图习题一，核心算法">
+                  <i class="fa fa-chevron-left"></i> 43图习题一，核心算法
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/42%E5%85%B3%E9%94%AE%E8%B7%AF%E5%BE%84/" rel="next" title="42关键路径">
+                  42关键路径 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">陈宇韶chenyushao</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

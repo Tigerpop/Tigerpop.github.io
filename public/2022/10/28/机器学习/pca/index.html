@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha256-AbA177XfpSnFEvgpYu1jMygiLabzPCJCRIBtR5jGc0k=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.13.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PCA主成分分析">
+<meta property="og:url" content="http://example.com/2022/10/28/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/pca/index.html">
+<meta property="og:site_name" content="Tiger_pop&#39;s Blog">
+<meta property="og:description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-10-28T13:07:36.000Z">
+<meta property="article:modified_time" content="2022-10-28T13:44:54.327Z">
+<meta property="article:author" content="陈宇韶chenyushao">
+<meta property="article:tag" content="pca（Principal Component Analysis">
+<meta property="article:tag" content="无监督学习(unsupervised learning)">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://example.com/2022/10/28/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/pca/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2022/10/28/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/pca/","path":"2022/10/28/机器学习/pca/","title":"PCA主成分分析"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>PCA主成分分析 | Tiger_pop's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="Tiger_pop's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Tiger_pop's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">tiger_pop 的博客</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#PCA%E5%9C%A8%E7%99%8C%E7%97%87%E5%9F%BA%E5%9B%A0%E7%BB%84%E5%9B%BE%E8%B0%B1%E6%95%B0%E6%8D%AE%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8"><span class="nav-number">1.</span> <span class="nav-text">PCA在癌症基因组图谱数据中的应用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E5%AE%9E%E9%AA%8C%E7%AE%80%E4%BB%8B"><span class="nav-number">1.1.</span> <span class="nav-text">一、实验简介</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%EF%BC%88%E4%B8%80%EF%BC%89%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0"><span class="nav-number">1.1.1.</span> <span class="nav-text">（一）问题描述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%EF%BC%88%E4%BA%8C%EF%BC%89%E9%97%AE%E9%A2%98%E9%9C%80%E6%B1%82"><span class="nav-number">1.1.2.</span> <span class="nav-text">（二）问题需求</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E5%AE%9E%E9%AA%8C%E4%BB%BB%E5%8A%A1%E4%B8%8E%E8%A6%81%E6%B1%82"><span class="nav-number">1.2.</span> <span class="nav-text">二、实验任务与要求</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E5%AE%9E%E9%AA%8C%E6%AD%A5%E9%AA%A4"><span class="nav-number">1.3.</span> <span class="nav-text">三、实验步骤</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80%EF%BC%89%E5%8A%A0%E8%BD%BD%E7%9B%B8%E5%85%B3%E7%9A%84%E5%8C%85"><span class="nav-number">1.3.1.</span> <span class="nav-text">(一）加载相关的包</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%8C%EF%BC%89%E5%8A%A0%E8%BD%BD%E6%95%B0%E6%8D%AE"><span class="nav-number">1.3.2.</span> <span class="nav-text">(二）加载数据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%89%EF%BC%89%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86"><span class="nav-number">1.3.3.</span> <span class="nav-text">(三）数据处理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E8%A7%82%E5%AF%9F%E6%95%B0%E6%8D%AE"><span class="nav-number">1.3.3.1.</span> <span class="nav-text">1.观察数据</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-%E6%95%B0%E6%8D%AE%E9%A2%84%E5%A4%84%E7%90%86"><span class="nav-number">1.3.3.2.</span> <span class="nav-text">2.数据预处理</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9B%9B%EF%BC%89PCA%E7%AE%97%E6%B3%95%E9%99%8D%E7%BB%B4%E6%95%88%E6%9E%9C%E6%B5%8B%E8%AF%95"><span class="nav-number">1.3.4.</span> <span class="nav-text">(四）PCA算法降维效果测试</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%81%E7%BB%93%E6%9E%9C%E5%88%86%E6%9E%90"><span class="nav-number">1.4.</span> <span class="nav-text">四、结果分析</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="陈宇韶chenyushao"
+      src="/images/my.jpg">
+  <p class="site-author-name" itemprop="name">陈宇韶chenyushao</p>
+  <div class="site-description" itemprop="description">爱学习、爱工作、爱生活;         微信号: Tiger_and_master;         手机号码:18515678348 </div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">378</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">24</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">138</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/10/28/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/pca/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/my.jpg">
+      <meta itemprop="name" content="陈宇韶chenyushao">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tiger_pop's Blog">
+      <meta itemprop="description" content="爱学习、爱工作、爱生活;         微信号: Tiger_and_master;         手机号码:18515678348 ">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="PCA主成分分析 | Tiger_pop's Blog">
+      <meta itemprop="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          PCA主成分分析
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2022-10-28 21:07:36 / 修改时间：21:44:54" itemprop="dateCreated datePublished" datetime="2022-10-28T21:07:36+08:00">2022-10-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+            <div class="post-description">这是文章开头，显示在主页面，详情请点击此处。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>#%% md <span id="more"></span></p>
+<h1 id="PCA在癌症基因组图谱数据中的应用"><a href="#PCA在癌症基因组图谱数据中的应用" class="headerlink" title="PCA在癌症基因组图谱数据中的应用"></a>PCA在癌症基因组图谱数据中的应用</h1><h2 id="一、实验简介"><a href="#一、实验简介" class="headerlink" title="一、实验简介"></a>一、实验简介</h2><h3 id="（一）问题描述"><a href="#（一）问题描述" class="headerlink" title="（一）问题描述"></a>（一）问题描述</h3><p>据统计，全球每年新增癌症患者达700万人，死于癌症的病人达500万人，60％的患者确诊后只能存活5年。目前已知的癌症有200多种，但是，无论什么癌症，在肿瘤的特殊类别（分型）或发展的不同分期方面都发现有基因组的特异变化，而正是基因组的改变（突变）导致了细胞分化、发育和生长通路的不正常，从而引发细胞不正常地失控增殖、生长。</p>
+<p>通过应用基因组分析技术，特别是采用大规模的基因组测序，将人类全部癌症的基因组变异图谱绘制出来，并进行系统分析，旨在找到所有致癌和抑癌基因的微小变异，了解癌细胞发生、发展的机制，在此基础上取得新的诊断和治疗方法。</p>
+<p>现如今，机器学习在数据分析领域已经慢慢走向成熟。如果可以用机器学习开发一套算法程序对癌症基因组图谱数据进行分析，辅助医生快速得出正确诊断结果，这将大大提高现代医学对癌症的诊断效率。</p>
+<p>本实验借助了TCGA中的癌症基因组图谱数据，利用Sklearn机器学习库中的PCA算法对该数据集特征进行降维，然后利用SVM算法分别对降维前后的数据进行学习，最终使用这两个SVM算法模型对同一个新数据集的癌症种类进行对比分析。</p>
+<p>#%% md</p>
+<h3 id="（二）问题需求"><a href="#（二）问题需求" class="headerlink" title="（二）问题需求"></a>（二）问题需求</h3><p>本次癌症基因组图谱数据集记录了801个样本数据，其特征数据是由癌症患者的RPPA【评估外显子组序列】 、DNA methylation【DNA甲基化】、Copy number【拷贝数变化(通过SNP阵列测量)】、Mutation【转录本剪接变化】、microRNA【microRNA表达】指标的数据构成，其中每个指标有多个数据，每个样本总共有20532个属性，样本标签是癌症的类型，数据集中总共记录了5种癌症类型，分别用数字1，2，3，4，5表示。</p>
+<p>数据文件所在位置：”pca\data.csv” 。<br>本实验首先对该数据集按8：2的比例划分出了训练集和测试集，由于癌症基因组图谱数据集特征比较多，这对算法的训练和预测都造成了巨大困难，所以对训练集和测试集的数据特征进行了PCA降维，之后对降维前后的数据集分别训练同一个分类算法模型，让训练好的算法模型去预测测试集数据，最后对测试集数据结果进行准确率评估。</p>
+<p>#%% md</p>
+<h2 id="二、实验任务与要求"><a href="#二、实验任务与要求" class="headerlink" title="二、实验任务与要求"></a>二、实验任务与要求</h2><p>本实验调用Sklearn库中的PCA算法模块对癌症基因图谱泛癌症数据特征进行降维，用降维前后的数据分别来训练SVM算法模型，之后是用两个SVM模型对新的数据集进行预测分类，并对分类结果进行准确率评估，最后对PCA算法的降维效果进行分析。具体的实验要求如下：</p>
+<p>1.观察数据：为了能初步了解数据特征的实际情况，可以观察前五条样本数据、每列数据的详细信息，以及数据中是否有空缺值。</p>
+<p>2.数据处理：对观察数据阶段所提出的问题进行解决，之后将数据集按8:2划分为训练集和测试集，对训练集和测试集数据调用PCA算法进行降维并对该算法进行简单介绍。</p>
+<p>3.PCA算法降维效果测试：使用降维前后的两个训练集分别对SVM算法模型进行训练，得到两个训练好的SVM算法模型对测试集数据进行预测，并对预测结果进行准确率评分，最后记录两个模型的训练、预测整个过程的时间。</p>
+<p>#%% md</p>
+<h2 id="三、实验步骤"><a href="#三、实验步骤" class="headerlink" title="三、实验步骤"></a>三、实验步骤</h2><p>本实验使用癌症基因组图谱数据，经过PCA算法模型对数据进行降维，之后供SVM算法模型进行学习与分类，比较PCA降维的效果，主要由以下几个步骤构成：</p>
+<p>1.加载相关的包。</p>
+<p>2.加载数据。</p>
+<p>3.数据处理。</p>
+<p>4.PCA算法降维效果测试。</p>
+<p>#%% md</p>
+<h3 id="一）加载相关的包"><a href="#一）加载相关的包" class="headerlink" title="(一）加载相关的包"></a>(一）加载相关的包</h3><p>（1）加载numpy、pandas等包做数据处理。</p>
+<p>（2）从sklearn.datasets和sklearn.model_selection中加载数据集和划分数据集。</p>
+<p>（3）从sklearn.decomposition加载PCA算法模块对数据进行降维。</p>
+<p>（4）从sklearn加载svm算法模块进行分类。</p>
+<p>（5）从sklearn.metrics中加载accuracy_score评分的函数对模型分类结果计算准确率。</p>
+<p>（6）加载time类记时。</p>
+<p>#%%</p>
+<p>import pandas as pd   #数据分析、处理包<br>import numpy as np   #矩阵、数组处理包<br>from sklearn.model_selection import train_test_split#数据划分函数<br>from sklearn.decomposition import PCA        #PCA降维算法<br>from sklearn import svm   #支持向量机算法<br>from sklearn.metrics import accuracy_score   #准确率评分函数<br>import time      #时间戳模块</p>
+<p>#%% md</p>
+<h3 id="二）加载数据"><a href="#二）加载数据" class="headerlink" title="(二）加载数据"></a>(二）加载数据</h3><p>#%%</p>
+<p>#读取癌症基因组图谱数据特征<br>filename_data &#x3D; ‘pca\data.csv’<br>df_feature &#x3D; pd.read_csv(filename_data)<br>#读取癌症基因组图谱数据标签<br>filename_label &#x3D; ‘pca\labels.csv’<br>df_label &#x3D; pd.read_csv(filename_label)</p>
+<p>#%% md</p>
+<h3 id="三）数据处理"><a href="#三）数据处理" class="headerlink" title="(三）数据处理"></a>(三）数据处理</h3><p>#%% md</p>
+<h4 id="1-观察数据"><a href="#1-观察数据" class="headerlink" title="1.观察数据"></a>1.观察数据</h4><p>#%%</p>
+<p>df_feature.head()   #观察数据集中的前5条</p>
+<p>#%% md</p>
+<p>初步观察可知，数据集有20532列，其中第一列是样本的序号，不是样本特征，需要删除该列。</p>
+<p>#%% md</p>
+<p>由于算法模型需要的全是数值型数据，在数据预处理前必须要对每列数据类型进行了解，可以利用info()函数来观察数据集中每列的数据类型。</p>
+<p>#%%</p>
+<p>df_feature.info()</p>
+<p>#%% md</p>
+<p>从输出可以看到数据集所有列中只有一列是object类型，其余列都是float64类型，从上面所观察到数据集的前五列可知，该object类型是数据集的第一列。</p>
+<p>#%% md</p>
+<p>由上表结合数据介绍可以了解到，数据特征比较多，数据情况比较复杂，而且都是数值型数据，若想要进一步了解这些数据，可以利用Pandas中的describe()函数对每列数据的总数量、平均值、标准差、最小值、下四分位数、中位数、上四分位数、最大值进行计算并显示出来。</p>
+<p>#%%</p>
+<p>describe &#x3D; df_feature.describe()#观察数据的整体信息 ，注意数据的大小、行列规模、数据类型等，便于后续数据处理。<br>describe</p>
+<p>#%% md</p>
+<p>从上表中可以看到数据集中有几列数据中的值为0.0的非常多，甚至列gene_5数据中全是0（无效值），这只是能看到的数据，还有很多列是不能看到的，在机器学习中无效值太多不仅会对算法模型的训练时间、预测时间有影响，而且还会使训练出的算法模型效果比较差，当然，这个问题可以用PCA算法来解决。</p>
+<p>#%% md</p>
+<p>SVM算法模型对空缺值数据是比较敏感的，需要将空缺值检测出来并填充。由观察数据阶段可知，除了第一列数据类型其余列数据类型全是float64，如果出现空缺值只有np.nan这一种情况，下面利用Numpy库中的isnan()函数对数据类型为float64的列数据进行空缺值搜索，返回是否有np.nan的bool类型值。</p>
+<p>#%%</p>
+<p>np.any(np.isnan(df_feature.iloc[:,1:]))</p>
+<p>#%% md</p>
+<p>这里可以看到输出的是False，说明数据集中没有空缺值。</p>
+<p>#%% md</p>
+<h4 id="2-数据预处理"><a href="#2-数据预处理" class="headerlink" title="2.数据预处理"></a>2.数据预处理</h4><p>#%% md</p>
+<p>（1）删除非特征列<br>根据前面步骤所分析的，第一列数据不是样本特征，为了降低训练难度，需要将这些非特征的列进行删除，可以利用Pandas库中的drop()函数从数据集中删除第一列数据。</p>
+<p>#%%</p>
+<p>df_feature &#x3D; df_feature.drop([df_feature.columns[0]],axis&#x3D;1)</p>
+<p>#%% md</p>
+<p>（2）数据划分<br>在不影响算法模型训练的情况下，使模型的评估更有可信度，可以将数据集按8：2划分为训练集和测试集，此处调用train_test_split(df_feature, df_label[‘Class_num’],test_size &#x3D; 0.2)函数对数据进行划分。 </p>
+<p>函数train_test_split()参数解释：</p>
+<pre><code>第一个参数：样本特征数据；
+第二个参数：样本标签数据；
+第三个参数：训练集样本数据占总样本数据的比列；
+第四个参数：固定训练集和测试集的随机种子。
+</code></pre>
+<p>#%%</p>
+<p>feature_train, feature_test, label_train, label_test &#x3D; train_test_split(df_feature, df_label[‘Class_num’],test_size &#x3D; 0.2,random_state&#x3D;1)</p>
+<p>#%% md</p>
+<p>（3）PCA降维<br>PCA（主成分分析）是一种常用的无监督学习数据分析算法。该算法通过线性变换将原始数据变换为一组各维度线性无关的表示，可用于提取数据的主要特征分量，以最大化投影后的方差，其次是投影产生的损失最小为原则对数据集进行降维，常用于高维数据的降维。<br>由于前面观察数据时发现了数据中有大量的0值，这对算法的训练并没有什么好处，可以利用PCA降维算法进行处理，首先调用Sklearn库中的PCA(n_components)类创建PCA算法类对象（参数n_components是降维后的维度），其次，通过对象调用fit_transform()方法对训练集数据进行拟合，最后将拟合好的模型对数据进行降维。n_components可以设置一个较小的值，然后根据下面检验是否合理再不断增大该值。函数参数解释：</p>
+<pre><code>第一个参数：需要降维的特征数据。
+</code></pre>
+<p>调用transform()方法对测试集数据进行降维。该函数参数解释：</p>
+<pre><code>第一个参数：需要降维的特征数据。
+</code></pre>
+<p>注意transform()和fit_transform()函数返回的是数组，在下面索引行和索引列时需注意语法，数组中没有.iloc。</p>
+<p>#%%</p>
+<p>n_components&#x3D;50      #设置降维后的维度<br>pca &#x3D; PCA(n_components)    #实例化PCA降维类<br>feature_train_pca &#x3D; pca.fit_transform(feature_train)  #对训练集数据进行PCA降维<br>feature_test_pca &#x3D; pca.transform(feature_test)  #对测试集数据进行PCA降维</p>
+<p>#%% md</p>
+<p>检验降维是否合理：<br>PCA算法是根据方差来降维的，因此可以利用降维后各成分方差情况来判断降维后的维数是否合理。PCA算法类的属性explained_variance_ratio_是降维后的各成分方差占比，比例越大，保留的信息越多，此处计算降维后各成分的方差占比之和，一般该值在70-95之间，从下面结果可看出样本数据降到50维是可以的。</p>
+<p>#%%</p>
+<p>sum(pca.explained_variance_ratio_)</p>
+<p>#%% md</p>
+<h3 id="四）PCA算法降维效果测试"><a href="#四）PCA算法降维效果测试" class="headerlink" title="(四）PCA算法降维效果测试"></a>(四）PCA算法降维效果测试</h3><p>支持向量机（SVM）是一种二类分类模型，其基本模型定义为特征空间上的间隔最大的线性分类器，其学习策略是使间隔最大化，最终可转化为一个凸二次规划问题的求解。该算法不仅适用于线性问题，还适用于非线性问题(用核函数)，由于本次数据特征比较多，降维后数据间将不存在线性关系，因此这里选用SVM进行PCA算法来对PCA降维的效果进行测试。   </p>
+<p>测试PCA降维效果需要使用降维前后的两个训练集分别对SVM算法模型进行训练，得到两个训练好的SVM算法模型对测试集数据进行预测，并对预测结果进行准确率评分。为了避免代码重复，此处编写一个函数test_model(feature_train, feature_test, label_train, label_test)实现SVM算法模型的调用、训练、预测以及预测结果评估，并对该过程的时间进行了记录，函数参数解释:</p>
+<pre><code>feature_train：训练集特征数据；
+feature_test：测试集特征数据；
+label_train：训练集标签数据；
+label_test：测试集标签数。
+</code></pre>
+<p>#%%</p>
+<p>def test_model(feature_train, feature_test, label_train, label_test):<br>    starttime &#x3D; time.time()<br>    model &#x3D; svm.SVC(kernel&#x3D;’sigmoid’)<br>    model.fit(feature_train, label_train)<br>    #make prediction of the gene dataset<br>    label_prediction &#x3D; model.predict(feature_test)<br>    print(‘预测结果的准确率：’,accuracy_score(label_test,label_prediction),’耗时:’,time.time()-starttime)</p>
+<p>#%% md</p>
+<p>使用降维前的数据集对模型进行训练。</p>
+<p>#%%</p>
+<p>test_model(feature_train,feature_test,label_train,label_test)</p>
+<p>#%% md</p>
+<p>使用降维后的数据集对模型进行训练。</p>
+<p>#%%</p>
+<p>test_model(feature_train_pca,feature_test_pca,label_train,label_test)</p>
+<p>#%% md</p>
+<h2 id="四、结果分析"><a href="#四、结果分析" class="headerlink" title="四、结果分析"></a>四、结果分析</h2><p>本实验采用癌症基因组图谱数据进行PCA降维，使用降维前后的数据分别训练SVM算法模型，并评估模型对测试集数据分类的准确率。从上面的实验中可以看出：未进行PCA降维的数据训练出的SVM算法模型预测测试集，其预测结果的准确率只有34.2%，整个过程耗时达到17秒多；然而，经过降维之后的数据训练同一个模型对测试集进行预测，其预测结果可达到了90%左右的准确率，并且耗时仅需0.015秒。得到这个结果的可能原因是：首先，说明特征数量对训练和预测的时间会有明显的影响，特征数量越多其耗时越久；其次说明数据集中的无效值多，引起数据分类困难，使训练模型和模型预测的效果都会变差。而PCA算法以最大化投影后的方差，投影产生的损失最小为原则对数据集进行降维，这样不仅降低了数据分类的困难，而且还降低了数据的特征数量，因此进行PCA降维后的数据在模型的训练时间和预测结果上都要比未经降维的数据要优。</p>
+<p>#%%</p>
+<p>from sklearn.decomposition import PCA<br>from sklearn.datasets import load_iris</p>
+<p>#%%</p>
+<p>data &#x3D; load_iris()</p>
+<p>#%%</p>
+<p>x &#x3D; data.data<br>x</p>
+<p>#%%</p>
+<p>model &#x3D; PCA(n_components&#x3D;3)</p>
+<p>#%%</p>
+<p>model.fit(X&#x3D;x)#训练模型</p>
+<p>#%%</p>
+<p>model.fit_transform(x)#降维后的数据</p>
+<p>#%%</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/pca%EF%BC%88Principal-Component-Analysis/" rel="tag"># pca（Principal Component Analysis</a>
+              <a href="/tags/%E6%97%A0%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0-unsupervised-learning/" rel="tag"># 无监督学习(unsupervised learning)</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/10/28/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/k-means/" rel="prev" title="k-means聚类分析">
+                  <i class="fa fa-chevron-left"></i> k-means聚类分析
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2022/10/28/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/svm/" rel="next" title="SVM">
+                  SVM <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">陈宇韶chenyushao</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

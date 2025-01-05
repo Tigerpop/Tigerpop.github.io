@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha256-AbA177XfpSnFEvgpYu1jMygiLabzPCJCRIBtR5jGc0k=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.13.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="66sort_with_swap">
+<meta property="og:url" content="http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/66sort_with_swap/index.html">
+<meta property="og:site_name" content="Tiger_pop&#39;s Blog">
+<meta property="og:description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-09-27T12:00:36.000Z">
+<meta property="article:modified_time" content="2022-10-28T16:11:16.004Z">
+<meta property="article:author" content="陈宇韶chenyushao">
+<meta property="article:tag" content="排序">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/66sort_with_swap/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/66sort_with_swap/","path":"2021/09/27/数据结构_浙江大学/66sort_with_swap/","title":"66sort_with_swap"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>66sort_with_swap | Tiger_pop's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="Tiger_pop's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Tiger_pop's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">tiger_pop 的博客</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-overview-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="陈宇韶chenyushao"
+      src="/images/my.jpg">
+  <p class="site-author-name" itemprop="name">陈宇韶chenyushao</p>
+  <div class="site-description" itemprop="description">爱学习、爱工作、爱生活;         微信号: Tiger_and_master;         手机号码:18515678348 </div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">378</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">24</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">138</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/66sort_with_swap/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/my.jpg">
+      <meta itemprop="name" content="陈宇韶chenyushao">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tiger_pop's Blog">
+      <meta itemprop="description" content="爱学习、爱工作、爱生活;         微信号: Tiger_and_master;         手机号码:18515678348 ">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="66sort_with_swap | Tiger_pop's Blog">
+      <meta itemprop="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          66sort_with_swap
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2021-09-27 20:00:36" itemprop="dateCreated datePublished" datetime="2021-09-27T20:00:36+08:00">2021-09-27</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2022-10-29 00:11:16" itemprop="dateModified" datetime="2022-10-29T00:11:16+08:00">2022-10-29</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%B5%99%E5%A4%A7%E7%AE%97%E6%B3%95%E4%B8%8E%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B-python%E5%AE%9E%E7%8E%B0/" itemprop="url" rel="index"><span itemprop="name">浙大算法与数据结构课程(python实现)</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+            <div class="post-description">这是文章开头，显示在主页面，详情请点击此处。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">sort with swap</span></span><br><span class="line"><span class="string">    题意：</span></span><br><span class="line"><span class="string">    -------------------------------------------------------------------</span></span><br><span class="line"><span class="string">            0   1   2   3   4   5   6   7   8   9</span></span><br><span class="line"><span class="string">    A       3   5   7   2   6   4   9   0   8   1</span></span><br><span class="line"><span class="string">    Table   7   9   3   0   5   1   4   2   8   6</span></span><br><span class="line"><span class="string">    -------------------------------------------------------------------</span></span><br><span class="line"><span class="string">    0 到 N-1 这 N 个数字的排列，如何仅仅依靠与 0 交换，达到排序目的，一共需要交换多少次？</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    回顾：讲表排序时，说过一个理论 —— &quot;N个数组的排列是由若干个独立的环组成。&quot;</span></span><br><span class="line"><span class="string">        具体的调整以包含A[0]的环为例子：</span></span><br><span class="line"><span class="string">    A       0 1 2 3 4 5 6 7</span></span><br><span class="line"><span class="string">    key     f d   a   b</span></span><br><span class="line"><span class="string">    - - - - - - - - - - - -</span></span><br><span class="line"><span class="string">    | table 3 5   1   0     |   # 已经通过指针得出的第一个环的正确顺序。</span></span><br><span class="line"><span class="string">    temp = A[i]</span></span><br><span class="line"><span class="string">    next_i = table[i]</span></span><br><span class="line"><span class="string">    #  * 注意，以下为第2种写法，temp直接赋值到最后一个空缺位置，比较好理解，注意最后一个空缺位置调整后把指针调整正确。</span></span><br><span class="line"><span class="string">    while table[table[i]] != table[i]:    # 看将要用来填充空缺的元素是否被调整过，如果调整过，说明形成闭环，可以用temp来填充了。</span></span><br><span class="line"><span class="string">        next_i = table[i]</span></span><br><span class="line"><span class="string">        A[i] = A[next_i]</span></span><br><span class="line"><span class="string">        table[i] = i</span></span><br><span class="line"><span class="string">        i = next_i</span></span><br><span class="line"><span class="string">    A[next_i] = temp</span></span><br><span class="line"><span class="string">    table[next_i] = next_i</span></span><br><span class="line"><span class="string">    </span></span><br><span class="line"><span class="string">    策略：</span></span><br><span class="line"><span class="string">        本题中 0 扮演了 物理排序中&quot;空缺&quot;的角色。</span></span><br><span class="line"><span class="string">        情况一：环内只有一个元素，不需要交换。</span></span><br><span class="line"><span class="string">        情况二：第0个环内有n0个元素，包括0，需要n-1次交换。</span></span><br><span class="line"><span class="string">        情况三：第i个环内有ni个元素，不包括0，需要先把0换到环内（1次交换），再进行 (ni+1)-1 次交换，一共ni+1次交换。</span></span><br><span class="line"><span class="string">               这个把0查到换内的操作，相当于把0做成了一个闭环的引子而已。</span></span><br><span class="line"><span class="string">    </span></span><br><span class="line"><span class="string">        N个元素的序列，包含S 个单元环，K个多元环，则交换次数为：</span></span><br><span class="line"><span class="string">            = n0-1 + sum(ni+1)&#123;i from 1 to K-1 &#125;</span></span><br><span class="line"><span class="string">            = K - 2 + sum(ni)&#123;i from 0 to K-1 &#125;</span></span><br><span class="line"><span class="string">            而 所有的非单一元素环的元素总个数 sum(ni)&#123;i from 0 to K-1 &#125; = N - S</span></span><br><span class="line"><span class="string">            = N - S + K - 2</span></span><br><span class="line"><span class="string">        题目要求一共交换多少次，转变为求 S 和 K 的问题。</span></span><br><span class="line"><span class="string">        在程序编写上，可以不用写一个 swap（）方法，然后用0代替空缺位置一个一个swap交换，数一共交换了多少次，</span></span><br><span class="line"><span class="string">        因为我们有现成的 &quot;物理排序&quot; 代码可以直接用，只需要用 &quot;物理排序&quot; 记录出 S K 两个值，</span></span><br><span class="line"><span class="string">        就能把题目中的总交换次数算出来。</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">解题：</span></span><br><span class="line"><span class="string">    先根据A制作table</span></span><br><span class="line"><span class="string">    再根据以上提到的策略算出总交换次数。</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line">A =  [<span class="number">3</span>,<span class="number">5</span>,<span class="number">7</span>,<span class="number">2</span>,<span class="number">6</span>,<span class="number">4</span>,<span class="number">9</span>,<span class="number">0</span>,<span class="number">8</span>,<span class="number">1</span>]</span><br><span class="line"><span class="keyword">def</span> <span class="title function_">Creat_table</span>(<span class="params">A</span>):</span><br><span class="line">    Table = [<span class="literal">None</span> <span class="keyword">for</span> _ <span class="keyword">in</span> A]</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(A)):</span><br><span class="line">        Table[A[i]] = i</span><br><span class="line">    <span class="keyword">return</span> Table</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">Count_Multivariate_or_Single_ring</span>(<span class="params">A,Table</span>):<span class="comment"># 就是&quot;物理排序&quot;用next_i填窟窿。</span></span><br><span class="line">    Multivate_cum = <span class="number">0</span></span><br><span class="line">    Single_cum = <span class="number">0</span></span><br><span class="line">    Is_cum = [<span class="number">0</span> <span class="keyword">for</span> _ <span class="keyword">in</span> A]                     <span class="comment"># 用一个数组来记录这个位置的元素是否被计数过。</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(A)):</span><br><span class="line">        start_i = i</span><br><span class="line">        temp = A[i]</span><br><span class="line">        next_i = table[i]</span><br><span class="line">        cum = <span class="number">1</span>                                 <span class="comment">#   用来记录数量。</span></span><br><span class="line">        <span class="keyword">while</span> table[table[i]] != table[i]:      <span class="comment"># 单一元素环会跳过循环。</span></span><br><span class="line">            cum += <span class="number">1</span></span><br><span class="line">            Is_cum[i] += <span class="number">1</span>                      <span class="comment"># 表示这个位置已经被计数过了。记录访问的次数。</span></span><br><span class="line">            next_i = table[i]</span><br><span class="line">            A[i] = A[next_i]</span><br><span class="line">            table[i] = i                        <span class="comment"># 表示已经调整好了</span></span><br><span class="line">            i = next_i</span><br><span class="line">        A[next_i] = temp</span><br><span class="line">        table[next_i] = next_i                  <span class="comment"># 表示环最后一个空位已经调整好了。</span></span><br><span class="line">        Is_cum[i] += <span class="number">1</span>                          <span class="comment"># 表示这个位置已经被计数过了。记录访问的次数</span></span><br><span class="line">        <span class="keyword">if</span> Is_cum[start_i]==<span class="number">1</span> <span class="keyword">and</span> cum == <span class="number">1</span>:     <span class="comment"># 只有在第一次访问，且环内1个元素。才记录</span></span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&#x27;!!!&#x27;</span>)</span><br><span class="line">            Single_cum += <span class="number">1</span></span><br><span class="line">        <span class="keyword">if</span> Is_cum[start_i]==<span class="number">1</span> <span class="keyword">and</span> cum &gt; <span class="number">1</span>:      <span class="comment"># 只有在第一次访问，且环内多个元素，才记录。</span></span><br><span class="line">            Multivate_cum += <span class="number">1</span></span><br><span class="line">    <span class="keyword">return</span> Multivate_cum,Single_cum</span><br><span class="line"></span><br><span class="line">table = Creat_table(A)</span><br><span class="line"><span class="built_in">print</span>(table)</span><br><span class="line">K,S = Count_Multivariate_or_Single_ring(A,table)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;排序好的结果是：&#x27;</span>,A)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;多元环数为：%d，单元环数为：%d&#x27;</span>%(K,S))</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;只和0交换的排序方法，计算得出总的交换次数为：\n N - S + K - 2 = %d 次。\</span></span><br><span class="line"><span class="string">        \n\n 浙大的算法数据结构课程到此完结撒花，\n希望我们更进一步在计算机技术上精益求精，\</span></span><br><span class="line"><span class="string">        \n保持学习热情，努力探索未知的世界！&#x27;</span>%(<span class="built_in">len</span>(A)-S+K-<span class="number">2</span>))</span><br></pre></td></tr></table></figure>
+
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%8E%92%E5%BA%8F/" rel="tag"># 排序</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/Jack-Cui%E5%9F%BA%E4%BA%8ERSRS%E7%9A%84%E9%87%8F%E5%8C%96%E4%BB%A3%E7%A0%81/" rel="prev" title="Jack-Cui基于RSRS的量化代码">
+                  <i class="fa fa-chevron-left"></i> Jack-Cui基于RSRS的量化代码
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/65%E6%8F%92%E5%85%A5%E6%8E%92%E5%BA%8F%E7%9A%84%E5%88%A4%E6%96%AD/" rel="next" title="65插入排序的判断">
+                  65插入排序的判断 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">陈宇韶chenyushao</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

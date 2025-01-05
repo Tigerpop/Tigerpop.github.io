@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha256-AbA177XfpSnFEvgpYu1jMygiLabzPCJCRIBtR5jGc0k=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.13.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="58散列函数的构造方法">
+<meta property="og:url" content="http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/58%E6%95%A3%E5%88%97%E5%87%BD%E6%95%B0%E7%9A%84%E6%9E%84%E9%80%A0%E6%96%B9%E6%B3%95/index.html">
+<meta property="og:site_name" content="Tiger_pop&#39;s Blog">
+<meta property="og:description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-09-27T12:00:36.000Z">
+<meta property="article:modified_time" content="2022-10-28T16:05:36.351Z">
+<meta property="article:author" content="陈宇韶chenyushao">
+<meta property="article:tag" content="哈希">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/58%E6%95%A3%E5%88%97%E5%87%BD%E6%95%B0%E7%9A%84%E6%9E%84%E9%80%A0%E6%96%B9%E6%B3%95/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/58%E6%95%A3%E5%88%97%E5%87%BD%E6%95%B0%E7%9A%84%E6%9E%84%E9%80%A0%E6%96%B9%E6%B3%95/","path":"2021/09/27/数据结构_浙江大学/58散列函数的构造方法/","title":"58散列函数的构造方法"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>58散列函数的构造方法 | Tiger_pop's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="Tiger_pop's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Tiger_pop's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">tiger_pop 的博客</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-overview-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="陈宇韶chenyushao"
+      src="/images/my.jpg">
+  <p class="site-author-name" itemprop="name">陈宇韶chenyushao</p>
+  <div class="site-description" itemprop="description">爱学习、爱工作、爱生活;         微信号: Tiger_and_master;         手机号码:18515678348 </div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">378</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">24</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">138</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/58%E6%95%A3%E5%88%97%E5%87%BD%E6%95%B0%E7%9A%84%E6%9E%84%E9%80%A0%E6%96%B9%E6%B3%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/my.jpg">
+      <meta itemprop="name" content="陈宇韶chenyushao">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tiger_pop's Blog">
+      <meta itemprop="description" content="爱学习、爱工作、爱生活;         微信号: Tiger_and_master;         手机号码:18515678348 ">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="58散列函数的构造方法 | Tiger_pop's Blog">
+      <meta itemprop="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          58散列函数的构造方法
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2021-09-27 20:00:36" itemprop="dateCreated datePublished" datetime="2021-09-27T20:00:36+08:00">2021-09-27</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2022-10-29 00:05:36" itemprop="dateModified" datetime="2022-10-29T00:05:36+08:00">2022-10-29</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%B5%99%E5%A4%A7%E7%AE%97%E6%B3%95%E4%B8%8E%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B-python%E5%AE%9E%E7%8E%B0/" itemprop="url" rel="index"><span itemprop="name">浙大算法与数据结构课程(python实现)</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+            <div class="post-description">这是文章开头，显示在主页面，详情请点击此处。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">散列函数的构造：</span></span><br><span class="line"><span class="string">    一：计算简单，以便高速转换；</span></span><br><span class="line"><span class="string">    二：关键词对应的地址空间分布均匀，尽量减少冲突。</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">如果关键词是数字，</span></span><br><span class="line"><span class="string">经典的几种方法有：</span></span><br><span class="line"><span class="string">    1、直接定值法</span></span><br><span class="line"><span class="string">        取key的某个线性函数值为散列的地址。</span></span><br><span class="line"><span class="string">        h（key）= a * key + b</span></span><br><span class="line"><span class="string">    2、除留余数法</span></span><br><span class="line"><span class="string">        h（key）= key mod p</span></span><br><span class="line"><span class="string">        p 一般取一个素数（质数）       # 一个大于1的自然数，除了1和它自身外，不能被其他自然数整除的数叫做质数；</span></span><br><span class="line"><span class="string">        因为质数 容易除出余数</span></span><br><span class="line"><span class="string">    3、数字分析法</span></span><br><span class="line"><span class="string">        关键字由很多位组成，每一位在对象里面变化情况不一样。我们选取变化比较多的部分作key输入函数。</span></span><br><span class="line"><span class="string">        比如：</span></span><br><span class="line"><span class="string">            取11位手机号码key的后4位作为地址；</span></span><br><span class="line"><span class="string">            散列函数为：h(key) = atoi(key+7)</span></span><br><span class="line"><span class="string">            这里key是一个指针，指向的是一个字符串的左边第一个位置，</span></span><br><span class="line"><span class="string">        比如：</span></span><br><span class="line"><span class="string">            18位身份证上数字变化较为多的是第6、10、14、16、17 五个位置。</span></span><br><span class="line"><span class="string">            我们用这五个位置的数字 组合成一个5位数来存放，</span></span><br><span class="line"><span class="string">            h(key) = key[6]*10^4 + key[10]*10^3 + key[14]*10^2 + key[16]*10^1 + key[17]</span></span><br><span class="line"><span class="string">            考虑到最后一位校验位</span></span><br><span class="line"><span class="string">            h(key) = h(key)*10 + key[18] or h(key) = h(key)*10 + 10 # 校验位是x。</span></span><br><span class="line"><span class="string">    4、折叠法</span></span><br><span class="line"><span class="string">        把关键词分割成位数相同的几个部分，然后叠加</span></span><br><span class="line"><span class="string">        比如：</span></span><br><span class="line"><span class="string">            56793542 每三位取成一组，不够的左边补0。形成：056、793、542三个数；</span></span><br><span class="line"><span class="string">            对这三个数求和，从右取，取三位作为存放地址。</span></span><br><span class="line"><span class="string">    5、平方取中法</span></span><br><span class="line"><span class="string">        和折叠法的思路一样，都是为了让散列方法的结果被尽可能多的位影响，</span></span><br><span class="line"><span class="string">        如果仅仅取后几位，则只会被后面几位影响，取中可以相对兼顾了头尾。</span></span><br><span class="line"><span class="string">        比如：</span></span><br><span class="line"><span class="string">            56793542 平方 ，取中间三位641作存放地址。</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">如果关键词是字符串，</span></span><br><span class="line"><span class="string">散列函数经典构造方法：</span></span><br><span class="line"><span class="string">    1、ASCII码 加和法</span></span><br><span class="line"><span class="string">        h(key) = (Σkey[i]) mod TableSize</span></span><br><span class="line"><span class="string">        但是这样的散列方法有一个潜在的问题，</span></span><br><span class="line"><span class="string">        ASCII 码用到的是7位，实际变化范围就是0～127，</span></span><br><span class="line"><span class="string">        例如一个关键词有10位，每一位变化范围是0～127，</span></span><br><span class="line"><span class="string">        h(key)一共就是0～1270个位置，远远小于实际可能出现的变量名组合，</span></span><br><span class="line"><span class="string">        容易出现聚集效应，冲突严重。</span></span><br><span class="line"><span class="string">    2、ASCII码 加和法改进，前3字符位移法</span></span><br><span class="line"><span class="string">        h(key) = (key[0]*27^2+key[1]*27+key[2]) mod TableSize</span></span><br><span class="line"><span class="string">        因为有26个字母，加一个空格，所以选27进制 运用到前三位来扩充范围。</span></span><br><span class="line"><span class="string">        但是这样仍然可能冲突，比如前三位是一样的str、str、str、str。</span></span><br><span class="line"><span class="string">        除此之外，还会浪费空间，加入字符串前三位都是字符组成，一共的可能性是26^3种，</span></span><br><span class="line"><span class="string">        但是英文字母实际前三位大约3000种，3000/26^3 造成大量空间浪费。</span></span><br><span class="line"><span class="string">    3、位移法</span></span><br><span class="line"><span class="string">        这是好的散列函数，涉及关键词所有字符一共n个，分布很好。</span></span><br><span class="line"><span class="string">        h(key) = (Σkey[i]*32^i) mod TableSize</span></span><br><span class="line"><span class="string">        h(&#x27;abcde&#x27;) = &#x27;a&#x27;*32^4 + &#x27;b&#x27;*32^3 + &#x27;c&#x27;*32^2 + &#x27;d&#x27;*32 + e</span></span><br><span class="line"><span class="string">        级数求和</span></span><br><span class="line"><span class="string">        可以用 秦九韶算法 减少级数求和中乘法的使用次数。</span></span><br><span class="line"><span class="string">        更好的做法是在秦九韶算法的基础上，用左移代替乘法：</span></span><br><span class="line"><span class="string">            在二进制中左移1位就是翻2^1倍，左移5位就是翻32倍。</span></span><br><span class="line"><span class="string">            def Hash(A,TableSize):</span></span><br><span class="line"><span class="string">                h = 0</span></span><br><span class="line"><span class="string">                i = 0</span></span><br><span class="line"><span class="string">                while i &lt; len(A):      # 没到字符串结尾。 </span></span><br><span class="line"><span class="string">                    h = (h&lt;&lt;5) + ord(A[i])</span></span><br><span class="line"><span class="string">                    i += 1</span></span><br><span class="line"><span class="string">                return h % TableSize</span></span><br><span class="line"><span class="string">                </span></span><br><span class="line"><span class="string">                </span></span><br><span class="line"><span class="string">                </span></span><br><span class="line"><span class="string">                </span></span><br><span class="line"><span class="string">                </span></span><br><span class="line"><span class="string">                </span></span><br><span class="line"><span class="string">                </span></span><br><span class="line"><span class="string">                </span></span><br><span class="line"><span class="string">                    </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br></pre></td></tr></table></figure>
+
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%93%88%E5%B8%8C/" rel="tag"># 哈希</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/60%E5%86%B2%E7%AA%81%E7%9A%84%E5%A4%84%E7%90%86%E6%96%B9%E6%B3%95(%E5%88%86%E7%A6%BB%E9%93%BE%E6%8E%A5%E6%B3%95)/" rel="prev" title="60冲突的处理方法(分离链接法)">
+                  <i class="fa fa-chevron-left"></i> 60冲突的处理方法(分离链接法)
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/57%E6%95%A3%E5%88%97%E8%A1%A8/" rel="next" title="57散列表">
+                  57散列表 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">陈宇韶chenyushao</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

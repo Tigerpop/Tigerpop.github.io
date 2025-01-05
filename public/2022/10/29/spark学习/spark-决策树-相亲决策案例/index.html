@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha256-AbA177XfpSnFEvgpYu1jMygiLabzPCJCRIBtR5jGc0k=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.13.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="spark_决策树-相亲决策案例">
+<meta property="og:url" content="http://example.com/2022/10/29/spark%E5%AD%A6%E4%B9%A0/spark-%E5%86%B3%E7%AD%96%E6%A0%91-%E7%9B%B8%E4%BA%B2%E5%86%B3%E7%AD%96%E6%A1%88%E4%BE%8B/index.html">
+<meta property="og:site_name" content="Tiger_pop&#39;s Blog">
+<meta property="og:description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2022/10/29/spark%E5%AD%A6%E4%B9%A0/spark-%E5%86%B3%E7%AD%96%E6%A0%91-%E7%9B%B8%E4%BA%B2%E5%86%B3%E7%AD%96%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-07-19%2015.29.08-7050379.jpg">
+<meta property="article:published_time" content="2022-10-29T14:44:07.000Z">
+<meta property="article:modified_time" content="2022-10-29T17:55:32.391Z">
+<meta property="article:author" content="陈宇韶chenyushao">
+<meta property="article:tag" content="决策树">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2022/10/29/spark%E5%AD%A6%E4%B9%A0/spark-%E5%86%B3%E7%AD%96%E6%A0%91-%E7%9B%B8%E4%BA%B2%E5%86%B3%E7%AD%96%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-07-19%2015.29.08-7050379.jpg">
+
+
+<link rel="canonical" href="http://example.com/2022/10/29/spark%E5%AD%A6%E4%B9%A0/spark-%E5%86%B3%E7%AD%96%E6%A0%91-%E7%9B%B8%E4%BA%B2%E5%86%B3%E7%AD%96%E6%A1%88%E4%BE%8B/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2022/10/29/spark%E5%AD%A6%E4%B9%A0/spark-%E5%86%B3%E7%AD%96%E6%A0%91-%E7%9B%B8%E4%BA%B2%E5%86%B3%E7%AD%96%E6%A1%88%E4%BE%8B/","path":"2022/10/29/spark学习/spark-决策树-相亲决策案例/","title":"spark_决策树-相亲决策案例"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>spark_决策树-相亲决策案例 | Tiger_pop's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="Tiger_pop's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Tiger_pop's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">tiger_pop 的博客</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-overview-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="陈宇韶chenyushao"
+      src="/images/my.jpg">
+  <p class="site-author-name" itemprop="name">陈宇韶chenyushao</p>
+  <div class="site-description" itemprop="description">爱学习、爱工作、爱生活;         微信号: Tiger_and_master;         手机号码:18515678348 </div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">378</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">24</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">138</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/10/29/spark%E5%AD%A6%E4%B9%A0/spark-%E5%86%B3%E7%AD%96%E6%A0%91-%E7%9B%B8%E4%BA%B2%E5%86%B3%E7%AD%96%E6%A1%88%E4%BE%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/my.jpg">
+      <meta itemprop="name" content="陈宇韶chenyushao">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tiger_pop's Blog">
+      <meta itemprop="description" content="爱学习、爱工作、爱生活;         微信号: Tiger_and_master;         手机号码:18515678348 ">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="spark_决策树-相亲决策案例 | Tiger_pop's Blog">
+      <meta itemprop="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          spark_决策树-相亲决策案例
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2022-10-29 22:44:07" itemprop="dateCreated datePublished" datetime="2022-10-29T22:44:07+08:00">2022-10-29</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2022-10-30 01:55:32" itemprop="dateModified" datetime="2022-10-30T01:55:32+08:00">2022-10-30</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/spark/" itemprop="url" rel="index"><span itemprop="name">spark</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+            <div class="post-description">这是文章开头，显示在主页面，详情请点击此处。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>简介 <span id="more"></span></p>
+<p>决策树算法：</p>
+<p>​		选择当前信息增益最大的特征作为树的节点，依次选择相应的特征作为树的节点，直到形成一颗决策树。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 相亲数据</span></span><br><span class="line">label,age,handsome,salary,programmer</span><br><span class="line">不见面,<span class="number">32</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">0</span></span><br><span class="line">不见面,<span class="number">25</span>,<span class="number">1</span>,<span class="number">1</span>,<span class="number">0</span></span><br><span class="line">见面,<span class="number">29</span>,<span class="number">1</span>,<span class="number">1</span>,<span class="number">1</span></span><br><span class="line">见面,<span class="number">24</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">0</span></span><br><span class="line">不见面,<span class="number">31</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">0</span></span><br><span class="line">见面,<span class="number">35</span>,<span class="number">1</span>,<span class="number">1</span>,<span class="number">1</span></span><br><span class="line">不见面,<span class="number">30</span>,<span class="number">0</span>,<span class="number">2</span>,<span class="number">0</span></span><br><span class="line">不见面,<span class="number">31</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">0</span></span><br><span class="line">见面,<span class="number">30</span>,<span class="number">1</span>,<span class="number">1</span>,<span class="number">1</span></span><br><span class="line">见面,<span class="number">21</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">0</span></span><br><span class="line">不见面,<span class="number">21</span>,<span class="number">1</span>,<span class="number">1</span>,<span class="number">0</span></span><br><span class="line">见面,<span class="number">21</span>,<span class="number">1</span>,<span class="number">1</span>,<span class="number">1</span></span><br><span class="line">不见面,<span class="number">29</span>,<span class="number">0</span>,<span class="number">1</span>,<span class="number">1</span></span><br><span class="line">不见面,<span class="number">29</span>,<span class="number">1</span>,<span class="number">0</span>,<span class="number">1</span></span><br><span class="line">不见面,<span class="number">29</span>,<span class="number">0</span>,<span class="number">1</span>,<span class="number">1</span></span><br><span class="line">见面,<span class="number">30</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">0</span></span><br><span class="line">不见面,<span class="number">32</span>,<span class="number">1</span>,<span class="number">1</span>,<span class="number">0</span></span><br><span class="line">见面,<span class="number">27</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">1</span></span><br><span class="line">见面,<span class="number">29</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">0</span></span><br><span class="line">见面,<span class="number">25</span>,<span class="number">1</span>,<span class="number">1</span>,<span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+<p>​		流程  </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 构建环境</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 加载数据</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 标签数值化</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 特征向量化</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 构建决策树模型</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 规范预测标签数值还原</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 数据集划分</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 构建 pipeline</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用训练集训练</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用测试集合测试/预测</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 输出决策过程</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 评估模型好坏</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p>​		提示：</p>
+<p>​		<code>[trainSet, testSet] = df.randomSplit(weights=[0.8,0.2])</code>	</p>
+<p>​		这段代码的意思，并不是严格按照4:1的比例划分数据集为训练集和测试集，而是 It only guarantees that each object has this probability (0.8,0.2) to be assigned to a specific subset.它只保证每个对象被分配到特定子集的概率为0.8和0.2。</p>
+<p>​		If number of records is low you’ll see fluctuations like here. This is normal behavior.如果记录的数量很低，你会看到像这里这样的波动。这是正常行为。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># coding:utf8</span></span><br><span class="line"><span class="keyword">from</span> pyspark.ml <span class="keyword">import</span> Pipeline</span><br><span class="line"><span class="keyword">from</span> pyspark.ml.classification <span class="keyword">import</span> DecisionTreeClassifier</span><br><span class="line"><span class="keyword">from</span> pyspark.ml.evaluation <span class="keyword">import</span> MulticlassClassificationEvaluator</span><br><span class="line"><span class="keyword">from</span> pyspark.ml.feature <span class="keyword">import</span> StringIndexer, VectorAssembler, IndexToString</span><br><span class="line"><span class="keyword">from</span> pyspark.sql <span class="keyword">import</span> SparkSession</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__==<span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    <span class="comment"># &quot;decision tree demo example for find husband&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># create environment 构建环境</span></span><br><span class="line">    spark = SparkSession.builder.appName(<span class="string">&quot;Decision_tree&quot;</span>).master(<span class="string">&quot;local[*]&quot;</span>)\</span><br><span class="line">        .getOrCreate()</span><br><span class="line"></span><br><span class="line">    <span class="comment"># load data 加载数据</span></span><br><span class="line">    df = spark.read.<span class="built_in">format</span>(<span class="string">&quot;csv&quot;</span>) \</span><br><span class="line">        .option(<span class="string">&quot;sep&quot;</span>,<span class="string">&quot;,&quot;</span>) \</span><br><span class="line">        .option(<span class="string">&quot;header&quot;</span>,<span class="string">&quot;true&quot;</span>) \</span><br><span class="line">        .option(<span class="string">&quot;inferSchema&quot;</span>,<span class="string">&quot;true&quot;</span>) \</span><br><span class="line">        .load(<span class="string">&quot;file:///opt/data/spark-structure-streaming/data/appointment.data&quot;</span>)</span><br><span class="line">    df.printSchema <span class="comment"># check data</span></span><br><span class="line">    df.show()</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;________________________\n&quot;</span>)</span><br><span class="line">    <span class="comment"># 标签数值化</span></span><br><span class="line">    stringIndexer = StringIndexer().setInputCol(<span class="string">&quot;label&quot;</span>).setOutputCol(<span class="string">&quot;label_index&quot;</span>).fit(df)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 特征向量化         (后续使用pipeline做统一的训练和转换，所以这里不需要再次fit)</span></span><br><span class="line">    vectorAssembler = VectorAssembler().setInputCols([<span class="string">&quot;age&quot;</span>,<span class="string">&quot;handsome&quot;</span>,<span class="string">&quot;salary&quot;</span>,<span class="string">&quot;programmer&quot;</span>])\</span><br><span class="line">        .setOutputCol(<span class="string">&quot;features&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 构建决策树模型       (后续使用pipeline做统一的训练和转换，所以这里不需要再次fit)</span></span><br><span class="line">    decisionTreeClassifier = DecisionTreeClassifier()\</span><br><span class="line">        .setFeaturesCol(<span class="string">&quot;features&quot;</span>)\</span><br><span class="line">        .setLabelCol(<span class="string">&quot;label_index&quot;</span>)\</span><br><span class="line">        .setPredictionCol(<span class="string">&quot;predict_index&quot;</span>)\</span><br><span class="line">        .setMaxDepth(<span class="number">4</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 规范预测标签数值还原</span></span><br><span class="line">    indexToString = IndexToString().setInputCol(<span class="string">&quot;predict_index&quot;</span>).setOutputCol(<span class="string">&quot;predict_string&quot;</span>)\</span><br><span class="line">        .setLabels(stringIndexer.labels)    <span class="comment">#（设置 数值和字符串的对应关系在哪里）</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 数据集划分</span></span><br><span class="line">    (trainSet, testSet) = df.randomSplit(weights=[<span class="number">0.8</span>,<span class="number">0.2</span>])</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;trainSet is :&quot;</span>)</span><br><span class="line">    trainSet.show()</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;testSet is :&quot;</span>)</span><br><span class="line">    testSet.show()</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 构建 pipeline</span></span><br><span class="line">    pipeline = Pipeline().setStages([stringIndexer</span><br><span class="line">                                    ,vectorAssembler</span><br><span class="line">                                    ,decisionTreeClassifier</span><br><span class="line">                                    ,indexToString ])</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 使用训练集训练</span></span><br><span class="line">    model = pipeline.fit(trainSet)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 使用测试集合测试/预测</span></span><br><span class="line">    testResult = model.transform(testSet)</span><br><span class="line">    testResult.show()</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 输出决策过程</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;模型决策过程为 :\n %s&quot;</span> %(model.stages[<span class="number">2</span>].toDebugString))</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 评估模型好坏</span></span><br><span class="line">    accuracy = MulticlassClassificationEvaluator(predictionCol=<span class="string">&quot;predict_index&quot;</span>,labelCol=<span class="string">&quot;label_index&quot;</span>,metricName=<span class="string">&quot;accuracy&quot;</span>)\</span><br><span class="line">        .evaluate(testResult)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;测试集 错误率为: %f &quot;</span>%(<span class="number">1</span>-accuracy))</span><br><span class="line"></span><br><span class="line">    path = <span class="string">&quot;file:///opt/data/spark-structure-streaming/model_decision_tree/model_1&quot;</span></span><br><span class="line">    model.save(path)</span><br><span class="line">    <span class="comment"># model2 = DecisionTreeClassificationModel.load(path)  # 下次加载这个训练好的模型，去跑数据，可以直接用。</span></span><br><span class="line"></span><br><span class="line">    spark.stop()</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># output</span></span><br><span class="line">+------+---+--------+------+----------+</span><br><span class="line">| label|age|handsome|salary|programmer|</span><br><span class="line">+------+---+--------+------+----------+</span><br><span class="line">|不见面| <span class="number">32</span>|       <span class="number">1</span>|     <span class="number">2</span>|         <span class="number">0</span>|</span><br><span class="line">|不见面| <span class="number">25</span>|       <span class="number">1</span>|     <span class="number">1</span>|         <span class="number">0</span>|</span><br><span class="line">|  见面| <span class="number">29</span>|       <span class="number">1</span>|     <span class="number">1</span>|         <span class="number">1</span>|</span><br><span class="line">|  见面| <span class="number">24</span>|       <span class="number">1</span>|     <span class="number">2</span>|         <span class="number">0</span>|</span><br><span class="line">|不见面| <span class="number">31</span>|       <span class="number">1</span>|     <span class="number">2</span>|         <span class="number">0</span>|</span><br><span class="line">|  见面| <span class="number">35</span>|       <span class="number">1</span>|     <span class="number">1</span>|         <span class="number">1</span>|</span><br><span class="line">|不见面| <span class="number">30</span>|       <span class="number">0</span>|     <span class="number">2</span>|         <span class="number">0</span>|</span><br><span class="line">|不见面| <span class="number">31</span>|       <span class="number">1</span>|     <span class="number">2</span>|         <span class="number">0</span>|</span><br><span class="line">|  见面| <span class="number">30</span>|       <span class="number">1</span>|     <span class="number">1</span>|         <span class="number">1</span>|</span><br><span class="line">|  见面| <span class="number">21</span>|       <span class="number">1</span>|     <span class="number">2</span>|         <span class="number">0</span>|</span><br><span class="line">|不见面| <span class="number">21</span>|       <span class="number">1</span>|     <span class="number">1</span>|         <span class="number">0</span>|</span><br><span class="line">|  见面| <span class="number">21</span>|       <span class="number">1</span>|     <span class="number">1</span>|         <span class="number">1</span>|</span><br><span class="line">|不见面| <span class="number">29</span>|       <span class="number">0</span>|     <span class="number">1</span>|         <span class="number">1</span>|</span><br><span class="line">|不见面| <span class="number">29</span>|       <span class="number">1</span>|     <span class="number">0</span>|         <span class="number">1</span>|</span><br><span class="line">|不见面| <span class="number">29</span>|       <span class="number">0</span>|     <span class="number">1</span>|         <span class="number">1</span>|</span><br><span class="line">|  见面| <span class="number">30</span>|       <span class="number">1</span>|     <span class="number">2</span>|         <span class="number">0</span>|</span><br><span class="line">|不见面| <span class="number">32</span>|       <span class="number">1</span>|     <span class="number">1</span>|         <span class="number">0</span>|</span><br><span class="line">|  见面| <span class="number">27</span>|       <span class="number">1</span>|     <span class="number">2</span>|         <span class="number">1</span>|</span><br><span class="line">|  见面| <span class="number">29</span>|       <span class="number">1</span>|     <span class="number">2</span>|         <span class="number">0</span>|</span><br><span class="line">|  见面| <span class="number">25</span>|       <span class="number">1</span>|     <span class="number">1</span>|         <span class="number">1</span>|</span><br><span class="line">+------+---+--------+------+----------+</span><br><span class="line"></span><br><span class="line">________________________</span><br><span class="line"></span><br><span class="line">trainSet <span class="keyword">is</span> :</span><br><span class="line">+------+---+--------+------+----------+</span><br><span class="line">| label|age|handsome|salary|programmer|</span><br><span class="line">+------+---+--------+------+----------+</span><br><span class="line">|不见面| <span class="number">25</span>|       <span class="number">1</span>|     <span class="number">1</span>|         <span class="number">0</span>|</span><br><span class="line">|不见面| <span class="number">29</span>|       <span class="number">0</span>|     <span class="number">1</span>|         <span class="number">1</span>|</span><br><span class="line">|不见面| <span class="number">29</span>|       <span class="number">1</span>|     <span class="number">0</span>|         <span class="number">1</span>|</span><br><span class="line">|不见面| <span class="number">30</span>|       <span class="number">0</span>|     <span class="number">2</span>|         <span class="number">0</span>|</span><br><span class="line">|不见面| <span class="number">31</span>|       <span class="number">1</span>|     <span class="number">2</span>|         <span class="number">0</span>|</span><br><span class="line">|不见面| <span class="number">31</span>|       <span class="number">1</span>|     <span class="number">2</span>|         <span class="number">0</span>|</span><br><span class="line">|不见面| <span class="number">32</span>|       <span class="number">1</span>|     <span class="number">1</span>|         <span class="number">0</span>|</span><br><span class="line">|不见面| <span class="number">32</span>|       <span class="number">1</span>|     <span class="number">2</span>|         <span class="number">0</span>|</span><br><span class="line">|  见面| <span class="number">21</span>|       <span class="number">1</span>|     <span class="number">1</span>|         <span class="number">1</span>|</span><br><span class="line">|  见面| <span class="number">21</span>|       <span class="number">1</span>|     <span class="number">2</span>|         <span class="number">0</span>|</span><br><span class="line">|  见面| <span class="number">24</span>|       <span class="number">1</span>|     <span class="number">2</span>|         <span class="number">0</span>|</span><br><span class="line">|  见面| <span class="number">25</span>|       <span class="number">1</span>|     <span class="number">1</span>|         <span class="number">1</span>|</span><br><span class="line">|  见面| <span class="number">29</span>|       <span class="number">1</span>|     <span class="number">1</span>|         <span class="number">1</span>|</span><br><span class="line">|  见面| <span class="number">29</span>|       <span class="number">1</span>|     <span class="number">2</span>|         <span class="number">0</span>|</span><br><span class="line">|  见面| <span class="number">30</span>|       <span class="number">1</span>|     <span class="number">1</span>|         <span class="number">1</span>|</span><br><span class="line">|  见面| <span class="number">30</span>|       <span class="number">1</span>|     <span class="number">2</span>|         <span class="number">0</span>|</span><br><span class="line">|  见面| <span class="number">35</span>|       <span class="number">1</span>|     <span class="number">1</span>|         <span class="number">1</span>|</span><br><span class="line">+------+---+--------+------+----------+</span><br><span class="line"></span><br><span class="line">testSet <span class="keyword">is</span> :</span><br><span class="line">+------+---+--------+------+----------+</span><br><span class="line">| label|age|handsome|salary|programmer|</span><br><span class="line">+------+---+--------+------+----------+</span><br><span class="line">|不见面| <span class="number">21</span>|       <span class="number">1</span>|     <span class="number">1</span>|         <span class="number">0</span>|</span><br><span class="line">|不见面| <span class="number">29</span>|       <span class="number">0</span>|     <span class="number">1</span>|         <span class="number">1</span>|</span><br><span class="line">|  见面| <span class="number">27</span>|       <span class="number">1</span>|     <span class="number">2</span>|         <span class="number">1</span>|</span><br><span class="line">+------+---+--------+------+----------+</span><br><span class="line"></span><br><span class="line"><span class="number">2022</span>-07-<span class="number">19</span> <span class="number">00</span>:<span class="number">27</span>:<span class="number">13</span>,<span class="number">842</span> WARN impl.DecisionTreeMetadata: DecisionTree reducing maxBins <span class="keyword">from</span> <span class="number">32</span> to <span class="number">17</span> (= number of training instances)</span><br><span class="line">+------+---+--------+------+----------+-----------+------------------+-------------+-----------+-------------+--------------+</span><br><span class="line">| label|age|handsome|salary|programmer|label_index|          features|rawPrediction|probability|predict_index|predict_string|</span><br><span class="line">+------+---+--------+------+----------+-----------+------------------+-------------+-----------+-------------+--------------+</span><br><span class="line">|不见面| <span class="number">21</span>|       <span class="number">1</span>|     <span class="number">1</span>|         <span class="number">0</span>|        <span class="number">0.0</span>|[<span class="number">21.0</span>,<span class="number">1.0</span>,<span class="number">1.0</span>,<span class="number">0.0</span>]|    [<span class="number">0.0</span>,<span class="number">3.0</span>]|  [<span class="number">0.0</span>,<span class="number">1.0</span>]|          <span class="number">1.0</span>|          见面|</span><br><span class="line">|不见面| <span class="number">29</span>|       <span class="number">0</span>|     <span class="number">1</span>|         <span class="number">1</span>|        <span class="number">0.0</span>|[<span class="number">29.0</span>,<span class="number">0.0</span>,<span class="number">1.0</span>,<span class="number">1.0</span>]|    [<span class="number">1.0</span>,<span class="number">0.0</span>]|  [<span class="number">1.0</span>,<span class="number">0.0</span>]|          <span class="number">0.0</span>|        不见面|</span><br><span class="line">|  见面| <span class="number">27</span>|       <span class="number">1</span>|     <span class="number">2</span>|         <span class="number">1</span>|        <span class="number">1.0</span>|[<span class="number">27.0</span>,<span class="number">1.0</span>,<span class="number">2.0</span>,<span class="number">1.0</span>]|    [<span class="number">0.0</span>,<span class="number">4.0</span>]|  [<span class="number">0.0</span>,<span class="number">1.0</span>]|          <span class="number">1.0</span>|          见面|</span><br><span class="line">+------+---+--------+------+----------+-----------+------------------+-------------+-----------+-------------+--------------+</span><br><span class="line"></span><br><span class="line">模型决策过程为 :</span><br><span class="line"> DecisionTreeClassificationModel: uid=DecisionTreeClassifier_50d5fdd7f108, depth=<span class="number">4</span>, numNodes=<span class="number">13</span>, numClasses=<span class="number">2</span>, numFeatures=<span class="number">4</span></span><br><span class="line">  If (feature <span class="number">0</span> &lt;= <span class="number">24.5</span>)</span><br><span class="line">   Predict: <span class="number">1.0</span></span><br><span class="line">  Else (feature <span class="number">0</span> &gt; <span class="number">24.5</span>)</span><br><span class="line">   If (feature <span class="number">3</span> &lt;= <span class="number">0.5</span>)</span><br><span class="line">    If (feature <span class="number">0</span> &lt;= <span class="number">30.5</span>)</span><br><span class="line">     If (feature <span class="number">0</span> &lt;= <span class="number">27.0</span>)</span><br><span class="line">      Predict: <span class="number">0.0</span></span><br><span class="line">     Else (feature <span class="number">0</span> &gt; <span class="number">27.0</span>)</span><br><span class="line">      Predict: <span class="number">1.0</span></span><br><span class="line">    Else (feature <span class="number">0</span> &gt; <span class="number">30.5</span>)</span><br><span class="line">     Predict: <span class="number">0.0</span></span><br><span class="line">   Else (feature <span class="number">3</span> &gt; <span class="number">0.5</span>)</span><br><span class="line">    If (feature <span class="number">1</span> &lt;= <span class="number">0.5</span>)</span><br><span class="line">     Predict: <span class="number">0.0</span></span><br><span class="line">    Else (feature <span class="number">1</span> &gt; <span class="number">0.5</span>)</span><br><span class="line">     If (feature <span class="number">2</span> &lt;= <span class="number">0.5</span>)</span><br><span class="line">      Predict: <span class="number">0.0</span></span><br><span class="line">     Else (feature <span class="number">2</span> &gt; <span class="number">0.5</span>)</span><br><span class="line">      Predict: <span class="number">1.0</span></span><br><span class="line"></span><br><span class="line">测试集 错误率为: <span class="number">0.333333</span> </span><br><span class="line"></span><br><span class="line">Process finished <span class="keyword">with</span> exit code <span class="number">0</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><img src="/2022/10/29/spark%E5%AD%A6%E4%B9%A0/spark-%E5%86%B3%E7%AD%96%E6%A0%91-%E7%9B%B8%E4%BA%B2%E5%86%B3%E7%AD%96%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-07-19%2015.29.08-7050379.jpg" alt="截屏2022-07-19 15.29.08"></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%86%B3%E7%AD%96%E6%A0%91/" rel="tag"># 决策树</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/10/29/spark%E5%AD%A6%E4%B9%A0/sparkstreaming-%E5%86%85%E6%B6%B5structurestreaming/" rel="prev" title="sparkstreaming_内涵structurestreaming">
+                  <i class="fa fa-chevron-left"></i> sparkstreaming_内涵structurestreaming
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2022/10/29/windows_ubuntu%E5%8F%8C%E7%B3%BB%E7%BB%9F/ubuntu%E6%89%A9%E5%AE%B9/" rel="next" title="ubuntu扩容">
+                  ubuntu扩容 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">陈宇韶chenyushao</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

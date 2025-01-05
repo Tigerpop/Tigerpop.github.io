@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha256-AbA177XfpSnFEvgpYu1jMygiLabzPCJCRIBtR5jGc0k=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.13.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="kafka和flume的集成">
+<meta property="og:url" content="http://example.com/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E5%92%8Cflume%E7%9A%84%E9%9B%86%E6%88%90/index.html">
+<meta property="og:site_name" content="Tiger_pop&#39;s Blog">
+<meta property="og:description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E5%92%8Cflume%E7%9A%84%E9%9B%86%E6%88%90/%E6%88%AA%E5%B1%8F2022-05-05%2020.51.58.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E5%92%8Cflume%E7%9A%84%E9%9B%86%E6%88%90/%E6%88%AA%E5%B1%8F2022-05-05%2020.52.12.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E5%92%8Cflume%E7%9A%84%E9%9B%86%E6%88%90/%E6%88%AA%E5%B1%8F2022-05-06%2013.29.49-7029137.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E5%92%8Cflume%E7%9A%84%E9%9B%86%E6%88%90/%E6%88%AA%E5%B1%8F2022-05-06%2013.30.19.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E5%92%8Cflume%E7%9A%84%E9%9B%86%E6%88%90/%E6%88%AA%E5%B1%8F2022-05-06%2013.30.38.jpg">
+<meta property="article:published_time" content="2022-10-29T07:42:07.000Z">
+<meta property="article:modified_time" content="2022-10-29T07:53:53.482Z">
+<meta property="article:author" content="陈宇韶chenyushao">
+<meta property="article:tag" content="kafka">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E5%92%8Cflume%E7%9A%84%E9%9B%86%E6%88%90/%E6%88%AA%E5%B1%8F2022-05-05%2020.51.58.jpg">
+
+
+<link rel="canonical" href="http://example.com/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E5%92%8Cflume%E7%9A%84%E9%9B%86%E6%88%90/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E5%92%8Cflume%E7%9A%84%E9%9B%86%E6%88%90/","path":"2022/10/29/kafka学习/kafka和flume的集成/","title":"kafka和flume的集成"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>kafka和flume的集成 | Tiger_pop's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="Tiger_pop's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Tiger_pop's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">tiger_pop 的博客</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%80%E3%80%81flume-to-kafka%E6%95%B4%E5%90%88%E6%B5%81%E7%A8%8B"><span class="nav-number">1.</span> <span class="nav-text">一、flume-to-kafka整合流程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%90%AF%E5%8A%A8Zookeeper%E5%92%8CKafka"><span class="nav-number">1.1.</span> <span class="nav-text">1. 启动Zookeeper和Kafka</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E5%88%9B%E5%BB%BA%E4%B8%BB%E9%A2%98"><span class="nav-number">1.2.</span> <span class="nav-text">2. 创建主题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E5%90%AF%E5%8A%A8kafka%E6%B6%88%E8%B4%B9%E8%80%85"><span class="nav-number">1.3.</span> <span class="nav-text">3. 启动kafka消费者</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E9%85%8D%E7%BD%AEFlume"><span class="nav-number">1.4.</span> <span class="nav-text">4. 配置Flume</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-%E5%90%AF%E5%8A%A8Flume"><span class="nav-number">1.5.</span> <span class="nav-text">5. 启动Flume</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-%E6%B5%8B%E8%AF%95"><span class="nav-number">1.6.</span> <span class="nav-text">6. 测试</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%8C%E3%80%81kafka-to-flume%E6%95%B4%E5%90%88"><span class="nav-number">2.</span> <span class="nav-text">二、kafka-to-flume整合</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%A1%A5%E5%85%85%EF%BC%9A%E5%8F%AF%E8%83%BD%E9%81%87%E5%88%B0%E7%9A%84%E6%8A%A5%E9%94%99%E3%80%82"><span class="nav-number">3.</span> <span class="nav-text">补充：可能遇到的报错。</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%94%99%E8%AF%AF%E5%8E%9F%E5%9B%A0%EF%BC%9A"><span class="nav-number">3.1.</span> <span class="nav-text">错误原因：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95%EF%BC%9A"><span class="nav-number">3.2.</span> <span class="nav-text">解决办法：</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="陈宇韶chenyushao"
+      src="/images/my.jpg">
+  <p class="site-author-name" itemprop="name">陈宇韶chenyushao</p>
+  <div class="site-description" itemprop="description">爱学习、爱工作、爱生活;         微信号: Tiger_and_master;         手机号码:18515678348 </div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">378</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">24</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">138</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E5%92%8Cflume%E7%9A%84%E9%9B%86%E6%88%90/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/my.jpg">
+      <meta itemprop="name" content="陈宇韶chenyushao">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tiger_pop's Blog">
+      <meta itemprop="description" content="爱学习、爱工作、爱生活;         微信号: Tiger_and_master;         手机号码:18515678348 ">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="kafka和flume的集成 | Tiger_pop's Blog">
+      <meta itemprop="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          kafka和flume的集成
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2022-10-29 15:42:07 / 修改时间：15:53:53" itemprop="dateCreated datePublished" datetime="2022-10-29T15:42:07+08:00">2022-10-29</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/kafka/" itemprop="url" rel="index"><span itemprop="name">kafka</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+            <div class="post-description">这是文章开头，显示在主页面，详情请点击此处。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>简介 <span id="more"></span></p>
+<pre><code>    先说一下，为什么要使用 Flume + Kafka？
+</code></pre>
+<p>​		以实时流处理项目为例，由于采集的数据量可能存在峰值和峰谷，假设是一个电商项目，那么峰值通常出现在秒杀时，这时如果直接将 Flume 聚合后的数据输入到 Storm 等分布式计算框架中，可能就会超过集群的处理能力，这时采用 Kafka 就可以起到削峰的作用。Kafka 天生为大数据场景而设计，具有高吞吐的特性，能很好地抗住峰值数据的冲击。</p>
+<h1 id="一、flume-to-kafka整合流程"><a href="#一、flume-to-kafka整合流程" class="headerlink" title="一、flume-to-kafka整合流程"></a>一、flume-to-kafka整合流程</h1><p>​		官方文档</p>
+<p>​		<a target="_blank" rel="noopener" href="https://flume.liyifeng.org/#kafka-source">https://flume.liyifeng.org/#kafka-source</a></p>
+<p>​		Flume 发送数据到 Kafka 上主要是通过 <code>Kafka Sink</code> 来实现</p>
+<h2 id="1-启动Zookeeper和Kafka"><a href="#1-启动Zookeeper和Kafka" class="headerlink" title="1. 启动Zookeeper和Kafka"></a>1. 启动Zookeeper和Kafka</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">启动zookeeper集群，在每台机器上开启。</span></span><br><span class="line">/opt/zookeeper/bin/zkServer.sh start</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">集群各节点 启动 kafka 服务。</span></span><br><span class="line">/opt/kafka/kafka_2.13-3.1.0/bin/kafka-server-start.sh -daemon /opt/kafka/kafka_2.13-3.1.0/config/server.properties</span><br></pre></td></tr></table></figure>
+
+<h2 id="2-创建主题"><a href="#2-创建主题" class="headerlink" title="2. 创建主题"></a>2. 创建主题</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">创建主题</span></span><br><span class="line">/opt/kafka/kafka_2.13-3.1.0/bin/kafka-topics.sh --create \</span><br><span class="line">--bootstrap-server node01:9092 \</span><br><span class="line">--replication-factor 2   \</span><br><span class="line">--partitions 3 --topic flume-kafka</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">检查topic状态</span></span><br><span class="line">kafka-topics.sh --bootstrap-server node01:9092 --describe --topic flume-kafka </span><br></pre></td></tr></table></figure>
+
+<h2 id="3-启动kafka消费者"><a href="#3-启动kafka消费者" class="headerlink" title="3. 启动kafka消费者"></a>3. 启动kafka消费者</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">这里不用kafka-python 自己写了，直接用终端开。</span></span><br><span class="line">kafka-console-consumer.sh --bootstrap-server node01:9092 --topic flume-kafka</span><br></pre></td></tr></table></figure>
+
+<h2 id="4-配置Flume"><a href="#4-配置Flume" class="headerlink" title="4. 配置Flume"></a>4. 配置Flume</h2><p>​		新建配置文件 <code>flume-to-kafka.properties</code>，文件内容如下。这里我们监听一个名为 <code>flume_to_kafka.log</code> 的文件，当文件内容有变化时，将新增加的内容发送到 Kafka 的 <code>flume-kafka</code> 主题上。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd /opt/data/</span><br><span class="line">touch flume_to_kafka.log</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">cd /opt/flume/conf</span><br><span class="line">vim flume-to-kafka.properties </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">a1.sources = s1</span><br><span class="line">a1.channels = c1</span><br><span class="line">a1.sinks = k1                         </span><br><span class="line">                                                                </span><br><span class="line">a1.sources.s1.type=exec</span><br><span class="line">a1.sources.s1.command=tail -F /opt/data/flume_to_kafka.log</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">设置Kafka接收器(kafkasink实际是实现了一个kafka的生产者)</span></span><br><span class="line">a1.sinks.k1.type= org.apache.flume.sink.kafka.KafkaSink</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">设置Kafka地址</span></span><br><span class="line">a1.sinks.k1.brokerList=node01:9092</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">设置发送到Kafka上的主题</span></span><br><span class="line">a1.sinks.k1.topic=flume-kafka</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">设置序列化方式</span></span><br><span class="line">a1.sinks.k1.serializer.class=kafka.serializer.StringEncoder</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</span></span><br><span class="line"></span><br><span class="line">a1.sinks.k1.channel=c1     </span><br><span class="line">a1.sources.s1.channels=c1 </span><br><span class="line"></span><br><span class="line">a1.channels.c1.type=memory</span><br><span class="line">a1.channels.c1.capacity=10000</span><br><span class="line">a1.channels.c1.transactionCapacity=100</span><br></pre></td></tr></table></figure>
+
+<h2 id="5-启动Flume"><a href="#5-启动Flume" class="headerlink" title="5. 启动Flume"></a>5. 启动Flume</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">bin/flume-ng agent \</span><br><span class="line">--conf conf \</span><br><span class="line">--conf-file /opt/flume/conf/flume-to-kafka.properties \</span><br><span class="line">--name a1 -Dflume.root.logger=INFO,console</span><br></pre></td></tr></table></figure>
+
+<h2 id="6-测试"><a href="#6-测试" class="headerlink" title="6. 测试"></a>6. 测试</h2><p>向监听的 <code>flume_to_kafka.log</code> 文件中追加内容，查看 Kafka 消费者的输出：</p>
+<p><img src="/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E5%92%8Cflume%E7%9A%84%E9%9B%86%E6%88%90/%E6%88%AA%E5%B1%8F2022-05-05%2020.51.58.jpg" alt="截屏2022-05-05 20.51.58"></p>
+<p><img src="/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E5%92%8Cflume%E7%9A%84%E9%9B%86%E6%88%90/%E6%88%AA%E5%B1%8F2022-05-05%2020.52.12.jpg" alt="截屏2022-05-05 20.52.12"></p>
+<p>​		可见，日志改变，改变的内容被kafkasink 实现kafka生产者发送进了kafka的cluster集群，最后被kafka的consumer消费掉了。</p>
+<p>​		</p>
+<h1 id="二、kafka-to-flume整合"><a href="#二、kafka-to-flume整合" class="headerlink" title="二、kafka-to-flume整合"></a>二、kafka-to-flume整合</h1><p>​		官方文档</p>
+<p>​		<a target="_blank" rel="noopener" href="https://flume.liyifeng.org/#kafka-source">https://flume.liyifeng.org/#kafka-source</a></p>
+<p>基本流程和flume to kafka 一样，在配置上改一改就行了。</p>
+<ol>
+<li><p>启动Zookeeper和Kafka</p>
+</li>
+<li><p>创建主题</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">创建主题</span></span><br><span class="line">/opt/kafka/kafka_2.13-3.1.0/bin/kafka-topics.sh --create \</span><br><span class="line">--bootstrap-server node01:9092 \</span><br><span class="line">--replication-factor 2   \</span><br><span class="line">--partitions 3 --topic kafka-flume</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>启动kafka生产者</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/opt/kafka/kafka_2.13-3.1.0/bin/kafka-console-producer.sh --broker-list node01:9092 --topic kafka-flume</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>配置Flume</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cd /opt/flume/conf</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">vim kafka_to_flume.properties </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">a1.sources = s1</span><br><span class="line">a1.channels = c1</span><br><span class="line">a1.sinks = k1                         </span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">设置Kafka类来源端(kafkasource实际是实现了一个kafka消费者)</span></span><br><span class="line">a1.sources.s1.type = org.apache.flume.source.kafka.KafkaSource</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">设置Kafka地址</span></span><br><span class="line">a1.sources.s1.kafka.bootstrap.servers = node01:9092</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">设置发送到Kafka上的主题</span></span><br><span class="line">a1.sources.s1.kafka.topics = kafka-flume </span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">定义拦截器，为消息添加时间戳</span>  </span><br><span class="line">a1.sources.s1.interceptors = i1  </span><br><span class="line">a1.sources.s1.interceptors.i1.type = org.apache.flume.interceptor.TimestampInterceptor$Builder</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">sink 传到hdfs 中。</span></span><br><span class="line">a1.sinks.k1.type= hdfs</span><br><span class="line">a1.sinks.k1.hdfs.path = hdfs://node01:9000/flume/%Y%m%d</span><br><span class="line">a1.sinks.k1.hdfs.filePrefix = events-</span><br><span class="line">a1.sinks.k1.hdfs.fileType = DataStream</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">不按照条数生成文件</span>  </span><br><span class="line">a1.sinks.k1.hdfs.rollCount = 0  </span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">HDFS上的文件达到128M时生成一个文件</span>  </span><br><span class="line">a1.sinks.k1.hdfs.rollSize = 134217728  </span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">HDFS上的文件达到60秒生成一个文件</span>  </span><br><span class="line">a1.sinks.k1.hdfs.rollInterval = 60  </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">a1.sinks.k1.channel=c1     </span><br><span class="line">a1.sources.s1.channels=c1 </span><br><span class="line"></span><br><span class="line">a1.channels.c1.type=memory</span><br><span class="line">a1.channels.c1.capacity=10000</span><br><span class="line">a1.channels.c1.transactionCapacity=1000</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>启动Flume</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bin/flume-ng agent --conf /opt/flume/conf --conf-file /opt/flume/conf/kafka_to_flume.properties --name a1 -Dflume.root.logger</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>测试</p>
+</li>
+</ol>
+<p>​		向kafka的生产者写入任意内容。查看hdfs 的flume文件夹中中有没有生成相应文件。</p>
+<p><img src="/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E5%92%8Cflume%E7%9A%84%E9%9B%86%E6%88%90/%E6%88%AA%E5%B1%8F2022-05-06%2013.29.49-7029137.jpg" alt="截屏2022-05-06 13.29.49"></p>
+<p><img src="/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E5%92%8Cflume%E7%9A%84%E9%9B%86%E6%88%90/%E6%88%AA%E5%B1%8F2022-05-06%2013.30.19.jpg" alt="截屏2022-05-06 13.30.19"></p>
+<p><img src="/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E5%92%8Cflume%E7%9A%84%E9%9B%86%E6%88%90/%E6%88%AA%E5%B1%8F2022-05-06%2013.30.38.jpg" alt="截屏2022-05-06 13.30.38"></p>
+<h1 id="补充：可能遇到的报错。"><a href="#补充：可能遇到的报错。" class="headerlink" title="补充：可能遇到的报错。"></a>补充：可能遇到的报错。</h1><p>​		启动 <a target="_blank" rel="noopener" href="https://so.csdn.net/so/search?q=Flume&spm=1001.2101.3001.7020">Flume</a> 时，会看到如下内容：</p>
+<p><code>Class path [contains](https://so.csdn.net/so/search?q=contains&amp;spm=1001.2101.3001.7020) multiple SLF4J bindings.</code></p>
+<p>​		启动 Flume 时，找到了多个 SLF4J bindings（绑定），SLF4J 如同 <a target="_blank" rel="noopener" href="https://so.csdn.net/so/search?q=log4j&spm=1001.2101.3001.7020">log4j</a> 一样，是打印日志的工具。</p>
+<p>​		<code>Found binding in...</code>，在加载 jar 包时，找到了两个本版本不同的 SLF4J，导致了程序出错。</p>
+<h2 id="错误原因："><a href="#错误原因：" class="headerlink" title="错误原因："></a>错误原因：</h2><p>​		启动 Flume 时，在 &#x2F;flume-1.9.0 目录下找到了 SLF4J，又在 &#x2F;hadoop-2.7.7 目录下找到了 SLF4J。</p>
+<p>由于 Flume 是 Hadoop 生态的一个日志采集工具，所以当启动 Flume 后，Flume 就会去加载 Hadoop_HOME 中的类，所以启动时可以看到加载了许多 Hadoop 下的包，当 SLF4J 时，在 Flume 自己目录下也有 SLF4J，就导致了类的冲突，而且版本不一样。</p>
+<h2 id="解决办法："><a href="#解决办法：" class="headerlink" title="解决办法："></a>解决办法：</h2><p>​		在提示中的路径下，对 Flume 的 SLF4J 删除或重命名。</p>
+<p>比如：将该 jar 包重命名为 <code>.jar.bak</code> 结尾的文件，bak 表示 backup（备份）。我这里的Hadoop和hive、flume三个 里面都有log4j，我决定仅保留Hadoop的吧。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">cd /opt/flume/lib </span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">重命名</span> </span><br><span class="line">mv slf4j-log4j12-1.7.25.jar slf4j-log4j12-1.7.25.jar.bak</span><br><span class="line"></span><br><span class="line">cd /opt/hive/apache-hive-3.1.2-bin/lib</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">重命名</span></span><br><span class="line">mv log4j-slf4j-impl-2.10.0.jar log4j-slf4j-impl-2.10.0.jar.bak</span><br></pre></td></tr></table></figure>
+
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/kafka/" rel="tag"># kafka</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka-API%E5%AE%9E%E6%88%98/" rel="prev" title="kafka_API实战">
+                  <i class="fa fa-chevron-left"></i> kafka_API实战
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E8%BF%9C%E7%A8%8B%E7%99%BB%E5%BD%95/" rel="next" title="linux远程登录">
+                  linux远程登录 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">陈宇韶chenyushao</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

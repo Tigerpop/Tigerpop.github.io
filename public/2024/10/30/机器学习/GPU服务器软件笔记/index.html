@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha256-AbA177XfpSnFEvgpYu1jMygiLabzPCJCRIBtR5jGc0k=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.13.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="GPU服务器软件笔记">
+<meta property="og:url" content="http://example.com/2024/10/30/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BD%AF%E4%BB%B6%E7%AC%94%E8%AE%B0/index.html">
+<meta property="og:site_name" content="Tiger_pop&#39;s Blog">
+<meta property="og:description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2024/10/30/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BD%AF%E4%BB%B6%E7%AC%94%E8%AE%B0/%E6%88%AA%E5%B1%8F2024-09-26%2009.34.20.jpg">
+<meta property="og:image" content="http://example.com/2024/10/30/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BD%AF%E4%BB%B6%E7%AC%94%E8%AE%B0/image-20240926094301173.png">
+<meta property="og:image" content="http://example.com/2024/10/30/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BD%AF%E4%BB%B6%E7%AC%94%E8%AE%B0/image-20240926093920689.png">
+<meta property="og:image" content="http://example.com/2024/10/30/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BD%AF%E4%BB%B6%E7%AC%94%E8%AE%B0/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20241120172957.jpg">
+<meta property="og:image" content="http://example.com/2024/10/30/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BD%AF%E4%BB%B6%E7%AC%94%E8%AE%B0/%E6%88%AA%E5%B1%8F2024-09-26%2009.46.28.jpg">
+<meta property="og:image" content="http://example.com/2024/10/30/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BD%AF%E4%BB%B6%E7%AC%94%E8%AE%B0/%E6%88%AA%E5%B1%8F2024-09-26%2009.47.08.jpg">
+<meta property="og:image" content="http://example.com/2024/10/30/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BD%AF%E4%BB%B6%E7%AC%94%E8%AE%B0/image-20240926094918382.png">
+<meta property="og:image" content="http://example.com/2024/10/30/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BD%AF%E4%BB%B6%E7%AC%94%E8%AE%B0/image-20240926094947415.png">
+<meta property="og:image" content="http://example.com/2024/10/30/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BD%AF%E4%BB%B6%E7%AC%94%E8%AE%B0/%E6%88%AA%E5%B1%8F2024-09-26%2009.50.50.jpg">
+<meta property="og:image" content="http://example.com/2024/10/30/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BD%AF%E4%BB%B6%E7%AC%94%E8%AE%B0/%E6%88%AA%E5%B1%8F2024-09-26%2009.52.06.jpg">
+<meta property="og:image" content="http://example.com/2024/10/30/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BD%AF%E4%BB%B6%E7%AC%94%E8%AE%B0/%E6%88%AA%E5%B1%8F2024-09-26%2009.53.57.jpg">
+<meta property="og:image" content="http://example.com/2024/10/30/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BD%AF%E4%BB%B6%E7%AC%94%E8%AE%B0/image-20240926095417330.png">
+<meta property="og:image" content="http://example.com/2024/10/30/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BD%AF%E4%BB%B6%E7%AC%94%E8%AE%B0/image-20240926095714212.png">
+<meta property="og:image" content="http://example.com/2024/10/30/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BD%AF%E4%BB%B6%E7%AC%94%E8%AE%B0/%E6%88%AA%E5%B1%8F2024-09-26%2009.58.34.jpg">
+<meta property="og:image" content="http://example.com/2024/10/30/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BD%AF%E4%BB%B6%E7%AC%94%E8%AE%B0/%E6%88%AA%E5%B1%8F2024-09-26%2009.59.01.jpg">
+<meta property="og:image" content="http://example.com/2024/10/30/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BD%AF%E4%BB%B6%E7%AC%94%E8%AE%B0/image-20240926100005353.png">
+<meta property="og:image" content="http://example.com/2024/10/30/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BD%AF%E4%BB%B6%E7%AC%94%E8%AE%B0/%E6%88%AA%E5%B1%8F2024-09-26%2010.48.17.jpg">
+<meta property="og:image" content="http://example.com/2024/10/30/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BD%AF%E4%BB%B6%E7%AC%94%E8%AE%B0/%E6%88%AA%E5%B1%8F2024-09-26%2010.53.02.jpg">
+<meta property="og:image" content="http://example.com/2024/10/30/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BD%AF%E4%BB%B6%E7%AC%94%E8%AE%B0/%E6%88%AA%E5%B1%8F2024-09-26%2010.57.57.jpg">
+<meta property="og:image" content="http://example.com/2024/10/30/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BD%AF%E4%BB%B6%E7%AC%94%E8%AE%B0/%E6%88%AA%E5%B1%8F2024-09-27%2021.16.11.jpg">
+<meta property="og:image" content="http://example.com/2024/10/30/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BD%AF%E4%BB%B6%E7%AC%94%E8%AE%B0/image-20240927211510343.png">
+<meta property="og:image" content="http://example.com/2024/10/30/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BD%AF%E4%BB%B6%E7%AC%94%E8%AE%B0/image-20240928172228211.png">
+<meta property="og:image" content="http://example.com/2024/10/30/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BD%AF%E4%BB%B6%E7%AC%94%E8%AE%B0/image-20240928172257720.png">
+<meta property="og:image" content="http://example.com/2024/10/30/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BD%AF%E4%BB%B6%E7%AC%94%E8%AE%B0/image-20240928172338819.png">
+<meta property="og:image" content="http://example.com/2024/10/30/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BD%AF%E4%BB%B6%E7%AC%94%E8%AE%B0/image-20240928172404532.png">
+<meta property="og:image" content="http://example.com/2024/10/30/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BD%AF%E4%BB%B6%E7%AC%94%E8%AE%B0/image-20240928194018180.png">
+<meta property="og:image" content="http://example.com/2024/10/30/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BD%AF%E4%BB%B6%E7%AC%94%E8%AE%B0/image-20240928194041646.png">
+<meta property="og:image" content="http://example.com/2024/10/30/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BD%AF%E4%BB%B6%E7%AC%94%E8%AE%B0/image-20240928194100718.png">
+<meta property="og:image" content="http://example.com/2024/10/30/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BD%AF%E4%BB%B6%E7%AC%94%E8%AE%B0/image-20240928194133870.png">
+<meta property="og:image" content="http://example.com/2024/10/30/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BD%AF%E4%BB%B6%E7%AC%94%E8%AE%B0/image-20240928194603410.png">
+<meta property="og:image" content="http://example.com/2024/10/30/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BD%AF%E4%BB%B6%E7%AC%94%E8%AE%B0/image-20240929110609679.png">
+<meta property="og:image" content="http://example.com/2024/10/30/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BD%AF%E4%BB%B6%E7%AC%94%E8%AE%B0/image-20240929110633360.png">
+<meta property="og:image" content="http://example.com/2024/10/30/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BD%AF%E4%BB%B6%E7%AC%94%E8%AE%B0/image-20240927222847362.png">
+<meta property="og:image" content="http://example.com/2024/10/30/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BD%AF%E4%BB%B6%E7%AC%94%E8%AE%B0/image-20240928132029174.png">
+<meta property="og:image" content="http://example.com/2024/10/30/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BD%AF%E4%BB%B6%E7%AC%94%E8%AE%B0/image-20240928132138895.png">
+<meta property="og:image" content="http://example.com/2024/10/30/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BD%AF%E4%BB%B6%E7%AC%94%E8%AE%B0/image-20240928133838486.png">
+<meta property="og:image" content="http://example.com/2024/10/30/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BD%AF%E4%BB%B6%E7%AC%94%E8%AE%B0/image-20240928191836094.png">
+<meta property="og:image" content="http://example.com/2024/10/30/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BD%AF%E4%BB%B6%E7%AC%94%E8%AE%B0/image-20240928191451148.png">
+<meta property="og:image" content="http://example.com/2024/10/30/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BD%AF%E4%BB%B6%E7%AC%94%E8%AE%B0/image-20240928191700340.png">
+<meta property="og:image" content="http://example.com/2024/10/30/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BD%AF%E4%BB%B6%E7%AC%94%E8%AE%B0/image-20240928192055059.png">
+<meta property="og:image" content="http://example.com/2024/10/30/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BD%AF%E4%BB%B6%E7%AC%94%E8%AE%B0/image-20240928192116639.png">
+<meta property="article:published_time" content="2024-10-30T06:40:24.000Z">
+<meta property="article:modified_time" content="2024-11-20T09:37:39.140Z">
+<meta property="article:author" content="陈宇韶chenyushao">
+<meta property="article:tag" content="cuda">
+<meta property="article:tag" content="pytorch">
+<meta property="article:tag" content="Nvidia驱动">
+<meta property="article:tag" content="前向兼容-后向兼容-小版本兼容">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2024/10/30/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BD%AF%E4%BB%B6%E7%AC%94%E8%AE%B0/%E6%88%AA%E5%B1%8F2024-09-26%2009.34.20.jpg">
+
+
+<link rel="canonical" href="http://example.com/2024/10/30/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BD%AF%E4%BB%B6%E7%AC%94%E8%AE%B0/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2024/10/30/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BD%AF%E4%BB%B6%E7%AC%94%E8%AE%B0/","path":"2024/10/30/机器学习/GPU服务器软件笔记/","title":"GPU服务器软件笔记"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>GPU服务器软件笔记 | Tiger_pop's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="Tiger_pop's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Tiger_pop's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">tiger_pop 的博客</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E5%88%B6%E4%BD%9C%E5%BC%95%E5%AF%BCU%E7%9B%98"><span class="nav-number">1.</span> <span class="nav-text">一、制作引导U盘</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%8C%E3%80%81bios%E9%85%8D%E7%BD%AE"><span class="nav-number">2.</span> <span class="nav-text">二、bios配置</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E5%AE%89%E8%A3%85ubuntu"><span class="nav-number">3.</span> <span class="nav-text">三、安装ubuntu</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9B%9B%E3%80%81%E6%9F%A5%E7%9C%8BGPU%E5%9E%8B%E5%8F%B7"><span class="nav-number">4.</span> <span class="nav-text">四、查看GPU型号</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%94%E3%80%81%E5%AE%89%E8%A3%85Nvidia%E9%A9%B1%E5%8A%A8"><span class="nav-number">5.</span> <span class="nav-text">五、安装Nvidia驱动</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94-0%E3%80%81%E5%85%BC%E5%AE%B9%E6%80%A7%E7%9F%A5%E8%AF%86%E7%9A%84%E4%BA%86%E8%A7%A3"><span class="nav-number">5.1.</span> <span class="nav-text">五-0、兼容性知识的了解</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94-1%E3%80%81%E4%B8%8B%E8%BD%BD"><span class="nav-number">5.2.</span> <span class="nav-text">五-1、下载</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94-2%E3%80%81%E5%AE%89%E8%A3%85"><span class="nav-number">5.3.</span> <span class="nav-text">五-2、安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94-3%E3%80%81%E9%87%8D%E5%90%AFnvidia%E6%9C%8D%E5%8A%A1"><span class="nav-number">5.4.</span> <span class="nav-text">五-3、重启nvidia服务</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%85%AD%E3%80%81%E5%AE%89%E8%A3%85cuda"><span class="nav-number">6.</span> <span class="nav-text">六、安装cuda</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%83%E3%80%81%E5%AE%89%E8%A3%85conda"><span class="nav-number">7.</span> <span class="nav-text">七、安装conda</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%85%AB%E3%80%81%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83%E5%86%85%E5%AE%89%E8%A3%85cuda%E5%8F%8Apytorch"><span class="nav-number">8.</span> <span class="nav-text">八、虚拟环境内安装cuda及pytorch</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B9%9D%E3%80%81%E6%88%90%E5%8A%9F%E9%85%8D%E7%BD%AE%E6%A1%88%E4%BE%8B"><span class="nav-number">9.</span> <span class="nav-text">九、成功配置案例</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A1%88%E4%BE%8B1"><span class="nav-number">9.1.</span> <span class="nav-text">案例1</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A1%88%E4%BE%8B2"><span class="nav-number">9.2.</span> <span class="nav-text">案例2</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%99%84%E5%8A%A0%EF%BC%9A%E5%8F%AF%E8%83%BD%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98"><span class="nav-number">10.</span> <span class="nav-text">附加：可能遇到的问题</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1%E3%80%81%E6%AD%BB%E8%BF%9B%E7%A8%8B%E9%9C%B8%E5%8D%A0%E6%98%BE%E5%AD%98"><span class="nav-number">10.1.</span> <span class="nav-text">1、死进程霸占显存</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2%E3%80%81%E5%87%BA%E8%BF%87%E4%B8%80%E6%AC%A1%E9%94%99%E8%AF%AF"><span class="nav-number">10.2.</span> <span class="nav-text">2、出过一次错误</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3%E3%80%81%E5%AE%89%E8%A3%85%E9%81%87%E5%88%B0%E7%A9%BA%E9%97%B4%E4%B8%8D%E5%A4%9F"><span class="nav-number">10.3.</span> <span class="nav-text">3、安装遇到空间不够</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4%E3%80%81Nvidia%E9%A9%B1%E5%8A%A8%E4%B8%8B%E8%BD%BD%E5%A5%BD%E4%BA%86%E4%BD%86%E6%98%AF%E6%B2%A1%E6%9C%89%E5%AE%89%E8%A3%85%E4%B8%8A%EF%BC%8C%E6%B2%A1%E6%9C%89%E8%AF%86%E5%88%AB%E5%88%B0%E7%A1%AC%E4%BB%B6"><span class="nav-number">10.4.</span> <span class="nav-text">4、Nvidia驱动下载好了但是没有安装上，没有识别到硬件</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="陈宇韶chenyushao"
+      src="/images/my.jpg">
+  <p class="site-author-name" itemprop="name">陈宇韶chenyushao</p>
+  <div class="site-description" itemprop="description">爱学习、爱工作、爱生活;         微信号: Tiger_and_master;         手机号码:18515678348 </div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">378</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">24</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">138</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/10/30/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BD%AF%E4%BB%B6%E7%AC%94%E8%AE%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/my.jpg">
+      <meta itemprop="name" content="陈宇韶chenyushao">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tiger_pop's Blog">
+      <meta itemprop="description" content="爱学习、爱工作、爱生活;         微信号: Tiger_and_master;         手机号码:18515678348 ">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="GPU服务器软件笔记 | Tiger_pop's Blog">
+      <meta itemprop="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          GPU服务器软件笔记
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-10-30 14:40:24" itemprop="dateCreated datePublished" datetime="2024-10-30T14:40:24+08:00">2024-10-30</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-11-20 17:37:39" itemprop="dateModified" datetime="2024-11-20T17:37:39+08:00">2024-11-20</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+            <div class="post-description">这是文章开头，显示在主页面，详情请点击此处。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="一、制作引导U盘"><a href="#一、制作引导U盘" class="headerlink" title="一、制作引导U盘"></a>一、制作引导U盘</h1><p>​		在ubuntu官网下载服务器版本的ubuntu【Ubuntu 20.04.6 LTS】<a target="_blank" rel="noopener" href="https://releases.ubuntu.com/20.04/">https://releases.ubuntu.com/20.04/</a></p>
+<p><img src="/2024/10/30/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BD%AF%E4%BB%B6%E7%AC%94%E8%AE%B0/%E6%88%AA%E5%B1%8F2024-09-26%2009.34.20.jpg" alt="截屏2024-09-26 09.34.20"></p>
+<p>​		然后使用Rufus或者其他工具，制作引导U盘。</p>
+<h1 id="二、bios配置"><a href="#二、bios配置" class="headerlink" title="二、bios配置"></a>二、bios配置</h1><p>​		在bios中关闭 网络引导，然后打开快速引导和 USB设备引导，在boot选项中把USB优先级提高，或者直接选择USB设备boot；</p>
+<p><img src="/2024/10/30/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BD%AF%E4%BB%B6%E7%AC%94%E8%AE%B0/image-20240926094301173.png" alt="image-20240926094301173"></p>
+<p>​		如遇到 辅助风扇报错可暂时不处理；</p>
+<p><img src="/2024/10/30/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BD%AF%E4%BB%B6%E7%AC%94%E8%AE%B0/image-20240926093920689.png" alt="image-20240926093920689"></p>
+<h1 id="三、安装ubuntu"><a href="#三、安装ubuntu" class="headerlink" title="三、安装ubuntu"></a>三、安装ubuntu</h1><p>​	<img src="/2024/10/30/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BD%AF%E4%BB%B6%E7%AC%94%E8%AE%B0/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20241120172957.jpg" alt="微信图片_20241120172957"></p>
+<p>​	配置的时候最好用AMT这个网口，Ubuntu 安装完毕以后 把网线再查回非AMT的网口，下面装Ubuntu的过程我们都是插在AMT口操作的。</p>
+<p>选语言；</p>
+<p><img src="/2024/10/30/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BD%AF%E4%BB%B6%E7%AC%94%E8%AE%B0/%E6%88%AA%E5%B1%8F2024-09-26%2009.46.28.jpg" alt="截屏2024-09-26 09.46.28"></p>
+<p>​		选键盘布局</p>
+<p><img src="/2024/10/30/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BD%AF%E4%BB%B6%E7%AC%94%E8%AE%B0/%E6%88%AA%E5%B1%8F2024-09-26%2009.47.08.jpg" alt="截屏2024-09-26 09.47.08"></p>
+<p>​		选择手动还是DHCP动态分配IP；我这里选择的手动manual；</p>
+<p><img src="/2024/10/30/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BD%AF%E4%BB%B6%E7%AC%94%E8%AE%B0/image-20240926094918382.png" alt="image-20240926094918382"></p>
+<p><img src="/2024/10/30/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BD%AF%E4%BB%B6%E7%AC%94%E8%AE%B0/image-20240926094947415.png" alt="image-20240926094947415"></p>
+<p>​		如果您的Ubuntu服务器在代理服务器后面，则需要在此处输入代理服务器详细信息。否则，只需将其保留为空；</p>
+<p><img src="/2024/10/30/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BD%AF%E4%BB%B6%E7%AC%94%E8%AE%B0/%E6%88%AA%E5%B1%8F2024-09-26%2009.50.50.jpg" alt="截屏2024-09-26 09.50.50"></p>
+<p>​		需要配置Ubuntu存档镜像。系统会自动为你选择一个默认的镜像。如果您不希望使用默认镜像，请在此处输入“镜像地址”，这个可以配置阿里云(<a target="_blank" rel="noopener" href="http://mirrors.aliyun.com/ubuntu/)%EF%BC%8C%E6%88%91%E8%BF%99%E9%87%8C%E4%BD%BF%E7%94%A8%E9%BB%98%E8%AE%A4%E7%9A%84%EF%BC%8C%E4%BD%86%E6%98%AF%E4%B8%8D%E4%BB%A3%E8%A1%A8%E9%BB%98%E8%AE%A4%E7%9A%84%E6%AF%8F%E6%AC%A1%E9%83%BD%E8%A1%8C%EF%BC%8C%E8%BF%99%E9%87%8C%E5%BC%BA%E7%83%88%E5%BB%BA%E8%AE%AE%E6%94%B9%E6%88%90%E6%B8%85%E5%8D%8E%E7%9A%84%E6%BA%90%EF%BC%9Ahttps://mirrors.tuna.tsinghua.edu.cn/ubuntu">http://mirrors.aliyun.com/ubuntu/)，我这里使用默认的，但是不代表默认的每次都行，这里强烈建议改成清华的源：https://mirrors.tuna.tsinghua.edu.cn/ubuntu</a>    ；</p>
+<p><img src="/2024/10/30/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BD%AF%E4%BB%B6%E7%AC%94%E8%AE%B0/%E6%88%AA%E5%B1%8F2024-09-26%2009.52.06.jpg" alt="截屏2024-09-26 09.52.06"></p>
+<p>​		配置磁盘布局，即对硬盘进行分区。您将获得两个选择。选择任何适合您的给定分区方法。</p>
+<p>​		使用整个磁盘：此方法将擦除整个硬盘并自动对驱动器进行分区。推荐给新手。如果选择此选项，则可以选择设置LVM并使用LUKS加密LVM配置。</p>
+<p><img src="/2024/10/30/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BD%AF%E4%BB%B6%E7%AC%94%E8%AE%B0/%E6%88%AA%E5%B1%8F2024-09-26%2009.53.57.jpg" alt="截屏2024-09-26 09.53.57"></p>
+<p><img src="/2024/10/30/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BD%AF%E4%BB%B6%E7%AC%94%E8%AE%B0/image-20240926095417330.png" alt="image-20240926095417330"></p>
+<p>​		continue之后 ，输入服务器系统的详细信息，例如您的名称，服务器名称，用户名及其密码，您将使用它们来登录服务器。（注意此时如果你设置了阿狗，那阿狗就具备root权限。）但是注意，此时 你想切root用户是做不到的，但是root用户又是实际存在的，要切root 用户，需要先<code>passwd root</code>给root用户定一个密码。<br>​		<img src="/2024/10/30/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BD%AF%E4%BB%B6%E7%AC%94%E8%AE%B0/image-20240926095714212.png" alt="image-20240926095714212"></p>
+<p>​		可以选择安装openSSH服务器，该服务器允许您从网络上的任何系统远程访问该服务器。<br><img src="/2024/10/30/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BD%AF%E4%BB%B6%E7%AC%94%E8%AE%B0/%E6%88%AA%E5%B1%8F2024-09-26%2009.58.34.jpg" alt="截屏2024-09-26 09.58.34"></p>
+<p><img src="/2024/10/30/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BD%AF%E4%BB%B6%E7%AC%94%E8%AE%B0/%E6%88%AA%E5%B1%8F2024-09-26%2009.59.01.jpg" alt="截屏2024-09-26 09.59.01"></p>
+<p>​		Ubuntu 20.04 LTS安装将立即开始。需要一段时间，具体取决于软件包的选择和Internet的速度。</p>
+<p><img src="/2024/10/30/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BD%AF%E4%BB%B6%E7%AC%94%E8%AE%B0/image-20240926100005353.png" alt="image-20240926100005353"></p>
+<p>​		reboot，立刻拔出U盘。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cat</span> /etc/os-release <span class="comment"># 查看版本是不是正确了。</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="四、查看GPU型号"><a href="#四、查看GPU型号" class="headerlink" title="四、查看GPU型号"></a>四、查看GPU型号</h1><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lspci | grep -i nvidia <span class="comment"># 如果只出现了2204 这样的编号没有 出现 像 GTX4090类似这样的具体型号，那就自己去网上搜 编号和具体型号的对应，像2204 对应就是 GTX3090。</span></span><br></pre></td></tr></table></figure>
+
+<p>也能拆机看看 显卡上有没有贴着，直接明了就是拆机麻烦点。</p>
+<h1 id="五、安装Nvidia驱动"><a href="#五、安装Nvidia驱动" class="headerlink" title="五、安装Nvidia驱动"></a>五、安装Nvidia驱动</h1><h2 id="五-0、兼容性知识的了解"><a href="#五-0、兼容性知识的了解" class="headerlink" title="五-0、兼容性知识的了解"></a>五-0、兼容性知识的了解</h2><p>​		兼容性推荐看这个解释<br><a target="_blank" rel="noopener" href="https://tianzhipeng-git.github.io/2023/11/21/cuda-version.html#%E5%8D%A1%E5%92%8Cdriver%E7%89%88%E6%9C%AC%E5%85%BC%E5%AE%B9">https://tianzhipeng-git.github.io/2023/11/21/cuda-version.html#%E5%8D%A1%E5%92%8Cdriver%E7%89%88%E6%9C%AC%E5%85%BC%E5%AE%B9</a></p>
+<p>​		有几个点要理解 </p>
+<ul>
+<li><p>GPU kernal-mode driver</p>
+</li>
+<li><p>CUDA user-mode driver</p>
+</li>
+<li><p>CUDA runtime</p>
+<p>上面两个绑定在一起，在Nvidia驱动，cuda runtime 可以理解为 我们分析的cuda版本，nvidia驱动是向后兼容的，支持老版本，现在的Nvidia驱动对cuda 也有小版本兼容，如果Nvidia驱动最开始对应的12.0，则12.0 12.1 12.X都是兼容的。</p>
+<p>torch安装起来直接考虑所安装的torch附带的cuda版本 , 如<code>torch-1.12.0+cu116-cp39</code>, 和机器的driver是否兼容即可</p>
+<p><strong>另外需要强调的是，pytorch 自带了一个 cuda支持包 ，大部分时候不会调用 本地系统中的cuda，不需要安装本地的cuda服务</strong>。</p>
+</li>
+</ul>
+<h2 id="五-1、下载"><a href="#五-1、下载" class="headerlink" title="五-1、下载"></a>五-1、下载</h2><p>​		先进Nvidia官网看看这个显卡推荐的驱动，<a target="_blank" rel="noopener" href="https://www.nvidia.com/en-us/drivers/">https://www.nvidia.com/en-us/drivers/</a>    。<br>​		下面是Tesla V100GPU和GTX3090的例子；<br>​		<img src="/2024/10/30/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BD%AF%E4%BB%B6%E7%AC%94%E8%AE%B0/%E6%88%AA%E5%B1%8F2024-09-26%2010.48.17.jpg" alt="截屏2024-09-26 10.48.17"></p>
+<p>​		<img src="/2024/10/30/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BD%AF%E4%BB%B6%E7%AC%94%E8%AE%B0/%E6%88%AA%E5%B1%8F2024-09-26%2010.53.02.jpg" alt="截屏2024-09-26 10.53.02"></p>
+<p>​		<img src="/2024/10/30/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BD%AF%E4%BB%B6%E7%AC%94%E8%AE%B0/%E6%88%AA%E5%B1%8F2024-09-26%2010.57.57.jpg" alt="截屏2024-09-26 10.57.57"></p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 复制上图 Download 地址，在服务器中用wget下载。</span></span><br><span class="line">wget https://us.download.nvidia.com/XFree86/Linux-x86_64/550.120/NVIDIA-Linux-x86_64-550.120.run</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="五-2、安装"><a href="#五-2、安装" class="headerlink" title="五-2、安装"></a>五-2、安装</h2><p>​		确保 nvidia驱动被 彻底卸载了，所以先尝试卸载一遍；</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment"># ——————————————————————————————————————  准备工作  ————————————————————————————————————————</span></span><br><span class="line">nvidia-smi <span class="comment"># 查看是否有安装 Nvidia 驱动；</span></span><br><span class="line">lspci | grep -i nvidia  <span class="comment"># 确认是否识别到设备：</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">sudo systemctl stop lightdm</span><br><span class="line">sudo systemctl stop gdm</span><br><span class="line"></span><br><span class="line"><span class="comment"># 确保禁用 Nouveau 驱动</span></span><br><span class="line">sudo vim /etc/modprobe.d/blacklist-nouveau.conf</span><br><span class="line"><span class="comment"># 添加</span></span><br><span class="line">blacklist nouveau</span><br><span class="line">options nouveau modeset=0</span><br><span class="line"></span><br><span class="line"><span class="comment"># 更新 initramfs： 执行以下命令以更新 initramfs，以确保系统在下次启动时禁用 Nouveau：</span></span><br><span class="line">sudo update-initramfs -u</span><br><span class="line">sudo reboot </span><br><span class="line"></span><br><span class="line"><span class="comment"># ——————————————————————————————————————  准备工作  ————————————————————————————————————————</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># ——————————————————————————————————————  卸载  ————————————————————————————————————————</span></span><br><span class="line"><span class="comment"># 如果有安装Nvidia驱动，且可以确定是 run 文件安装的，则先额外添加以下一条命令，后面一样。</span></span><br><span class="line">sudo bash NVIDIA-XXX-XXX.XXX.run --uninstall </span><br><span class="line"><span class="comment"># 如果不是是 run 文件安装的，直接暴力全部卸载。</span></span><br><span class="line"><span class="comment"># 确保 nvidia驱动被有哪些。</span></span><br><span class="line">sudo dpkg -l | grep nvidia  </span><br><span class="line">sudo apt-get purge <span class="string">&#x27;^nvidia-.*&#x27;</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment"># ¥ 若遇到以下错误 </span></span><br><span class="line">    Errors were encountered <span class="keyword">while</span> processing:</span><br><span class="line">     qemu-ga</span><br><span class="line">    <span class="comment"># ¥ 处理方法</span></span><br><span class="line">    sudo apt-get remove --purge qemu-ga</span><br><span class="line">    sudo apt-get autoremove</span><br><span class="line">    sudo apt-get clean</span><br><span class="line">    sudo apt-get update</span><br><span class="line">    sudo apt-get install qemu-ga 或者 sudo apt-get install qemu-guest-agent</span><br><span class="line">		sudo apt-get purge <span class="string">&#x27;^nvidia-.*&#x27;</span></span><br><span class="line"></span><br><span class="line">sudo apt-get autoremove --purge</span><br><span class="line">sudo apt-get clean</span><br><span class="line"><span class="comment"># 查看 卸载干净没有</span></span><br><span class="line">sudo dpkg -l | grep nvidia  </span><br><span class="line">sudo reboot</span><br><span class="line"><span class="comment"># ——————————————————————————————————————  卸载  ————————————————————————————————————————</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># ——————————————————————————————————————  安装  ————————————————————————————————————————</span></span><br><span class="line">		</span><br><span class="line">		<span class="comment"># apt换源，先备份</span></span><br><span class="line">    sudo <span class="built_in">cp</span> /etc/apt/sources.list /etc/apt/sources.list.backup</span><br><span class="line">    sudo vim /etc/apt/sources.list</span><br><span class="line">    <span class="comment"># 写入</span></span><br><span class="line">    deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal main restricted universe multiverse</span><br><span class="line">    deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-updates main restricted universe multiverse</span><br><span class="line">    deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-backports main restricted universe multiverse</span><br><span class="line">    deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-security main restricted universe multiverse</span><br><span class="line">    deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-proposed main restricted universe multiverse</span><br><span class="line"></span><br><span class="line">	</span><br><span class="line">	<span class="comment"># 情况一：下载的是 deb 文件。</span></span><br><span class="line">	sudo dpkg -i nvidia-driver-local-repo-ubuntu2004-550.54.14_1.0-1_amd64.deb</span><br><span class="line">	sudo <span class="built_in">cp</span> /var/nvidia-driver-local-repo-ubuntu2004-550.54.14/nvidia-driver-local-F9E6E988-keyring.gpg /usr/share/keyrings/</span><br><span class="line">	sudo apt-get update</span><br><span class="line">	sudo apt-get -f install</span><br><span class="line">	sudo apt install nvidia-driver-550</span><br><span class="line">	sudo reboot </span><br><span class="line">	nvidia-smi <span class="comment"># 可见安装成功，但不一定是550.54.14版本，可能是550.90.12。</span></span><br><span class="line">	</span><br><span class="line">	</span><br><span class="line">	<span class="comment"># 情况二：下载的是 run 文件。</span></span><br><span class="line">	sudo bash NVIXXX.XXX.XXX install </span><br><span class="line">	<span class="comment"># 可能需要安装gcc make等</span></span><br><span class="line">	sudo apt update</span><br><span class="line">	sudo apt install gcc</span><br><span class="line">  sudo apt install make</span><br><span class="line">	</span><br><span class="line"><span class="comment"># ——————————————————————————————————————  安装  ————————————————————————————————————————</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 安装Nvidia驱动之后，不再安装系统的 cuda，而在 conda 中根据各自虚拟环境的的要求,安装对应的cuda 和pytorch即可。</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="五-3、重启nvidia服务"><a href="#五-3、重启nvidia服务" class="headerlink" title="五-3、重启nvidia服务"></a>五-3、重启nvidia服务</h2><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo systemctl restart nvidia-persistenced</span><br><span class="line"></span><br><span class="line">sudo reboot </span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="六、安装cuda"><a href="#六、安装cuda" class="headerlink" title="六、安装cuda"></a>六、安装cuda</h1><p>​		cuda 官网 <a target="_blank" rel="noopener" href="https://developer.nvidia.com/cuda-12-4-0-download-archive?target_os=Linux&amp;target_arch=x86_64&amp;Distribution=Ubuntu&amp;target_version=20.04&amp;target_type=deb_local">https://developer.nvidia.com/cuda-12-4-0-download-archive?target_os=Linux&amp;target_arch=x86_64&amp;Distribution=Ubuntu&amp;target_version=20.04&amp;target_type=deb_local</a></p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># ——————————————————————————————————————  卸载  ————————————————————————————————————————</span></span><br><span class="line"></span><br><span class="line">sudo apt-get --purge remove <span class="string">&quot;*cublas*&quot;</span> <span class="string">&quot;cuda*&quot;</span> <span class="string">&quot;nsight*&quot;</span></span><br><span class="line"></span><br><span class="line">sudo <span class="built_in">rm</span> /etc/apt/sources.list.d/cuda*</span><br><span class="line">sudo <span class="built_in">rm</span> /etc/apt/sources.list.d/nvidia-ml.list</span><br><span class="line"></span><br><span class="line">sudo apt-get autoremove</span><br><span class="line">sudo apt-get autoclean</span><br><span class="line"></span><br><span class="line">sudo reboot</span><br><span class="line"></span><br><span class="line"><span class="comment"># ——————————————————————————————————————  卸载  ————————————————————————————————————————</span></span><br></pre></td></tr></table></figure>
+
+<p>​		</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># ——————————————————————————————————————  安装  ————————————————————————————————————————</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 把临时的管道文件夹设置在一个大点的磁盘内，这个文件夹挂着个大磁盘，并且这个是一次性的，下次开机就不生效了。</span></span><br><span class="line"><span class="built_in">mkdir</span> -p /data/tmp</span><br><span class="line"><span class="built_in">export</span> TMPDIR=/data/tmp</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">换源，先备份</span><br><span class="line">sudo <span class="built_in">cp</span> /etc/apt/sources.list /etc/apt/sources.list.backup</span><br><span class="line"></span><br><span class="line">sudo vim /etc/apt/sources.list</span><br><span class="line"><span class="comment"># 写入</span></span><br><span class="line">deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal main restricted universe multiverse</span><br><span class="line">deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-updates main restricted universe multiverse</span><br><span class="line">deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-backports main restricted universe multiverse</span><br><span class="line">deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-security main restricted universe multiverse</span><br><span class="line">deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-proposed main restricted universe multiverse</span><br><span class="line"></span><br><span class="line"><span class="comment">### 官网内容 ###</span></span><br><span class="line">    wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/cuda-ubuntu2004.pin</span><br><span class="line">    sudo <span class="built_in">mv</span> cuda-ubuntu2004.pin /etc/apt/preferences.d/cuda-repository-pin-600</span><br><span class="line">    wget https://developer.download.nvidia.com/compute/cuda/12.4.0/local_installers/cuda-repo-ubuntu2004-12-4-local_12.4.0-550.54.14-1_amd64.deb</span><br><span class="line">    sudo dpkg -i cuda-repo-ubuntu2004-12-4-local_12.4.0-550.54.14-1_amd64.deb</span><br><span class="line">    sudo <span class="built_in">cp</span> /var/cuda-repo-ubuntu2004-12-4-<span class="built_in">local</span>/cuda-*-keyring.gpg /usr/share/keyrings/</span><br><span class="line">    sudo apt-get update</span><br><span class="line">    sudo apt-get -y install cuda-toolkit-12-4</span><br><span class="line"><span class="comment">### 官网内容 ###</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 在 .bashrc 写入</span></span><br><span class="line"><span class="built_in">export</span> PATH=/usr/local/cuda/bin:<span class="variable">$PATH</span></span><br><span class="line"><span class="built_in">export</span> LD_LIBRARY_PATH=/usr/local/cuda/lib64:<span class="variable">$LD_LIBRARY_PATH</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">source</span> ~/.bashrc</span><br><span class="line">nvcc --version</span><br><span class="line"></span><br><span class="line"><span class="comment"># ——————————————————————————————————————  安装  ————————————————————————————————————————</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="七、安装conda"><a href="#七、安装conda" class="headerlink" title="七、安装conda"></a>七、安装conda</h1><p>​		下载conda，我推荐使用miniconda，<a target="_blank" rel="noopener" href="https://docs.conda.io/en/latest/miniconda.html#linux-installers%E3%80%82">https://docs.conda.io/en/latest/miniconda.html#linux-installers。</a></p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 添加环境变量，然后再 source ~/.bashrc</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<p>​		兄弟改个国内源吧，不然贼慢。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cp</span> ~/.condarc ~/.condarc.bak</span><br><span class="line"></span><br><span class="line">vim  ~/.condarc</span><br><span class="line"></span><br><span class="line"><span class="comment"># 写入以下内容 </span></span><br><span class="line">channels:</span><br><span class="line">  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main</span><br><span class="line">  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free</span><br><span class="line">  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/pro</span><br><span class="line">  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/r</span><br><span class="line">  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/msys2</span><br><span class="line">  - conda-forge</span><br><span class="line">  - defaults  </span><br></pre></td></tr></table></figure>
+
+
+
+<p>使用 <code>pip</code> 命令安装 Jupyter Lab，同时确保安装在用户的本地目录中：</p>
+<p><code>pip install --user jupyterlab</code></p>
+<p>如果 <code>~/.local/bin</code> 没有看到，可以将其添加到 <code>~/.bashrc</code> 或 <code>~/.bash_profile</code> 中：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="string">&#x27;export PATH=&quot;$HOME/.local/bin:$PATH&quot;&#x27;</span> &gt;&gt; ~/.bashrc</span><br><span class="line"><span class="built_in">source</span> ~/.bashrc</span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="八、虚拟环境内安装cuda及pytorch"><a href="#八、虚拟环境内安装cuda及pytorch" class="headerlink" title="八、虚拟环境内安装cuda及pytorch"></a>八、虚拟环境内安装cuda及pytorch</h1><p>conda update conda</p>
+<p>注意：<a target="_blank" rel="noopener" href="https://pytorch.org/get-started/locally/">https://pytorch.org/get-started/locally/</a> 查看 cuda和pytorch对应关系，nvidia-smi 中右上角的 cuda是Nvidia驱动最高支持到的cuda版本，之后下载的cuda不能高于这个版本。<img src="/2024/10/30/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BD%AF%E4%BB%B6%E7%AC%94%E8%AE%B0/%E6%88%AA%E5%B1%8F2024-09-27%2021.16.11.jpg" alt="截屏2024-09-27 21.16.11"><img src="/2024/10/30/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BD%AF%E4%BB%B6%E7%AC%94%E8%AE%B0/image-20240927211510343.png" alt="image-20240927211510343"></p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#（重要）先把环境外的 pytorch都给卸载了，不然可能影响环境中调用 pytorch，可能调到外面的导致混乱。</span></span><br><span class="line">pip uninstall torch torchvision torchaudio</span><br><span class="line">conda remove pytorch torchvision torchaudio</span><br><span class="line"></span><br><span class="line"><span class="comment"># 进入 自己环境，安装cudatoolkit，根据自己的Nvidia驱动支持的最高版本来选择。</span></span><br><span class="line">conda install cudatoolkit=11.8 -c https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free/</span><br><span class="line"><span class="comment"># 检查一下</span></span><br><span class="line">conda list cudatoolkit</span><br><span class="line"></span><br><span class="line"><span class="comment"># 进入 自己环境，安装cudnn，根据前面的cudatoolkit的版本，conda search cudnn搜出可用版本来选择。</span></span><br><span class="line">conda search cudnn</span><br><span class="line">conda install cudnn=8.9.2.26 -c https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free/</span><br><span class="line"></span><br><span class="line"><span class="comment"># 进入 自己建立的环境如python3.8，然后（这一步conda可能要等待1-2个小时）。conda、pip安装二选一即可，推荐pip加 -i 清华源，快点。</span></span><br><span class="line"><span class="comment"># conda install pytorch==2.4.1 torchvision torchaudio pytorch-cuda=11.8 -c pytorch -c nvidia</span></span><br><span class="line">pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu124 -i https://pypi.tuna.tsinghua.edu.cn/simpleß</span><br><span class="line">pip install torch==2.4.0 torchvision==0.19.0 torchaudio==2.4.0 --index-url https://download.pytorch.org/whl/cu118 -i https://pypi.tuna.tsinghua.edu.cn/simple</span><br><span class="line"></span><br><span class="line">pip install pyyaml</span><br><span class="line"><span class="comment"># 检查是否有依赖缺失</span></span><br><span class="line">pip check</span><br><span class="line">pip install pytz idna urllib3</span><br><span class="line">conda install cmake   </span><br><span class="line">...</span><br><span class="line"><span class="comment"># 解决完冲突再检查一下</span></span><br><span class="line">pip check </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">conda activate XXX  <span class="comment"># 激活conda中的虚拟环境</span></span><br><span class="line">conda install ipykernel  <span class="comment"># 安装丘比特核心。</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 把丘比特核心和conda 建立的环境关联上。</span></span><br><span class="line">python -m ipykernel install --user --name python3_8 --display-name <span class="string">&quot;Python 3.8 (conda)&quot;</span></span><br><span class="line">python -m ipykernel install --user --name python3_10 --display-name <span class="string">&quot;Python 3.10 (conda)&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 多加了或者 虚拟环境已经没有了，删除丘比特和虚拟环境的关联</span></span><br><span class="line">jupyter kernelspec uninstall python3.7 </span><br><span class="line"><span class="comment"># 看关联内核</span></span><br><span class="line">jupyter kernelspec list </span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h1 id="九、成功配置案例"><a href="#九、成功配置案例" class="headerlink" title="九、成功配置案例"></a>九、成功配置案例</h1><p>​	</p>
+<h2 id="案例1"><a href="#案例1" class="headerlink" title="案例1"></a>案例1</h2><ul>
+<li>系统：Ubuntu 20.04.6 LTS （服务器版本）</li>
+<li>python：Python 3.8.10</li>
+<li>GPU：Tesla V100S-PCIE-32GB</li>
+<li>Nvidia驱动：550.107.02</li>
+<li>系统Cuda：cuda_12.4</li>
+<li>conda：未安装</li>
+<li>Pytorch：2.4.0+cu118</li>
+</ul>
+<p>		</p>
+<p>​				<img src="/2024/10/30/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BD%AF%E4%BB%B6%E7%AC%94%E8%AE%B0/image-20240928172228211.png" alt="image-20240928172228211"></p>
+<p><img src="/2024/10/30/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BD%AF%E4%BB%B6%E7%AC%94%E8%AE%B0/image-20240928172257720.png" alt="image-20240928172257720"></p>
+<p><img src="/2024/10/30/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BD%AF%E4%BB%B6%E7%AC%94%E8%AE%B0/image-20240928172338819.png" alt="image-20240928172338819"></p>
+<p><img src="/2024/10/30/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BD%AF%E4%BB%B6%E7%AC%94%E8%AE%B0/image-20240928172404532.png" alt="image-20240928172404532"></p>
+<h2 id="案例2"><a href="#案例2" class="headerlink" title="案例2"></a>案例2</h2><ul>
+<li><p>系统：Ubuntu 20.04.6 LTS （服务器版本）</p>
+</li>
+<li><p>python：Python 3.8.19  （conda虚拟环境的python）</p>
+</li>
+<li><p>GPU：GRID V100S-16C</p>
+</li>
+<li><p>Nvidia驱动：470.82.01 （企业版run安装）</p>
+</li>
+<li><p>系统Cuda：V10.1.243</p>
+</li>
+<li><p>conda：miniconda 24.7.1</p>
+</li>
+<li><p>Pytorch： 1.10.0	（conda虚拟环境内）	</p>
+</li>
+<li><p>cuda：11.3（conda虚拟环境内）</p>
+</li>
+<li><p>cudatoolkit: 11.3.1 （conda虚拟环境内）</p>
+</li>
+<li><p>cudnn: 8200  （conda虚拟环境内）</p>
+</li>
+</ul>
+<p><img src="/2024/10/30/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BD%AF%E4%BB%B6%E7%AC%94%E8%AE%B0/image-20240928194018180.png" alt="image-20240928194018180"></p>
+<p><img src="/2024/10/30/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BD%AF%E4%BB%B6%E7%AC%94%E8%AE%B0/image-20240928194041646.png" alt="image-20240928194041646"></p>
+<p><img src="/2024/10/30/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BD%AF%E4%BB%B6%E7%AC%94%E8%AE%B0/image-20240928194100718.png" alt="image-20240928194100718"></p>
+<p><img src="/2024/10/30/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BD%AF%E4%BB%B6%E7%AC%94%E8%AE%B0/image-20240928194133870.png" alt="image-20240928194133870"></p>
+<p><img src="/2024/10/30/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BD%AF%E4%BB%B6%E7%AC%94%E8%AE%B0/image-20240928194603410.png" alt="image-20240928194603410"></p>
+<p><img src="/2024/10/30/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BD%AF%E4%BB%B6%E7%AC%94%E8%AE%B0/image-20240929110609679.png" alt="image-20240929110609679"></p>
+<p><img src="/2024/10/30/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BD%AF%E4%BB%B6%E7%AC%94%E8%AE%B0/image-20240929110633360.png" alt="image-20240929110633360"></p>
+<p>​		以上只是两个成功安装案例，实际上 安装只要注意 后向支持和小版本支持的匹配原则，是很容易搭配的。</p>
+<h1 id="附加：可能遇到的问题"><a href="#附加：可能遇到的问题" class="headerlink" title="附加：可能遇到的问题"></a>附加：可能遇到的问题</h1><h2 id="1、死进程霸占显存"><a href="#1、死进程霸占显存" class="headerlink" title="1、死进程霸占显存"></a>1、死进程霸占显存</h2><p>​		遇到死了很久的进程，却一直霸占着显存</p>
+<p><img src="/2024/10/30/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BD%AF%E4%BB%B6%E7%AC%94%E8%AE%B0/image-20240927222847362.png" alt="image-20240927222847362"></p>
+<p>kill 这些进程，然后 torch.cuda.empty_cache() </p>
+<h2 id="2、出过一次错误"><a href="#2、出过一次错误" class="headerlink" title="2、出过一次错误"></a>2、出过一次错误</h2><p><img src="/2024/10/30/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BD%AF%E4%BB%B6%E7%AC%94%E8%AE%B0/image-20240928132029174.png" alt="image-20240928132029174"></p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 重启Nvidia服务。</span></span><br><span class="line">sudo systemctl restart nvidia-persistenced</span><br><span class="line"></span><br><span class="line">sudo reboot </span><br></pre></td></tr></table></figure>
+
+<p><img src="/2024/10/30/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BD%AF%E4%BB%B6%E7%AC%94%E8%AE%B0/image-20240928132138895.png" alt="image-20240928132138895"></p>
+<h2 id="3、安装遇到空间不够"><a href="#3、安装遇到空间不够" class="headerlink" title="3、安装遇到空间不够"></a>3、安装遇到空间不够</h2><p><img src="/2024/10/30/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BD%AF%E4%BB%B6%E7%AC%94%E8%AE%B0/image-20240928133838486.png" alt="image-20240928133838486"></p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 把临时的管道文件夹设置在一个大点的磁盘内，这个文件夹挂着个大磁盘，并且这个是一次性的，下次开机就不生效了。</span></span><br><span class="line"><span class="built_in">mkdir</span> -p /data/tmp</span><br><span class="line"><span class="built_in">export</span> TMPDIR=/data/tmp</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="4、Nvidia驱动下载好了但是没有安装上，没有识别到硬件"><a href="#4、Nvidia驱动下载好了但是没有安装上，没有识别到硬件" class="headerlink" title="4、Nvidia驱动下载好了但是没有安装上，没有识别到硬件"></a>4、Nvidia驱动下载好了但是没有安装上，没有识别到硬件</h2><p>nvidia-smi 出现这样提示，且&#x2F;dev下面没有 nvidia相关文件。</p>
+<p><code>ll /dev | grep nvidia </code> 显示空。</p>
+<p><img src="/2024/10/30/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BD%AF%E4%BB%B6%E7%AC%94%E8%AE%B0/image-20240928191836094.png" alt="image-20240928191836094"></p>
+<p><img src="/2024/10/30/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BD%AF%E4%BB%B6%E7%AC%94%E8%AE%B0/image-20240928191451148.png" alt="image-20240928191451148"></p>
+<p>处理方法：</p>
+<p>​		关机，（有虚拟化管理）在虚拟化的管理平台 删除硬件，再 添加硬件；（直接有硬件显卡）拔了，再插上；</p>
+<p><img src="/2024/10/30/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BD%AF%E4%BB%B6%E7%AC%94%E8%AE%B0/image-20240928191700340.png" alt="image-20240928191700340"></p>
+<p><img src="/2024/10/30/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BD%AF%E4%BB%B6%E7%AC%94%E8%AE%B0/image-20240928192055059.png" alt="image-20240928192055059"></p>
+<p><img src="/2024/10/30/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BD%AF%E4%BB%B6%E7%AC%94%E8%AE%B0/image-20240928192116639.png" alt="image-20240928192116639"></p>
+<p>如果还没有识别到，见 前面Nvidia驱动安装，巴拉巴拉再来一遍。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/cuda/" rel="tag"># cuda</a>
+              <a href="/tags/pytorch/" rel="tag"># pytorch</a>
+              <a href="/tags/Nvidia%E9%A9%B1%E5%8A%A8/" rel="tag"># Nvidia驱动</a>
+              <a href="/tags/%E5%89%8D%E5%90%91%E5%85%BC%E5%AE%B9-%E5%90%8E%E5%90%91%E5%85%BC%E5%AE%B9-%E5%B0%8F%E7%89%88%E6%9C%AC%E5%85%BC%E5%AE%B9/" rel="tag"># 前向兼容-后向兼容-小版本兼容</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2024/10/28/windows_ubuntu%E5%8F%8C%E7%B3%BB%E7%BB%9F/ubuntu%E5%8F%8C%E7%B3%BB%E7%BB%9F%E4%B8%ADboot%E6%89%BE%E4%B8%8D%E5%88%B0Windows/" rel="prev" title="ubuntu双系统中boot找不到Windows">
+                  <i class="fa fa-chevron-left"></i> ubuntu双系统中boot找不到Windows
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2024/11/07/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/pytorch%E7%9A%84%E5%A4%9AGPU%E8%AE%AD%E7%BB%83/" rel="next" title="pytorch的多GPU训练">
+                  pytorch的多GPU训练 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">陈宇韶chenyushao</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

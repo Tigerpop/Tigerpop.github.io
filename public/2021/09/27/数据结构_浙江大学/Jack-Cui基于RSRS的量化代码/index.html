@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha256-AbA177XfpSnFEvgpYu1jMygiLabzPCJCRIBtR5jGc0k=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.13.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Jack-Cui基于RSRS的量化代码">
+<meta property="og:url" content="http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/Jack-Cui%E5%9F%BA%E4%BA%8ERSRS%E7%9A%84%E9%87%8F%E5%8C%96%E4%BB%A3%E7%A0%81/index.html">
+<meta property="og:site_name" content="Tiger_pop&#39;s Blog">
+<meta property="og:description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-09-27T12:00:36.000Z">
+<meta property="article:modified_time" content="2022-10-28T16:18:44.106Z">
+<meta property="article:author" content="陈宇韶chenyushao">
+<meta property="article:tag" content="量化">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/Jack-Cui%E5%9F%BA%E4%BA%8ERSRS%E7%9A%84%E9%87%8F%E5%8C%96%E4%BB%A3%E7%A0%81/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/Jack-Cui%E5%9F%BA%E4%BA%8ERSRS%E7%9A%84%E9%87%8F%E5%8C%96%E4%BB%A3%E7%A0%81/","path":"2021/09/27/数据结构_浙江大学/Jack-Cui基于RSRS的量化代码/","title":"Jack-Cui基于RSRS的量化代码"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Jack-Cui基于RSRS的量化代码 | Tiger_pop's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="Tiger_pop's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Tiger_pop's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">tiger_pop 的博客</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AF%BC%E5%85%A5%E5%87%BD%E6%95%B0%E5%BA%93"><span class="nav-number">1.</span> <span class="nav-text">导入函数库</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96%E5%87%BD%E6%95%B0%EF%BC%8C%E8%AE%BE%E5%AE%9A%E5%9F%BA%E5%87%86%E7%AD%89%E7%AD%89"><span class="nav-number">2.</span> <span class="nav-text">初始化函数，设定基准等等</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%80%E7%9B%98%E5%89%8D%E8%BF%90%E8%A1%8C%E5%87%BD%E6%95%B0"><span class="nav-number">2.1.</span> <span class="nav-text">开盘前运行函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%80%E7%9B%98%E6%97%B6%E8%BF%90%E8%A1%8C%E5%87%BD%E6%95%B0"><span class="nav-number">2.2.</span> <span class="nav-text">开盘时运行函数</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AD%96%E7%95%A5%E9%80%89%E8%82%A1%E4%B9%B0%E5%8D%96%E9%83%A8%E5%88%86"><span class="nav-number">3.</span> <span class="nav-text">策略选股买卖部分</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%89%93%E5%88%86%E5%B7%A5%E5%85%B7"><span class="nav-number">4.</span> <span class="nav-text">打分工具</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%94%B6%E7%9B%98%E5%90%8E%E8%BF%90%E8%A1%8C%E5%87%BD%E6%95%B0"><span class="nav-number">4.1.</span> <span class="nav-text">收盘后运行函数</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="陈宇韶chenyushao"
+      src="/images/my.jpg">
+  <p class="site-author-name" itemprop="name">陈宇韶chenyushao</p>
+  <div class="site-description" itemprop="description">爱学习、爱工作、爱生活;         微信号: Tiger_and_master;         手机号码:18515678348 </div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">378</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">24</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">138</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/Jack-Cui%E5%9F%BA%E4%BA%8ERSRS%E7%9A%84%E9%87%8F%E5%8C%96%E4%BB%A3%E7%A0%81/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/my.jpg">
+      <meta itemprop="name" content="陈宇韶chenyushao">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tiger_pop's Blog">
+      <meta itemprop="description" content="爱学习、爱工作、爱生活;         微信号: Tiger_and_master;         手机号码:18515678348 ">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Jack-Cui基于RSRS的量化代码 | Tiger_pop's Blog">
+      <meta itemprop="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Jack-Cui基于RSRS的量化代码
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2021-09-27 20:00:36" itemprop="dateCreated datePublished" datetime="2021-09-27T20:00:36+08:00">2021-09-27</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2022-10-29 00:18:44" itemprop="dateModified" datetime="2022-10-29T00:18:44+08:00">2022-10-29</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%B5%99%E5%A4%A7%E7%AE%97%E6%B3%95%E4%B8%8E%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B-python%E5%AE%9E%E7%8E%B0/" itemprop="url" rel="index"><span itemprop="name">浙大算法与数据结构课程(python实现)</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+            <div class="post-description">这是文章开头，显示在主页面，详情请点击此处。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>‘’’<br>策略思路：<br>选股：财务指标选股<br>择时：RSRS择时<br>持仓：有开仓信号时持有10只股票，不满足时保持空仓</p>
+<p>‘’’</p>
+<h1 id="导入函数库"><a href="#导入函数库" class="headerlink" title="导入函数库"></a>导入函数库</h1><p>import statsmodels.api as sm<br>from pandas.stats.api import ols</p>
+<h1 id="初始化函数，设定基准等等"><a href="#初始化函数，设定基准等等" class="headerlink" title="初始化函数，设定基准等等"></a>初始化函数，设定基准等等</h1><p>def initialize(context):<br>    # 开启动态复权模式(真实价格)<br>    set_option(‘use_real_price’, True)<br>    # 过滤掉order系列API产生的比error级别低的log<br>    # log.set_level(‘order’, ‘error’)<br>    set_parameter(context)<br>    ### 股票相关设定 ###<br>    # 股票类每笔交易时的手续费是：买入时佣金万分之三，卖出时佣金万分之三加千分之一印花税, 每笔交易佣金最低扣5块钱<br>    set_order_cost(OrderCost(close_tax&#x3D;0.001, open_commission&#x3D;0.0003, close_commission&#x3D;0.0003, min_commission&#x3D;5),<br>                   type&#x3D;’stock’)</p>
+<pre><code>## 运行函数（reference_security为运行时间的参考标的；传入的标的只做种类区分，因此传入&#39;000300.XSHG&#39;或&#39;510300.XSHG&#39;是一样的）
+# 开盘前运行
+run_daily(before_market_open, time=&#39;before_open&#39;, reference_security=&#39;000300.XSHG&#39;)
+# 开盘时运行
+run_daily(market_open, time=&#39;open&#39;, reference_security=&#39;000300.XSHG&#39;)
+# 收盘后运行
+# run_daily(after_market_close, time=&#39;after_close&#39;, reference_security=&#39;000300.XSHG&#39;)
+</code></pre>
+<p>‘’’<br>&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;参数设置部分&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;<br>‘’’</p>
+<p>def set_parameter(context):<br>    # 设置RSRS指标中N, M的值<br>    # 统计周期<br>    g.N &#x3D; 18<br>    # 统计样本长度<br>    g.M &#x3D; 1100<br>    # 首次运行判断<br>    g.init &#x3D; True<br>    # 持仓股票数<br>    g.stock_num &#x3D; 10<br>    # 风险参考基准<br>    g.security &#x3D; ‘000300.XSHG’<br>    # 设定策略运行基准<br>    set_benchmark(g.security)<br>    # 记录策略运行天数<br>    g.days &#x3D; 0<br>    # set_benchmark(g.stock)<br>    # 买入阈值<br>    g.buy &#x3D; 0.7<br>    g.sell &#x3D; -0.7<br>    # 用于记录回归后的beta值，即斜率<br>    g.ans &#x3D; []<br>    # 用于计算被决定系数加权修正后的贝塔值<br>    g.ans_rightdev &#x3D; []</p>
+<pre><code># 计算2005年1月5日至回测开始日期的RSRS斜率指标
+prices = get_price(g.security, &#39;2005-01-05&#39;, context.previous_date, &#39;1d&#39;, [&#39;high&#39;, &#39;low&#39;])
+highs = prices.high
+lows = prices.low
+g.ans = []
+for i in range(len(highs))[g.N:]:
+    data_high = highs.iloc[i - g.N + 1:i + 1]
+    data_low = lows.iloc[i - g.N + 1:i + 1]
+    X = sm.add_constant(data_low)
+    model = sm.OLS(data_high, X)
+    results = model.fit()
+    g.ans.append(results.params[1])
+    # 计算r2
+    g.ans_rightdev.append(results.rsquared)
+</code></pre>
+<h2 id="开盘前运行函数"><a href="#开盘前运行函数" class="headerlink" title="开盘前运行函数"></a>开盘前运行函数</h2><p>def before_market_open(context):<br>    # 输出运行时间<br>    # log.info(‘函数运行时间(before_market_open)：’+str(context.current_dt.time()))<br>    g.days +&#x3D; 1<br>    # 给微信发送消息（添加模拟交易，并绑定微信生效）<br>    send_message(‘策略正常，运行第%s天~’ % g.days)</p>
+<h2 id="开盘时运行函数"><a href="#开盘时运行函数" class="headerlink" title="开盘时运行函数"></a>开盘时运行函数</h2><p>def market_open(context):<br>    security &#x3D; g.security<br>    # 填入各个日期的RSRS斜率值<br>    beta &#x3D; 0<br>    r2 &#x3D; 0<br>    if g.init:<br>        g.init &#x3D; False<br>    else:<br>        # RSRS斜率指标定义<br>        prices &#x3D; attribute_history(security, g.N, ‘1d’, [‘high’, ‘low’])<br>        highs &#x3D; prices.high<br>        lows &#x3D; prices.low<br>        X &#x3D; sm.add_constant(lows)<br>        model &#x3D; sm.OLS(highs, X)<br>        beta &#x3D; model.fit().params[1]<br>        g.ans.append(beta)<br>        # 计算r2<br>        r2 &#x3D; model.fit().rsquared<br>        g.ans_rightdev.append(r2)</p>
+<pre><code># 计算标准化的RSRS指标
+# 计算均值序列
+section = g.ans[-g.M:]
+# 计算均值序列
+mu = np.mean(section)
+# 计算标准化RSRS指标序列
+sigma = np.std(section)
+zscore = (section[-1] - mu) / sigma
+# 计算右偏RSRS标准分
+zscore_rightdev = zscore * beta * r2
+
+# 如果上一时间点的RSRS斜率大于买入阈值, 则全仓买入
+if zscore_rightdev &gt; g.buy:
+    # 记录这次买入
+    log.info(&quot;市场风险在合理范围&quot;)
+    # 满足条件运行交易
+    trade_func(context)
+# 如果上一时间点的RSRS斜率小于卖出阈值, 则空仓卖出
+elif (zscore_rightdev &lt; g.sell) and (len(context.portfolio.positions.keys()) &gt; 0):
+    # 记录这次卖出
+    log.info(&quot;市场风险过大，保持空仓状态&quot;)
+    # 卖出所有股票,使这只股票的最终持有量为0
+    for s in context.portfolio.positions.keys():
+        order_target(s, 0)
+</code></pre>
+<h1 id="策略选股买卖部分"><a href="#策略选股买卖部分" class="headerlink" title="策略选股买卖部分"></a>策略选股买卖部分</h1><p>def trade_func(context):<br>    # 获取股票池<br>    df &#x3D; get_fundamentals(query(valuation.code, valuation.pb_ratio, indicator.roe))<br>    # 进行pb,roe大于0筛选<br>    df &#x3D; df[(df[‘roe’] &gt; 0) &amp; (df[‘pb_ratio’] &gt; 0)].sort(‘pb_ratio’)<br>    # 以股票名词作为index<br>    df.index &#x3D; df[‘code’].values<br>    # 取roe倒数<br>    df[‘1&#x2F;roe’] &#x3D; 1 &#x2F; df[‘roe’]<br>    # 获取综合得分<br>    df[‘point’] &#x3D; df[[‘pb_ratio’, ‘1&#x2F;roe’]].rank().T.apply(f_sum)<br>    # 按得分进行排序，取指定数量的股票<br>    df &#x3D; df.sort(‘point’)[:g.stock_num]<br>    pool &#x3D; df.index<br>    log.info(‘总共选出%s只股票’ % len(pool))<br>    # 得到每只股票应该分配的资金<br>    cash &#x3D; context.portfolio.total_value &#x2F; len(pool)<br>    # 获取已经持仓列表<br>    hold_stock &#x3D; context.portfolio.positions.keys()<br>    # 卖出不在持仓中的股票<br>    for s in hold_stock:<br>        if s not in pool:<br>            order_target(s, 0)<br>    # 买入股票<br>    for s in pool:<br>        order_target_value(s, cash)</p>
+<h1 id="打分工具"><a href="#打分工具" class="headerlink" title="打分工具"></a>打分工具</h1><p>def f_sum(x):<br>    return sum(x)</p>
+<h2 id="收盘后运行函数"><a href="#收盘后运行函数" class="headerlink" title="收盘后运行函数"></a>收盘后运行函数</h2><p>def after_market_close(context):<br>    # 得到当天所有成交记录<br>    trades &#x3D; get_trades()<br>    for _trade in trades.values():<br>        log.info(‘成交记录：’ + str(_trade))<br>    # 打印账户总资产<br>    log.info(‘今日账户总资产：%s’ % round(context.portfolio.total_value, 2))<br>    # log.info(‘##############################################################’)</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E9%87%8F%E5%8C%96/" rel="tag"># 量化</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/k%E8%B7%AF%E5%BD%92%E5%B9%B6%E6%8E%92%E5%BA%8F/" rel="prev" title="k路归并排序">
+                  <i class="fa fa-chevron-left"></i> k路归并排序
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/66sort_with_swap/" rel="next" title="66sort_with_swap">
+                  66sort_with_swap <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">陈宇韶chenyushao</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

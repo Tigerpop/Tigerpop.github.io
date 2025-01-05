@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha256-AbA177XfpSnFEvgpYu1jMygiLabzPCJCRIBtR5jGc0k=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.13.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="linux目录文件">
+<meta property="og:url" content="http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/Linux%E7%9B%AE%E5%BD%95%E6%96%87%E4%BB%B6/index.html">
+<meta property="og:site_name" content="Tiger_pop&#39;s Blog">
+<meta property="og:description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-10-29T07:42:07.000Z">
+<meta property="article:modified_time" content="2022-10-29T08:43:28.189Z">
+<meta property="article:author" content="陈宇韶chenyushao">
+<meta property="article:tag" content="linux">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/Linux%E7%9B%AE%E5%BD%95%E6%96%87%E4%BB%B6/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/Linux%E7%9B%AE%E5%BD%95%E6%96%87%E4%BB%B6/","path":"2022/10/29/Linux学习/Linux目录文件/","title":"linux目录文件"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>linux目录文件 | Tiger_pop's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="Tiger_pop's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Tiger_pop's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">tiger_pop 的博客</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#x2F-bin"><span class="nav-number">1.</span> <span class="nav-text">&#x2F;bin</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#x2F-sbin"><span class="nav-number">2.</span> <span class="nav-text">&#x2F;sbin</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#x2F-home"><span class="nav-number">3.</span> <span class="nav-text">&#x2F;home</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#x2F-root"><span class="nav-number">4.</span> <span class="nav-text">&#x2F;root</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#x2F-lib"><span class="nav-number">5.</span> <span class="nav-text">&#x2F;lib</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#x2F-lost-found"><span class="nav-number">6.</span> <span class="nav-text">&#x2F;lost + found</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#x2F-etc"><span class="nav-number">7.</span> <span class="nav-text">&#x2F;etc</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#x2F-usr"><span class="nav-number">8.</span> <span class="nav-text">&#x2F;usr</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#x2F-boot"><span class="nav-number">9.</span> <span class="nav-text">&#x2F;boot</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#x2F-proc-x2F-srv-x2F-sys"><span class="nav-number">10.</span> <span class="nav-text">&#x2F;proc &#x2F;srv &#x2F;sys</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#x2F-tmp"><span class="nav-number">11.</span> <span class="nav-text">&#x2F;tmp</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#x2F-dev"><span class="nav-number">12.</span> <span class="nav-text">&#x2F;dev</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#x2F-media"><span class="nav-number">13.</span> <span class="nav-text">&#x2F;media</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#x2F-mnt"><span class="nav-number">14.</span> <span class="nav-text">&#x2F;mnt</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#x2F-opt"><span class="nav-number">15.</span> <span class="nav-text">&#x2F;opt</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#x2F-ust-x2F-local"><span class="nav-number">16.</span> <span class="nav-text">&#x2F;ust&#x2F;local</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#x2F-var"><span class="nav-number">17.</span> <span class="nav-text">&#x2F;var</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="陈宇韶chenyushao"
+      src="/images/my.jpg">
+  <p class="site-author-name" itemprop="name">陈宇韶chenyushao</p>
+  <div class="site-description" itemprop="description">爱学习、爱工作、爱生活;         微信号: Tiger_and_master;         手机号码:18515678348 </div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">378</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">24</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">138</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/Linux%E7%9B%AE%E5%BD%95%E6%96%87%E4%BB%B6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/my.jpg">
+      <meta itemprop="name" content="陈宇韶chenyushao">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tiger_pop's Blog">
+      <meta itemprop="description" content="爱学习、爱工作、爱生活;         微信号: Tiger_and_master;         手机号码:18515678348 ">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="linux目录文件 | Tiger_pop's Blog">
+      <meta itemprop="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          linux目录文件
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2022-10-29 15:42:07 / 修改时间：16:43:28" itemprop="dateCreated datePublished" datetime="2022-10-29T15:42:07+08:00">2022-10-29</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+            <div class="post-description">这是文章开头，显示在主页面，详情请点击此处。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>简介 <span id="more"></span></p>
+<p>​		Linux下一切皆为文件！</p>
+<p>​		Linux会把硬件都映射为一个文件来进行统一管理，比如cpu什么的。</p>
+<h1 id="x2F-bin"><a href="#x2F-bin" class="headerlink" title="&#x2F;bin"></a>&#x2F;bin</h1><p>​		binary缩写，存放最近常用的命令，例如cd命令。</p>
+<h1 id="x2F-sbin"><a href="#x2F-sbin" class="headerlink" title="&#x2F;sbin"></a>&#x2F;sbin</h1><p>​		s 是 super user，指的是系统管理员，bin一样。</p>
+<h1 id="x2F-home"><a href="#x2F-home" class="headerlink" title="&#x2F;home"></a>&#x2F;home</h1><p>​		普通用户主目录。主目录下 useradd jack命令就创建了另一个用户。</p>
+<h1 id="x2F-root"><a href="#x2F-root" class="headerlink" title="&#x2F;root"></a>&#x2F;root</h1><p>​		系统管理员。</p>
+<h1 id="x2F-lib"><a href="#x2F-lib" class="headerlink" title="&#x2F;lib"></a>&#x2F;lib</h1><p>​		动态链接共享库。</p>
+<h1 id="x2F-lost-found"><a href="#x2F-lost-found" class="headerlink" title="&#x2F;lost + found"></a>&#x2F;lost + found</h1><p>​		一般是空，里面存放非法关机数据。</p>
+<h1 id="x2F-etc"><a href="#x2F-etc" class="headerlink" title="&#x2F;etc"></a>&#x2F;etc</h1><p>​		所有系统管理所需要配置的文件和子目录，比如mysql 就是my.conf 。</p>
+<h1 id="x2F-usr"><a href="#x2F-usr" class="headerlink" title="&#x2F;usr"></a>&#x2F;usr</h1><p>​		用户的应用程序和文件，类似Windows的program files。</p>
+<h1 id="x2F-boot"><a href="#x2F-boot" class="headerlink" title="&#x2F;boot"></a>&#x2F;boot</h1><p>​		引导部分。</p>
+<h1 id="x2F-proc-x2F-srv-x2F-sys"><a href="#x2F-proc-x2F-srv-x2F-sys" class="headerlink" title="&#x2F;proc &#x2F;srv &#x2F;sys"></a>&#x2F;proc &#x2F;srv &#x2F;sys</h1><p>​		系统内存映射，改动很容易就系统崩溃。</p>
+<h1 id="x2F-tmp"><a href="#x2F-tmp" class="headerlink" title="&#x2F;tmp"></a>&#x2F;tmp</h1><p>​		临时文件。</p>
+<h1 id="x2F-dev"><a href="#x2F-dev" class="headerlink" title="&#x2F;dev"></a>&#x2F;dev</h1><p>​		设备管理器，把所有的硬件用文件的形式管理。</p>
+<h1 id="x2F-media"><a href="#x2F-media" class="headerlink" title="&#x2F;media"></a>&#x2F;media</h1><p>​		识别的设备，u盘、光驱什么的，挂载到这里。</p>
+<h1 id="x2F-mnt"><a href="#x2F-mnt" class="headerlink" title="&#x2F;mnt"></a>&#x2F;mnt</h1><p>​		系统在该目录让用户临时挂载别的文件系统，我们可以将外部存储挂载在&#x2F;mnt&#x2F;上，然后进入该目录就能看里面的内容了。</p>
+<h1 id="x2F-opt"><a href="#x2F-opt" class="headerlink" title="&#x2F;opt"></a>&#x2F;opt</h1><p>​		理论上待安装文件要放在这里。</p>
+<h1 id="x2F-ust-x2F-local"><a href="#x2F-ust-x2F-local" class="headerlink" title="&#x2F;ust&#x2F;local"></a>&#x2F;ust&#x2F;local</h1><p>​		另一个安装软件的目录，一般是通过编译源码形式安装程序。</p>
+<h1 id="x2F-var"><a href="#x2F-var" class="headerlink" title="&#x2F;var"></a>&#x2F;var</h1><p>​		习惯于存放log日志文件。常被修改的文件。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/linux/" rel="tag"># linux</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/Linux%E5%86%85%E6%A0%B8%E5%8D%87%E7%BA%A7/" rel="prev" title="linux内核升级">
+                  <i class="fa fa-chevron-left"></i> linux内核升级
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2022/10/29/Mac/Mac%E7%BB%88%E7%AB%AF%E7%94%A8%E4%BB%A3%E7%90%86_git-cloing%E7%94%A8%E4%BB%A3%E7%90%86_brew%E6%8D%A2%E6%BA%90/" rel="next" title="Mac终端用代理_git-cloing用代理_brew换源">
+                  Mac终端用代理_git-cloing用代理_brew换源 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">陈宇韶chenyushao</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

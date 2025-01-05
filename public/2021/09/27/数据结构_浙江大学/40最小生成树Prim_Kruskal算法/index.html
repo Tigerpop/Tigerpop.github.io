@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha256-AbA177XfpSnFEvgpYu1jMygiLabzPCJCRIBtR5jGc0k=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.13.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="40最小生成树Prim_Kruskal算法">
+<meta property="og:url" content="http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/40%E6%9C%80%E5%B0%8F%E7%94%9F%E6%88%90%E6%A0%91Prim_Kruskal%E7%AE%97%E6%B3%95/index.html">
+<meta property="og:site_name" content="Tiger_pop&#39;s Blog">
+<meta property="og:description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-09-27T12:00:36.000Z">
+<meta property="article:modified_time" content="2022-10-28T15:56:54.851Z">
+<meta property="article:author" content="陈宇韶chenyushao">
+<meta property="article:tag" content="图">
+<meta property="article:tag" content="最小生成树">
+<meta property="article:tag" content="贪心">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/40%E6%9C%80%E5%B0%8F%E7%94%9F%E6%88%90%E6%A0%91Prim_Kruskal%E7%AE%97%E6%B3%95/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/40%E6%9C%80%E5%B0%8F%E7%94%9F%E6%88%90%E6%A0%91Prim_Kruskal%E7%AE%97%E6%B3%95/","path":"2021/09/27/数据结构_浙江大学/40最小生成树Prim_Kruskal算法/","title":"40最小生成树Prim_Kruskal算法"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>40最小生成树Prim_Kruskal算法 | Tiger_pop's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="Tiger_pop's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Tiger_pop's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">tiger_pop 的博客</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-overview-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="陈宇韶chenyushao"
+      src="/images/my.jpg">
+  <p class="site-author-name" itemprop="name">陈宇韶chenyushao</p>
+  <div class="site-description" itemprop="description">爱学习、爱工作、爱生活;         微信号: Tiger_and_master;         手机号码:18515678348 </div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">378</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">24</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">138</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/40%E6%9C%80%E5%B0%8F%E7%94%9F%E6%88%90%E6%A0%91Prim_Kruskal%E7%AE%97%E6%B3%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/my.jpg">
+      <meta itemprop="name" content="陈宇韶chenyushao">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tiger_pop's Blog">
+      <meta itemprop="description" content="爱学习、爱工作、爱生活;         微信号: Tiger_and_master;         手机号码:18515678348 ">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="40最小生成树Prim_Kruskal算法 | Tiger_pop's Blog">
+      <meta itemprop="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          40最小生成树Prim_Kruskal算法
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2021-09-27 20:00:36" itemprop="dateCreated datePublished" datetime="2021-09-27T20:00:36+08:00">2021-09-27</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2022-10-28 23:56:54" itemprop="dateModified" datetime="2022-10-28T23:56:54+08:00">2022-10-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%B5%99%E5%A4%A7%E7%AE%97%E6%B3%95%E4%B8%8E%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B-python%E5%AE%9E%E7%8E%B0/" itemprop="url" rel="index"><span itemprop="name">浙大算法与数据结构课程(python实现)</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+            <div class="post-description">这是文章开头，显示在主页面，详情请点击此处。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br><span class="line">267</span><br><span class="line">268</span><br><span class="line">269</span><br><span class="line">270</span><br><span class="line">271</span><br><span class="line">272</span><br><span class="line">273</span><br><span class="line">274</span><br><span class="line">275</span><br><span class="line">276</span><br><span class="line">277</span><br><span class="line">278</span><br><span class="line">279</span><br><span class="line">280</span><br><span class="line">281</span><br><span class="line">282</span><br><span class="line">283</span><br><span class="line">284</span><br><span class="line">285</span><br><span class="line">286</span><br><span class="line">287</span><br><span class="line">288</span><br><span class="line">289</span><br><span class="line">290</span><br><span class="line">291</span><br><span class="line">292</span><br><span class="line">293</span><br><span class="line">294</span><br><span class="line">295</span><br><span class="line">296</span><br><span class="line">297</span><br><span class="line">298</span><br><span class="line">299</span><br><span class="line">300</span><br><span class="line">301</span><br><span class="line">302</span><br><span class="line">303</span><br><span class="line">304</span><br><span class="line">305</span><br><span class="line">306</span><br><span class="line">307</span><br><span class="line">308</span><br><span class="line">309</span><br><span class="line">310</span><br><span class="line">311</span><br><span class="line">312</span><br><span class="line">313</span><br><span class="line">314</span><br><span class="line">315</span><br><span class="line">316</span><br><span class="line">317</span><br><span class="line">318</span><br><span class="line">319</span><br><span class="line">320</span><br><span class="line">321</span><br><span class="line">322</span><br><span class="line">323</span><br><span class="line">324</span><br><span class="line">325</span><br><span class="line">326</span><br><span class="line">327</span><br><span class="line">328</span><br><span class="line">329</span><br><span class="line">330</span><br><span class="line">331</span><br><span class="line">332</span><br><span class="line">333</span><br><span class="line">334</span><br><span class="line">335</span><br><span class="line">336</span><br><span class="line">337</span><br><span class="line">338</span><br><span class="line">339</span><br><span class="line">340</span><br><span class="line">341</span><br><span class="line">342</span><br><span class="line">343</span><br><span class="line">344</span><br><span class="line">345</span><br><span class="line">346</span><br><span class="line">347</span><br><span class="line">348</span><br><span class="line">349</span><br><span class="line">350</span><br><span class="line">351</span><br><span class="line">352</span><br><span class="line">353</span><br><span class="line">354</span><br><span class="line">355</span><br><span class="line">356</span><br><span class="line">357</span><br><span class="line">358</span><br><span class="line">359</span><br><span class="line">360</span><br><span class="line">361</span><br><span class="line">362</span><br><span class="line">363</span><br><span class="line">364</span><br><span class="line">365</span><br><span class="line">366</span><br><span class="line">367</span><br><span class="line">368</span><br><span class="line">369</span><br><span class="line">370</span><br><span class="line">371</span><br><span class="line">372</span><br><span class="line">373</span><br><span class="line">374</span><br><span class="line">375</span><br><span class="line">376</span><br><span class="line">377</span><br><span class="line">378</span><br><span class="line">379</span><br><span class="line">380</span><br><span class="line">381</span><br><span class="line">382</span><br><span class="line">383</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">用最小的代价连接图所有的点</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">图的最小生成树</span></span><br><span class="line"><span class="string">Minimum Spanning Tree</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">树 ：</span></span><br><span class="line"><span class="string">    无回路</span></span><br><span class="line"><span class="string">    v个顶点v-1条边</span></span><br><span class="line"><span class="string">生成树：</span></span><br><span class="line"><span class="string">    包含了全部顶点</span></span><br><span class="line"><span class="string">    v-1条边都在图里</span></span><br><span class="line"><span class="string">最小生成树：</span></span><br><span class="line"><span class="string">    边的权重和是最小的</span></span><br><span class="line"><span class="string">    向生成树加任意一条边都会构成回路</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">此题 贪心算法</span></span><br><span class="line"><span class="string">    &quot;贪&quot;： 每一步都要最&quot;好&quot;的。</span></span><br><span class="line"><span class="string">    &quot;好&quot;： 权重最小的边。</span></span><br><span class="line"><span class="string">    </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    约束条件</span></span><br><span class="line"><span class="string">    只能用图里有的边</span></span><br><span class="line"><span class="string">    只能正好用掉v-1条边</span></span><br><span class="line"><span class="string">    不能有回路</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">Prim贪心算法 ---- 让一颗小树长大</span></span><br><span class="line"><span class="string">    类似Dijkstra算法，但是不是在原有基础上累加，而是只考虑一步长度。</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string"># dist[w] 定义为w结点到整个树的距离,parent[s] = -1 ,初始结点的dist定义为 +∞。</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">def Prim():</span></span><br><span class="line"><span class="string">    MST = &#123;s&#125;</span></span><br><span class="line"><span class="string">    while 1:</span></span><br><span class="line"><span class="string">        v = MST未收录的dist最小者</span></span><br><span class="line"><span class="string">        if  这样的v不存在：</span></span><br><span class="line"><span class="string">            break</span></span><br><span class="line"><span class="string">        收录v点</span></span><br><span class="line"><span class="string">        for v的所有邻接点w：</span></span><br><span class="line"><span class="string">            if w未被收录：</span></span><br><span class="line"><span class="string">                if E(v,w) &lt; dist[w]:</span></span><br><span class="line"><span class="string">                    dist[w] = E(v,w)</span></span><br><span class="line"><span class="string">                    parent[s] = v</span></span><br><span class="line"><span class="string">    if MST收录到的v的数量 &lt; v个：</span></span><br><span class="line"><span class="string">        return &#x27;存在孤立的点,生成树不存在。 &#x27;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string"># 时间复杂度 T = O(v**2)</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string"># 所以适应稠密图(稠密 E &gt; v）(稀疏 E ≈￿ v)</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">Kruskal 贪心算法 ---- 将森林合并成树</span></span><br><span class="line"><span class="string">    默认为每个结点就是一棵树</span></span><br><span class="line"><span class="string">    每次收进一条边，就等于两棵树并成了一棵树，</span></span><br><span class="line"><span class="string">    最后把所有的结点并进来成为一棵树。</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">def Kruskal():</span></span><br><span class="line"><span class="string">    MST = &#123;&#125; # 最小生成树存的是边。</span></span><br><span class="line"><span class="string">    while （ MST 中不到v-1条边 and E 中还有边  ):</span></span><br><span class="line"><span class="string">        从E中取出一条权重最小的边 E(v,w)  # *** 最小堆 ***</span></span><br><span class="line"><span class="string">        将 E(v,w) 从 E 中删除</span></span><br><span class="line"><span class="string">        if E(v,w) 不在MST 中构成回路：   # *** 并查集 *** 如果新加入的点w不在 v的集合内，那就不会形成闭合回路。</span></span><br><span class="line"><span class="string">            将 E(v,w)加入 新的集合 </span></span><br><span class="line"><span class="string">        else:</span></span><br><span class="line"><span class="string">            无视E(v,w)。           </span></span><br><span class="line"><span class="string">    if MST 中不到 v-1 条边：</span></span><br><span class="line"><span class="string">        return &#x27;存在不联通点，生成树不存在。&#x27;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string"># 时间复杂度 T = O(Elog(E)) </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string"># 适用于稀疏图。</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">       (v1)    2    (v2)</span></span><br><span class="line"><span class="string">     4     1      3      10</span></span><br><span class="line"><span class="string">(v3)    2    (v4)    7    (v5)</span></span><br><span class="line"><span class="string">     5      8      4       6</span></span><br><span class="line"><span class="string">       (v6)    1     (v7)</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># ***********************************************************************************************</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Prim算法 稠密图 邻接矩阵 示例。</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Graph</span>():</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self,n_vertices</span>):</span><br><span class="line">        self._n_vertices = n_vertices</span><br><span class="line">        self.G = [ [<span class="built_in">float</span>(<span class="string">&#x27;inf&#x27;</span>) <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(n_vertices) ] <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(n_vertices) ]</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">add_edge</span>(<span class="params">self,v,w,weight</span>):</span><br><span class="line">        self.G[v][w] = weight</span><br><span class="line">        self.G[w][v] = weight</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">show_Graph</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(self._n_vertices):</span><br><span class="line">            <span class="built_in">print</span>(self.G[i])</span><br><span class="line">graph = Graph(<span class="number">7</span>)</span><br><span class="line">graph.add_edge(<span class="number">0</span>,<span class="number">1</span>,<span class="number">2</span>)</span><br><span class="line">graph.add_edge(<span class="number">0</span>,<span class="number">3</span>,<span class="number">1</span>)</span><br><span class="line">graph.add_edge(<span class="number">1</span>,<span class="number">3</span>,<span class="number">3</span>)</span><br><span class="line">graph.add_edge(<span class="number">1</span>,<span class="number">4</span>,<span class="number">10</span>)</span><br><span class="line">graph.add_edge(<span class="number">2</span>,<span class="number">0</span>,<span class="number">4</span>)</span><br><span class="line">graph.add_edge(<span class="number">2</span>,<span class="number">5</span>,<span class="number">5</span>)</span><br><span class="line">graph.add_edge(<span class="number">3</span>,<span class="number">2</span>,<span class="number">2</span>)</span><br><span class="line">graph.add_edge(<span class="number">3</span>,<span class="number">4</span>,<span class="number">7</span>)</span><br><span class="line">graph.add_edge(<span class="number">3</span>,<span class="number">5</span>,<span class="number">8</span>)</span><br><span class="line">graph.add_edge(<span class="number">3</span>,<span class="number">6</span>,<span class="number">4</span>)</span><br><span class="line">graph.add_edge(<span class="number">4</span>,<span class="number">6</span>,<span class="number">6</span>)</span><br><span class="line">graph.add_edge(<span class="number">6</span>,<span class="number">5</span>,<span class="number">1</span>)</span><br><span class="line">graph.show_Graph()</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;    \n&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">data</span>():</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self,Vertex_num</span>):</span><br><span class="line">        self.dist = [<span class="built_in">float</span>(<span class="string">&#x27;inf&#x27;</span>) <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(Vertex_num)]    <span class="comment"># 这里的dist 是v到这棵树的距离。</span></span><br><span class="line">        self.parent = [-<span class="number">1</span> <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(Vertex_num)]      <span class="comment"># 用数组来储存树。</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">Prim</span>(<span class="params">s,data</span>):  <span class="comment"># s 是起始结点位置。</span></span><br><span class="line">    <span class="keyword">while</span> <span class="number">1</span>:</span><br><span class="line">        v = Find_Smallest_Dist(s,data)</span><br><span class="line">        <span class="keyword">if</span> v == <span class="literal">None</span>:</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">        data.dist[v] = <span class="number">0</span>  <span class="comment"># 收录结点</span></span><br><span class="line">        <span class="keyword">for</span> w <span class="keyword">in</span> near_Node(v):   <span class="comment"># 影响未收录的相邻结点</span></span><br><span class="line">            <span class="keyword">if</span> data.dist[w] != <span class="number">0</span>:</span><br><span class="line">                <span class="comment"># 找出v--&gt;w 边对应权重。</span></span><br><span class="line">                weight_v_w = graph.G[v][w]</span><br><span class="line">                <span class="keyword">if</span> data.dist[w] &gt; weight_v_w:  <span class="comment"># 由于是点到树的距离，不是点到源点的距离，</span></span><br><span class="line">                    data.dist[w] = weight_v_w   <span class="comment"># 所以 一步距离和原有的dist距离比较即可。</span></span><br><span class="line">                    data.parent[w] = v</span><br><span class="line">    <span class="keyword">for</span> collected <span class="keyword">in</span> data.dist:</span><br><span class="line">        <span class="keyword">if</span> collected != <span class="number">0</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="string">&#x27;这样的最小生成树不存在，因为有孤立点。&#x27;</span></span><br><span class="line">    <span class="keyword">return</span> data</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">Find_Smallest_Dist</span>(<span class="params">s,data</span>):</span><br><span class="line">    <span class="keyword">if</span> data.dist[s] != <span class="number">0</span>:</span><br><span class="line">        data.dist[s] = -<span class="number">1</span></span><br><span class="line">    uncollected_list = [i <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(data.dist)) <span class="keyword">if</span> data.dist[i]!=<span class="number">0</span>]</span><br><span class="line">    <span class="built_in">print</span>(uncollected_list,<span class="string">&#x27;没收集到!!!&#x27;</span>)</span><br><span class="line">    <span class="keyword">if</span> uncollected_list == []:</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">None</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> uncollected_list:</span><br><span class="line">        <span class="keyword">if</span> data.dist[i] == <span class="built_in">min</span>([data.dist[i] <span class="keyword">for</span> i <span class="keyword">in</span> uncollected_list]):</span><br><span class="line">            <span class="built_in">print</span>(i,<span class="string">&#x27;   没收集的最小dist对应位置&#x27;</span>)</span><br><span class="line">            <span class="built_in">print</span>(data.dist[i],<span class="string">&#x27;   没有收录的最小dist值&#x27;</span>)</span><br><span class="line">            <span class="keyword">return</span> i</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">near_Node</span>(<span class="params">v</span>):</span><br><span class="line">    near_Node = [ w <span class="keyword">for</span> w <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(graph.G[v])) <span class="keyword">if</span> w != <span class="built_in">float</span>(<span class="string">&#x27;inf&#x27;</span>)]</span><br><span class="line">    <span class="keyword">return</span> near_Node</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">CreatTree</span>(<span class="params">H</span>):<span class="comment"># 得出的parent其实就是一棵树了，如果有强迫症也可以这样建立一个邻接表，树本身就是一种特殊的图。</span></span><br><span class="line">    G = [[] <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">7</span>)]</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(H)):</span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(H )):</span><br><span class="line">            <span class="keyword">if</span> H[j] == i:</span><br><span class="line">                G[i].append(&#123;j:graph.G[i][j]&#125;)</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(G)):</span><br><span class="line">        <span class="keyword">if</span> G[i] != []:</span><br><span class="line">            <span class="built_in">print</span>(i,G[i])</span><br><span class="line">    <span class="keyword">return</span> G</span><br><span class="line"></span><br><span class="line">data = data(<span class="number">7</span>)</span><br><span class="line">Prim(<span class="number">0</span>,data)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;\n\n**********\n Prim算法的结果如下：&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;dist&#x27;</span>,data.dist)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;parent&#x27;</span>,data.parent)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 得出的parent其实就是一棵树了，如果有强迫症也可以这样建立一个邻接表，树本身就是一种特殊的图。</span></span><br><span class="line"></span><br><span class="line">t = CreatTree(data.parent)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;**********\n&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># ***********************************************************************************************</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># ***********************************************************************************************</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Kruskal 算法，稀疏图,邻接表。</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 提前解释一下，为什么之前未连接的两个点在同一个集合内，一旦连接着两个点，就会出现闭合回路，就不是树了。</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 如果在同一个集合内，这两个点又没有连接，说明他们在一条线上，他们之间又若干的点。</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 此时连接两点，注定产生一个闭合回路，图就不是树了。</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Kruskal算法就是基于并查集的贪心算法。</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 这里分散的把关键点说一下：</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># （下面的代码 变量命名有点不太规范）：</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 用new_MST 数组 存 集合信息，默认初始化每个点都是一个集合（树）。</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 用所有边构建一个最小堆，再用最小堆选出 权重最小的边。</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 合并集合（树）的过程中用到了 路径压缩，在new_MST内完成。</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 判断两点不在一个树上，合并成新的树的时候是要全覆盖的。</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 能够合并v、w 点，就添加边&lt;v,w&gt;进 新集合E,集合E 就是最后要输出的树。</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 统计最后树的数量 和前面 伪代码略有不同，是数new_MST中-1来完成的。</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Graph</span>():</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self,n_vertices</span>):</span><br><span class="line">        self._n_vertices = n_vertices</span><br><span class="line">        self.G = [[] <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(self._n_vertices)]</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">add_edge</span>(<span class="params">self,pro_vertices,new_vertices,edge_weight</span>):</span><br><span class="line">        self.G[pro_vertices].append(&#123;new_vertices:edge_weight&#125;)</span><br><span class="line">        self.G[new_vertices].append(&#123;pro_vertices: edge_weight&#125;)</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">show_Graph</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(self._n_vertices):</span><br><span class="line">            <span class="built_in">print</span>(self.G[i])</span><br><span class="line">graph = Graph(<span class="number">7</span>)</span><br><span class="line">graph.add_edge(<span class="number">0</span>,<span class="number">1</span>,<span class="number">2</span>) <span class="comment"># v - w - weight</span></span><br><span class="line">graph.add_edge(<span class="number">0</span>,<span class="number">3</span>,<span class="number">1</span>)</span><br><span class="line">graph.add_edge(<span class="number">1</span>,<span class="number">3</span>,<span class="number">3</span>)</span><br><span class="line">graph.add_edge(<span class="number">1</span>,<span class="number">4</span>,<span class="number">10</span>)</span><br><span class="line">graph.add_edge(<span class="number">2</span>,<span class="number">0</span>,<span class="number">4</span>)</span><br><span class="line">graph.add_edge(<span class="number">2</span>,<span class="number">5</span>,<span class="number">5</span>)</span><br><span class="line">graph.add_edge(<span class="number">3</span>,<span class="number">2</span>,<span class="number">2</span>)</span><br><span class="line">graph.add_edge(<span class="number">3</span>,<span class="number">4</span>,<span class="number">7</span>)</span><br><span class="line">graph.add_edge(<span class="number">3</span>,<span class="number">5</span>,<span class="number">8</span>)</span><br><span class="line">graph.add_edge(<span class="number">3</span>,<span class="number">6</span>,<span class="number">4</span>)</span><br><span class="line">graph.add_edge(<span class="number">4</span>,<span class="number">6</span>,<span class="number">6</span>)</span><br><span class="line">graph.add_edge(<span class="number">6</span>,<span class="number">5</span>,<span class="number">1</span>)</span><br><span class="line">graph.show_Graph()</span><br><span class="line">Edge = [</span><br><span class="line">    [<span class="number">0</span>,<span class="number">1</span>,<span class="number">2</span>],</span><br><span class="line">    [<span class="number">0</span>,<span class="number">3</span>,<span class="number">1</span>],</span><br><span class="line">    [<span class="number">1</span>,<span class="number">3</span>,<span class="number">3</span>],</span><br><span class="line">    [<span class="number">1</span>,<span class="number">4</span>,<span class="number">10</span>],</span><br><span class="line">    [<span class="number">2</span>,<span class="number">0</span>,<span class="number">4</span>],</span><br><span class="line">    [<span class="number">2</span>,<span class="number">5</span>,<span class="number">5</span>],</span><br><span class="line">    [<span class="number">3</span>,<span class="number">2</span>,<span class="number">2</span>],</span><br><span class="line">    [<span class="number">3</span>,<span class="number">4</span>,<span class="number">7</span>],</span><br><span class="line">    [<span class="number">3</span>,<span class="number">5</span>,<span class="number">8</span>],</span><br><span class="line">    [<span class="number">3</span>,<span class="number">6</span>,<span class="number">4</span>],</span><br><span class="line">    [<span class="number">4</span>,<span class="number">6</span>,<span class="number">6</span>],</span><br><span class="line">    [<span class="number">6</span>,<span class="number">5</span>,<span class="number">1</span>]</span><br><span class="line">]</span><br><span class="line"><span class="built_in">print</span>(Edge)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;_________\n&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">Kruskal</span>():</span><br><span class="line">    E = []</span><br><span class="line">    new_MST = [-<span class="number">1</span> <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(graph.G))]  <span class="comment"># 初始假设每个点都是独立的树（并查集）。</span></span><br><span class="line">    MST = Edge <span class="comment"># 最小生成树存的是边。</span></span><br><span class="line">    H = creat_Heap(MST)</span><br><span class="line">    <span class="keyword">while</span> ( Edge_Num(new_MST)&lt;<span class="built_in">len</span>(graph.G)-<span class="number">1</span> <span class="keyword">and</span> <span class="built_in">len</span>(MST) ):</span><br><span class="line">        theMin = pop_smallest_Edge(H,MST)<span class="comment">#从E中取出一条权重最小的边 E(v,w) ,将 E(v,w) 从 E 中删除</span></span><br><span class="line">        v = theMin[<span class="number">0</span>]</span><br><span class="line">        w = theMin[<span class="number">1</span>]</span><br><span class="line">        weight = theMin[<span class="number">2</span>]</span><br><span class="line">        <span class="built_in">print</span>(new_MST)</span><br><span class="line">        <span class="built_in">print</span>(theMin)</span><br><span class="line">        <span class="keyword">if</span> NotInTheSomeSet(v,w,new_MST):  <span class="comment">#E(v,w) 不在MST 中构成回路：   # *** 并查集 *** 如果新加入的点w不在 v的集合内，那就不会形成闭合回路。</span></span><br><span class="line">            Unin(v,w,new_MST)</span><br><span class="line">            E.append(theMin)  <span class="comment">#</span></span><br><span class="line">            <span class="built_in">print</span>(v,w)</span><br><span class="line">    count = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> new_MST:</span><br><span class="line">        <span class="keyword">if</span> i == -<span class="number">1</span>:</span><br><span class="line">            count += <span class="number">1</span></span><br><span class="line">    <span class="keyword">if</span> count &gt; <span class="number">1</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&#x27;存在不联通点，生成树不存在。%d个集合&#x27;</span>%count</span><br><span class="line">    <span class="keyword">return</span> E</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">Edge_Num</span>(<span class="params">new_MST</span>): <span class="comment"># 统计边的数量。</span></span><br><span class="line">    count = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> new_MST:</span><br><span class="line">        <span class="keyword">if</span> i != -<span class="number">1</span>:</span><br><span class="line">            count += <span class="number">1</span></span><br><span class="line">    <span class="keyword">return</span> count</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">findRoot</span>(<span class="params">x,new_MST</span>):   <span class="comment"># 找root并压缩路径。</span></span><br><span class="line">    <span class="keyword">if</span> new_MST[x] == -<span class="number">1</span>:</span><br><span class="line">        <span class="keyword">return</span> x</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        new_MST[x] = findRoot(new_MST[x],new_MST)</span><br><span class="line">        <span class="keyword">return</span> new_MST[x]</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">NotInTheSomeSet</span>(<span class="params">v,w,new_MST</span>):</span><br><span class="line">    <span class="keyword">if</span> findRoot(v,new_MST) != findRoot(w,new_MST):</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">Unin</span>(<span class="params">v,w,new_MST</span>):</span><br><span class="line">    v_root = findRoot(v,new_MST)</span><br><span class="line">    w_root = findRoot(w,new_MST)</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(new_MST)):</span><br><span class="line">        <span class="keyword">if</span> new_MST[i] == w_root:</span><br><span class="line">            new_MST[i] = v_root</span><br><span class="line">    new_MST[w_root] = v_root</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">creat_Heap</span>(<span class="params">MST</span>):</span><br><span class="line">    H = HeapStruct()</span><br><span class="line">    H.MinHeapCreate(Capacity_Size=<span class="number">20</span>)</span><br><span class="line">    <span class="keyword">for</span> e <span class="keyword">in</span> MST:</span><br><span class="line">        H.Insert(e)</span><br><span class="line">    <span class="keyword">return</span> H</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">pop_smallest_Edge</span>(<span class="params">heap,MST</span>):</span><br><span class="line">    theMin = heap.DeleteMin()</span><br><span class="line">    <span class="keyword">for</span> e <span class="keyword">in</span> MST:</span><br><span class="line">        <span class="keyword">if</span> e == theMin:</span><br><span class="line">            MST.remove(e)</span><br><span class="line">    <span class="keyword">return</span> theMin</span><br><span class="line"></span><br><span class="line"><span class="comment"># 最小堆。稍微对element存的值进行了更改,其实就是改了比较大小的位置，由element的元素改为元素的元素。</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">HeapStruct</span>():</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self,elements=[<span class="literal">None</span>],addre=<span class="number">0</span>,capacity=<span class="number">0</span></span>):</span><br><span class="line">        self.elements = elements</span><br><span class="line">        self.addre = addre <span class="comment"># addre 相当于指针，表明堆中最大的那个位置。</span></span><br><span class="line">        self.capacity = capacity</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">MinHeapCreate</span>(<span class="params">self,Capacity_Size</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&#x27; 若插入数值，请确保插入数值在 0 以上 。结点容量为%d&#x27;</span>%Capacity_Size)</span><br><span class="line">        self.elements = [<span class="literal">None</span>] * (Capacity_Size+<span class="number">1</span>) <span class="comment"># 因为有&quot;哨兵&quot;。</span></span><br><span class="line">        self.capacity = Capacity_Size</span><br><span class="line">        self.elements[<span class="number">0</span>] = self.MinData() <span class="comment"># 定义哨兵，其值小于堆中最小值，便于以后更快操作。</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&#x27;self capacity = %s&#x27;</span>%self.capacity)</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">MinData</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">return</span> [<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>]</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">Insert</span>(<span class="params">self,item</span>):</span><br><span class="line">        <span class="keyword">if</span> self.IsFull():</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&#x27;最小堆已满&#x27;</span>)</span><br><span class="line">            <span class="keyword">return</span></span><br><span class="line">        i = self.addre + <span class="number">1</span></span><br><span class="line">        <span class="keyword">if</span> self.elements[<span class="number">0</span>][<span class="number">2</span>] &gt;= item[<span class="number">2</span>]:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&#x27;插入数值大小小于下限&#x27;</span>)</span><br><span class="line">            <span class="keyword">return</span></span><br><span class="line">        <span class="keyword">while</span> self.elements[i//<span class="number">2</span>][<span class="number">2</span>] &gt; item[<span class="number">2</span>]: <span class="comment"># i/2 address是父结点的位置。加入值比父类结点小就往上走。这个循环是找到插入位置，并为插入点腾开位置。</span></span><br><span class="line">            <span class="built_in">print</span>(self.elements[i//<span class="number">2</span>],item)</span><br><span class="line">            self.elements[i] = self.elements[i//<span class="number">2</span>] <span class="comment"># 值得一提：树结构中移动，有的可变动值，而不动结点结构。</span></span><br><span class="line">            i //= <span class="number">2</span></span><br><span class="line">        self.elements[i] = item</span><br><span class="line">        self.addre += <span class="number">1</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">IsFull</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">if</span> self.addre == self.capacity:</span><br><span class="line">            <span class="built_in">print</span>( self.addre,self.capacity)</span><br><span class="line">            <span class="keyword">return</span> <span class="number">1</span></span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">IsEmpty</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">if</span> self.addre == <span class="number">0</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="number">1</span></span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">DeleteMin</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">if</span> self.IsEmpty():</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&#x27;最小堆已空。&#x27;</span>)</span><br><span class="line">            <span class="keyword">return</span></span><br><span class="line">        minitem = self.elements[<span class="number">1</span>]</span><br><span class="line">        temp = self.elements[self.addre]</span><br><span class="line">        self.elements[self.addre] = <span class="literal">None</span></span><br><span class="line">        self.addre -= <span class="number">1</span> <span class="comment"># 拿掉最后一个结点。</span></span><br><span class="line">        parent = <span class="number">1</span></span><br><span class="line">        <span class="comment"># 保证比最小的儿子还要小，就向上走。</span></span><br><span class="line">        <span class="keyword">while</span> parent*<span class="number">2</span> &lt;= self.addre: <span class="comment"># 保证有儿子（必有左儿子）（可能有右儿子）</span></span><br><span class="line">            left_child = parent * <span class="number">2</span></span><br><span class="line">            <span class="keyword">if</span> self.addre != left_child <span class="keyword">and</span> self.elements[left_child+<span class="number">1</span>][<span class="number">2</span>] &lt; self.elements[left_child][<span class="number">2</span>]:</span><br><span class="line">                child = left_child + <span class="number">1</span></span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                child = left_child</span><br><span class="line">            <span class="keyword">if</span> self.elements[child][<span class="number">2</span>] &lt;= temp[<span class="number">2</span>]: <span class="comment"># 假定temp在根位置。</span></span><br><span class="line">                self.elements[parent] = self.elements[child]</span><br><span class="line">                parent = child  <span class="comment"># 沿着最小儿子的路径往下走。</span></span><br><span class="line">            <span class="keyword">elif</span> self.elements[child][<span class="number">2</span>] &gt; temp[<span class="number">2</span>]:</span><br><span class="line">                self.elements[parent] = temp <span class="comment"># 找到适合位置。</span></span><br><span class="line">                <span class="keyword">return</span> minitem</span><br><span class="line">        self.elements[parent] = temp  <span class="comment"># 在有儿子的情况到循环结束，没有temp的落脚点，此时叶子结点parent那个位置适合temp。</span></span><br><span class="line">        <span class="keyword">return</span> minitem</span><br><span class="line"></span><br><span class="line">E = Kruskal()</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;\n\n**********\n Kruskal算法的结果如下：&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;最终的最小生成树为：&#x27;</span>)</span><br><span class="line"><span class="keyword">for</span> edge <span class="keyword">in</span> E:</span><br><span class="line">    <span class="built_in">print</span>(edge)</span><br></pre></td></tr></table></figure>
+
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%9B%BE/" rel="tag"># 图</a>
+              <a href="/tags/%E6%9C%80%E5%B0%8F%E7%94%9F%E6%88%90%E6%A0%91/" rel="tag"># 最小生成树</a>
+              <a href="/tags/%E8%B4%AA%E5%BF%83/" rel="tag"># 贪心</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/42%E5%85%B3%E9%94%AE%E8%B7%AF%E5%BE%84/" rel="prev" title="42关键路径">
+                  <i class="fa fa-chevron-left"></i> 42关键路径
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/4.1%E5%B9%BF%E4%B9%89%E8%A1%A8%E4%B8%8E%E5%A4%9A%E9%87%8D%E9%93%BE%E6%8E%A5/" rel="next" title="4.1广义表与多重链接">
+                  4.1广义表与多重链接 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">陈宇韶chenyushao</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

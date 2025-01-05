@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha256-AbA177XfpSnFEvgpYu1jMygiLabzPCJCRIBtR5jGc0k=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.13.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hive_SQL数据定义语言_DDL">
+<meta property="og:url" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/index.html">
+<meta property="og:site_name" content="Tiger_pop&#39;s Blog">
+<meta property="og:description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-02-24%2015.38.54-7028285-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-02-24%2016.23.09-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-02-24%2016.27.45-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-02-24%2016.35.28-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-02-24%2016.38.17-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-02-24%2016.39.02-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-02-24%2016.39.45-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-02-24%2016.40.13-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-02-24%2016.43.38-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-02-24%2016.46.46-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-02-24%2016.48.48-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-02-24%2016.56.03-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-02-24%2017.05.34-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-02-24%2017.06.03-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-02-24%2017.08.04-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-02-24%2017.10.07-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-02-24%2017.11.08-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-02-24%2021.23.10-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-02-24%2021.28.06-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-02-24%2021.33.58-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-02-24%2021.39.15-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-02-24%2021.44.17-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-02-24%2021.48.19-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-02-24%2021.50.23-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-02-24%2021.54.14-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-02-24%2022.00.36-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-02-24%2022.01.58-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-02-24%2022.12.10-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-01%2012.03.53-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-01%2012.04.17-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-01%2012.04.39-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-01%2012.38.49-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-01%2014.03.56-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-01%2014.14.14-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-02-24%2022.26.28-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-01%2021.11.51-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-02%2017.10.00-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-02%2017.11.09-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-02%2017.18.40-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-02%2017.19.35-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-02%2017.32.35-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-02%2017.35.34-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-02%2017.40.16-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-02%2017.44.33-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-02%2017.47.18-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-02%2017.48.21-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-02%2018.30.46-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-02%2018.31.03-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-03%2011.39.33-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-03%2011.46.51-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-03%2017.00.07-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-03%2022.37.00-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-03%2022.40.45-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-03%2022.48.14-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-03%2023.05.05-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-03%2023.08.06-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-03%2023.14.15-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-03%2023.17.57-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-04%2000.10.57-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-04%2000.12.03-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-04%2010.46.05-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-04%2010.47.46-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-04%2010.48.29-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-04%2010.50.34-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-04%2010.56.21-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-05%2011.05.12-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-05%2011.10.19-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-05%2011.12.14-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-05%2011.13.21-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-05%2011.18.49-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-05%2011.20.01-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-05%2011.21.51-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-05%2011.26.44-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-05%2011.31.46-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-05%2011.34.17-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-05%2011.36.44-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-05%2011.39.07-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-05%2011.40.39-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-05%2011.42.42-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-05%2011.45.56-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-05%2011.53.13-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-05%2011.56.25-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-05%2020.04.18-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-05%2020.06.10-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-05%2020.14.10-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-05%2020.18.44-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-05%2020.19.55-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-05%2020.29.27-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-05%2020.34.15-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-05%2021.20.06-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-05%2021.24.12-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-05%2021.26.06-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-05%2021.28.36-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-05%2021.31.36-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-05%2021.34.40-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-05%2021.37.31-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-05%2021.39.32-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-05%2021.40.45-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-05%2021.49.13-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-05%2021.51.26-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-05%2021.53.39-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-05%2021.55.03-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-05%2021.58.49-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-05%2022.04.12-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-05%2022.07.09-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-05%2022.11.05-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-05%2022.15.09-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-05%2022.21.13-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-05%2022.24.30-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-05%2022.27.46-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-05%2022.31.42-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-05%2022.32.16-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-05%2022.33.46-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-05%2022.34.37-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-06%2021.19.07-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-06%2021.20.45-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-06%2021.21.14-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-06%2021.26.11-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-06%2021.27.18-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-06%2021.28.22-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-06%2021.30.57-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-06%2021.34.19-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-06%2021.37.05-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-06%2021.38.29-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-06%2021.42.50-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-06%2021.45.25-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-06%2021.50.02-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-06%2021.52.17-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-06%2021.53.09-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-06%2021.55.20-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-06%2021.59.01-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-06%2022.18.57-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-06%2022.20.03-7028320.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-06%2022.21.16-7028320.jpg">
+<meta property="article:published_time" content="2022-10-29T07:11:19.000Z">
+<meta property="article:modified_time" content="2022-10-29T07:26:38.268Z">
+<meta property="article:author" content="陈宇韶chenyushao">
+<meta property="article:tag" content="hive">
+<meta property="article:tag" content="sql">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-02-24%2015.38.54-7028285-7028320.jpg">
+
+
+<link rel="canonical" href="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/","path":"2022/10/29/Hive学习/Hive-SQL数据定义语言-DDL/","title":"Hive_SQL数据定义语言_DDL"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Hive_SQL数据定义语言_DDL | Tiger_pop's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="Tiger_pop's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Tiger_pop's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">tiger_pop 的博客</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AE%80%E4%BB%8B"><span class="nav-number">1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL"><span class="nav-number">2.</span> <span class="nav-text">Hive SQL数据定义语言 DDL</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="陈宇韶chenyushao"
+      src="/images/my.jpg">
+  <p class="site-author-name" itemprop="name">陈宇韶chenyushao</p>
+  <div class="site-description" itemprop="description">爱学习、爱工作、爱生活;         微信号: Tiger_and_master;         手机号码:18515678348 </div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">378</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">24</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">138</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/my.jpg">
+      <meta itemprop="name" content="陈宇韶chenyushao">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tiger_pop's Blog">
+      <meta itemprop="description" content="爱学习、爱工作、爱生活;         微信号: Tiger_and_master;         手机号码:18515678348 ">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Hive_SQL数据定义语言_DDL | Tiger_pop's Blog">
+      <meta itemprop="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Hive_SQL数据定义语言_DDL
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2022-10-29 15:11:19 / 修改时间：15:26:38" itemprop="dateCreated datePublished" datetime="2022-10-29T15:11:19+08:00">2022-10-29</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/hive/" itemprop="url" rel="index"><span itemprop="name">hive</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+            <div class="post-description">这是文章开头，显示在主页面，详情请点击此处。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>简介 <span id="more"></span></p>
+<h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-02-24%2015.38.54-7028285-7028320.jpg" alt="截屏2022-02-24 15.38.54"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-02-24%2016.23.09-7028320.jpg" alt="截屏2022-02-24 16.23.09"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-02-24%2016.27.45-7028320.jpg" alt="截屏2022-02-24 16.27.45"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-02-24%2016.35.28-7028320.jpg" alt="截屏2022-02-24 16.35.28"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-02-24%2016.38.17-7028320.jpg" alt="截屏2022-02-24 16.38.17"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-02-24%2016.39.02-7028320.jpg" alt="截屏2022-02-24 16.39.02"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-02-24%2016.39.45-7028320.jpg" alt="截屏2022-02-24 16.39.45"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-02-24%2016.40.13-7028320.jpg" alt="截屏2022-02-24 16.40.13"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-02-24%2016.43.38-7028320.jpg" alt="截屏2022-02-24 16.43.38"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-02-24%2016.46.46-7028320.jpg" alt="截屏2022-02-24 16.46.46"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-02-24%2016.48.48-7028320.jpg" alt="截屏2022-02-24 16.48.48"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-02-24%2016.56.03-7028320.jpg" alt="截屏2022-02-24 16.56.03"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-02-24%2017.05.34-7028320.jpg" alt="截屏2022-02-24 17.05.34"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-02-24%2017.06.03-7028320.jpg" alt="截屏2022-02-24 17.06.03"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-02-24%2017.08.04-7028320.jpg" alt="截屏2022-02-24 17.08.04"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-02-24%2017.10.07-7028320.jpg" alt="截屏2022-02-24 17.10.07"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-02-24%2017.11.08-7028320.jpg" alt="截屏2022-02-24 17.11.08"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-02-24%2021.23.10-7028320.jpg" alt="截屏2022-02-24 21.23.10"></p>
+<p>内嵌模式安装（这只是简介，具体的安装配置教程参考之前的hive安装笔记。）：</p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-02-24%2021.28.06-7028320.jpg" alt="截屏2022-02-24 21.28.06"></p>
+<p>本地模式安装（这只是简介，具体的安装配置教程参考之前的hive安装笔记。）：</p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-02-24%2021.33.58-7028320.jpg" alt="截屏2022-02-24 21.33.58"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-02-24%2021.39.15-7028320.jpg" alt="截屏2022-02-24 21.39.15"></p>
+<p>远程模式安装：</p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-02-24%2021.44.17-7028320.jpg" alt="截屏2022-02-24 21.44.17"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-02-24%2021.48.19-7028320.jpg" alt="截屏2022-02-24 21.48.19"></p>
+<p>方式3 远程方式安装，这才是hive主要应用场景（这只是简介，具体的安装配置教程参考之前的hive安装笔记。）：</p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-02-24%2021.50.23-7028320.jpg" alt="截屏2022-02-24 21.50.23"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-02-24%2021.54.14-7028320.jpg" alt="截屏2022-02-24 21.54.14"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-02-24%2022.00.36-7028320.jpg" alt="截屏2022-02-24 22.00.36"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-02-24%2022.01.58-7028320.jpg" alt="截屏2022-02-24 22.01.58"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-02-24%2022.12.10-7028320.jpg" alt="截屏2022-02-24 22.12.10"></p>
+<p>​		我们在用hive强行新建一个表，并插入数据时，速度很慢实际是运行一个java程序，此时我们打开yarn的监测端口可以看见一个mapreduce程序正在运行。</p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-01%2012.03.53-7028320.jpg" alt="截屏2022-03-01 12.03.53"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-01%2012.04.17-7028320.jpg" alt="截屏2022-03-01 12.04.17"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-01%2012.04.39-7028320.jpg" alt="截屏2022-03-01 12.04.39"></p>
+<p>​		卧槽插入一条数据花了182秒，可见hive真的不是sql。</p>
+<p>​		映射成表才是正解</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">vim user.txt</span><br><span class="line">1,zhangsan</span><br><span class="line">2,lisi</span><br><span class="line"></span><br><span class="line">bin/hadoop fs -put user.txt / <span class="comment"># 用Hadoop命令把user.txt 传到hdfs的根目录下。</span></span><br><span class="line"></span><br><span class="line">此时用9870端口查看yarn的根目录，可见多了一个user.txt文件。</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-01%2012.38.49-7028320.jpg" alt="截屏2022-03-01 12.38.49"></p>
+<p>​		默认情况下，hive在 &#x2F;user&#x2F;hive&#x2F;warehouse 中创建库和表。将我们刚才放在hdfs根目录的user.txt移动到 &#x2F;user&#x2F;hive&#x2F;warehouse 与之对应的表中。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bin/hadoop  fs  -<span class="built_in">mv</span>  /user.txt  /user/hive/warehouse/test.db/table_test</span><br></pre></td></tr></table></figure>
+
+<p>​		现在可以看见有东西存进来了，但是新的内容都是显示null，</p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-01%2014.03.56-7028320.jpg" alt="截屏2022-03-01 14.03.56"></p>
+<p>​		hive建立表的时间加上分隔符</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> t_user(id <span class="type">int</span>,name <span class="type">varchar</span>(<span class="number">20</span>))<span class="type">row</span> format delimited fields terminated <span class="keyword">by</span> <span class="string">&#x27;,&#x27;</span>;</span><br></pre></td></tr></table></figure>
+
+<p>​		把user.txt 文件映射到指定位置的表中</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bin/hadoop fs -put user.txt /user/hive/warehouse/test.db/t_user</span><br></pre></td></tr></table></figure>
+
+<p>​		再在hive中 select * from t_user; 可见</p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-01%2014.14.14-7028320.jpg" alt="截屏2022-03-01 14.14.14"></p>
+<p>​		成功映射好了。</p>
+<p>​		注意文件映射为表，hive会自己尝试着把类型对应，比如文件类型是int，映射的表中类型是varchar，那么hive可以帮我们自动类型转换，但是如果文件中类型是str字符串类型，表中定义时就定义了是int类型，hive自动类型转换str转int是转不过来的，有点像java的自动类型转换的级别特点。</p>
+<p>​		所以建立表时，要把字段顺序和字段类型和文件保持一致。</p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-02-24%2022.26.28-7028320.jpg" alt="截屏2022-02-24 22.26.28"></p>
+<h1 id="Hive-SQL数据定义语言-DDL"><a href="#Hive-SQL数据定义语言-DDL" class="headerlink" title="Hive SQL数据定义语言 DDL"></a>Hive SQL数据定义语言 DDL</h1><p>​		<img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-01%2021.11.51-7028320.jpg" alt="截屏2022-03-01 21.11.51"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-02%2017.10.00-7028320.jpg" alt="截屏2022-03-02 17.10.00"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-02%2017.11.09-7028320.jpg" alt="截屏2022-03-02 17.11.09"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-02%2017.18.40-7028320.jpg" alt="截屏2022-03-02 17.18.40"></p>
+<img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-02%2017.19.35-7028320.jpg" alt="截屏2022-03-02 17.19.35" style="zoom:50%;">
+
+<img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-02%2017.32.35-7028320.jpg" alt="截屏2022-03-02 17.32.35" style="zoom:50%;">
+
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-02%2017.35.34-7028320.jpg" alt="截屏2022-03-02 17.35.34"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-02%2017.40.16-7028320.jpg" alt="截屏2022-03-02 17.40.16"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-02%2017.44.33-7028320.jpg" alt="截屏2022-03-02 17.44.33"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-02%2017.47.18-7028320.jpg" alt="截屏2022-03-02 17.47.18"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-02%2017.48.21-7028320.jpg" alt="截屏2022-03-02 17.48.21"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-02%2018.30.46-7028320.jpg" alt="截屏2022-03-02 18.30.46"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-02%2018.31.03-7028320.jpg" alt="截屏2022-03-02 18.31.03"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-03%2011.39.33-7028320.jpg" alt="截屏2022-03-03 11.39.33"></p>
+<p>​	新建完sql 记得新增数据源 configure data source，就是apache hive。改一下主机名，用户名，测试一下，然后链接。</p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-03%2011.46.51-7028320.jpg" alt="截屏2022-03-03 11.46.51"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-03%2017.00.07-7028320.jpg" alt="截屏2022-03-03 17.00.07"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-03%2022.37.00-7028320.jpg" alt="截屏2022-03-03 22.37.00"></p>
+<p>​		把文件放到hive表对应的的位置，马上就映射成功了。</p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-03%2022.40.45-7028320.jpg" alt="截屏2022-03-03 22.40.45"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-03%2022.48.14-7028320.jpg" alt="截屏2022-03-03 22.48.14"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-03%2023.05.05-7028320.jpg" alt="截屏2022-03-03 23.05.05"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-03%2023.08.06-7028320.jpg"></p>
+<p>所以优先考虑 \001 作为分隔符。</p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-03%2023.14.15-7028320.jpg" alt="截屏2022-03-03 23.14.15"></p>
+<p>注意上面的 &#x2F; 是hdfs的根目录，不是系统根目录。<img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-03%2023.17.57-7028320.jpg" alt="截屏2022-03-03 23.17.57"></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">hadoop fs -<span class="built_in">chmod</span> -R 777 / <span class="comment"># 可以让 node01:9870 浏览器中修改hdfs的目录文件夹。给了权限。</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 更加传统的方法是</span></span><br><span class="line"><span class="comment"># 查看文件</span></span><br><span class="line">hadoop fs -<span class="built_in">ls</span> /user/hive/warehouse</span><br><span class="line"><span class="comment"># 删除文件、目录</span></span><br><span class="line">hadoop fs -<span class="built_in">rm</span>  /data</span><br><span class="line"></span><br><span class="line"><span class="comment"># 有了新的hdfs的文件夹以后，可以hive建表location到 指定的hdfs下的位置了。将文件Hadoop fs -put 文件 新位置 ; 传过来即可映射。</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-04%2000.10.57-7028320.jpg" alt="截屏2022-03-04 00.10.57"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-04%2000.12.03-7028320.jpg" alt="截屏2022-03-04 00.12.03"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-04%2010.46.05-7028320.jpg" alt="截屏2022-03-04 10.46.05"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-04%2010.47.46-7028320.jpg" alt="截屏2022-03-04 10.47.46"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-04%2010.48.29-7028320.jpg" alt="截屏2022-03-04 10.48.29"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-04%2010.50.34-7028320.jpg" alt="截屏2022-03-04 10.50.34"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-04%2010.56.21-7028320.jpg" alt="截屏2022-03-04 10.56.21"></p>
+<p>​		external创建外部表，但是不添加location，存放位置还是在&#x2F;usr&#x2F;hive&#x2F;warehouse 中。但是它还是外部表，删除操作保留原文件。</p>
+<p>内部表还是外部表由external存在与否决定，location在哪里和这点没关系。</p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-05%2011.05.12-7028320.jpg" alt="截屏2022-03-05 11.05.12"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-05%2011.10.19-7028320.jpg" alt="截屏2022-03-05 11.10.19"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-05%2011.12.14-7028320.jpg" alt="截屏2022-03-05 11.12.14"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-05%2011.13.21-7028320.jpg" alt="截屏2022-03-05 11.13.21"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-05%2011.18.49-7028320.jpg" alt="截屏2022-03-05 11.18.49"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-05%2011.20.01-7028320.jpg" alt="截屏2022-03-05 11.20.01"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-05%2011.21.51-7028320.jpg" alt="截屏2022-03-05 11.21.51"></p>
+<p>​		分区表数据不能想原来一样 put 进指定位置映射就完事，需要每一个源文件在 hive console控制台内 静态加载到 hdfs 对应表中。</p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-05%2011.26.44-7028320.jpg" alt="截屏2022-03-05 11.26.44"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-05%2011.31.46-7028320.jpg" alt="截屏2022-03-05 11.31.46"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-05%2011.34.17-7028320.jpg" alt="截屏2022-03-05 11.34.17"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-05%2011.36.44-7028320.jpg" alt="截屏2022-03-05 11.36.44"></p>
+<p>​		我的分区优化后的查询用时1分59秒，没有分区的查询时间是2分7秒。</p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-05%2011.39.07-7028320.jpg" alt="截屏2022-03-05 11.39.07"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-05%2011.40.39-7028320.jpg" alt="截屏2022-03-05 11.40.39"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-05%2011.42.42-7028320.jpg" alt="截屏2022-03-05 11.42.42"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-05%2011.45.56-7028320.jpg" alt="截屏2022-03-05 11.45.56"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-05%2011.53.13-7028320.jpg" alt="截屏2022-03-05 11.53.13"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-05%2011.56.25-7028320.jpg" alt="截屏2022-03-05 11.56.25"></p>
+<p>​		第三点中，底层原数据没有变化，显示的分区字段其实是 hive 中生成的。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">set</span> hive.exec.dynamic.partition<span class="operator">=</span><span class="literal">true</span>;</span><br><span class="line"><span class="keyword">set</span> hive.exec.dynamic.partition.mode<span class="operator">=</span>nonstrict;</span><br><span class="line"></span><br><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> t_all_hero_part_dynamic(</span><br><span class="line">                                id <span class="type">int</span>,</span><br><span class="line">                                name string,</span><br><span class="line">                                hp_max <span class="type">int</span>,</span><br><span class="line">                                mp_max <span class="type">int</span>,</span><br><span class="line">                                attack_max <span class="type">int</span>,</span><br><span class="line">                                defense_man <span class="type">int</span>,</span><br><span class="line">                                attack_range string,</span><br><span class="line">                                role_main string,</span><br><span class="line">                                role_assist string</span><br><span class="line">)partitioned <span class="keyword">by</span> (role string) <span class="type">row</span> format delimited fields terminated <span class="keyword">by</span> &quot;\t&quot;;</span><br><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> t_all_hero(</span><br><span class="line">                                        id <span class="type">int</span>,</span><br><span class="line">                                        name string,</span><br><span class="line">                                        hp_max <span class="type">int</span>,</span><br><span class="line">                                        mp_max <span class="type">int</span>,</span><br><span class="line">                                        attack_max <span class="type">int</span>,</span><br><span class="line">                                        defense_man <span class="type">int</span>,</span><br><span class="line">                                        attack_range string,</span><br><span class="line">                                        role_main string,</span><br><span class="line">                                        role_assist string</span><br><span class="line">)<span class="type">row</span> format delimited fields terminated <span class="keyword">by</span> &quot;\t&quot;;</span><br><span class="line"></span><br><span class="line"># 动态插入分区表\动态分区。</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> <span class="keyword">table</span> t_all_hero_part_dynamic <span class="keyword">partition</span>(role)</span><br><span class="line"><span class="keyword">select</span> tmp.<span class="operator">*</span>,tmp.role_main <span class="keyword">from</span> t_all_hero tmp;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-05%2020.04.18-7028320.jpg" alt="截屏2022-03-05 20.04.18"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-05%2020.06.10-7028320.jpg" alt="截屏2022-03-05 20.06.10"></p>
+<p>​		这里可以回顾一下，之前学习的算法与数据结构中的 散列表。<img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-05%2020.14.10-7028320.jpg" alt="截屏2022-03-05 20.14.10"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-05%2020.18.44-7028320.jpg" alt="截屏2022-03-05 20.18.44"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-05%2020.19.55-7028320.jpg" alt="截屏2022-03-05 20.19.55"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-05%2020.29.27-7028320.jpg" alt="截屏2022-03-05 20.29.27"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-05%2020.34.15-7028320.jpg" alt="截屏2022-03-05 20.34.15"></p>
+<p>​		分桶表还可以提高抽样的效率。</p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-05%2021.20.06-7028320.jpg" alt="截屏2022-03-05 21.20.06"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-05%2021.24.12-7028320.jpg" alt="截屏2022-03-05 21.24.12"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-05%2021.26.06-7028320.jpg" alt="截屏2022-03-05 21.26.06"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-05%2021.28.36-7028320.jpg" alt="截屏2022-03-05 21.28.36"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-05%2021.31.36-7028320.jpg" alt="截屏2022-03-05 21.31.36"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-05%2021.34.40-7028320.jpg" alt="截屏2022-03-05 21.34.40"></p>
+<p>insert into trans_student values(1,’chenyushao’,29);</p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-05%2021.37.31-7028320.jpg" alt="截屏2022-03-05 21.37.31"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-05%2021.39.32-7028320.jpg" alt="截屏2022-03-05 21.39.32"></p>
+<p>​		可以看见其实hive没有删除原文件，只是用了新的 “事务操作” 产生新的版本而已。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">set</span> hive.support.concurrency=<span class="literal">true</span>;</span><br><span class="line"><span class="built_in">set</span> hive.enforce.bucketing=<span class="literal">true</span>;</span><br><span class="line"><span class="built_in">set</span> hive.exec.dynamic.partition.mode=nonstrict;</span><br><span class="line"><span class="built_in">set</span> hive.txn.manager=org.apache.hadoop.hive.ql.lockmgr.DbTxnManager;</span><br><span class="line"><span class="built_in">set</span> hive.compactor.initiator.on=<span class="literal">true</span>;</span><br><span class="line"><span class="built_in">set</span> hive.compactor.worker.threads=1;</span><br><span class="line"></span><br><span class="line">drop table trans_student;</span><br><span class="line">create table trans_student(</span><br><span class="line">    <span class="built_in">id</span> int,</span><br><span class="line">    name string,</span><br><span class="line">    age int</span><br><span class="line">)clustered by (<span class="built_in">id</span>) into 2 buckets stored as orc TBLPROPERTIES(<span class="string">&#x27;transactional&#x27;</span>=<span class="string">&#x27;true&#x27;</span>);</span><br><span class="line"></span><br><span class="line">insert into trans_student values(1,<span class="string">&#x27;chenyushao&#x27;</span>,29);  <span class="comment"># 插入数据到事务表， 速度实在是太慢了！3分钟。</span></span><br><span class="line">update trans_student <span class="built_in">set</span> age=20 <span class="built_in">where</span> <span class="built_in">id</span>=1;</span><br><span class="line">delete from trans_student <span class="built_in">where</span> <span class="built_in">id</span> =1;</span><br><span class="line">select * from trans_student;</span><br></pre></td></tr></table></figure>
+
+
+
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-05%2021.40.45-7028320.jpg" alt="截屏2022-03-05 21.40.45"></p>
+<p>​		基于select 创建视图，只看前面5项。</p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-05%2021.49.13-7028320.jpg" alt="截屏2022-03-05 21.49.13"></p>
+<p>​		</p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-05%2021.51.26-7028320.jpg" alt="截屏2022-03-05 21.51.26"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-05%2021.53.39-7028320.jpg" alt="截屏2022-03-05 21.53.39"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-05%2021.55.03-7028320.jpg" alt="截屏2022-03-05 21.55.03"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-05%2021.58.49-7028320.jpg" alt="截屏2022-03-05 21.58.49"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-05%2022.04.12-7028320.jpg" alt="截屏2022-03-05 22.04.12"></p>
+<p>​		注意：view只是让我们方便查看语句，并不是真的优化了查询的性能。</p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-05%2022.07.09-7028320.jpg" alt="截屏2022-03-05 22.07.09"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-05%2022.11.05-7028320.jpg" alt="截屏2022-03-05 22.11.05"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-05%2022.15.09-7028320.jpg" alt="截屏2022-03-05 22.15.09"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-05%2022.21.13-7028320.jpg" alt="截屏2022-03-05 22.21.13"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-05%2022.24.30-7028320.jpg" alt="截屏2022-03-05 22.24.30"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-05%2022.27.46-7028320.jpg" alt="截屏2022-03-05 22.27.46"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-05%2022.31.42-7028320.jpg" alt="截屏2022-03-05 22.31.42"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-05%2022.32.16-7028320.jpg" alt="截屏2022-03-05 22.32.16"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-05%2022.33.46-7028320.jpg" alt="截屏2022-03-05 22.33.46"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-05%2022.34.37-7028320.jpg" alt="截屏2022-03-05 22.34.37"></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">create table student(</span><br><span class="line">    <span class="built_in">id</span> int ,</span><br><span class="line">    name string,</span><br><span class="line">    sex string,</span><br><span class="line">    age string,</span><br><span class="line">    studept string</span><br><span class="line">)row format delimited fields terminated by<span class="string">&quot;,&quot;</span>;</span><br><span class="line"></span><br><span class="line">drop table student_trans;</span><br><span class="line">create table student_trans(</span><br><span class="line">    sno int,</span><br><span class="line">    sname string,</span><br><span class="line">    sdept string</span><br><span class="line">)clustered by (sno) into 2 buckets stored as orc TBLPROPERTIES (<span class="string">&#x27;transactional&#x27;</span>=<span class="string">&#x27;true&#x27;</span>); <span class="comment"># 新建一个分桶事务表。</span></span><br><span class="line">insert into table student_trans select <span class="built_in">id</span>,name,studept from student; <span class="comment"># 从普通表插入到分桶事务表中。</span></span><br><span class="line"></span><br><span class="line">create materialized view student_trans_agg</span><br><span class="line">    as select sdept ,count(*)as dept_cnt from student_trans group by sdept; <span class="comment"># 创建物化视图（因为这个查询经常用，才会作一个物化视图。）</span></span><br><span class="line"></span><br><span class="line">select sdept,count(*) from student_trans group by sdept;  <span class="comment"># 速度快，直接从物化视图的存档继续。</span></span><br><span class="line">explain select sdept,count(*) from student_trans group by sdept; <span class="comment"># 可见从物化视图继续的，并不是从student_trans。</span></span><br><span class="line">alter materialized view student_trans_agg <span class="built_in">disable</span> rewrite; <span class="comment"># 关闭此物化视图的重写属性。</span></span><br><span class="line">select sdept,count(*) from student_trans group by sdept;  <span class="comment"># 速度瞬间变慢。</span></span><br><span class="line">alter materialized view student_trans_agg <span class="built_in">enable</span> rewrite;</span><br><span class="line">select sdept,count(*) from student_trans group by sdept;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-06%2021.19.07-7028320.jpg" alt="截屏2022-03-06 21.19.07"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-06%2021.20.45-7028320.jpg" alt="截屏2022-03-06 21.20.45"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-06%2021.21.14-7028320.jpg" alt="截屏2022-03-06 21.21.14"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-06%2021.26.11-7028320.jpg" alt="截屏2022-03-06 21.26.11"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-06%2021.27.18-7028320.jpg" alt="截屏2022-03-06 21.27.18"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-06%2021.28.22-7028320.jpg" alt="截屏2022-03-06 21.28.22"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-06%2021.30.57-7028320.jpg" alt="截屏2022-03-06 21.30.57"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-06%2021.34.19-7028320.jpg" alt="截屏2022-03-06 21.34.19"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-06%2021.37.05-7028320.jpg" alt="截屏2022-03-06 21.37.05"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-06%2021.38.29-7028320.jpg" alt="截屏2022-03-06 21.38.29"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-06%2021.42.50-7028320.jpg" alt="截屏2022-03-06 21.42.50"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-06%2021.45.25-7028320.jpg" alt="截屏2022-03-06 21.45.25"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-06%2021.50.02-7028320.jpg" alt="截屏2022-03-06 21.50.02"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-06%2021.52.17-7028320.jpg" alt="截屏2022-03-06 21.52.17"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-06%2021.53.09-7028320.jpg" alt="截屏2022-03-06 21.53.09"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-06%2021.55.20-7028320.jpg" alt="截屏2022-03-06 21.55.20"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-06%2021.59.01-7028320.jpg" alt="截屏2022-03-06 21.59.01"></p>
+<p>​		1、在hive的console创建一个分区的表；</p>
+<p>​		2、直接用hdfs命令创建分区文件夹；hadoop fs -mkdir -p &#x2F;user&#x2F;hive&#x2F;marehouse&#x2F;databasename&#x2F;tablename&#x2F;role&#x3D;sheshou（分区名）</p>
+<p>​		3、hdfs 命令直接 put 数据上 对应的分区位置；</p>
+<p>​		4、hive 的select 看不见上面的分区表；</p>
+<p>​		5、用msck 修复分区，msck repair table 【tablename】 add partition；add partition 可以不写、msck默认添加分区。</p>
+<p>​		6、hive可以操作新分区表了。</p>
+<p>​		1、hdfs 直接删除分区表的一个分区；</p>
+<p>​		2、hive 看不见变化，还误以为没有变；</p>
+<p>​		3、msck repair table 【tablename】drop partition； 修复删除分区。</p>
+<p>​		4、hive 正常了。</p>
+<p>【sync】同步hive 的分区表元存储 与 hdfs上的内容。操作同上。</p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-06%2022.18.57-7028320.jpg" alt="截屏2022-03-06 22.18.57"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-06%2022.20.03-7028320.jpg" alt="截屏2022-03-06 22.20.03"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/%E6%88%AA%E5%B1%8F2022-03-06%2022.21.16-7028320.jpg" alt="截屏2022-03-06 22.21.16"></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/hive/" rel="tag"># hive</a>
+              <a href="/tags/sql/" rel="tag"># sql</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/" rel="prev" title="Hive SQL 数据操控、查询语言 DML、DQL">
+                  <i class="fa fa-chevron-left"></i> Hive SQL 数据操控、查询语言 DML、DQL
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%87%BD%E6%95%B0%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BD%BF%E7%94%A8/" rel="next" title="Hive参数配置与函数、运算符使用">
+                  Hive参数配置与函数、运算符使用 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">陈宇韶chenyushao</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

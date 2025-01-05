@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha256-AbA177XfpSnFEvgpYu1jMygiLabzPCJCRIBtR5jGc0k=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.13.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="c语言">
+<meta property="og:url" content="http://example.com/2022/10/28/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0/c%E8%AF%AD%E8%A8%80/index.html">
+<meta property="og:site_name" content="Tiger_pop&#39;s Blog">
+<meta property="og:description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2022/10/28/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0/c%E8%AF%AD%E8%A8%80/4d060c3f67c22cd4b07273db00f64708_1440w-6959095.jpg">
+<meta property="og:image" content="http://example.com/2022/10/28/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0/c%E8%AF%AD%E8%A8%80/26702ad72a395403ce4c7d02ccd167e4_1440w.jpg">
+<meta property="og:image" content="http://example.com/2022/10/28/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0/c%E8%AF%AD%E8%A8%80/0b6ca6a620fd381b4c2395e134137ae6_1440w.jpg">
+<meta property="og:image" content="http://example.com/2022/10/28/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0/c%E8%AF%AD%E8%A8%80/f18c1c1a62294bc5c45682ea69776e7e_1440w.jpg">
+<meta property="og:image" content="http://example.com/2022/10/28/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0/c%E8%AF%AD%E8%A8%80/04789934874fc4f8c8d8d742d8fa447e_1440w.jpg">
+<meta property="article:published_time" content="2022-10-28T12:09:40.000Z">
+<meta property="article:modified_time" content="2022-10-28T12:41:38.880Z">
+<meta property="article:author" content="陈宇韶chenyushao">
+<meta property="article:tag" content="c语言">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2022/10/28/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0/c%E8%AF%AD%E8%A8%80/4d060c3f67c22cd4b07273db00f64708_1440w-6959095.jpg">
+
+
+<link rel="canonical" href="http://example.com/2022/10/28/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0/c%E8%AF%AD%E8%A8%80/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2022/10/28/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0/c%E8%AF%AD%E8%A8%80/","path":"2022/10/28/操作系统学习/c语言/","title":"c语言"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>c语言 | Tiger_pop's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="Tiger_pop's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Tiger_pop's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">tiger_pop 的博客</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-overview-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="陈宇韶chenyushao"
+      src="/images/my.jpg">
+  <p class="site-author-name" itemprop="name">陈宇韶chenyushao</p>
+  <div class="site-description" itemprop="description">爱学习、爱工作、爱生活;         微信号: Tiger_and_master;         手机号码:18515678348 </div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">378</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">24</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">138</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/10/28/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0/c%E8%AF%AD%E8%A8%80/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/my.jpg">
+      <meta itemprop="name" content="陈宇韶chenyushao">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tiger_pop's Blog">
+      <meta itemprop="description" content="爱学习、爱工作、爱生活;         微信号: Tiger_and_master;         手机号码:18515678348 ">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="c语言 | Tiger_pop's Blog">
+      <meta itemprop="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          c语言
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2022-10-28 20:09:40 / 修改时间：20:41:38" itemprop="dateCreated datePublished" datetime="2022-10-28T20:09:40+08:00">2022-10-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">操作系统学习</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+            <div class="post-description">这是文章开头，显示在主页面，详情请点击此处。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>​		对于程序员来说内存可以简化成这样一种东西：<span id="more"></span></p>
+<p><img src="/2022/10/28/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0/c%E8%AF%AD%E8%A8%80/4d060c3f67c22cd4b07273db00f64708_1440w-6959095.jpg" alt="img"></p>
+<p>​		你可以把它想象成一条无限长的纸带。纸带上边有一个个的小格子，每个小格子正好是一字节，里边能够存放一个数字。计算机的工作就是对这些小格子里的数字做处理。虽然你在电脑上能够看视频、听音乐，但这些东西本质上都是存在内存这条纸带上的数字。</p>
+<p>​		对于纸带上的每个小格子来说能够采取的操作只有两种「读取」和「写入」。每次执行操作时都必须要指明对于哪一个格子进行操作，为了方便起见人们就给这些格子编了号。如上图所示，第一个就是0号，第二个是1号以此类推（前边的0x代表是16进制的意思）。而这些编号就是我们所说的指针的内容，指针变量里边所记载的就是这些编号。但为什么我们平时看到的指针值都是类似于0xa2cf23c3d这种呢？这是因为，内存非常之大，作为编号的数字也非常大。所以看是来就像是神秘代码一样。</p>
+<p>举个例子：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">unsigned</span> <span class="type">char</span> a = <span class="number">1</span>; <span class="comment">// unsigned char 类型占一个字节 </span></span><br><span class="line"><span class="type">unsigned</span> <span class="type">char</span>* b = &amp;a; <span class="comment">// &amp;a 代表的就是得到变量a所存储的那个小格子的编号。             											// 赋值给变量b后，b格子里存的就是a格子的编号。 </span></span><br><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;%d&quot;</span>, *b);  <span class="comment">//输出1，*b代表的是看看b格子里存储的编号所代表的格子里存的数是什											么。</span></span><br></pre></td></tr></table></figure>
+
+<p>​		上边代码中的内容变成纸带就是：</p>
+<p><img src="/2022/10/28/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0/c%E8%AF%AD%E8%A8%80/26702ad72a395403ce4c7d02ccd167e4_1440w.jpg" alt="img"></p>
+<p>​		ok，如果你觉得这个太简单，我们现在可以深入到一些更加复杂的概念——指针的指针。例如下边的代码：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">unsigned</span> <span class="type">char</span> a = <span class="number">1</span>;</span><br><span class="line"><span class="type">unsigned</span> <span class="type">char</span>* b = &amp;a;</span><br><span class="line"><span class="type">unsigned</span> <span class="type">char</span>** c = &amp;b;</span><br></pre></td></tr></table></figure>
+
+<p>​		上文中我们提到指针就是格子的编号，那么指针的指针是什么呢？就是指针变量所在格子的编号。如图：</p>
+<p><img src="/2022/10/28/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0/c%E8%AF%AD%E8%A8%80/0b6ca6a620fd381b4c2395e134137ae6_1440w.jpg" alt="img"></p>
+<p>​		至于什么指针的指针的指针，以此类推。有 时候人们会把这种关系视作是一种指向关系。所以当人们说一个指针指向某个变量时，他们指的是这个指针变量的值是某个变量的格子编号。</p>
+<p>​		但是这里有个问题，前文说到 ，每个格子只有一个字节。有些类型的变量需要多个字节来存储，比如int型就需要4个字节（不同平台长度不一致，这里假定是4个）。如果我有一个int型的变量a存在0x01号地址，我必须有方法告诉程序后边的三个格子也是这个变量值的一部分。</p>
+<p>​		为了解决这个问题人们引入了指针类型的概念，对于int型的指针他表示的是从当前格子开始共4个格子都是该变量的值，而对于unsigned char型则只表示当前的格子。例如：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">unsigned</span> <span class="type">int</span> c = <span class="number">257</span>;</span><br><span class="line"><span class="type">unsigned</span> <span class="type">int</span>* a = &amp;c;</span><br><span class="line"><span class="type">unsigned</span> <span class="type">char</span>* b = (<span class="type">unsigned</span> <span class="type">char</span>*)&amp;c;  <span class="comment">//必须强制转换一下</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;%d&quot;</span>, *a); <span class="comment">// 输出 257</span></span><br><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;%d&quot;</span>, *b); <span class="comment">// 输出 1</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><img src="/2022/10/28/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0/c%E8%AF%AD%E8%A8%80/f18c1c1a62294bc5c45682ea69776e7e_1440w.jpg" alt="img"></p>
+<p>​		有的同学可能会奇怪为什么*b的值是1。要解决这个问题我们先要了解一个概念，大小端。</p>
+<p>​		计算机使用二进制来表示数字。对于所有unsigned的整数类型变量来说，二进制的值本身就代表了他自己的数值，257转换成二进制是多少？「100000001」。8位是一个字节，int型就是4个字节32位。补齐前边的0后257可以写作「00000000 00000000 00000001 00000001」。8个位8个位的转换成10进制，上边的数字就是「0 0 1 1」。</p>
+<p>​		OK，现在给你编号为1-4的四个格子和四个数字，让你按顺序存进去，请问有几种方法？</p>
+<p>​		答案是2种，一种是1号放0，2号放0， 3号放1， 4号放1。另外一种是，4号放0，3号放0， 2号放1， 1号放1。我们把第一种方式叫小端，第二种叫大端，这里写反了，应该是第一种叫做大端。由于没有什么人来规定怎么在内存里存多个字节的数字，所以人们就随便来了。碰巧在我的机器上，内存里是大端存储的。所以就变成了上图中所示的样子。</p>
+<p>此时计算机看到*a，于是找到了编号0x00的格子，因为是int型的指针，于是顺手把后边3个也读了出来，得到「1 1 0 0」。因为我的机器是大端，所以调整成人类的书写格式（低位在最右边）就是「0 0 1 1」，然后「00000000 00000000 00000001 00000001」，再然后「257」。</p>
+<p>之后计算机又看了 *b，因为是unsigned char型的指针所以只拿0x00格子里的内容。于是就是1了。</p>
+<p>​		ok，如果你还有兴趣看下去的话，我们来讨论一下指针运算的问题。</p>
+<p>​		假设有一个指针a，那么a+1代表什么呢？就存储a的格子编号，加上a的类型所占的字节数所得到的的新地址。如图：</p>
+<p><img src="/2022/10/28/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0/c%E8%AF%AD%E8%A8%80/04789934874fc4f8c8d8d742d8fa447e_1440w.jpg" alt="img"></p>
+<p>​		减法也是一个意思。两个指针相减就是他们之间差了几个格子。比如0x04-0x00 &#x3D;&#x3D;&gt;4之类的。课本上一般会说两个指针相加没有意义，或者指针不能相加。现在知道为什么了吧，因为0x00+0x04之类的运算是没有实际含义的，算倒是可以算。你知道为什么C语言中的数组下表从0开始吗？因为arr[n]的形式事实上等价于*(arr+n)。数组名其实就是数组的首地址，也就是数组的第一个格子的地址。作为数组中的第一个元素当然得加0啦。关于数组我多说两句，数组就是一段连续的小格子。数组名代表的就是第一个小格所在编号。因此数组名就是指针，只不过这个指针变量的值是无法改变的。对于二维数组int [3][4] a来说，唯一的区别就是指针+1后移动过的格子数不同。感兴趣的同学可以自己查查为什么。至于什么指针数组、数组的指针之类的等等概念，都是基于上述简单概念的组合，以此类推就可以了。ok，理解到这一步其实基本上就算是可以了。不过为了稍微严谨一点我再多说几句。实际中的计算机可没有这么简单。这个纸带不一定是一条，有可能一条是内存，一条是硬盘上的虚拟内存。纸带还会被分成多个区域，像什么堆栈之类的，并不是每个地址都可以访问，纸带也不一定是连续的。但是你在写程序的时候操作系统帮你把内存抽象成了一条连续的纸带。很多时候我们并不关心具体的值是什么。此外有的时候这种格子编号，不一定都指的是内存中的小格子。也有可能是某个硬件设备之类的。不过这就是另外一个话题了。PS：上文中格子编号一律可以替换为内存地址。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 注意一下三者的理解。</span></span><br><span class="line"><span class="comment">// 一、</span></span><br><span class="line"><span class="type">int</span> *p;<span class="comment">// int *p 虽然*p是一起写着的，但是变量名是p，类型是int*。p存的是地址，			  //p是一个指针。</span></span><br><span class="line">p = &amp;a;<span class="comment">//p存的是a的地址。</span></span><br><span class="line"><span class="type">int</span>** p;<span class="comment">//变量名为p，类型为int** int**表示存放的是int类型地址的地址。</span></span><br><span class="line"><span class="comment">// 二、</span></span><br><span class="line">*p;    <span class="comment">// 这是一个取值操作；p格子内存放的是地址，*p就是取此地址对应的值。</span></span><br><span class="line">**p;   <span class="comment">// 两次取值操作。可以视作 *（*p），一个 * 就是一次取值操作。</span></span><br><span class="line"><span class="comment">// 三、</span></span><br><span class="line">p    <span class="comment">// 单纯就是p格子内的东西 </span></span><br></pre></td></tr></table></figure>
+
+
+
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/c%E8%AF%AD%E8%A8%80/" rel="tag"># c语言</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/10/28/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0/%E4%BF%A1%E5%8F%B7%E9%87%8F%E8%A7%A3%E5%86%B3%E5%93%B2%E5%AD%A6%E5%AE%B6%E5%90%83%E9%A5%AD%E9%97%AE%E9%A2%98/" rel="prev" title="信号量解决哲学家吃饭问题">
+                  <i class="fa fa-chevron-left"></i> 信号量解决哲学家吃饭问题
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2022/10/28/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E5%86%B3%E7%AD%96%E6%A0%91/" rel="next" title="决策树">
+                  决策树 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">陈宇韶chenyushao</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

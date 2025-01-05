@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha256-AbA177XfpSnFEvgpYu1jMygiLabzPCJCRIBtR5jGc0k=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.13.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hive SQL 数据操控、查询语言 DML、DQL">
+<meta property="og:url" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/index.html">
+<meta property="og:site_name" content="Tiger_pop&#39;s Blog">
+<meta property="og:description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-06%2022.26.57-7026773.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-06%2022.29.48.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-06%2022.34.07.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-06%2022.38.57.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-06%2022.43.15.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-06%2022.45.41.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-07%2010.55.27.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-07%2011.02.58.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-07%2011.14.33.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-07%2011.24.31.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-07%2011.25.39.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-07%2011.31.24.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-07%2011.32.43.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-07%2011.36.24.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-07%2011.37.34.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-07%2011.39.23.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-07%2011.40.28.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-07%2011.43.08.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-07%2011.44.27.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-07%2011.47.14.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-07%2011.48.04.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-07%2011.50.23.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-07%2015.39.59.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-07%2015.41.17.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-07%2015.42.38.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-07%2015.45.02.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-07%2015.57.27.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-07%2022.07.12.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-07%2022.07.47.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-07%2022.10.20.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-07%2022.14.36.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-07%2022.16.14.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-07%2022.19.29.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-07%2022.20.45.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-07%2022.40.12.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-07%2022.45.45.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-07%2022.53.05.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-07%2022.55.23.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-07%2022.58.27.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-07%2023.00.10.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-07%2023.03.15.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-08%2014.44.51.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-08%2014.49.29.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-08%2014.56.32.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-08%2014.52.44.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-08%2014.53.28.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-08%2014.54.37.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-08%2015.04.57.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-08%2015.06.06.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-08%2015.08.36.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-08%2015.09.57.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-08%2015.14.06.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-08%2015.18.14.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-08%2015.23.02.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-08%2022.24.51.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-08%2022.37.13.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-09%2000.16.39.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-08%2023.49.53.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-08%2023.56.42.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-09%2000.20.41.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-09%2000.25.59.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-09%2000.32.58.jpg">
+<meta property="article:published_time" content="2022-10-29T07:04:10.000Z">
+<meta property="article:modified_time" content="2022-10-29T07:10:21.467Z">
+<meta property="article:author" content="陈宇韶chenyushao">
+<meta property="article:tag" content="hive">
+<meta property="article:tag" content="sql">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-06%2022.26.57-7026773.jpg">
+
+
+<link rel="canonical" href="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/","path":"2022/10/29/Hive学习/DML、DQL/","title":"Hive SQL 数据操控、查询语言 DML、DQL"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Hive SQL 数据操控、查询语言 DML、DQL | Tiger_pop's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="Tiger_pop's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Tiger_pop's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">tiger_pop 的博客</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Hive-SQL-%E6%95%B0%E6%8D%AE%E6%93%8D%E6%8E%A7%E3%80%81%E6%9F%A5%E8%AF%A2%E8%AF%AD%E8%A8%80%E3%80%82DML%E3%80%81DQL"><span class="nav-number">1.</span> <span class="nav-text">Hive SQL 数据操控、查询语言。DML、DQL</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#select-%E8%AE%B2%E8%A7%A3"><span class="nav-number">1.1.</span> <span class="nav-text">select 讲解</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="陈宇韶chenyushao"
+      src="/images/my.jpg">
+  <p class="site-author-name" itemprop="name">陈宇韶chenyushao</p>
+  <div class="site-description" itemprop="description">爱学习、爱工作、爱生活;         微信号: Tiger_and_master;         手机号码:18515678348 </div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">378</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">24</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">138</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/my.jpg">
+      <meta itemprop="name" content="陈宇韶chenyushao">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tiger_pop's Blog">
+      <meta itemprop="description" content="爱学习、爱工作、爱生活;         微信号: Tiger_and_master;         手机号码:18515678348 ">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Hive SQL 数据操控、查询语言 DML、DQL | Tiger_pop's Blog">
+      <meta itemprop="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Hive SQL 数据操控、查询语言 DML、DQL
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2022-10-29 15:04:10 / 修改时间：15:10:21" itemprop="dateCreated datePublished" datetime="2022-10-29T15:04:10+08:00">2022-10-29</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/hive/" itemprop="url" rel="index"><span itemprop="name">hive</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+            <div class="post-description">这是文章开头，显示在主页面，详情请点击此处。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>hive sql <span id="more"></span></p>
+<h1 id="Hive-SQL-数据操控、查询语言。DML、DQL"><a href="#Hive-SQL-数据操控、查询语言。DML、DQL" class="headerlink" title="Hive SQL 数据操控、查询语言。DML、DQL"></a>Hive SQL 数据操控、查询语言。DML、DQL</h1><p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-06%2022.26.57-7026773.jpg" alt="截屏2022-03-06 22.26.57"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-06%2022.29.48.jpg" alt="截屏2022-03-06 22.29.48"></p>
+<p>hive推荐使用load加载数据，大数据用加载，insert会慢的怀疑人生。</p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-06%2022.34.07.jpg" alt="截屏2022-03-06 22.34.07"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-06%2022.38.57.jpg" alt="截屏2022-03-06 22.38.57"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-06%2022.43.15.jpg" alt="截屏2022-03-06 22.43.15"></p>
+<p>重要：master主机的hiveserver2 运行，slave的beeline运行local指的也是master的本地。</p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-06%2022.45.41.jpg" alt="截屏2022-03-06 22.45.41"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-07%2010.55.27.jpg" alt="截屏2022-03-07 10.55.27"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-07%2011.02.58.jpg" alt="截屏2022-03-07 11.02.58"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-07%2011.14.33.jpg" alt="截屏2022-03-07 11.14.33"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-07%2011.24.31.jpg" alt="截屏2022-03-07 11.24.31"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-07%2011.25.39.jpg" alt="截屏2022-03-07 11.25.39"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-07%2011.31.24.jpg" alt="截屏2022-03-07 11.31.24"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-07%2011.32.43.jpg" alt="截屏2022-03-07 11.32.43"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-07%2011.36.24.jpg" alt="截屏2022-03-07 11.36.24"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-07%2011.37.34.jpg" alt="截屏2022-03-07 11.37.34"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-07%2011.39.23.jpg" alt="截屏2022-03-07 11.39.23"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-07%2011.40.28.jpg" alt="截屏2022-03-07 11.40.28"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-07%2011.43.08.jpg" alt="截屏2022-03-07 11.43.08"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-07%2011.44.27.jpg" alt="截屏2022-03-07 11.44.27"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-07%2011.47.14.jpg" alt="截屏2022-03-07 11.47.14"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-07%2011.48.04.jpg" alt="截屏2022-03-07 11.48.04"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-07%2011.50.23.jpg" alt="截屏2022-03-07 11.50.23"></p>
+<p>​		注意：这个是overwrite！！！ 我之前就是一次不小心把hdfs的关键文件夹都给重写了，搞得全部重装一遍，一定要注意overwrite 别把关键文件夹都重写了！！！</p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-07%2015.39.59.jpg" alt="截屏2022-03-07 15.39.59"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-07%2015.41.17.jpg" alt="截屏2022-03-07 15.41.17"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-07%2015.42.38.jpg" alt="截屏2022-03-07 15.42.38"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-07%2015.45.02.jpg" alt="截屏2022-03-07 15.45.02"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-07%2015.57.27.jpg" alt="截屏2022-03-07 15.57.27"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-07%2022.07.12.jpg" alt="截屏2022-03-07 22.07.12"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-07%2022.07.47.jpg" alt="截屏2022-03-07 22.07.47"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-07%2022.10.20.jpg" alt="截屏2022-03-07 22.10.20"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-07%2022.14.36.jpg" alt="截屏2022-03-07 22.14.36"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-07%2022.16.14.jpg" alt="截屏2022-03-07 22.16.14"></p>
+<p>​		事务表只能 insert 不能load ，这点有点坑。</p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-07%2022.19.29.jpg" alt="截屏2022-03-07 22.19.29"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-07%2022.20.45.jpg" alt="截屏2022-03-07 22.20.45"></p>
+<p>​		只有事务表才能 update、delete，前文说过了。</p>
+<h2 id="select-讲解"><a href="#select-讲解" class="headerlink" title="select 讲解"></a>select 讲解</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">--step1:创建普通表t_usa_covid19</span></span><br><span class="line"><span class="keyword">drop</span> <span class="keyword">table</span> if <span class="keyword">exists</span> t_usa_covid19;</span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> t_usa_covid19(</span><br><span class="line">       count_date string,</span><br><span class="line">       county string,</span><br><span class="line">       state string,</span><br><span class="line">       fips <span class="type">int</span>,</span><br><span class="line">       cases <span class="type">int</span>,</span><br><span class="line">       deaths <span class="type">int</span>)</span><br><span class="line"><span class="type">row</span> format delimited fields terminated <span class="keyword">by</span> &quot;,&quot;;</span><br><span class="line"><span class="comment">--将源数据load加载到t_usa_covid19表对应的路径下</span></span><br><span class="line">load data <span class="keyword">local</span> inpath <span class="string">&#x27;/root/hivedata/us-covid19-counties.dat&#x27;</span> <span class="keyword">into</span> <span class="keyword">table</span> t_usa_covid19;</span><br><span class="line"></span><br><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> t_usa_covid19;</span><br><span class="line"></span><br><span class="line"><span class="comment">--step2:创建一张分区表 基于count_date日期,state州进行分区</span></span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> if <span class="keyword">not</span> <span class="keyword">exists</span> t_usa_covid19_p(</span><br><span class="line">     county string,</span><br><span class="line">     fips <span class="type">int</span>,</span><br><span class="line">     cases <span class="type">int</span>,</span><br><span class="line">     deaths <span class="type">int</span>)</span><br><span class="line">partitioned <span class="keyword">by</span>(count_date string,state string)</span><br><span class="line"><span class="type">row</span> format delimited fields terminated <span class="keyword">by</span> &quot;,&quot;;</span><br><span class="line"></span><br><span class="line"><span class="comment">--step3:使用动态分区插入将数据导入t_usa_covid19_p中</span></span><br><span class="line"><span class="keyword">set</span> hive.exec.dynamic.partition.mode <span class="operator">=</span> nonstrict;</span><br><span class="line"></span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> <span class="keyword">table</span> t_usa_covid19_p <span class="keyword">partition</span> (count_date,state)</span><br><span class="line"><span class="keyword">select</span> county,fips,cases,deaths,count_date,state <span class="keyword">from</span> t_usa_covid19;</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-07%2022.40.12.jpg" alt="截屏2022-03-07 22.40.12"></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">---------------Hive SQL select查询基础语法------------------</span></span><br><span class="line"></span><br><span class="line"><span class="comment">--1、select_expr</span></span><br><span class="line"><span class="comment">--查询所有字段或者指定字段</span></span><br><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> t_usa_covid19_p;</span><br><span class="line"><span class="keyword">select</span> county, cases, deaths <span class="keyword">from</span> t_usa_covid19_p;</span><br><span class="line"><span class="comment">--查询匹配正则表达式的所有字段</span></span><br><span class="line"><span class="keyword">SET</span> hive.support.quoted.identifiers <span class="operator">=</span> <span class="keyword">none</span>; <span class="comment">--反引号不在解释为其他含义，被解释为正则表达式</span></span><br><span class="line"><span class="keyword">select</span> `<span class="operator">^</span>c.<span class="operator">*</span>` <span class="keyword">from</span> t_usa_covid19_p;</span><br><span class="line"><span class="comment">--查询当前数据库</span></span><br><span class="line"><span class="keyword">select</span> current_database(); <span class="comment">--省去from关键字</span></span><br><span class="line"><span class="comment">--查询使用函数</span></span><br><span class="line"><span class="keyword">select</span> <span class="built_in">count</span>(county) <span class="keyword">from</span> t_usa_covid19_p;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">--2、ALL DISTINCT</span></span><br><span class="line"><span class="comment">--返回所有匹配的行</span></span><br><span class="line"><span class="keyword">select</span> state <span class="keyword">from</span> t_usa_covid19_p;</span><br><span class="line"><span class="comment">--相当于</span></span><br><span class="line"><span class="keyword">select</span> <span class="keyword">all</span> state <span class="keyword">from</span> t_usa_covid19_p;</span><br><span class="line"><span class="comment">--返回所有匹配的行 去除重复的结果</span></span><br><span class="line"><span class="keyword">select</span> <span class="keyword">distinct</span> state <span class="keyword">from</span> t_usa_covid19_p;</span><br><span class="line"><span class="comment">--多个字段distinct 整体去重</span></span><br><span class="line"><span class="keyword">select</span>  county,state <span class="keyword">from</span> t_usa_covid19_p;</span><br><span class="line"><span class="keyword">select</span> <span class="keyword">distinct</span> county,state <span class="keyword">from</span> t_usa_covid19_p;</span><br><span class="line"><span class="keyword">select</span> <span class="keyword">distinct</span> sex <span class="keyword">from</span> student;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-07%2022.45.45.jpg" alt="截屏2022-03-07 22.45.45"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-07%2022.53.05.jpg" alt="截屏2022-03-07 22.53.05"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-07%2022.55.23.jpg" alt="截屏2022-03-07 22.55.23"></p>
+<p>典型错误如下</p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-07%2022.58.27.jpg" alt="截屏2022-03-07 22.58.27"></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">--先where分组前过滤（此处是分区裁剪），再进行group by分组， 分组后每个分组结果集确定 再使用having过滤</span></span><br><span class="line"><span class="keyword">select</span> state,<span class="built_in">sum</span>(deaths)</span><br><span class="line"><span class="keyword">from</span> t_usa_covid19_p</span><br><span class="line"><span class="keyword">where</span> count_date <span class="operator">=</span> &quot;2021-01-28&quot;</span><br><span class="line"><span class="keyword">group</span> <span class="keyword">by</span> state</span><br><span class="line"><span class="keyword">having</span> <span class="built_in">sum</span>(deaths) <span class="operator">&gt;</span> <span class="number">10000</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">--这样写更好 即在group by的时候聚合函数已经作用得出结果 having直接引用结果过滤 不需要再单独计算一次了</span></span><br><span class="line"><span class="keyword">select</span> state,<span class="built_in">sum</span>(deaths) <span class="keyword">as</span> cnts</span><br><span class="line"><span class="keyword">from</span> t_usa_covid19_p</span><br><span class="line"><span class="keyword">where</span> count_date <span class="operator">=</span> &quot;2021-01-28&quot;</span><br><span class="line"><span class="keyword">group</span> <span class="keyword">by</span> state</span><br><span class="line"><span class="keyword">having</span> cnts<span class="operator">&gt;</span> <span class="number">10000</span>;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-07%2023.00.10.jpg" alt="截屏2022-03-07 23.00.10"></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">--返回结果集的前5条</span><br><span class="line">select * from t_usa_covid19_p</span><br><span class="line"><span class="built_in">where</span> count_date = <span class="string">&quot;2021-01-28&quot;</span></span><br><span class="line">  and state =<span class="string">&quot;California&quot;</span></span><br><span class="line"><span class="built_in">limit</span> 5;</span><br><span class="line"></span><br><span class="line">--返回结果集从第1行开始 共3行</span><br><span class="line">select * from t_usa_covid19_p</span><br><span class="line"><span class="built_in">where</span> count_date = <span class="string">&quot;2021-01-28&quot;</span></span><br><span class="line">and state =<span class="string">&quot;California&quot;</span></span><br><span class="line"><span class="built_in">limit</span> 2,3; --注意 第一个参数偏移量是从0开始的</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-07%2023.03.15.jpg" alt="截屏2022-03-07 23.03.15"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-08%2014.44.51.jpg" alt="截屏2022-03-08 14.44.51"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-08%2014.49.29.jpg" alt="截屏2022-03-08 14.49.29"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-08%2014.56.32.jpg" alt="截屏2022-03-08 14.56.32"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-08%2014.52.44.jpg" alt="截屏2022-03-08 14.52.44"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-08%2014.53.28.jpg" alt="截屏2022-03-08 14.53.28"></p>
+<p>​		hash函数对2取mod，分成 奇偶 两个组，且每组排了序。</p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-08%2014.54.37.jpg" alt="截屏2022-03-08 14.54.37"></p>
+<p>​		我们可以知道cluster by 的局限性，cluster by 的使用只能 针对同一个字段分组，且每组内排序只能是正序。 比如目的是按sex 分组且 按age的降序排列；这样的要求cluster by 就是不能满足的，若先cluster by 再 order by 会报错，因为order by 是全局排序的。</p>
+<p>​		为此我们引入 distribute by + sort by</p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-08%2015.04.57.jpg" alt="截屏2022-03-08 15.04.57"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-08%2015.06.06.jpg" alt="截屏2022-03-08 15.06.06"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-08%2015.08.36.jpg" alt="截屏2022-03-08 15.08.36"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-08%2015.09.57.jpg" alt="截屏2022-03-08 15.09.57"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-08%2015.14.06.jpg" alt="截屏2022-03-08 15.14.06"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-08%2015.18.14.jpg" alt="截屏2022-03-08 15.18.14"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-08%2015.23.02.jpg" alt="截屏2022-03-08 15.23.02"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-08%2022.24.51.jpg" alt="截屏2022-03-08 22.24.51"></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-----------------Common Table Expressions（CTE）-----------------------------------</span></span><br><span class="line"><span class="comment">--select语句中的CTE</span></span><br><span class="line"><span class="keyword">with</span> q1 <span class="keyword">as</span> (<span class="keyword">select</span> num,name,age <span class="keyword">from</span> student <span class="keyword">where</span> num <span class="operator">=</span> <span class="number">95002</span>)</span><br><span class="line"><span class="keyword">select</span> <span class="operator">*</span></span><br><span class="line"><span class="keyword">from</span> q1;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- from风格</span></span><br><span class="line"><span class="keyword">with</span> q1 <span class="keyword">as</span> (<span class="keyword">select</span> num,name,age <span class="keyword">from</span> student <span class="keyword">where</span> num <span class="operator">=</span> <span class="number">95002</span>)</span><br><span class="line"><span class="keyword">from</span> q1</span><br><span class="line"><span class="keyword">select</span> <span class="operator">*</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- chaining CTEs 链式</span></span><br><span class="line"><span class="keyword">with</span> q1 <span class="keyword">as</span> ( <span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> student <span class="keyword">where</span> num <span class="operator">=</span> <span class="number">95002</span>),</span><br><span class="line">     q2 <span class="keyword">as</span> ( <span class="keyword">select</span> num,name,age <span class="keyword">from</span> q1)</span><br><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> (<span class="keyword">select</span> num <span class="keyword">from</span> q2) a;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- union</span></span><br><span class="line"><span class="keyword">with</span> q1 <span class="keyword">as</span> (<span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> student <span class="keyword">where</span> num <span class="operator">=</span> <span class="number">95002</span>),</span><br><span class="line">     q2 <span class="keyword">as</span> (<span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> student <span class="keyword">where</span> num <span class="operator">=</span> <span class="number">95004</span>)</span><br><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> q1 <span class="keyword">union</span> <span class="keyword">all</span> <span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> q2;</span><br><span class="line"></span><br><span class="line"><span class="comment">--视图，CTAS和插入语句中的CTE</span></span><br><span class="line"><span class="comment">-- insert</span></span><br><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> s1 <span class="keyword">like</span> student;</span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> q1 <span class="keyword">as</span> ( <span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> student <span class="keyword">where</span> num <span class="operator">=</span> <span class="number">95002</span>)</span><br><span class="line"><span class="keyword">from</span> q1</span><br><span class="line"><span class="keyword">insert</span> overwrite <span class="keyword">table</span> s1</span><br><span class="line"><span class="keyword">select</span> <span class="operator">*</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> s1;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- ctas</span></span><br><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> s2 <span class="keyword">as</span></span><br><span class="line"><span class="keyword">with</span> q1 <span class="keyword">as</span> ( <span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> student <span class="keyword">where</span> num <span class="operator">=</span> <span class="number">95002</span>)</span><br><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> q1;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- view</span></span><br><span class="line"><span class="keyword">create</span> <span class="keyword">view</span> v1 <span class="keyword">as</span></span><br><span class="line"><span class="keyword">with</span> q1 <span class="keyword">as</span> ( <span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> student <span class="keyword">where</span> num <span class="operator">=</span> <span class="number">95002</span>)</span><br><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> q1;</span><br><span class="line"></span><br><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> v1;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-08%2022.37.13.jpg" alt="截屏2022-03-08 22.37.13"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-09%2000.16.39.jpg" alt="截屏2022-03-09 00.16.39"></p>
+<p>内连接、左连接、右连接、全连接 都和mysql一样的。</p>
+<p>补充几个</p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-08%2023.49.53.jpg" alt="截屏2022-03-08 23.49.53"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-08%2023.56.42.jpg" alt="截屏2022-03-08 23.56.42"></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- A 不是内连接而是cross join ，因为后面是where，inner join 是on 作连接条件的。</span></span><br><span class="line"><span class="comment">-- B cross join</span></span><br><span class="line"><span class="comment">-- C inner join （虽然结果一样，但是内连接不会像cross join 一样先 生成两个表的笛卡尔积表，再根据where/on条件过滤。）</span></span><br><span class="line"><span class="comment">-- 无条件的 inner join 就是cross join</span></span><br><span class="line"></span><br><span class="line"><span class="comment">-- 注意：！！！！内连接可以看作是 笛卡尔积后，根据on做了筛选，保留了on后符合条件的行。</span></span><br><span class="line"><span class="comment">-- 注意：</span></span><br><span class="line"></span><br><span class="line">​		就算是a和b表<span class="keyword">join</span><span class="operator">+</span><span class="keyword">on</span>仍然会有[笛卡尔积]的形式</span><br><span class="line"></span><br><span class="line">​		因为如果a表和b表的id都有<span class="number">1</span>对多的形式时，就是笛卡尔积</span><br><span class="line"></span><br><span class="line">​		比如a中id<span class="operator">=</span><span class="number">1</span>的记录有<span class="number">3</span>条（ID，维修时间），</span><br><span class="line"></span><br><span class="line">​		b中id<span class="operator">=</span><span class="number">1</span>的记录有<span class="number">2</span>条（ID，用户上报时间）</span><br><span class="line"></span><br><span class="line">​		，<span class="keyword">join</span>，<span class="keyword">on</span>之后就会有<span class="number">6</span>条！</span><br><span class="line"><span class="comment">-- 例子： a.id [1,2,3]  b.id[1,2,2,3]</span></span><br><span class="line"><span class="comment">-- a join b on a.id=b.id;</span></span><br><span class="line"><span class="comment">-- 先 a 和 b 做笛卡尔积得到 1-1 1-2 1-2 1-3，2-1 2-2 2-2 2-3，3-1 3-2 3-2 3-3。</span></span><br><span class="line"><span class="comment">-- 再 根据on 后的条件做筛选 保留 1-1 2-2 2-2 3-3，有4条。因为a.id=2有一条 b.id=2有两条。</span></span><br><span class="line"></span><br><span class="line"><span class="comment">-- 例子：a.id [1,1,1]  b.id[1,1,1]</span></span><br><span class="line"><span class="comment">-- a join b on a.id=b.id;</span></span><br><span class="line"><span class="comment">-- 结果是9条，因为 a.id=1有三条 b.id=1有三条。</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-09%2000.20.41.jpg" alt="截屏2022-03-09 00.20.41"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-09%2000.25.59.jpg" alt="截屏2022-03-09 00.25.59"></p>
+<pre><code>     这个reducer流式传输地方没有太看懂。
+</code></pre>
+<p>​		在hive的连接实现中，它必须从多个表中获取记录，按连接键对它们进行排序，然后按正确的顺序将它们整理在一起。它必须读取按不同表分组的数据，因此它们必须看到来自不同表的组，一旦看到所有表，就开始处理它们。第一个表中的第一组需要缓冲（保存在内存中），因为在看到最后一个表之前无法处理它们。最后一个表可以流式传输（每一行在读取时都会被处理），因为其他表组都在内存中，连接可以启动。</p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/%E6%88%AA%E5%B1%8F2022-03-09%2000.32.58.jpg" alt="0"></p>
+<p>统计词频的 map - reduce 伪代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">mapper (filename, file-contents):</span><br><span class="line">  <span class="keyword">for</span> each word <span class="keyword">in</span> file-contents:</span><br><span class="line">    emit (word, <span class="number">1</span>)  <span class="comment"># 遇到重复的word， 就把 values 的后面再追加一个 1，values初始是 [1]，遇到两次相同word ，values就变成  [1,1]；丰富出多个 键值对。</span></span><br><span class="line"> </span><br><span class="line">reducer (word, values):</span><br><span class="line">  <span class="built_in">sum</span> = <span class="number">0</span></span><br><span class="line">  <span class="keyword">for</span> each value <span class="keyword">in</span> values:</span><br><span class="line">    <span class="built_in">sum</span> = <span class="built_in">sum</span> + value</span><br><span class="line">  emit (word, <span class="built_in">sum</span>) <span class="comment"># 给出一个键值对 ：&#123;word单词 : 出现次数的统计&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>Hive中的Join可分为Common Join（Reduce阶段完成join）和Map Join（Map阶段完成join）</p>
+<p>Map Join作用及原理</p>
+<p>作用简单来说，在Map阶段进行join，而不是Common Join那样在Reduce阶段按照join列进行分发后在每个Reduce节点上进行join，一来省去Shuffle这个代价昂贵的阶段，二来不需要分发也就没有倾斜的问题。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/hive/" rel="tag"># hive</a>
+              <a href="/tags/sql/" rel="tag"># sql</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/centos7%E5%AE%89%E8%A3%85Hadoop/" rel="prev" title="centos7安装Hadoop">
+                  <i class="fa fa-chevron-left"></i> centos7安装Hadoop
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/Hive-SQL%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80-DDL/" rel="next" title="Hive_SQL数据定义语言_DDL">
+                  Hive_SQL数据定义语言_DDL <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">陈宇韶chenyushao</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

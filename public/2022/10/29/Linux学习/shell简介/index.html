@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha256-AbA177XfpSnFEvgpYu1jMygiLabzPCJCRIBtR5jGc0k=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.13.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="shell简介">
+<meta property="og:url" content="http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/shell%E7%AE%80%E4%BB%8B/index.html">
+<meta property="og:site_name" content="Tiger_pop&#39;s Blog">
+<meta property="og:description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/shell%E7%AE%80%E4%BB%8B/image-20220116152241867-7030603.png">
+<meta property="og:image" content="http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/shell%E7%AE%80%E4%BB%8B/image-20220116153216923.png">
+<meta property="og:image" content="http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/shell%E7%AE%80%E4%BB%8B/image-20220116154744742.png">
+<meta property="og:image" content="http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/shell%E7%AE%80%E4%BB%8B/image-20220116154933412.png">
+<meta property="og:image" content="http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/shell%E7%AE%80%E4%BB%8B/image-20220116160140472.png">
+<meta property="og:image" content="http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/shell%E7%AE%80%E4%BB%8B/image-20220116162903588.png">
+<meta property="og:image" content="http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/shell%E7%AE%80%E4%BB%8B/image-20220116163916063.png">
+<meta property="og:image" content="http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/shell%E7%AE%80%E4%BB%8B/image-20220116170028631.png">
+<meta property="og:image" content="http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/shell%E7%AE%80%E4%BB%8B/image-20220116172538434.png">
+<meta property="og:image" content="http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/shell%E7%AE%80%E4%BB%8B/image-20220116172605505.png">
+<meta property="og:image" content="http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/shell%E7%AE%80%E4%BB%8B/image-20220116221011014.png">
+<meta property="og:image" content="http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/shell%E7%AE%80%E4%BB%8B/image-20220116224551707.png">
+<meta property="og:image" content="http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/shell%E7%AE%80%E4%BB%8B/image-20220117142638415.png">
+<meta property="og:image" content="http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/shell%E7%AE%80%E4%BB%8B/image-20220117145640323.png">
+<meta property="article:published_time" content="2022-10-29T07:42:07.000Z">
+<meta property="article:modified_time" content="2022-10-29T08:31:45.487Z">
+<meta property="article:author" content="陈宇韶chenyushao">
+<meta property="article:tag" content="shell">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/shell%E7%AE%80%E4%BB%8B/image-20220116152241867-7030603.png">
+
+
+<link rel="canonical" href="http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/shell%E7%AE%80%E4%BB%8B/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/shell%E7%AE%80%E4%BB%8B/","path":"2022/10/29/Linux学习/shell简介/","title":"shell简介"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>shell简介 | Tiger_pop's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="Tiger_pop's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Tiger_pop's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">tiger_pop 的博客</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#shell%E7%9A%84%E5%8F%98%E9%87%8F"><span class="nav-number">1.</span> <span class="nav-text">shell的变量</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E5%8F%98%E9%87%8F"><span class="nav-number">1.1.</span> <span class="nav-text">自定义变量		</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F"><span class="nav-number">1.2.</span> <span class="nav-text">环境变量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%8D%E7%BD%AE%E5%8F%82%E6%95%B0%E5%8F%98%E9%87%8F"><span class="nav-number">1.3.</span> <span class="nav-text">位置参数变量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A2%84%E5%AE%9A%E4%B9%89%E5%8F%98%E9%87%8F%EF%BC%88%E7%94%A8%E7%9A%84%E4%B8%8D%E5%A4%9A%EF%BC%89"><span class="nav-number">1.4.</span> <span class="nav-text">预定义变量（用的不多）</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="nav-number">2.</span> <span class="nav-text">运算符</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9D%A1%E4%BB%B6%E5%88%A4%E6%96%AD"><span class="nav-number">3.</span> <span class="nav-text">条件判断</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6"><span class="nav-number">4.</span> <span class="nav-text">流程控制</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#if"><span class="nav-number">4.1.</span> <span class="nav-text">if</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#case"><span class="nav-number">4.2.</span> <span class="nav-text">case</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#for"><span class="nav-number">4.3.</span> <span class="nav-text">for</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#while"><span class="nav-number">4.4.</span> <span class="nav-text">while</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#read"><span class="nav-number">4.5.</span> <span class="nav-text">read</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#shell%E7%9A%84%E5%87%BD%E6%95%B0"><span class="nav-number">5.</span> <span class="nav-text">shell的函数</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B3%BB%E7%BB%9F%E5%87%BD%E6%95%B0"><span class="nav-number">5.1.</span> <span class="nav-text">系统函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E5%87%BD%E6%95%B0"><span class="nav-number">5.2.</span> <span class="nav-text">自定义函数</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#shell%E7%BB%BC%E5%90%88%E6%A1%88%E4%BE%8B"><span class="nav-number">6.</span> <span class="nav-text">shell综合案例</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A1%A5%E5%85%85%E7%9F%A5%E8%AF%86%E7%82%B9%EF%BC%9A"><span class="nav-number">6.1.</span> <span class="nav-text">补充知识点：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E5%A4%87%E4%BB%BD%E8%84%9A%E6%9C%AC"><span class="nav-number">6.2.</span> <span class="nav-text">创建备份脚本</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9A%E6%97%B6%E8%B0%83%E7%94%A8"><span class="nav-number">6.3.</span> <span class="nav-text">定时调用</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="陈宇韶chenyushao"
+      src="/images/my.jpg">
+  <p class="site-author-name" itemprop="name">陈宇韶chenyushao</p>
+  <div class="site-description" itemprop="description">爱学习、爱工作、爱生活;         微信号: Tiger_and_master;         手机号码:18515678348 </div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">378</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">24</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">138</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/shell%E7%AE%80%E4%BB%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/my.jpg">
+      <meta itemprop="name" content="陈宇韶chenyushao">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tiger_pop's Blog">
+      <meta itemprop="description" content="爱学习、爱工作、爱生活;         微信号: Tiger_and_master;         手机号码:18515678348 ">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="shell简介 | Tiger_pop's Blog">
+      <meta itemprop="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          shell简介
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2022-10-29 15:42:07 / 修改时间：16:31:45" itemprop="dateCreated datePublished" datetime="2022-10-29T15:42:07+08:00">2022-10-29</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+            <div class="post-description">这是文章开头，显示在主页面，详情请点击此处。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>简介 <span id="more"></span></p>
+<pre><code>    类似于解释器，解释给Linux内核。
+</code></pre>
+<p><img src="/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/shell%E7%AE%80%E4%BB%8B/image-20220116152241867-7030603.png" alt="image-20220116152241867"></p>
+<p>​		国内一般都是bash，</p>
+<p>​		执行方式：可以chmod 加权限直接运行shell文件，也可以不加权限直接 sh XXX.sh 运行，两种方法都是可以的。</p>
+<h1 id="shell的变量"><a href="#shell的变量" class="headerlink" title="shell的变量"></a>shell的变量</h1><h2 id="自定义变量"><a href="#自定义变量" class="headerlink" title="自定义变量		"></a>自定义变量		<img src="/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/shell%E7%AE%80%E4%BB%8B/image-20220116153216923.png" alt="image-20220116153216923"></h2><p>​		<img src="/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/shell%E7%AE%80%E4%BB%8B/image-20220116154744742.png" alt="image-20220116154744742"></p>
+<p>​		<img src="/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/shell%E7%AE%80%E4%BB%8B/image-20220116154933412.png" alt="image-20220116154933412"></p>
+<p>（反引号是键盘1左侧的～按键。）</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># sh脚本内输入：</span></span><br><span class="line"><span class="comment">#!/bin/bash</span></span><br><span class="line"><span class="comment"># 定义变量A</span></span><br><span class="line">A=100</span><br><span class="line"><span class="comment"># 输出变量A</span></span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$A</span></span><br><span class="line"><span class="built_in">echo</span> A=<span class="variable">$A</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;A=<span class="variable">$A</span>&quot;</span></span><br><span class="line"><span class="comment"># 撤销变量A</span></span><br><span class="line"><span class="built_in">unset</span> A</span><br><span class="line"><span class="built_in">echo</span> A=<span class="variable">$A</span></span><br><span class="line"><span class="comment"># 声明静态变量B=2,不能unset</span></span><br><span class="line"><span class="built_in">readonly</span> B=2</span><br><span class="line"><span class="built_in">echo</span> B=<span class="variable">$B</span></span><br><span class="line"><span class="built_in">unset</span> B</span><br><span class="line"><span class="comment"># 将指令返回的结果赋给变量</span></span><br><span class="line">C=`<span class="built_in">date</span>`</span><br><span class="line">D=$(<span class="built_in">date</span>)</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;C=<span class="variable">$C</span>&quot;</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;D=<span class="variable">$D</span>&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 运行脚本后输出：</span></span><br><span class="line">100</span><br><span class="line">A=100</span><br><span class="line">A=100</span><br><span class="line">A=</span><br><span class="line">B=2</span><br><span class="line">var.sh: 第 14 行:<span class="built_in">unset</span>: B: 无法取消设定: 只读 variable</span><br><span class="line">C=2022年 01月 15日 星期六 13:39:41 EST</span><br><span class="line">D=2022年 01月 15日 星期六 13:39:41 EST</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="环境变量"><a href="#环境变量" class="headerlink" title="环境变量"></a>环境变量</h2><p>​		<img src="/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/shell%E7%AE%80%E4%BB%8B/image-20220116160140472.png" alt="image-20220116160140472"></p>
+<p>​		在&#x2F;etc&#x2F;profile 里export 一个全局变量，然后输出。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/profile</span><br><span class="line">		<span class="built_in">export</span> MYSQL_HOME=/usr/bin/mysql</span><br><span class="line"><span class="built_in">source</span> /etc/profile</span><br><span class="line"></span><br><span class="line"><span class="comment"># shell 脚本内输入： </span></span><br><span class="line">:&lt;&lt;!</span><br><span class="line">多行注释</span><br><span class="line">多行注释</span><br><span class="line">多行注释</span><br><span class="line">!</span><br><span class="line"><span class="comment"># 输出环境变量/全局变量的值</span></span><br><span class="line"><span class="built_in">echo</span> MYSQL_HOME=<span class="variable">$MYSQL_HOME</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 输出：</span></span><br><span class="line">MYSQL_HOME=/usr/bin/mysql</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="位置参数变量"><a href="#位置参数变量" class="headerlink" title="位置参数变量"></a>位置参数变量</h2><p>​		<img src="/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/shell%E7%AE%80%E4%BB%8B/image-20220116162903588.png" alt="image-20220116162903588"></p>
+<p>​		写一个脚本position.sh,在此脚本中获取到命令行的各个参数信息。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 脚本内写入：</span></span><br><span class="line"><span class="comment">#!/bin/bash</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;0=<span class="variable">$0</span> 1=<span class="variable">$1</span> 2=<span class="variable">$2</span>&quot;</span></span><br><span class="line"><span class="built_in">echo</span> $*</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;<span class="variable">$@</span>&quot;</span></span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$#</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 命令</span></span><br><span class="line">sh position.sh 100 200 300 400</span><br><span class="line"></span><br><span class="line"><span class="comment"># 输出</span></span><br><span class="line">0=./position.sh 1=100 2=200</span><br><span class="line">100 200 300 400</span><br><span class="line">100 200 300 400</span><br><span class="line">4</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>​		</p>
+<h2 id="预定义变量（用的不多）"><a href="#预定义变量（用的不多）" class="headerlink" title="预定义变量（用的不多）"></a>预定义变量（用的不多）</h2><p>​		<img src="/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/shell%E7%AE%80%E4%BB%8B/image-20220116163916063.png" alt="image-20220116163916063"></p>
+<p>​		</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 新建一个脚本preVar.sh</span></span><br><span class="line"><span class="comment">#!/bin/bash</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;当前执行的进程id=$$&quot;</span></span><br><span class="line"><span class="comment"># 以后台方式运行shell脚本,结尾+ &amp;</span></span><br><span class="line">/root/shcode/position.sh &amp;</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;后台最后一个运行的进程id=$!&quot;</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;执行的结果是$?&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 输出</span></span><br><span class="line">当前执行的进程<span class="built_in">id</span>=26947</span><br><span class="line">后台最后一个运行的进程<span class="built_in">id</span>=26948</span><br><span class="line">执行的结果是0</span><br><span class="line">[root@localhost shcode]<span class="comment"># 0=/root/shcode/position.sh 1= 2=</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">0</span><br><span class="line"><span class="comment"># 卡住，因为脚本里面又运行了另一个脚本。ctrl+c退出。</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="运算符"><a href="#运算符" class="headerlink" title="运算符"></a>运算符</h1><p>​		<img src="/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/shell%E7%AE%80%E4%BB%8B/image-20220116170028631.png" alt="image-20220116170028631"></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 输入 </span></span><br><span class="line"><span class="comment">#!/bin/bash</span></span><br><span class="line">RES1=$(((<span class="number">2</span>+<span class="number">3</span>)*<span class="number">4</span>))</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;res1=<span class="variable">$RES1</span>&quot;</span></span><br><span class="line"></span><br><span class="line">RES2=$[(2+3)*4]</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;res2=<span class="variable">$RES2</span>&quot;</span></span><br><span class="line"></span><br><span class="line">TEMP=`<span class="built_in">expr</span> 2 + 3`</span><br><span class="line">RES3=`<span class="built_in">expr</span> <span class="variable">$TEMP</span> \* 4`</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;temp=<span class="variable">$TEMP</span>&quot;</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;res3=<span class="variable">$RES3</span>&quot;</span></span><br><span class="line"></span><br><span class="line">SUM=$[<span class="variable">$1</span>+<span class="variable">$2</span>]</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;参数和是 <span class="variable">$SUM</span>&quot;</span></span><br><span class="line">~                                                                                           </span><br><span class="line">~                                                                                           </span><br><span class="line"><span class="comment"># 输出</span></span><br><span class="line"><span class="comment"># sh oper.sh 20 50</span></span><br><span class="line">res1=20</span><br><span class="line">res2=20</span><br><span class="line">temp=5</span><br><span class="line">res3=20</span><br><span class="line">参数和是 70</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="条件判断"><a href="#条件判断" class="headerlink" title="条件判断"></a>条件判断</h1><p>​		</p>
+<p><img src="/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/shell%E7%AE%80%E4%BB%8B/image-20220116172538434.png" alt="image-20220116172538434"></p>
+<p><img src="/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/shell%E7%AE%80%E4%BB%8B/image-20220116172605505.png" alt="image-20220116172605505"></p>
+<p>​		</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 输入</span></span><br><span class="line"><span class="comment">#!/bin/bash</span></span><br><span class="line"><span class="keyword">if</span> [ <span class="string">&quot;ok&quot;</span> = <span class="string">&quot;ok&quot;</span> ]</span><br><span class="line"><span class="keyword">then</span></span><br><span class="line">        <span class="built_in">echo</span> <span class="string">&quot;equal&quot;</span></span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> [ 23 -ge 22 ]</span><br><span class="line"><span class="keyword">then</span>        </span><br><span class="line">        <span class="built_in">echo</span> <span class="string">&quot;大于等于&quot;</span></span><br><span class="line"><span class="keyword">fi</span>          </span><br><span class="line">           </span><br><span class="line"><span class="keyword">if</span> [ -f /root/shcode/aaa.txt ]</span><br><span class="line"><span class="keyword">then</span>          </span><br><span class="line">        <span class="built_in">echo</span> <span class="string">&quot;存在&quot;</span> </span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> [ aaa.txt ] </span><br><span class="line"><span class="keyword">then</span> </span><br><span class="line">        <span class="built_in">echo</span> <span class="string">&quot;hello aaa.txt&quot;</span> </span><br><span class="line"><span class="keyword">fi</span>  </span><br><span class="line"></span><br><span class="line"><span class="comment"># 输出</span></span><br><span class="line">equal</span><br><span class="line">大于等于</span><br><span class="line">存在</span><br><span class="line">hello aaa.txt</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="流程控制"><a href="#流程控制" class="headerlink" title="流程控制"></a>流程控制</h1><h2 id="if"><a href="#if" class="headerlink" title="if"></a>if</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> [ 条件判断式 ]</span><br><span class="line"><span class="keyword">then</span></span><br><span class="line">		代码</span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> [ 条件判断式 ]</span><br><span class="line"><span class="keyword">then</span></span><br><span class="line">		代码</span><br><span class="line"><span class="keyword">elif</span> [ 条件判断式 ]</span><br><span class="line"><span class="keyword">then</span></span><br><span class="line">		代码</span><br><span class="line">...</span><br><span class="line"><span class="keyword">fi</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="case"><a href="#case" class="headerlink" title="case"></a>case</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 脚本内写入</span></span><br><span class="line"><span class="comment">#!/bin/bash</span></span><br><span class="line"><span class="keyword">case</span> <span class="variable">$1</span> <span class="keyword">in</span></span><br><span class="line"><span class="string">&quot;1&quot;</span>)</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;周一&quot;</span></span><br><span class="line">;;</span><br><span class="line"><span class="string">&quot;2&quot;</span>)</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;周二&quot;</span> </span><br><span class="line">;;          </span><br><span class="line">*)          </span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;other&quot;</span></span><br><span class="line"><span class="keyword">esac</span> </span><br><span class="line"></span><br><span class="line"><span class="comment"># 输出 .sh 参数</span></span><br><span class="line">周一/周二/other</span><br></pre></td></tr></table></figure>
+
+<h2 id="for"><a href="#for" class="headerlink" title="for"></a>for</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 输入</span></span><br><span class="line"><span class="comment"># for的第一种写法</span></span><br><span class="line"><span class="comment">#!/bin/bash</span></span><br><span class="line"><span class="comment"># $* 参数当作一个整体</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="string">&quot;$*&quot;</span></span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">        <span class="built_in">echo</span> <span class="string">&quot;num is <span class="variable">$i</span>&quot;</span></span><br><span class="line"><span class="keyword">done</span></span><br><span class="line"><span class="comment"># $@ 是分别对待</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;=========&quot;</span></span><br><span class="line"><span class="keyword">for</span> j <span class="keyword">in</span> <span class="string">&quot;<span class="variable">$@</span>&quot;</span></span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">        <span class="built_in">echo</span> <span class="string">&quot;num is <span class="variable">$j</span>&quot;</span></span><br><span class="line"><span class="keyword">done</span></span><br><span class="line"><span class="comment"># for的第二种写法</span></span><br><span class="line">SUM=0</span><br><span class="line"><span class="keyword">for</span> (( i=1; i&lt;=5; i++ ))  <span class="comment"># 注意空格</span></span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">        SUM=$[<span class="variable">$SUM</span>+<span class="variable">$i</span>]</span><br><span class="line"><span class="keyword">done</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;sum = <span class="variable">$SUM</span>&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 输出</span></span><br><span class="line"><span class="comment"># ./testFor1.sh 100 200 300 </span></span><br><span class="line">num is 100 200 300</span><br><span class="line">=========</span><br><span class="line">num is 100</span><br><span class="line">num is 200</span><br><span class="line">num is 300</span><br><span class="line"><span class="built_in">sum</span> = 15</span><br></pre></td></tr></table></figure>
+
+<h2 id="while"><a href="#while" class="headerlink" title="while"></a>while</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 第一种写法</span></span><br><span class="line"><span class="keyword">while</span> 条件/命令</span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">    循环体</span><br><span class="line"><span class="keyword">done</span></span><br><span class="line"><span class="comment"># while的条件可以是各种终端的命令。包括外部命令或bash内建（built-in）命令都可以。因为命令都是有返回值的（可以用echo $?查看），命令执行的成功与否就是while条件的真或假。</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#输入</span></span><br><span class="line"><span class="comment">#!/bin/bash</span></span><br><span class="line">SUM=0</span><br><span class="line">i=0</span><br><span class="line"><span class="keyword">while</span> [ <span class="variable">$i</span> -le <span class="variable">$1</span> ]</span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">        SUM=$[<span class="variable">$SUM</span>+<span class="variable">$i</span>]</span><br><span class="line">        i=$[<span class="variable">$i</span>+1]</span><br><span class="line"><span class="keyword">done</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;SUM is <span class="variable">$SUM</span>&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#输出</span></span><br><span class="line"><span class="comment">#  ./testWhile.sh 10</span></span><br><span class="line">SUM is 55</span><br><span class="line"></span><br><span class="line"><span class="comment"># 第二种写法</span></span><br><span class="line"><span class="keyword">while</span> 命令</span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">    循环体</span><br><span class="line"><span class="keyword">done</span> &lt; 文件名 or &gt; 文件名</span><br><span class="line"><span class="comment">#!/bin/bash</span></span><br><span class="line"><span class="comment">#从/etc/passwd文件中读取用户名并输出</span></span><br><span class="line">oldIFS=<span class="variable">$IFS</span> <span class="comment">#IFS是文件内部分隔符</span></span><br><span class="line">IFS=<span class="string">&quot;:&quot;</span>     <span class="comment">#设置分隔符为:</span></span><br><span class="line"><span class="keyword">while</span>  <span class="built_in">read</span> username var <span class="comment">#var变量不可少</span></span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;用户名:<span class="variable">$username</span>&quot;</span></span><br><span class="line"><span class="keyword">done</span> &lt; /etc/passwd </span><br><span class="line">IFS=<span class="variable">$oldIFS</span></span><br><span class="line"><span class="string">&#x27;&#x27;</span><span class="string">&#x27;熟悉/etc/passwd文件结构的朋友都知道这个文件的每一行包含了一个用户的大量信息（用户名只是第一项）。 这里我们实际只输出了用户名。但是注意while的read后面除变量username外还有个var，尽管我们并不输出这个变量的值。 但它却必不可少，如果我们写成while read username那么username的值等于passwd文件这一整行的内容（IFS=”:”也就不起作用了）</span></span><br><span class="line"><span class="string">&#x27;</span><span class="string">&#x27;&#x27;</span></span><br><span class="line"><span class="comment">#!/bin/bash</span></span><br><span class="line"><span class="comment">#每隔10分钟，ping一下局域网内主机192.168.1.101，</span></span><br><span class="line"><span class="comment">#并把结果记录到ping.txt文件中</span></span><br><span class="line"><span class="keyword">while</span> <span class="built_in">date</span></span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">    ping -c5 192.168.1.101 &gt;/dev/null 2&gt;&amp;1 </span><br><span class="line">    <span class="keyword">if</span> [ $? = 0 ];<span class="keyword">then</span></span><br><span class="line">        <span class="built_in">echo</span> OK</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        <span class="built_in">echo</span> FAIL</span><br><span class="line">    <span class="keyword">fi</span></span><br><span class="line">    <span class="built_in">sleep</span> 600 <span class="comment">#600秒是10分钟</span></span><br><span class="line"><span class="keyword">done</span> &gt; ping.txt</span><br><span class="line"><span class="comment"># linux 中0:表示键盘输入(stdin)，1:表示标准输出(stdout),系统默认是1， 2:表示错误输出(stderr)</span></span><br><span class="line"><span class="comment"># /dev/null代表linux的空设备文件，所有往这个文件里面写入的内容都会丢失，俗称“黑洞”。那么执行了&gt;/dev/null之后，标准输出就会不再存在，没有任何地方能够找到输出的内容。</span></span><br><span class="line"><span class="comment"># 2&gt;&amp;1 这条命令用到了重定向绑定，采用&amp;可以将两个输出绑定在一起。这条命令的作用是错误输出将和标准输出同用一个文件描述符，说人话就是错误输出将会和标准输出输出到同一个地方。</span></span><br><span class="line"><span class="comment"># command &gt;/dev/null 2&gt;&amp;1 执行了这条命令之后，该条shell命令将不会输出任何信息到控制台，也不会有任何信息输出到文件中。</span></span><br><span class="line"><span class="comment"># cat ping.txt 可见</span></span><br><span class="line">2015年 01月 31日 星期六 16:03:13 CST</span><br><span class="line">OK</span><br></pre></td></tr></table></figure>
+
+<h2 id="read"><a href="#read" class="headerlink" title="read"></a>read</h2><p>​		读取控制台输入。</p>
+<p><img src="/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/shell%E7%AE%80%E4%BB%8B/image-20220116221011014.png" alt="image-20220116221011014"></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 输入</span></span><br><span class="line"><span class="comment">#!/bin/bash</span></span><br><span class="line"><span class="built_in">read</span> -p <span class="string">&quot;请输入一个数NUM1:&quot;</span> NUM1</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;你输入的数是<span class="variable">$NUM1</span>&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">read</span> -t 10 -p <span class="string">&quot;请在10s内输入一个数：&quot;</span> NUM2</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;你输入的数是<span class="variable">$NUM2</span>&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 输出</span></span><br><span class="line">请输入一个数NUM1:1</span><br><span class="line">你输入的数是1</span><br><span class="line">请在10s内输入一个数：你输入的数是  <span class="comment"># 因为第二次我没及时输入。</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="shell的函数"><a href="#shell的函数" class="headerlink" title="shell的函数"></a>shell的函数</h1><h2 id="系统函数"><a href="#系统函数" class="headerlink" title="系统函数"></a>系统函数</h2><p>​		韩介绍了两个，和别的编程语言大同小异,其实大家 查查文档就好。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># basename 用于获取文件名，去掉/等杂的东西，也可去掉后缀。</span></span><br><span class="line"><span class="built_in">basename</span> /home/my/test.txt</span><br><span class="line"><span class="comment"># 输出 test.txt</span></span><br><span class="line"><span class="built_in">basename</span> /home/my/test.txt .txt</span><br><span class="line"><span class="comment"># 输出 test</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># dirname 返回完整路径。</span></span><br><span class="line"><span class="built_in">dirname</span> /home/my/hello.txt</span><br><span class="line"><span class="comment"># 输出/home/my</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="自定义函数"><a href="#自定义函数" class="headerlink" title="自定义函数"></a>自定义函数</h2><p>​		<img src="/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/shell%E7%AE%80%E4%BB%8B/image-20220116224551707.png" alt="image-20220116224551707">	</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># shell 文件内写如下内容：</span></span><br><span class="line"><span class="comment">#!/bin/bash</span></span><br><span class="line"><span class="comment"># 定义函数</span></span><br><span class="line"><span class="keyword">function</span> <span class="function"><span class="title">GetSum</span></span>() &#123;</span><br><span class="line">        SUM=$[<span class="variable">$n1</span>+<span class="variable">$n2</span>]</span><br><span class="line">        <span class="built_in">echo</span> <span class="string">&quot;两者和是<span class="variable">$SUM</span>&quot;</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">read</span> -p <span class="string">&quot;输入一个数n1&quot;</span> n1</span><br><span class="line"><span class="built_in">read</span> -p <span class="string">&quot;输入第二个数n2&quot;</span> n2</span><br><span class="line"></span><br><span class="line"><span class="comment"># 调用函数</span></span><br><span class="line">GetSum <span class="variable">$n1</span> <span class="variable">$n2</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 运行 ./testFun.sh </span></span><br><span class="line">输入一个数n1100</span><br><span class="line">输入第二个数n2200</span><br><span class="line">两者和是300</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>​		</p>
+<h1 id="shell综合案例"><a href="#shell综合案例" class="headerlink" title="shell综合案例"></a>shell综合案例</h1><p>​		<img src="/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/shell%E7%AE%80%E4%BB%8B/image-20220117142638415.png" alt="image-20220117142638415"></p>
+<p>​		<img src="/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/shell%E7%AE%80%E4%BB%8B/image-20220117145640323.png" alt="image-20220117145640323"></p>
+<h2 id="补充知识点："><a href="#补充知识点：" class="headerlink" title="补充知识点："></a>补充知识点：</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">find 位置 -ctime +10 -name <span class="string">&quot;a.txt&quot;</span></span><br><span class="line"><span class="comment"># 在此位置找10天前建立的 名字为a.txt 的文件。find 的搜索模板 可以用正则的通配符；</span></span><br><span class="line">-mtime   -n +n                <span class="comment">#按文件更改时间来查找文件，-n指n天以内，+n指n天以前</span></span><br><span class="line">-atime    -n +n               <span class="comment">#按文件访问时间来查GIN: 0px&quot;&gt;</span></span><br><span class="line">-ctime    -n +n              <span class="comment">#按文件创建时间来查找文件，-n指n天以内，+n指n天以前</span></span><br><span class="line"></span><br><span class="line">XXX -<span class="built_in">exec</span> <span class="built_in">rm</span> &#123;&#125; \;</span><br><span class="line">XXX -<span class="built_in">exec</span> <span class="built_in">rm</span> &#123;&#125; \+</span><br><span class="line"><span class="comment"># 将前面XXX得到的 结果 拼接到&#123;&#125;中，然后执行exec后面的内容，这里是进行删除操作。</span></span><br><span class="line"><span class="comment"># 第一行的写法是将找到的文件名拼接到 &#123;&#125; 中，然后执行命令。第二行类似，不同的是把所有文件名拼接成一条命令。如下：</span></span><br><span class="line"><span class="built_in">rm</span> 1</span><br><span class="line"><span class="built_in">rm</span> 2</span><br><span class="line"><span class="built_in">rm</span> 3</span><br><span class="line"><span class="built_in">rm</span> 1 2 3</span><br><span class="line"></span><br><span class="line">-e filename <span class="comment">#如果 filename存在，则为真</span></span><br><span class="line">-d filename <span class="comment">#如果 filename为目录，则为真 </span></span><br><span class="line">-f filename <span class="comment">#如果 filename为常规文件，则为真</span></span><br><span class="line">-L filename <span class="comment">#如果 filename为符号链接，则为真</span></span><br><span class="line">-r filename <span class="comment">#如果 filename可读，则为真 </span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Shell 里面的中括号（包括单中括号与双中括号）可用于一些条件的测试：</span></span><br><span class="line"><span class="comment"># 算术比较, 比如一个变量是否为0, [ $var -eq 0 ]。</span></span><br><span class="line"><span class="comment"># 文件属性测试，比如一个文件是否存在，[ -e $var ], 是否是目录，[ -d $var ]。</span></span><br><span class="line"><span class="comment"># 字符串比较, 比如两个字符串是否相同， [[ $var1 = $var2 ]]。</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># | 在Linux中 | 是作为管道符来使用的，将 ‘|’前面命令的输入当做后面命令的输入；</span></span><br><span class="line"><span class="comment"># || ，用 || 分割的命令具有短路效应，及如果前面的命令为真，在后面的命令不会执行，如果前面的命令为假，则继续执行后面的命令；</span></span><br><span class="line"><span class="comment"># &amp; ，用 &amp; 连接的多个符号将同时执行，不管命令是否执行成功， &amp; 放在命令最后 表示后台运行；</span></span><br><span class="line"><span class="comment"># &amp;&amp; ，用&amp;&amp;连接的符号也具有短路效应，即当前面的命令执行的结果为假时，后面的命令将不会得到执行，只有当前面的命令执行结果为真时后面的命令才会得到执行；</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="创建备份脚本"><a href="#创建备份脚本" class="headerlink" title="创建备份脚本"></a>创建备份脚本</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /usr/sbin  <span class="comment"># 习惯root用户在这个文件夹里面写脚本。</span></span><br><span class="line">vim mysql_db_backup.sh <span class="comment"># 创建备份脚本。</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"><span class="comment"># 备份目录位置</span></span><br><span class="line">BACKUP=/data/backup/db</span><br><span class="line"><span class="comment"># 当前时间</span></span><br><span class="line">DATETIME=$(<span class="built_in">date</span> +%Y-%m-%d_%H%M%S)</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;<span class="variable">$DATETIME</span>&quot;</span>  <span class="comment"># 检查</span></span><br><span class="line"><span class="comment"># 数据库地址</span></span><br><span class="line">HOST=localhost</span><br><span class="line"><span class="comment"># 数据库用户名</span></span><br><span class="line">DB_USER=root</span><br><span class="line"><span class="comment"># 数据库密码</span></span><br><span class="line">DB_PW=my123456</span><br><span class="line"><span class="comment"># 备份的数据库名</span></span><br><span class="line">DATABASE=FirstTestDatabase</span><br><span class="line"></span><br><span class="line"><span class="comment"># 如果备份目录位置不存在，就创建一个。</span></span><br><span class="line">[ ! -d <span class="variable">$BACKUP</span>/<span class="variable">$DATETIME</span> ] &amp;&amp; <span class="built_in">mkdir</span> -p <span class="string">&quot;<span class="variable">$BACKUP</span>/<span class="variable">$DATETIME</span>&quot;</span>  <span class="comment"># -p 是创建多级用户。</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 备份数据库</span></span><br><span class="line">mysqldump -u<span class="variable">$DB_USER</span> -p<span class="variable">$DB_PW</span> --host=<span class="variable">$HOST</span> -q -R --databases <span class="variable">$DATABASE</span> &gt; <span class="variable">$BACKUP</span>/<span class="variable">$DATETIME</span>/<span class="variable">$DATETIME</span>.txt</span><br><span class="line"></span><br><span class="line"><span class="comment"># 将日期文件夹连带备份文件打包，并删除原文件夹和文件。</span></span><br><span class="line"><span class="built_in">cd</span> <span class="variable">$BACKUP</span></span><br><span class="line">tar -zcvf <span class="variable">$DATETIME</span>.tar.gz <span class="variable">$DATETIME</span></span><br><span class="line"><span class="built_in">rm</span> -rf <span class="variable">$DATETIME</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 逐个删除10天前的备份文件</span></span><br><span class="line">find <span class="variable">$BACKUP</span> -atime +10 -name <span class="string">&quot;*.tar.gz&quot;</span> -<span class="built_in">exec</span> <span class="built_in">rm</span> -rf &#123;&#125; \; </span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;数据库<span class="variable">$DATABASES</span> 成功备份！&quot;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="定时调用"><a href="#定时调用" class="headerlink" title="定时调用"></a>定时调用</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">crontab -e</span><br><span class="line">*/1 * * * *  /usr/sbin/mysql_db_backup.sh</span><br><span class="line"><span class="comment"># 为了快速看见效果，我定隔一分钟搞一下这脚本。</span></span><br><span class="line">30 2 * * * sh /usr/sbin/mysql_db_backup.sh</span><br></pre></td></tr></table></figure>
+
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/shell/" rel="tag"># shell</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E6%95%B0%E6%8D%AE%E7%9A%84%E5%A4%87%E4%BB%BD%E5%92%8C%E6%81%A2%E5%A4%8D/" rel="prev" title="linux数据的备份和恢复">
+                  <i class="fa fa-chevron-left"></i> linux数据的备份和恢复
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E6%89%BE%E5%9B%9Eroot%E5%AF%86%E7%A0%81/" rel="next" title="linux找回root密码">
+                  linux找回root密码 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">陈宇韶chenyushao</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

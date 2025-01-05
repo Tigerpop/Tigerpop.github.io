@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha256-AbA177XfpSnFEvgpYu1jMygiLabzPCJCRIBtR5jGc0k=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.13.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="45简单排序">
+<meta property="og:url" content="http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/45%E7%AE%80%E5%8D%95%E6%8E%92%E5%BA%8F/index.html">
+<meta property="og:site_name" content="Tiger_pop&#39;s Blog">
+<meta property="og:description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-09-27T12:00:36.000Z">
+<meta property="article:modified_time" content="2022-10-28T15:59:25.681Z">
+<meta property="article:author" content="陈宇韶chenyushao">
+<meta property="article:tag" content="排序">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/45%E7%AE%80%E5%8D%95%E6%8E%92%E5%BA%8F/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/45%E7%AE%80%E5%8D%95%E6%8E%92%E5%BA%8F/","path":"2021/09/27/数据结构_浙江大学/45简单排序/","title":"45简单排序"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>45简单排序 | Tiger_pop's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="Tiger_pop's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Tiger_pop's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">tiger_pop 的博客</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-overview-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="陈宇韶chenyushao"
+      src="/images/my.jpg">
+  <p class="site-author-name" itemprop="name">陈宇韶chenyushao</p>
+  <div class="site-description" itemprop="description">爱学习、爱工作、爱生活;         微信号: Tiger_and_master;         手机号码:18515678348 </div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">378</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">24</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">138</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/45%E7%AE%80%E5%8D%95%E6%8E%92%E5%BA%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/my.jpg">
+      <meta itemprop="name" content="陈宇韶chenyushao">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tiger_pop's Blog">
+      <meta itemprop="description" content="爱学习、爱工作、爱生活;         微信号: Tiger_and_master;         手机号码:18515678348 ">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="45简单排序 | Tiger_pop's Blog">
+      <meta itemprop="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          45简单排序
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2021-09-27 20:00:36" itemprop="dateCreated datePublished" datetime="2021-09-27T20:00:36+08:00">2021-09-27</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2022-10-28 23:59:25" itemprop="dateModified" datetime="2022-10-28T23:59:25+08:00">2022-10-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%B5%99%E5%A4%A7%E7%AE%97%E6%B3%95%E4%B8%8E%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B-python%E5%AE%9E%E7%8E%B0/" itemprop="url" rel="index"><span itemprop="name">浙大算法与数据结构课程(python实现)</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+            <div class="post-description">这是文章开头，显示在主页面，详情请点击此处。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">简单排序统一接下来的格式</span></span><br><span class="line"><span class="string">def X_Sort( ElementType A[], int N )</span></span><br><span class="line"><span class="string">    默认从小到大的整数排序。</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    只讨论基于 比较 的排序。</span></span><br><span class="line"><span class="string">    只讨论内部排序。假定内存空间无限大，一次性在内存中解决。</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">稳定性：任意两个相等的数据，排序前后的相对位置不发生改变。</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">没有一种排序是任何情况下都表现最好的。</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">冒泡排序算法：</span></span><br><span class="line"><span class="string">    步骤一： 让一个指针从上到下，依次比较两个相邻的泡泡。</span></span><br><span class="line"><span class="string">            如果大小不对，就交换两个泡泡的位置。</span></span><br><span class="line"><span class="string">    补充说明：</span></span><br><span class="line"><span class="string">        第一个循环（也就是第一趟冒泡）完毕时（指针从头走到 N-1位置），</span></span><br><span class="line"><span class="string">        此时最大的值已经找到，但是前面的N-1个位置的排序不确定。</span></span><br><span class="line"><span class="string">    步骤二： 在前面 N-1 个数组中 ，重复步骤一，找出第二大的数。</span></span><br><span class="line"><span class="string">    ...</span></span><br><span class="line"><span class="string">    不断重复，直到前面没定顺序的数组中只剩2个数,(足够完成最后一次交换)。 # 其实这个比较的区间就是原数组去头去尾的。</span></span><br><span class="line"><span class="string">    （其实我们在最小堆那节已经用过类似的思想了。）</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 冒泡排序代码</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">Bubble_Sort</span>(<span class="params">A</span>):</span><br><span class="line">    <span class="keyword">for</span> p <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(A)-<span class="number">1</span>,<span class="number">0</span>,-<span class="number">1</span>):   <span class="comment"># 比较区间的变化其实就是原数组去头去尾的部分，因为这已经足够Swap了。</span></span><br><span class="line">        flag = <span class="number">0</span>                     <span class="comment"># 用标识看是否发生了交换。可以降低最好的情况下时间复杂度。</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(p):</span><br><span class="line">            <span class="keyword">if</span> A[i] &gt; A[i+<span class="number">1</span>]:</span><br><span class="line">                Swap(A,i)</span><br><span class="line">                flag = <span class="number">1</span>             <span class="comment"># 发生了交换。</span></span><br><span class="line">        <span class="keyword">if</span> flag == <span class="number">0</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="string">&#x27;冒泡排序第一遍冒泡就发现顺序已经没问题了。&#x27;</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">Swap</span>(<span class="params">A,i</span>):   <span class="comment"># 对可变对象本体操作才能 达到修改目的。</span></span><br><span class="line">    temp = A[i]</span><br><span class="line">    A[i] = A[i+<span class="number">1</span>]</span><br><span class="line">    A[i+<span class="number">1</span>] = temp</span><br><span class="line"></span><br><span class="line"><span class="comment"># 以下写法对于可变对象达不到效果。</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># def Swap(a,b):</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#     temp = a</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#     a = b</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#     b = temp</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 冒泡排序最好的时间复杂度是 O(N) 一遍冒泡就发现根本不需要交换，原本已经是排好的了。</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 最坏的时间复杂度是 O(N**2)  完全是逆序的，每一对相邻的元素都要交换。</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 冒泡排序有一个优点别的 排序没有，</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 一是在非数组的链表情况下，冒泡排序依然可用。</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 因为这个交换发生在相邻两个元素间，在链表一样可以完成。</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 二是，比较中，如果相等是不改变位置的，也就是 &quot;稳定&quot; 的。</span></span><br><span class="line"></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">插入排序算法：</span></span><br><span class="line"><span class="string">    类似于打牌里的 &quot;插牌&quot;。</span></span><br><span class="line"><span class="string">    假定手里本来就有一张牌，是数组的第一张牌，</span></span><br><span class="line"><span class="string">    从数组抓第二张牌，</span></span><br><span class="line"><span class="string">    和手中第一张牌比大小，决定是否交换位置，</span></span><br><span class="line"><span class="string">    从手里抓第三张牌，和前一张牌比大小，看看是否交换位置，...再看看和第一张牌是否要交换。</span></span><br><span class="line"><span class="string">    ...</span></span><br><span class="line"><span class="string">    直到抓完N-1张牌。</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 插入排序代码</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">Insert_Sort</span>(<span class="params">A</span>):  <span class="comment">#     下面一种写法会更加好理解一些。</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#     for p in range(1,len(A)):    # 抓牌</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#         temp = A[p]              # 这次抓到的牌</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># for i in range(p,-1,-1): # 一直回头比,注意比到第一个数，腾出适合的插入位置。</span></span><br><span class="line">        <span class="comment">#     if i-1 &gt;=0 and A[i-1] &gt; temp:  # 其实是比到i=1的位置，但是i会循环到0，以便后序方便赋值。这里老师伪代码其实看的更加清晰一些。</span></span><br><span class="line">        <span class="comment">#         A[i] = A[i-1]</span></span><br><span class="line">        <span class="comment">#         # print(i)</span></span><br><span class="line">        <span class="comment">#     else:</span></span><br><span class="line">        <span class="comment">#         break            # 找到适合的插入位置 i。</span></span><br><span class="line">        <span class="comment"># A[i] = temp              # 新牌落位。</span></span><br><span class="line">    <span class="keyword">for</span> p <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>, <span class="built_in">len</span>(A)):     <span class="comment"># 抓牌</span></span><br><span class="line">        temp = A[p]                <span class="comment"># 这次抓到的牌</span></span><br><span class="line">        preIndex = p-<span class="number">1</span></span><br><span class="line">        current = p</span><br><span class="line">        <span class="keyword">while</span> A[preIndex] &gt; temp <span class="keyword">and</span> preIndex &gt;= <span class="number">0</span> :  <span class="comment"># 找插入位置。python找插入位置用while写方便一些。</span></span><br><span class="line">            A[current] = A[preIndex]</span><br><span class="line">            current = preIndex</span><br><span class="line">            preIndex = current - <span class="number">1</span></span><br><span class="line">            <span class="comment"># print(A)</span></span><br><span class="line">        A[current] = temp</span><br><span class="line">        <span class="comment"># print(A)</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 因为比较中如果等值，位置不会变化，所以插入排序也是 &quot;稳定&quot; 的。</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 最好的时间复杂度 O(N)，和冒泡一样，一遍以后发现顺序是对的。</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 最坏的时间复杂度 O(N**2) 也和冒泡一样，全部重排一遍。</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    a = [<span class="number">1</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">2</span>,<span class="number">4</span>,<span class="number">3</span>,<span class="number">8</span>,<span class="number">9</span>,<span class="number">7</span>]</span><br><span class="line">    Bubble_Sort(a)</span><br><span class="line">    <span class="built_in">print</span>(a)</span><br><span class="line">    b = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>,<span class="number">9</span>]</span><br><span class="line">    <span class="comment"># b = [3,1,9,8,28,36,44,35,0,100]</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;\n&#x27;</span>,Bubble_Sort(b))</span><br><span class="line">    <span class="built_in">print</span>(b,<span class="string">&#x27;\n&#x27;</span>)</span><br><span class="line">    c = [<span class="number">3</span>,<span class="number">1</span>,<span class="number">9</span>,<span class="number">8</span>,<span class="number">28</span>,<span class="number">36</span>,<span class="number">44</span>,<span class="number">35</span>,<span class="number">0</span>,<span class="number">100</span>]</span><br><span class="line">    Insert_Sort(c)</span><br><span class="line">    <span class="built_in">print</span>(c)</span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">时间复杂度下界讲解/</span></span><br><span class="line"><span class="string">    &quot;逆序对&quot;inversion：下标i &lt; j,但是 A[i] &gt; A[j],则（i，j）是一对逆序对。</span></span><br><span class="line"><span class="string">    &#123;34,8,64,51,32,21&#125; 中有多少逆序对呢？ I = 9 个。</span></span><br><span class="line"><span class="string">    无论是冒泡还是插入排序，交换次数都是9次，消去了9个逆序对。</span></span><br><span class="line"><span class="string">    插入排序 T(N,I) = O(N+I) 。</span></span><br><span class="line"><span class="string">    如果序列基本有序，则插入排序简单且高效。</span></span><br><span class="line"><span class="string">    </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    定理： </span></span><br><span class="line"><span class="string">        N个不同元素组成的序列，平均有 N(N-1)/4个 逆序对。</span></span><br><span class="line"><span class="string">    定理：</span></span><br><span class="line"><span class="string">        任何仅以交换相邻两个元素来排序的算法，其平均时间复杂度为 Ω(N**2)。</span></span><br><span class="line"><span class="string">        Ω 是时间复杂度下界。   # 最好的情况下T 和平均时间复杂度下界不是一个意思。</span></span><br><span class="line"><span class="string">    </span></span><br><span class="line"><span class="string">    根据以上分析，要提高算法效率，需要一次交换消除尽可能多的逆序对。 </span></span><br><span class="line"><span class="string">        所以我们在接下来的尝试中，跳着交换相隔较远的2个元素。</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br></pre></td></tr></table></figure>
+
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%8E%92%E5%BA%8F/" rel="tag"># 排序</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/46%E5%B8%8C%E5%B0%94%E6%8E%92%E5%BA%8F/" rel="prev" title="46希尔排序">
+                  <i class="fa fa-chevron-left"></i> 46希尔排序
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/47%E9%80%89%E6%8B%A9%E6%8E%92%E5%BA%8F/" rel="next" title="47选择排序">
+                  47选择排序 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">陈宇韶chenyushao</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

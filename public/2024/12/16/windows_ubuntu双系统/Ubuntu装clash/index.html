@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha256-AbA177XfpSnFEvgpYu1jMygiLabzPCJCRIBtR5jGc0k=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.13.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Ubuntu装clash">
+<meta property="og:url" content="http://example.com/2024/12/16/windows_ubuntu%E5%8F%8C%E7%B3%BB%E7%BB%9F/Ubuntu%E8%A3%85clash/index.html">
+<meta property="og:site_name" content="Tiger_pop&#39;s Blog">
+<meta property="og:description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2024/12/16/windows_ubuntu%E5%8F%8C%E7%B3%BB%E7%BB%9F/Ubuntu%E8%A3%85clash/%E6%88%AA%E5%B1%8F2024-12-16%2019.04.22.jpg">
+<meta property="og:image" content="http://example.com/2024/12/16/windows_ubuntu%E5%8F%8C%E7%B3%BB%E7%BB%9F/Ubuntu%E8%A3%85clash/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20241216191308.jpg">
+<meta property="og:image" content="http://example.com/2024/12/16/windows_ubuntu%E5%8F%8C%E7%B3%BB%E7%BB%9F/Ubuntu%E8%A3%85clash/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20241216191357.jpg">
+<meta property="article:published_time" content="2024-12-16T13:09:57.000Z">
+<meta property="article:modified_time" content="2024-12-17T02:27:03.337Z">
+<meta property="article:author" content="陈宇韶chenyushao">
+<meta property="article:tag" content="ubuntu">
+<meta property="article:tag" content="clash">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2024/12/16/windows_ubuntu%E5%8F%8C%E7%B3%BB%E7%BB%9F/Ubuntu%E8%A3%85clash/%E6%88%AA%E5%B1%8F2024-12-16%2019.04.22.jpg">
+
+
+<link rel="canonical" href="http://example.com/2024/12/16/windows_ubuntu%E5%8F%8C%E7%B3%BB%E7%BB%9F/Ubuntu%E8%A3%85clash/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2024/12/16/windows_ubuntu%E5%8F%8C%E7%B3%BB%E7%BB%9F/Ubuntu%E8%A3%85clash/","path":"2024/12/16/windows_ubuntu双系统/Ubuntu装clash/","title":"Ubuntu装clash"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Ubuntu装clash | Tiger_pop's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="Tiger_pop's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Tiger_pop's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">tiger_pop 的博客</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%8B%E8%BD%BD"><span class="nav-number">1.</span> <span class="nav-text">下载</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%89%E8%A3%85"><span class="nav-number">2.</span> <span class="nav-text">安装</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE"><span class="nav-number">3.</span> <span class="nav-text">配置</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9%E7%B3%BB%E7%BB%9F%E4%BB%A3%E7%90%86"><span class="nav-number">4.</span> <span class="nav-text">修改系统代理</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%BF%9B%E5%85%A5%E7%95%8C%E9%9D%A2"><span class="nav-number">5.</span> <span class="nav-text">进入界面</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%AF%E4%BB%A5%E7%A7%91%E5%AD%A6%E4%B8%8A%E7%BD%91%E4%BA%86"><span class="nav-number">6.</span> <span class="nav-text">可以科学上网了</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="陈宇韶chenyushao"
+      src="/images/my.jpg">
+  <p class="site-author-name" itemprop="name">陈宇韶chenyushao</p>
+  <div class="site-description" itemprop="description">爱学习、爱工作、爱生活;         微信号: Tiger_and_master;         手机号码:18515678348 </div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">378</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">24</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">138</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/12/16/windows_ubuntu%E5%8F%8C%E7%B3%BB%E7%BB%9F/Ubuntu%E8%A3%85clash/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/my.jpg">
+      <meta itemprop="name" content="陈宇韶chenyushao">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tiger_pop's Blog">
+      <meta itemprop="description" content="爱学习、爱工作、爱生活;         微信号: Tiger_and_master;         手机号码:18515678348 ">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Ubuntu装clash | Tiger_pop's Blog">
+      <meta itemprop="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Ubuntu装clash
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-12-16 21:09:57" itemprop="dateCreated datePublished" datetime="2024-12-16T21:09:57+08:00">2024-12-16</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-12-17 10:27:03" itemprop="dateModified" datetime="2024-12-17T10:27:03+08:00">2024-12-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/windows-ubuntu%E5%8F%8C%E7%B3%BB%E7%BB%9F/" itemprop="url" rel="index"><span itemprop="name">windows_ubuntu双系统</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+            <div class="post-description">这是文章开头，显示在主页面，详情请点击此处。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>简介 <span id="more"></span></p>
+<h1 id="下载"><a href="#下载" class="headerlink" title="下载"></a>下载</h1><p>Github 上的 clash 官方仓库已经删库跑路，本文介绍的是一个目前可行的解决方案。</p>
+<p>在 <a target="_blank" rel="noopener" href="https://github.com/doreamon-design/clash/releases">https://github.com/doreamon-design/clash/releases</a> 下载与自己系统架构符合的安装包。一般选择 <code>[clash_2.0.24_linux_amd64.tar.gz](https://github.com/doreamon-design/clash/releases/download/v2.0.24/clash_2.0.24_linux_amd64.tar.gz)</code>。</p>
+<h1 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">gzip -d clash_2.0.24_linux_amd64.tar.gz <span class="comment"># 在安装包所在路径解压安装包</span></span><br><span class="line"><span class="built_in">chmod</span> +x clash_2.0.24_linux_amd64.tar.gz <span class="comment"># 给解压后的文件赋予执行权限</span></span><br><span class="line"><span class="built_in">mv</span> clash_2.0.24_linux_amd64 /usr/local/bin/clash <span class="comment"># 移动文件位置</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 一、 把clash_2.0.24_linux_amd64文件夹中 clash执行文件和 license 移动到 /usr/local/bin/clash</span></span><br><span class="line"><span class="comment"># 二、 在bashrc 或者 zshrc 中 把 /usr/local/bin/clash 加入到环境变量路径。</span></span><br><span class="line"><span class="comment"># 三、如果缺少MMDB文件：</span></span><br><span class="line"><span class="comment">#    下载 Country.mmdb 文件： 在另一台可以访问网络的设备上，手动下载 Country.mmdb 文件：</span></span><br><span class="line"><span class="comment">#    URL: https://cdn.jsdelivr.net/gh/Dreamacro/maxmind-geoip@release/Country.mmdb</span></span><br><span class="line"><span class="comment">#    将文件复制到 Clash 的配置目录：  ~/.config/clash/</span></span><br><span class="line"></span><br><span class="line">clash -v <span class="comment"># 查看是否成功安装</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">clash <span class="comment"># 启动 Clash，生成 ~/.config/clash/config.yaml 文件</span></span><br><span class="line"><span class="built_in">cd</span> ~/.config/clash/ <span class="comment"># 进入目录配置文件</span></span><br><span class="line">wget -O config.yaml 订阅地址 <span class="comment"># 把订阅地址的配置文件导入本地配置文件</span></span><br><span class="line"><span class="built_in">echo</span> -e <span class="string">&quot;export http_proxy=http://127.0.0.1:7890\nexport https_proxy=http://127.0.0.1:7890&quot;</span> &gt;&gt; ~/.bashrc <span class="comment"># 配置环境变量</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="修改系统代理"><a href="#修改系统代理" class="headerlink" title="修改系统代理"></a>修改系统代理</h1><p><img src="/2024/12/16/windows_ubuntu%E5%8F%8C%E7%B3%BB%E7%BB%9F/Ubuntu%E8%A3%85clash/%E6%88%AA%E5%B1%8F2024-12-16%2019.04.22.jpg" alt="截屏2024-12-16 19.04.22"></p>
+<h1 id="进入界面"><a href="#进入界面" class="headerlink" title="进入界面"></a>进入界面</h1><p>启动后在打开  <a target="_blank" rel="noopener" href="http://clash.razord.top/#/settings">http://clash.razord.top/#/settings</a>  进入节点管理的 UI 页面。</p>
+<p><img src="/2024/12/16/windows_ubuntu%E5%8F%8C%E7%B3%BB%E7%BB%9F/Ubuntu%E8%A3%85clash/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20241216191308.jpg" alt="微信图片_20241216191308"></p>
+<h1 id="可以科学上网了"><a href="#可以科学上网了" class="headerlink" title="可以科学上网了"></a>可以科学上网了</h1><p><img src="/2024/12/16/windows_ubuntu%E5%8F%8C%E7%B3%BB%E7%BB%9F/Ubuntu%E8%A3%85clash/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20241216191357.jpg" alt="微信图片_20241216191357"></p>
+<p>参考：<a target="_blank" rel="noopener" href="https://eaglebear2002.github.io/%E6%8A%80%E6%9C%AF%E7%A7%91%E6%99%AE/Ubuntu%2022.04%20%E5%AE%89%E8%A3%85%20Clash/">https://eaglebear2002.github.io/%E6%8A%80%E6%9C%AF%E7%A7%91%E6%99%AE/Ubuntu%2022.04%20%E5%AE%89%E8%A3%85%20Clash/</a></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/ubuntu/" rel="tag"># ubuntu</a>
+              <a href="/tags/clash/" rel="tag"># clash</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2024/11/07/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/pytorch%E7%9A%84%E5%A4%9AGPU%E8%AE%AD%E7%BB%83/" rel="prev" title="pytorch的多GPU训练">
+                  <i class="fa fa-chevron-left"></i> pytorch的多GPU训练
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2024/12/25/Linux%E5%AD%A6%E4%B9%A0/CentOS%207%20%E6%9B%B4%E6%96%B0baseurl_for_repo/" rel="next" title="CentOS 7 更新baseurl_for_repo">
+                  CentOS 7 更新baseurl_for_repo <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">陈宇韶chenyushao</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

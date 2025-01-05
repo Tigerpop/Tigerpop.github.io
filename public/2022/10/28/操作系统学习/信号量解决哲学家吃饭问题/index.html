@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha256-AbA177XfpSnFEvgpYu1jMygiLabzPCJCRIBtR5jGc0k=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.13.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="信号量解决哲学家吃饭问题">
+<meta property="og:url" content="http://example.com/2022/10/28/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0/%E4%BF%A1%E5%8F%B7%E9%87%8F%E8%A7%A3%E5%86%B3%E5%93%B2%E5%AD%A6%E5%AE%B6%E5%90%83%E9%A5%AD%E9%97%AE%E9%A2%98/index.html">
+<meta property="og:site_name" content="Tiger_pop&#39;s Blog">
+<meta property="og:description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2022/10/28/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0/%E4%BF%A1%E5%8F%B7%E9%87%8F%E8%A7%A3%E5%86%B3%E5%93%B2%E5%AD%A6%E5%AE%B6%E5%90%83%E9%A5%AD%E9%97%AE%E9%A2%98/%E6%9C%AA%E5%91%BD%E5%90%8D%E6%96%87%E4%BB%B6.png">
+<meta property="article:published_time" content="2022-10-28T12:02:01.000Z">
+<meta property="article:modified_time" content="2022-10-28T12:42:07.845Z">
+<meta property="article:author" content="陈宇韶chenyushao">
+<meta property="article:tag" content="信号量">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2022/10/28/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0/%E4%BF%A1%E5%8F%B7%E9%87%8F%E8%A7%A3%E5%86%B3%E5%93%B2%E5%AD%A6%E5%AE%B6%E5%90%83%E9%A5%AD%E9%97%AE%E9%A2%98/%E6%9C%AA%E5%91%BD%E5%90%8D%E6%96%87%E4%BB%B6.png">
+
+
+<link rel="canonical" href="http://example.com/2022/10/28/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0/%E4%BF%A1%E5%8F%B7%E9%87%8F%E8%A7%A3%E5%86%B3%E5%93%B2%E5%AD%A6%E5%AE%B6%E5%90%83%E9%A5%AD%E9%97%AE%E9%A2%98/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2022/10/28/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0/%E4%BF%A1%E5%8F%B7%E9%87%8F%E8%A7%A3%E5%86%B3%E5%93%B2%E5%AD%A6%E5%AE%B6%E5%90%83%E9%A5%AD%E9%97%AE%E9%A2%98/","path":"2022/10/28/操作系统学习/信号量解决哲学家吃饭问题/","title":"信号量解决哲学家吃饭问题"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>信号量解决哲学家吃饭问题 | Tiger_pop's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="Tiger_pop's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Tiger_pop's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">tiger_pop 的博客</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9C%80%E5%88%9D%E7%BA%A7%E7%9A%84%E6%96%B9%E6%A1%88"><span class="nav-number">1.</span> <span class="nav-text">最初级的方案</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%94%B9%E8%BF%9B%E6%96%B9%E6%A1%88"><span class="nav-number">2.</span> <span class="nav-text">改进方案</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="陈宇韶chenyushao"
+      src="/images/my.jpg">
+  <p class="site-author-name" itemprop="name">陈宇韶chenyushao</p>
+  <div class="site-description" itemprop="description">爱学习、爱工作、爱生活;         微信号: Tiger_and_master;         手机号码:18515678348 </div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">378</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">24</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">138</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/10/28/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0/%E4%BF%A1%E5%8F%B7%E9%87%8F%E8%A7%A3%E5%86%B3%E5%93%B2%E5%AD%A6%E5%AE%B6%E5%90%83%E9%A5%AD%E9%97%AE%E9%A2%98/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/my.jpg">
+      <meta itemprop="name" content="陈宇韶chenyushao">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tiger_pop's Blog">
+      <meta itemprop="description" content="爱学习、爱工作、爱生活;         微信号: Tiger_and_master;         手机号码:18515678348 ">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="信号量解决哲学家吃饭问题 | Tiger_pop's Blog">
+      <meta itemprop="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          信号量解决哲学家吃饭问题
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2022-10-28 20:02:01 / 修改时间：20:42:07" itemprop="dateCreated datePublished" datetime="2022-10-28T20:02:01+08:00">2022-10-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">操作系统学习</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+            <div class="post-description">这是文章开头，显示在主页面，详情请点击此处。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>问题介绍 <span id="more"></span></p>
+<p><img src="/2022/10/28/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0/%E4%BF%A1%E5%8F%B7%E9%87%8F%E8%A7%A3%E5%86%B3%E5%93%B2%E5%AD%A6%E5%AE%B6%E5%90%83%E9%A5%AD%E9%97%AE%E9%A2%98/%E6%9C%AA%E5%91%BD%E5%90%8D%E6%96%87%E4%BB%B6.png" alt="未命名文件"></p>
+<p>前提假设：</p>
+<p>​		一个哲学家吃饭要同时用到左右两个叉子；</p>
+<p>​		哲学家的行为有：吃、思考。</p>
+<p>要求：</p>
+<p>​		合理的安排大家就餐。</p>
+<h1 id="最初级的方案"><a href="#最初级的方案" class="headerlink" title="最初级的方案"></a>最初级的方案</h1><!--more-->
+<p>用一组p()\v()信号量 来实现哲学家吃饭的互斥。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">semaphore mutex</span><br><span class="line"><span class="type">void</span> <span class="title function_">philosopher</span><span class="params">(<span class="type">int</span> i)</span></span><br><span class="line">	<span class="title function_">while</span><span class="params">(TRUE)</span>&#123;</span><br><span class="line">    think();									 <span class="comment">//哲学家思考</span></span><br><span class="line">    P(mutex);     				     <span class="comment">//拿到mutex资源。</span></span><br><span class="line">    	</span><br><span class="line">    	take_fork(i);						 <span class="comment">//拿左边叉子		</span></span><br><span class="line">    	take_fork((i+<span class="number">1</span>)mod N);	 <span class="comment">//拿右边叉子</span></span><br><span class="line">    	eat();									 <span class="comment">// 吃</span></span><br><span class="line">    	put_fork(i);             <span class="comment">//放下左边叉子</span></span><br><span class="line">    	put_fork((i+<span class="number">1</span>) mod N);   <span class="comment">//放下右边叉子</span></span><br><span class="line">    	</span><br><span class="line">    V(mutex);                  <span class="comment">// 释放mutex资源。</span></span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+
+<p>分析：</p>
+<p>​		每个哲学家互斥了，但是每次只允许一个人进餐。而理论上，5个人，可以同时2人吃饭。把就餐人员看成了“必须互斥的临界资源”（而不是叉子），造成了（叉子）资源的浪费。下面改进方案其实就是用一个 “状态”来代替哲学家作为临界资源，而“状态”是包括【哲学家、叉子】信息组合而成的集合体，包括了叉子资源，因此减少了叉子资源的浪费。</p>
+<h1 id="改进方案"><a href="#改进方案" class="headerlink" title="改进方案"></a>改进方案</h1><p>基本思想：</p>
+<p>​		要么不拿，要么拿左右2个叉子。</p>
+<p>​		不浪费CPU时间，进程间相互通信，让5个进程并发执行。</p>
+<p>步骤：</p>
+<p>​		s1 思考</p>
+<p>​		s2 进入饥饿</p>
+<p>​		s3 如果左右邻居都在进餐，进程进入阻塞状态，否则 s4。</p>
+<p>​		s4 拿起左右两个叉子</p>
+<p>​		s5 eating</p>
+<p>​		s6 放下左边的叉子，看看左边的邻居能否就餐，若能就唤醒</p>
+<p>​		s7 放下右边的叉子，看看右边的邻居能否就餐，若能就唤醒</p>
+<p>​		s8 回到 s1</p>
+<p>程序设计：</p>
+<p>​		1、因为哲学家有吃和思考两种行为，而吃有约束条件思考没有，所以哲学家一定有3种状态——吃、饥饿、思考。</p>
+<p>​		2、用数据结构描述哲学家当前状态。</p>
+<p>​		3、把 状态 视为临界资源，哲学家对它的访问需要  ”互斥“ 。</p>
+<p>​		4、一个人吃饱后，需要唤醒其左右他人，相邻的人之间存在  ”同步”  关系。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">N = <span class="number">5</span>   <span class="comment">//5个哲学家</span></span><br><span class="line">LEFT = （i<span class="number">-1</span>) mod N  <span class="comment">// 第i个哲学家左邻居</span></span><br><span class="line">RIGHT = (i+<span class="number">1</span>) mod N  <span class="comment">// 第i个哲学家右邻居</span></span><br><span class="line">THINKING = <span class="number">0</span>         <span class="comment">// 枚举 制定 的三种状态</span></span><br><span class="line">HUNGRY = <span class="number">1</span></span><br><span class="line">EATING = <span class="number">2</span></span><br><span class="line"><span class="type">int</span> state[N]         <span class="comment">// 记录每一个人的状态</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// “状态” 是一种 临界资源，对其访问需要互斥，设定一个相应的信号量实现 互斥 功能。</span></span><br><span class="line">mutex = <span class="number">1</span></span><br><span class="line">semaphore mutex;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 一个哲学家吃饱后，有可能 唤醒 邻居，存在着同步关系，用一个信号量实现 同步唤醒 功能。</span></span><br><span class="line">s[i] = <span class="number">0</span></span><br><span class="line">semaphore s[N];</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">philosopher</span><span class="params">(<span class="type">int</span> i)</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="keyword">while</span>(TRUE)</span><br><span class="line">  &#123;</span><br><span class="line">    think(i);</span><br><span class="line">    take_forks(i);          <span class="comment">//拿两把叉子或者阻塞</span></span><br><span class="line">    eat();</span><br><span class="line">    put_forks(i);					  <span class="comment">//放回两把叉子，试着唤醒邻居。</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">take_forks</span><span class="params">(<span class="type">int</span> i)</span>           <span class="comment">//第i个哲学家</span></span><br><span class="line">&#123;</span><br><span class="line">  P(mutex);											 <span class="comment">//获取临界区资源</span></span><br><span class="line">  state[i] = HUNGRY;             <span class="comment">//饿了</span></span><br><span class="line">  test_take_left_right_forks(i); <span class="comment">//测试能否吃饭。</span></span><br><span class="line">  V(mutex);											 <span class="comment">//释放临界区资源</span></span><br><span class="line">  </span><br><span class="line">  P(s[i]);											 <span class="comment">// 测试不通过，第一次就阻塞。</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 因为state和 test_take_left_right_forks都可能改变 state的状态，所以都被mutex 包在了互斥 空间内。</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">test_take_left_right_forks</span><span class="params">(<span class="type">int</span> i)</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="keyword">if</span>(state[i]==HUNGRY &amp;&amp; state[LEFT]!=EATING &amp;&amp; state[RIGHT]!=EATING)      <span class="comment">// i自己饿了，而左右邻居都没在吃。</span></span><br><span class="line">  &#123;</span><br><span class="line">    state[i] = EATING;     <span class="comment">//满足吃饭条件，状态。</span></span><br><span class="line">    V(s[i]);							 <span class="comment">//发出信号，让自己通过阻塞。自我唤醒 take_forks 下的P(s[i]) 通过。</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">put_forks</span><span class="params">(<span class="type">int</span> i)</span></span><br><span class="line">&#123;</span><br><span class="line">  p(mutex)												<span class="comment">// 进入临界区，保护住可能修改state变量的代码区。</span></span><br><span class="line">  state[i] = THINKING;    				<span class="comment">//吃完了，进入思考时间</span></span><br><span class="line">  test_take_left_right_forks(LEFT);  <span class="comment">//测试左邻居能否吃饭</span></span><br><span class="line">  test_take_left_right_forks(RIGHT); <span class="comment">//测试右邻居能否吃饭 </span></span><br><span class="line">  V(mutex)												<span class="comment">// 退出临界区</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">think</span><span class="params">(<span class="type">int</span> i)</span></span><br><span class="line">&#123;</span><br><span class="line">  P(mutex)                <span class="comment">// 因为有state变量的修改，所以用mutex保护起来。</span></span><br><span class="line">    state[i] = THINKING;</span><br><span class="line">  V(mutex)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>以上用信号量实现了5个进程并发执行，可以2个进程一起执行。不会死锁。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E4%BF%A1%E5%8F%B7%E9%87%8F/" rel="tag"># 信号量</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/10/28/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0/%E7%AE%A1%E7%A8%8B%E5%AE%9E%E7%8E%B0%E8%AF%BB%E8%80%85%E4%BC%98%E5%85%88and%E5%86%99%E8%80%85%E4%BC%98%E5%85%88/" rel="prev" title="管程实现读者优先and写者优先">
+                  <i class="fa fa-chevron-left"></i> 管程实现读者优先and写者优先
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2022/10/28/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0/c%E8%AF%AD%E8%A8%80/" rel="next" title="c语言">
+                  c语言 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">陈宇韶chenyushao</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>
