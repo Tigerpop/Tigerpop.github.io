@@ -46,7 +46,7 @@
 <meta property="og:image" content="http://example.com/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/12-ETH%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/%E6%88%AA%E5%B1%8F2024-12-25%2022.00.23.png">
 <meta property="og:image" content="http://example.com/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/12-ETH%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/%E6%88%AA%E5%B1%8F2024-12-25%2022.07.15.png">
 <meta property="article:published_time" content="2025-01-10T13:12:12.000Z">
-<meta property="article:modified_time" content="2025-01-29T14:52:26.495Z">
+<meta property="article:modified_time" content="2025-02-03T10:45:44.302Z">
 <meta property="article:author" content="陈宇韶chenyushao">
 <meta property="article:tag" content="eth">
 <meta name="twitter:card" content="summary">
@@ -239,7 +239,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-01-29 22:52:26" itemprop="dateModified" datetime="2025-01-29T22:52:26+08:00">2025-01-29</time>
+      <time title="修改时间：2025-02-03 18:45:44" itemprop="dateModified" datetime="2025-02-03T18:45:44+08:00">2025-02-03</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -290,7 +290,7 @@
 <p>上面图片的例子中只有一个结点 的值 ，从29变成 45，这就是上图表达的意思；</p>
 <p>对于全结点而言，每新建一个block ，就需要在本地维护一个新的 merkle Patricia tree，只不过大部分结点是重复利用上的。</p>
 <h2 id="回滚困境"><a href="#回滚困境" class="headerlink" title="回滚困境"></a>回滚困境</h2><p><img src="/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/12-ETH%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/%E6%88%AA%E5%B1%8F2024-12-23%2021.03.03.png" alt="截屏2024-12-23 21.03.03"></p>
-<p>淘汰掉的一条链，想要直接回滚是不可能的，因为eth 中有智能合约，只能合约 可能非常复杂，合约执行完之后想要回滚实现不了。</p>
+<p>淘汰掉的一条链，想要直接回滚是不可能的，因为eth 中有智能合约，智能合约 可能非常复杂，合约执行完之后想要回滚实现不了。</p>
 <p>所以想要回滚必须要 保存历史状态；</p>
 <h2 id="header-块结构"><a href="#header-块结构" class="headerlink" title="header 块结构"></a>header 块结构</h2><p><img src="/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/12-ETH%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/%E6%88%AA%E5%B1%8F2024-12-23%2021.09.15.png" alt="截屏2024-12-23 21.09.15"></p>
 <p>前一个 block header的 hash 值；</p>
