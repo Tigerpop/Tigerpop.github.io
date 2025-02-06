@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2025-02-05T14:45:57.974Z</updated>
+  <updated>2025-02-06T10:06:18.020Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,69 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>21-总结</title>
+    <link href="http://example.com/2025/02/06/%E5%8C%BA%E5%9D%97%E9%93%BE/21-%E6%80%BB%E7%BB%93/"/>
+    <id>http://example.com/2025/02/06/%E5%8C%BA%E5%9D%97%E9%93%BE/21-%E6%80%BB%E7%BB%93/</id>
+    <published>2025-02-06T14:17:12.000Z</published>
+    <updated>2025-02-06T10:06:18.020Z</updated>
+    
+    <content type="html"><![CDATA[<p>简介 <span id="more"></span></p><h1 id="区块链的应用问题"><a href="#区块链的应用问题" class="headerlink" title="区块链的应用问题"></a>区块链的应用问题</h1><p>有人说放保险，可以理赔快，但是实际上 是卡在了 理赔确认这一步上，区块链并没有优势；</p><p>有人说放 蔬菜溯源 上，利用区块链的不可篡改性，但是实际上 在进入区块链之前就被改过的话，标签就打错了，区块链也解决不了这样的问题；</p><p>区块链用于在互不信任的实体之间达成共识。</p><p>一个成功的商业模式中，中心化和去中心化 是可以同时存在的，比如 一个商店支持区块链币种支付，哈哈。</p><p>跨国交易 对区块链来说 确实是非常方便。但是一般的支付手段 区块链由于能耗高并无优势。</p><p>区块链对于价值交换比较在行，如果是价值交换信息交换同步进行的互联网，区块链可能有用武之地。</p><p>2018年的课程 说当时币价太高了，2025年看搞得心里拔凉拔凉的，哈哈。</p>]]></content>
+    
+    
+    <summary type="html">这是文章开头，显示在主页面，详情请点击此处。</summary>
+    
+    
+    
+    <category term="区块链" scheme="http://example.com/categories/%E5%8C%BA%E5%9D%97%E9%93%BE/"/>
+    
+    
+    <category term="eth" scheme="http://example.com/tags/eth/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>20-美链</title>
+    <link href="http://example.com/2025/02/06/%E5%8C%BA%E5%9D%97%E9%93%BE/20-%E7%BE%8E%E9%93%BE/"/>
+    <id>http://example.com/2025/02/06/%E5%8C%BA%E5%9D%97%E9%93%BE/20-%E7%BE%8E%E9%93%BE/</id>
+    <published>2025-02-06T04:19:11.000Z</published>
+    <updated>2025-02-06T10:09:35.896Z</updated>
+    
+    <content type="html"><![CDATA[<p>简介 <span id="more"></span></p><p>首次公开发行</p><p><img src="/2025/02/06/%E5%8C%BA%E5%9D%97%E9%93%BE/20-%E7%BE%8E%E9%93%BE/Screenshot%202025-02-06%20at%204.57.01%E2%80%AFPM.png" alt="Screenshot 2025-02-06 at 4.57.01 PM"></p><p>首次代币发行</p><p><img src="/2025/02/06/%E5%8C%BA%E5%9D%97%E9%93%BE/20-%E7%BE%8E%E9%93%BE/Screenshot%202025-02-06%20at%204.57.25%E2%80%AFPM.png" alt="Screenshot 2025-02-06 at 4.57.25 PM"></p><h1 id="发行代币"><a href="#发行代币" class="headerlink" title="发行代币"></a>发行代币</h1><p>eth 的代币发行实际上没有一个这样代币的一个链，只不过是以 智能合约的形式运行在 EVM 中。</p><p>发行这个代币的智能合约对应 eth 中状态树的一个节点；</p><p>这个节点有自己的账户余额，也就是这个智能合约一共有多少个 eth；</p><p>这个合约中每一个账户有多少代币，作为存储树中的变量，存储在智能合约的账户中；</p><p>代币的 转帐 产生 销毁 都是 通过合约中的函数来实现的；</p><p>而不需要想 eth 、btc 一样通过 minering 来维护一个基础链；</p><p>代币和 eth 的兑换规则可以由发行人自己定义在 合约中；</p><h1 id="美链的事故案例"><a href="#美链的事故案例" class="headerlink" title="美链的事故案例"></a>美链的事故案例</h1><p>DPOS（Delegated Proof of Stake，委托权益证明）</p><p>有的 币 在还没有上线之前也只是 eth 中的一个代币，上线之后就 拥有了自己的基础链 来和 eth链竞争。（叛徒哈哈）</p><p><img src="/2025/02/06/%E5%8C%BA%E5%9D%97%E9%93%BE/20-%E7%BE%8E%E9%93%BE/Screenshot%202025-02-06%20at%205.19.14%E2%80%AFPM.png" alt="Screenshot 2025-02-06 at 5.19.14 PM"></p><p><img src="/2025/02/06/%E5%8C%BA%E5%9D%97%E9%93%BE/20-%E7%BE%8E%E9%93%BE/Screenshot%202025-02-06%20at%205.12.26%E2%80%AFPM.png" alt="Screenshot 2025-02-06 at 5.12.26 PM"></p><p>batch Transfer 函数如下</p><p><img src="/2025/02/06/%E5%8C%BA%E5%9D%97%E9%93%BE/20-%E7%BE%8E%E9%93%BE/Screenshot%202025-02-06%20at%205.20.09%E2%80%AFPM.png" alt="Screenshot 2025-02-06 at 5.20.09 PM"></p><p>问题所在</p><p><img src="/2025/02/06/%E5%8C%BA%E5%9D%97%E9%93%BE/20-%E7%BE%8E%E9%93%BE/Screenshot%202025-02-06%20at%205.23.45%E2%80%AFPM.png" alt="Screenshot 2025-02-06 at 5.23.45 PM"></p><p>红框中乘法可能溢出 导致酸楚的amount 总的转出数变成一个很小的数字，sub扣除就扣了一个很小的数，但是add 给每一个收款人却转的还是哪个 比较大的 原始 _value 数值。导致了 整个代币越转越多。</p><p><img src="/2025/02/06/%E5%8C%BA%E5%9D%97%E9%93%BE/20-%E7%BE%8E%E9%93%BE/Screenshot%202025-02-06%20at%205.27.56%E2%80%AFPM.png" alt="Screenshot 2025-02-06 at 5.27.56 PM"></p><p><img src="/2025/02/06/%E5%8C%BA%E5%9D%97%E9%93%BE/20-%E7%BE%8E%E9%93%BE/Screenshot%202025-02-06%20at%205.30.07%E2%80%AFPM.png" alt="Screenshot 2025-02-06 at 5.30.07 PM"></p><p>可以看到 add 、sub 都是调用了 safemath 中的库函数，但是出问题的地方 直接用的 * 乘法。</p>]]></content>
+    
+    
+    <summary type="html">这是文章开头，显示在主页面，详情请点击此处。</summary>
+    
+    
+    
+    <category term="区块链" scheme="http://example.com/categories/%E5%8C%BA%E5%9D%97%E9%93%BE/"/>
+    
+    
+    <category term="eth" scheme="http://example.com/tags/eth/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>19-eth反思</title>
+    <link href="http://example.com/2025/02/06/%E5%8C%BA%E5%9D%97%E9%93%BE/19-eth%E5%8F%8D%E6%80%9D/"/>
+    <id>http://example.com/2025/02/06/%E5%8C%BA%E5%9D%97%E9%93%BE/19-eth%E5%8F%8D%E6%80%9D/</id>
+    <published>2025-02-06T01:11:12.000Z</published>
+    <updated>2025-02-06T10:07:15.909Z</updated>
+    
+    <content type="html"><![CDATA[<p>简介 <span id="more"></span></p><h1 id="不智能"><a href="#不智能" class="headerlink" title="不智能"></a>不智能</h1><p>智能合约 其实 只是个自动化的合约而已，和智能不搭边。</p><p>一旦发现 漏洞 理论上 智能硬分叉解决，成本太高，而加补救规则 会导致 软分叉。</p><h1 id="实际可改"><a href="#实际可改" class="headerlink" title="实际可改"></a>实际可改</h1><p>但是 事实上 没有什么是真的完全不可改的。</p><p>智能合约是理论上不可改而已。</p><h1 id="solidity易被攻击"><a href="#solidity易被攻击" class="headerlink" title="solidity易被攻击"></a>solidity易被攻击</h1><p>表达能力强的语言，执行起来 可能出现 漏洞。</p><p>以后会被标准化库来搞。</p><h1 id="开源但是并没有变安全"><a href="#开源但是并没有变安全" class="headerlink" title="开源但是并没有变安全"></a>开源但是并没有变安全</h1><p>开源 大家也没有检查合约，导致了安全问题没被改善。</p><h1 id="decentralized"><a href="#decentralized" class="headerlink" title="decentralized"></a>decentralized</h1><p>以太坊团队 在dao中 硬分叉的例子也没有真的 实现 中心化，事实上还是 大部分 miner 感觉他们有号召力又符合自己的利益才用实际挖矿来支持的。</p><p>存在 分叉的选择 就是 民主的体现。</p><p>decentralized 不等于 distribute！</p><p>分布式可以运行 中心化的应用。</p><h1 id="适用场景"><a href="#适用场景" class="headerlink" title="适用场景"></a>适用场景</h1><p>state machine 状态机 的目的 是容错，而不是加速。</p><p>EMV 如果当分布式存储来看 开销就太大了gas费用，emv 适用的 是控制场景！</p><p>建立共识用的，控制用的，而不是 用于计算。</p>]]></content>
+    
+    
+    <summary type="html">这是文章开头，显示在主页面，详情请点击此处。</summary>
+    
+    
+    
+    <category term="区块链" scheme="http://example.com/categories/%E5%8C%BA%E5%9D%97%E9%93%BE/"/>
+    
+    
+    <category term="eth" scheme="http://example.com/tags/eth/"/>
+    
+  </entry>
   
   <entry>
     <title>18-the-DAO失败案例</title>
@@ -372,69 +435,6 @@
     <updated>2025-01-29T14:52:26.564Z</updated>
     
     <content type="html"><![CDATA[<p>简介 <span id="more"></span></p><p>bitcoin 中的结点是平等的。</p><p><img src="/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/3.1-btc%E7%BD%91%E7%BB%9C/%E6%88%AA%E5%B1%8F2024-11-18%2023.01.38.png" alt="截屏2024-11-18 23.01.38"></p><h1 id="简单-鲁棒robust-不高效"><a href="#简单-鲁棒robust-不高效" class="headerlink" title="简单 鲁棒robust 不高效"></a>简单 鲁棒robust 不高效</h1><p><strong>btc系统中要维护一个 “等待” 上链的交易的集合</strong></p><p>第一次听说某个交易的时候，把它加入这个集合，并转发给邻居结点，以后再收到这个交易的时候就不用转发了，</p><p>越大的区块 在 网络上传播的速度就越慢，</p><p><strong>btc协议对区块大小限制在1M大小内</strong>，因为btc网络的传播方式 非常消耗带宽，一个 1M大小的区块 可能要几十秒才能传播到 网络上的大多数结点。<img src="/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/3.1-btc%E7%BD%91%E7%BB%9C/%E6%88%AA%E5%B1%8F2024-11-18%2023.17.06.png" alt="截屏2024-11-18 23.17.06"></p><h1 id="best-effect"><a href="#best-effect" class="headerlink" title="best effect"></a>best effect</h1><p>一个交易发布到bct 网络中，不一定要所有结点 都收到消息，不同结点收到这个消息的顺序也不是一样的。</p>]]></content>
-    
-    
-    <summary type="html">这是文章开头，显示在主页面，详情请点击此处。</summary>
-    
-    
-    
-    <category term="区块链" scheme="http://example.com/categories/%E5%8C%BA%E5%9D%97%E9%93%BE/"/>
-    
-    
-    <category term="btc" scheme="http://example.com/tags/btc/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>3-BTC实现</title>
-    <link href="http://example.com/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/3-BTC%E5%AE%9E%E7%8E%B0/"/>
-    <id>http://example.com/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/3-BTC%E5%AE%9E%E7%8E%B0/</id>
-    <published>2025-01-10T13:06:10.000Z</published>
-    <updated>2025-01-29T14:52:26.553Z</updated>
-    
-    <content type="html"><![CDATA[<p>简介 <span id="more"></span></p><h1 id="transaction-based-ledger-基于交易的账簿。"><a href="#transaction-based-ledger-基于交易的账簿。" class="headerlink" title="transaction- based  ledger 基于交易的账簿。"></a><strong>transaction- based  ledger</strong> 基于交易的账簿。</h1><h2 id="UTXO-："><a href="#UTXO-：" class="headerlink" title="UTXO ："></a><strong>UTXO</strong> ：</h2><p>Unspent Transaction Output。 还没有花掉的交易的 输出 的集合。</p><p>同一笔交易可能有的输出在 UTXO里面有的不在里面（花掉了），UTXO中的每一个元素要给出 产生这个元素的hash 值，以及它在这个交易里 是第几个输出，就可以定位到这个UTXO中的输出。</p><p>UTXO 用于交易前检测 这个钱是不是没有被花掉，每一个 full block 都要维护 UTXO。</p><h2 id="transaction-free"><a href="#transaction-free" class="headerlink" title="transaction free"></a>transaction free</h2><p>我们之前说过抢到了记账权 会有一个 block reward，但是 他凭什么给你记账呢？而不去选自己喜欢的人加入 这个区块的账簿中呢？这里就涉及到我们说的交易费用。</p><p><img src="/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/3-BTC%E5%AE%9E%E7%8E%B0/%E6%88%AA%E5%B1%8F2024-11-13%2021.41.15.png" alt="截屏2024-11-13 21.41.15"></p><h2 id="每隔21万个区块减半"><a href="#每隔21万个区块减半" class="headerlink" title="每隔21万个区块减半"></a>每隔21万个区块减半</h2><p>btc 设计的每隔10分钟会有一个新的区块产生。</p><p>设计了 <strong>每隔21万个区块，就要减半一次。所以大约4年一次减半</strong>。</p><p><img src="/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/3-BTC%E5%AE%9E%E7%8E%B0/%E6%88%AA%E5%B1%8F2024-11-13%2021.47.57.png" alt="截屏2024-11-13 21.47.57"></p><h2 id="account-based-ledger-基于账户的账簿"><a href="#account-based-ledger-基于账户的账簿" class="headerlink" title="account-based ledger 基于账户的账簿"></a>account-based ledger 基于账户的账簿</h2><h1 id="block介绍"><a href="#block介绍" class="headerlink" title="block介绍"></a>block介绍</h1><p><img src="/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/3-BTC%E5%AE%9E%E7%8E%B0/%E6%88%AA%E5%B1%8F2024-11-13%2021.53.10.png" alt="截屏2024-11-13 21.53.10"></p><blockquote><p>上面的例子解释一下：</p><p>（左）</p><p>这个区块中包括 686 个交易</p><p>总输出 XXX 个btc</p><p>总交易费</p><p>height 是区块的高度也就是 区块的序号；</p><p>时间戳</p><p>挖矿难度（每隔2016个block调整一次难度，为了保证出块时间在 10分钟左右。）</p><p>nonce 随机数，这个是最后找到的符合难度要求的 nonce；</p><p>出块奖励</p><p>（右）</p><p>区块的头的 hash 值； 调整 nonce 让 H(block header) &lt;&#x3D; target ，成立的这个hash值。</p><p>前一个区块的头的 hash 值；</p><p>merkle root ，前面说过的，它来验证 交易是否在 block body 中。</p></blockquote><h2 id="block-header"><a href="#block-header" class="headerlink" title="block header"></a>block header</h2><p><img src="/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/3-BTC%E5%AE%9E%E7%8E%B0/%E6%88%AA%E5%B1%8F2024-11-13%2022.08.40.png" alt="截屏2024-11-13 22.08.40"></p><p>这个随机数，是一个32位的无符号整数。</p><p>由于 miner 太多，32位的无符号整数即便是遍历完 也无法满足 提高target难度的要求，要给出更多的空间去给miner 去算，我们看看 block header 的内容。</p><p><img src="/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/3-BTC%E5%AE%9E%E7%8E%B0/%E6%88%AA%E5%B1%8F2024-11-13%2022.11.58.png" alt="截屏2024-11-13 22.11.58"></p><p>看看还有哪些内容是可以变的。</p><p> 其中 merkle根hash 值 改的比较多。</p><h2 id="coinbase-transaction（铸币交易）"><a href="#coinbase-transaction（铸币交易）" class="headerlink" title="coinbase transaction（铸币交易）"></a>coinbase transaction（铸币交易）</h2><p>每一个 发布的 block 中 有一个 <strong>铸币交易（coinbase transaction）</strong>，btc 产生新的币的唯一方式；<img src="/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/3-BTC%E5%AE%9E%E7%8E%B0/%E6%88%AA%E5%B1%8F2024-11-17%2021.54.50.png" alt="截屏2024-11-17 21.54.50"></p><p>我们可以看见 coinbase transaction 是没有输入的，属于 凭空创造；CoinBase 内写入任何内容是没有人管的，我们改变其中的值，逐层做hash 最终会影响到 root 的hash 值；如下图所示：</p><p><img src="/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/3-BTC%E5%AE%9E%E7%8E%B0/%E6%88%AA%E5%B1%8F2024-11-17%2022.01.10.png" alt="截屏2024-11-17 22.01.10"></p><p>由此可知 我们可以把 coinbase transaction的域 单做 随机数 nonce ，来弥补block header 中 nonce 只有4字节也就是32位的缺点，例如将 其前8个字节 当 nonce随机数用；</p><p>正式的挖矿中一般就是两层循环，一层循环nonce 一层循环coinbase 域 的随机数位 ；</p><h2 id="transaction"><a href="#transaction" class="headerlink" title="transaction"></a>transaction</h2><p><img src="/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/3-BTC%E5%AE%9E%E7%8E%B0/%E6%88%AA%E5%B1%8F2024-11-17%2022.15.54.png" alt="截屏2024-11-17 22.15.54"></p><p>一个普通的交易，output 是之前的哪个交易的output 不是这个交易的output，下方有输入脚本和输出脚本，</p><p><img src="/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/3-BTC%E5%AE%9E%E7%8E%B0/%E6%88%AA%E5%B1%8F2024-11-17%2022.21.23.png" alt="截屏2024-11-17 22.21.23"></p><p><strong>将这个交易中的  Input Scripts 和 前一个提供币的来源的交易的 Output Scripts 配对，如果这两个脚本拼接在一起能够顺利的执行，那这个交易就是合法的。</strong></p><h2 id="hash-puzzles（求解）"><a href="#hash-puzzles（求解）" class="headerlink" title="hash puzzles（求解）"></a>hash puzzles（求解）</h2><p><img src="/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/3-BTC%E5%AE%9E%E7%8E%B0/%E6%88%AA%E5%B1%8F2024-11-17%2022.30.56.png" alt="截屏2024-11-17 22.30.56"></p><p>上面 H hash 仅仅是对 block header 求hash ，tx 内容并不直接 hash 而是间接汇总到 merkle root hash 值里，在 block header 中 影响到 hash 过程。</p><h2 id="出块"><a href="#出块" class="headerlink" title="出块"></a>出块</h2><p><img src="/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/3-BTC%E5%AE%9E%E7%8E%B0/%E6%88%AA%E5%B1%8F2024-11-17%2022.40.08.png" alt="截屏2024-11-17 22.40.08"></p><p>伯努利二项分布 独立随机，实验的次数很多成功的概率很低，可以用柏松分布 。<strong>概率密度随着出块时间降低，服从指数分布</strong>；</p><p><strong>已经挖了十分钟如果还没哟挖到，将来还要挖多久才能 挖到的概率不会变化。progress free\memoryless<img src="/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/3-BTC%E5%AE%9E%E7%8E%B0/%E6%88%AA%E5%B1%8F2024-11-17%2023.04.17.png" alt="截屏2024-11-17 23.04.17"></strong></p><blockquote><p>总共约 2100万个btc</p></blockquote><h2 id="链上信息确认"><a href="#链上信息确认" class="headerlink" title="链上信息确认"></a>链上信息确认</h2><p><img src="/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/3-BTC%E5%AE%9E%E7%8E%B0/%E6%88%AA%E5%B1%8F2024-11-17%2023.21.07.png" alt="截屏2024-11-17 23.21.07"></p><p>上图说的是 获得记账权的 M结点恶意，想要把给A的币 又转一份一样的给自己，最后，让自己 M&gt;M&#96; 的链变成长链，从而让 M&gt;A 的链被回滚掉，因为 M&gt;A 的交易中可能伴随着 实物或者其他不可撤回的交易已经到手，所以M就能白嫖到 这个 M&gt;A 的交易中伴随着的不可撤回交易物；</p><p>上图是一个失败的 M 恶意结点操作， 6个区块（约一小时）后会认定6个区块前的链为不可篡改链。</p><p>当然 ，M&gt;A 后 再 M&gt;M&#96; 伴随着非法的 双花交易，UTXO中无记录，别的诚实结点不会承认这笔交易；</p><h2 id="selfish-mining"><a href="#selfish-mining" class="headerlink" title="selfish mining"></a>selfish mining</h2><p>挖到了记账权以后 偷偷藏起来，等于自己偷偷藏了好多个区块，藏了一条链，上图中的 M&gt;A 和M&gt;M&#96; 竞争的时候，突然打出一串链，抢到主链，实现 前面说的  赚到 不可撤回物品的目的；</p><p>或者干脆就是 抢主链 赚交易费；</p><blockquote><p>以上的做法有个前提条件，就是你的算力在 这里面要有非常大的比重，最好51%以上，即便这样也是按照概率看的，也可能selfish mining 失败。</p></blockquote>]]></content>
-    
-    
-    <summary type="html">这是文章开头，显示在主页面，详情请点击此处。</summary>
-    
-    
-    
-    <category term="区块链" scheme="http://example.com/categories/%E5%8C%BA%E5%9D%97%E9%93%BE/"/>
-    
-    
-    <category term="btc" scheme="http://example.com/tags/btc/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>1-bct数据结构</title>
-    <link href="http://example.com/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/1-bct%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/"/>
-    <id>http://example.com/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/1-bct%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/</id>
-    <published>2025-01-10T13:05:10.000Z</published>
-    <updated>2025-01-29T14:52:26.487Z</updated>
-    
-    <content type="html"><![CDATA[<p>简介 <span id="more"></span></p><h1 id="hash指针"><a href="#hash指针" class="headerlink" title="hash指针"></a>hash指针</h1><p><strong>一般的指针</strong>：存放的是 结构体在 内存中的起始位置；</p><p><strong>hash 指针</strong>：除了存放结构体在 内存中的起始位置，还需要 存结构体的hash 值，以保证不被篡改。</p><p><strong>Genesis block</strong> ：起源块</p><p>每一个区块都包括了指向前一个区块的指针。</p><p><img src="/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/1-bct%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/%E6%88%AA%E5%B1%8F2024-11-12%2007.25.03.png" alt="截屏2024-11-12 07.25.03"></p><p>最后一个 H() 哈希值 在系统中，这样结构。</p><p>每一个 H() 都是由前一个 区块的全部内容 算出来的 哈希值，包括 前一个区块中存放的前前一个区块的 H 哈希值。因此 我一个区块的改动就会导致 后面每一个 H 值发生改变，因此，我只需要保存最后一个 H 值，就能保证前面的值 都是没有被改变的。</p><p>很多时候，我们只保留最近几个区块，如果要用到前面的区块的内容的话，就找前面的人要，给我们以后去算一算，确认一下有没有被篡改。</p><h1 id="full-node、light-node"><a href="#full-node、light-node" class="headerlink" title="full node、light node"></a>full node、light node</h1><p>btc链 中的结点 分 <strong>轻结点</strong>（仅仅保存 block header） <strong>全结点</strong>（保留block header和block body）；</p><p>钱包大部分都是轻结点。</p><h1 id="merkle-tree"><a href="#merkle-tree" class="headerlink" title="merkle tree"></a>merkle tree</h1><p><img src="/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/1-bct%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/%E6%88%AA%E5%B1%8F2024-11-12%2007.37.05.png" alt="截屏2024-11-12 07.37.05"></p><p>叶子结点保存 data数据，上面的结点 都是 保存 H 值用的。</p><blockquote><p>每一个 data 其实是一个交易。</p></blockquote><p>hash树是一个区块的组成部分。区块分头和体。</p><p>block header：  root hash 存这里面</p><p>block body： 包括交易列表</p><p>merkle tree 用来提供 merkle proof </p><p>一个转钱的例子，你说已经把前转给我了，我只有手机上的 轻结点，我如何知道 你的操作是不是已经写入了链中？这就是  merkle proof  的过程。</p><h1 id="merkle-proof-："><a href="#merkle-proof-：" class="headerlink" title="**merkle proof ** ："></a>**merkle proof ** ：</h1><p><strong>proof of membership、proof of inclusion</strong></p><p>最上面蓝色的表示一个 简单的区块链。这里展开了体现了一个 区块中的一个 merkle tree。</p><p>我们的轻结点要 检验 标黄的 tx 这一笔交易是不是包含在了这个merkle tree 中。</p><p>轻结点是没有保存 merkle tree 的具体内容的，只保存了这个 root hash 值。</p><p>轻结点向某个全结点发出请求，全结点就发出 几个红色的 H 给 轻结点，有了这几个红色的H以后，轻结点就能在本地计算出 绿色的几个H值，我们可以看出来，有一红一绿两个H，就又能把上一级的H算出来，拿着上一级的绿色的H，配合上一级的红色 又能算出上上级的 绿色H… 把最后算出的 红绿H 和轻结点手中的 红绿H对比，就可以验证 黄色tx 这笔交易了。 </p><p><img src="/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/1-bct%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/%E6%88%AA%E5%B1%8F2024-11-12%2008.15.03.png" alt="截屏2024-11-12 08.15.03"></p><blockquote><p>如想要 通过 篡改 红色H ，来 实现 被篡改的黄色 tx 的配平，来让上上级的绿色H保持正确，是不可行的，因为认为调整 红色H来达到某一个值，属于认为制造 hash 碰撞，和我们在 区块链的密码学原理中说到的 collision resistance 与 hiding 性质相矛盾，所以无法实现。</p></blockquote><h2 id="proof-of-membership"><a href="#proof-of-membership" class="headerlink" title="proof of membership"></a>proof of membership</h2><p>因为是二叉树，所以，证明 tx 在里面 ，从下往上算 hash，一步一步对比，和二分法从上往下的算位置的路径是一样的。所以时间复杂度就是 二方法的 O(logN)。</p><h2 id="proof-of-non-membership"><a href="#proof-of-non-membership" class="headerlink" title="proof of non-membership"></a>proof of non-membership</h2><p>为了证明 tx 不在 tree 中，只能一步一步算每一个tx看看在不在里面。时间复杂度 O(N)，当然了，如果 tx 是排序好的，那时间复杂度自然可以低很多达到 O(logN)。</p><blockquote><p>btc 不要求做这样的不存在证明，所以tx实际上是没哟排序的。</p></blockquote><p>只要是无环的数据结构，都可以用hash指针来代替 普通指针。</p><p>每一个指针依赖前一个区块定下来，有环的话，会出现循环依赖。</p>]]></content>
-    
-    
-    <summary type="html">这是文章开头，显示在主页面，详情请点击此处。</summary>
-    
-    
-    
-    <category term="区块链" scheme="http://example.com/categories/%E5%8C%BA%E5%9D%97%E9%93%BE/"/>
-    
-    
-    <category term="btc" scheme="http://example.com/tags/btc/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>2-BTC协议</title>
-    <link href="http://example.com/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/2-BTC%E5%8D%8F%E8%AE%AE/"/>
-    <id>http://example.com/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/2-BTC%E5%8D%8F%E8%AE%AE/</id>
-    <published>2025-01-10T13:05:10.000Z</published>
-    <updated>2025-01-29T14:52:26.550Z</updated>
-    
-    <content type="html"><![CDATA[<p>简介 <span id="more"></span></p><h1 id="一个小型区块链"><a href="#一个小型区块链" class="headerlink" title="一个小型区块链"></a>一个小型区块链</h1><p><img src="/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/2-BTC%E5%8D%8F%E8%AE%AE/%E6%88%AA%E5%B1%8F2024-11-12%2020.37.55.png" alt="截屏2024-11-12 20.37.55"></p><p>两种 hash 指针，一种是 把区块连接起来，形成一个链表用的；另一种是 指向 前面 某个交易的，说明币的来源。</p><p>这样避免 双花攻击 double spend attack。</p><blockquote><p>一笔交易，A向B转账。</p><p>A就需要知道B的BTC地址，BTC的地址是 公钥求hash 算出来的，所以A需要知道B的公钥；</p><p>同时所有人都要知道 A的公钥，因为A要对自己的行为进行数字签名，数字签名就是用私钥加密，然后让所有人用自己的公钥解密验证。所以 大家要知道 A的公钥。</p></blockquote><p><img src="/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/2-BTC%E5%8D%8F%E8%AE%AE/%E6%88%AA%E5%B1%8F2024-11-12%2021.02.23.png" alt="截屏2024-11-12 21.02.23"></p><p>区块之间的hash 指针 其实 只与 block header 有关系，对block header 计算hash，串成了链表；</p><p>头中包括：</p><p>version、hash of previous block header、merkle root hash 、用来验算是否在合理范围的target、随机数nonce；</p><p>体中包括：</p><p>transaction list </p><blockquote><p>H(block header) &lt;&#x3D; target ， 就算合格，而 nonce 作为随机数 在 block header 中，会对 hash 计算产生影响，我们试多个nonce随机数，看哪一个能让hash 值落入 target范围内。</p></blockquote><h1 id="distributed-consensus-分布式共识"><a href="#distributed-consensus-分布式共识" class="headerlink" title="distributed consensus 分布式共识"></a>distributed consensus 分布式共识</h1><p>大家都记账 就需要有一个分布式的共识。</p><p>asychromous faulty： 异步错误，分布式系统中存在异步就无法在分布式中达成共识。</p><p>我们假设一下，如果是每个账户都有投票权，那我一个超级计算机就拼命 生成 公私钥对（就是账户），那我就能获得很多投票权，形成对投票结果的操纵。女巫攻击【sybil attack】</p><blockquote><p>女巫攻击【sybil attack】</p></blockquote><h2 id="过程展示（重点）"><a href="#过程展示（重点）" class="headerlink" title="过程展示（重点）"></a>过程展示（重点）</h2><p>1、H(block header) &lt;&#x3D; target ， 就算合格，而 nonce 作为随机数 在 block header 中，会对 hash 计算产生影响，我们试多个nonce随机数，看哪一个能让hash 值落入 target范围内。</p><p>如果某个节点 找到了符合要求的 nonce 值，我们就说 这个节点获得了 记账权。</p><p>所谓“记账权”就是区块链中，写入下一个区块的权利， 只有找到这个nonce 值的结点，才有资格去发布下一个区块。</p><p>2、发布下一个区块之后，别的结点还需要对这个区块进行合法性认证。</p><p>例如： target 有一个 nBits 来衡量 target 的难度是否足够…验证block header是否合法； 再验证一下 是不是每个交易都是合法的，一要有合法的签名signed，二以前没有被花过。</p><p>同时，还要求 新加入的区块 要在 longest valid chain 最长合法链上。</p><p><img src="/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/2-BTC%E5%8D%8F%E8%AE%AE/%E6%88%AA%E5%B1%8F2024-11-12%2022.02.15.png" alt="截屏2024-11-12 22.02.15"></p><blockquote><p>以上截图就是 forking attack，如果两个结点 都同时抢到了 记账权，优先生成下一个区块的一方会 成为longest valid chain，因此会胜出，而下一个区块没来得及生成的一方，会被 orphan block孤儿区块。</p></blockquote><p>3、btc获得记账权的结点，还将获得 <strong>block reward</strong>，铸币权。</p><p>btc 的来源只可能是 transaction 或者 block reward 。</p><p>mining 挖矿 的 miner 矿工 就是干的这个事情，猛算抢夺 block reward。</p>]]></content>
     
     
     <summary type="html">这是文章开头，显示在主页面，详情请点击此处。</summary>
