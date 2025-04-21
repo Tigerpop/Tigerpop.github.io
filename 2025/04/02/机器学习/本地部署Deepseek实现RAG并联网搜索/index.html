@@ -90,7 +90,7 @@
 <meta property="og:image" content="http://example.com/2025/04/02/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E6%9C%AC%E5%9C%B0%E9%83%A8%E7%BD%B2Deepseek%E5%AE%9E%E7%8E%B0RAG%E5%B9%B6%E8%81%94%E7%BD%91%E6%90%9C%E7%B4%A2/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20250402181036.png">
 <meta property="og:image" content="http://example.com/2025/04/02/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E6%9C%AC%E5%9C%B0%E9%83%A8%E7%BD%B2Deepseek%E5%AE%9E%E7%8E%B0RAG%E5%B9%B6%E8%81%94%E7%BD%91%E6%90%9C%E7%B4%A2/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20250402181950.png">
 <meta property="article:published_time" content="2025-04-02T01:08:18.000Z">
-<meta property="article:modified_time" content="2025-04-10T02:48:51.106Z">
+<meta property="article:modified_time" content="2025-04-20T13:17:31.570Z">
 <meta property="article:author" content="陈宇韶chenyushao">
 <meta property="article:tag" content="docker">
 <meta property="article:tag" content="docker compose">
@@ -217,7 +217,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">404</span>
+          <span class="site-state-item-count">405</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -228,7 +228,7 @@
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">166</span>
+        <span class="site-state-item-count">169</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -303,7 +303,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-04-10 10:48:51" itemprop="dateModified" datetime="2025-04-10T10:48:51+08:00">2025-04-10</time>
+      <time title="修改时间：2025-04-20 21:17:31" itemprop="dateModified" datetime="2025-04-20T21:17:31+08:00">2025-04-20</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -627,7 +627,7 @@
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">docker <span class="built_in">exec</span> -it f474c557b8a6 /bin/bash</span><br><span class="line">root@cysserver:/vllm-workspace<span class="comment"># ray status </span></span><br><span class="line">======== Autoscaler status: 2025-03-30 11:21:02.211262 ========</span><br><span class="line">Node status</span><br><span class="line">---------------------------------------------------------------</span><br><span class="line">Active:</span><br><span class="line"> 1 node_921f86c035112492b0daccabd0f373361ea3a721370c3cbcc1dc32ea</span><br><span class="line"> 1 node_4260699a5c1bfdf24d9a886b7aec5e38b7f5e42ab38a2427c13e8366</span><br><span class="line">Pending:</span><br><span class="line"> (no pending nodes)</span><br><span class="line">Recent failures:</span><br><span class="line"> (no failures)</span><br><span class="line"></span><br><span class="line">Resources</span><br><span class="line">---------------------------------------------------------------</span><br><span class="line">Usage:</span><br><span class="line"> 0.0/48.0 CPU</span><br><span class="line"> 0.0/4.0 GPU</span><br><span class="line"> 0B/725.54GiB memory</span><br><span class="line"> 0B/19.46GiB object_store_memory</span><br><span class="line"></span><br><span class="line">Demands:</span><br><span class="line"> (no resource demands)</span><br></pre></td></tr></table></figure>
 
 <p>在ray集群部署好之后可以看见，在一台机器上可以调用整个集群的资源了。<br>在主节点进入vllm的容器，启动 vllm 服务</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">docker <span class="built_in">exec</span> -it f474c557b8a6 /bin/bash</span><br><span class="line"><span class="comment"># --tensor-parallel-size 单台机器的GPU数量，--pipeline-parallel-size 节点数量，vllm GPU只能1 2 4 8 这样的总数量运行。</span></span><br><span class="line"> vllm serve /model/deepseek-r1-70b-AWQ \</span><br><span class="line">     --tensor-parallel-size 2 \</span><br><span class="line">     --pipeline-parallel-size 2 \</span><br><span class="line">     --max-model-len 53520 \</span><br><span class="line">     --gpu-memory-utilization 0.8 \</span><br><span class="line">     --served-model-name deepseek-r1-70b-AWQ \</span><br><span class="line">     --api-key <span class="string">&#x27;jisudf*&amp;QW123&#x27;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">docker <span class="built_in">exec</span> -it f474c557b8a6 /bin/bash</span><br><span class="line"><span class="comment"># --tensor-parallel-size 单台机器的GPU数量，--pipeline-parallel-size 节点数量，vllm GPU只能1 2 4 8 这样的总数量运行。</span></span><br><span class="line"> vllm serve /model/deepseek-r1-70b-AWQ \</span><br><span class="line">     --tensor-parallel-size 2 \</span><br><span class="line">     --pipeline-parallel-size 2 \</span><br><span class="line">     --max-model-len 53520 \</span><br><span class="line">     --gpu-memory-utilization 0.8 \</span><br><span class="line">     --served-model-name deepseek-r1-70b-AWQ \</span><br><span class="line">     --api-key <span class="string">&#x27;jisudf*&amp;QW123&#x27;</span></span><br><span class="line">     </span><br><span class="line"><span class="comment"># 更推荐这样 先在这个容器中建立一个 logs 文件夹然后搞一个 vllm.log 文件存日志。</span></span><br><span class="line"><span class="built_in">nohup</span> vllm serve /model/deepseek-r1-70b-AWQ \</span><br><span class="line">     --tensor-parallel-size 2 \</span><br><span class="line">     --pipeline-parallel-size 2 \</span><br><span class="line">     --max-model-len 53520 \</span><br><span class="line">     --gpu-memory-utilization 0.8 \</span><br><span class="line">     --served-model-name deepseek-r1-70b-AWQ \</span><br><span class="line">     --api-key <span class="string">&#x27;jisudf*&amp;QW123&#x27;</span> \</span><br><span class="line">  &gt; ./logs/vllm.log 2&gt;&amp;1 &amp;</span><br></pre></td></tr></table></figure>
 
 <p><img src="/2025/04/02/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E6%9C%AC%E5%9C%B0%E9%83%A8%E7%BD%B2Deepseek%E5%AE%9E%E7%8E%B0RAG%E5%B9%B6%E8%81%94%E7%BD%91%E6%90%9C%E7%B4%A2/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20250330222345.png" alt="微信图片_20250330222345"></p>
 <h3 id="1-3、嵌入模型部署"><a href="#1-3、嵌入模型部署" class="headerlink" title="1.3、嵌入模型部署"></a>1.3、嵌入模型部署</h3><p>参考： <a target="_blank" rel="noopener" href="https://blog.csdn.net/make_progress/article/details/146051006">https://blog.csdn.net/make_progress/article/details/146051006</a></p>
@@ -792,6 +792,9 @@
                 </a>
             </div>
             <div class="post-nav-item">
+                <a href="/2025/04/21/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/huggingface%E5%B5%8C%E5%85%A5%E6%A8%A1%E5%9E%8B/" rel="next" title="huggingface嵌入模型">
+                  huggingface嵌入模型 <i class="fa fa-chevron-right"></i>
+                </a>
             </div>
           </div>
     </footer>
