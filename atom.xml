@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2025-06-14T07:45:02.391Z</updated>
+  <updated>2025-08-08T08:57:30.651Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,56 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Cloudflare免费代理节点（可用chatgpt、X等）教程</title>
+    <link href="http://example.com/2025/08/08/%E7%A7%91%E5%AD%A6%E9%82%A3%E4%B8%AA%E4%B8%8A%E7%BD%91/Cloudflare%E5%85%8D%E8%B4%B9%E4%BB%A3%E7%90%86%E8%8A%82%E7%82%B9%EF%BC%88%E5%8F%AF%E7%94%A8chatgpt%E3%80%81X%E7%AD%89%EF%BC%89%E6%95%99%E7%A8%8B/"/>
+    <id>http://example.com/2025/08/08/%E7%A7%91%E5%AD%A6%E9%82%A3%E4%B8%AA%E4%B8%8A%E7%BD%91/Cloudflare%E5%85%8D%E8%B4%B9%E4%BB%A3%E7%90%86%E8%8A%82%E7%82%B9%EF%BC%88%E5%8F%AF%E7%94%A8chatgpt%E3%80%81X%E7%AD%89%EF%BC%89%E6%95%99%E7%A8%8B/</id>
+    <published>2025-08-08T00:08:18.000Z</published>
+    <updated>2025-08-08T08:57:30.651Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h1><p>利用 cloudflare 中的 workers ，我们自行修改 脚本实现代码 完成科学上网。</p><p><img src="/2025/08/08/%E7%A7%91%E5%AD%A6%E9%82%A3%E4%B8%AA%E4%B8%8A%E7%BD%91/Cloudflare%E5%85%8D%E8%B4%B9%E4%BB%A3%E7%90%86%E8%8A%82%E7%82%B9%EF%BC%88%E5%8F%AF%E7%94%A8chatgpt%E3%80%81X%E7%AD%89%EF%BC%89%E6%95%99%E7%A8%8B/%E6%88%AA%E5%B1%8F2025-08-08%2015.48.17.png" alt="截屏2025-08-08 15.48.17"></p><p>实测效果相当优秀，4k视频毫无压力。好评，感谢  甬哥 提供的代码和 <a href="https://7techlife.blogspot.com/">Seven科技生活</a>的讲解；</p><h2 id="解决问题："><a href="#解决问题：" class="headerlink" title="解决问题："></a>解决问题：</h2><p>1、之前通过 cloudflare 代理有时候 会失效是 因为proxyip 经常久了以后就失效了；</p><p>2、同时通过 cloudflare代理 不能访问 chatgpt、X等 网站。这是因为 这些网站也是cloudflare来解析的域名，cloudflare 为了避免内部相互访问加了措施，所以不能访问。</p><p>这里我们用了 甬哥代码方案解决上述两个问题，实现科学上网，这种方法是把我们的cloudflare伪装成了外部的，从而实现对 chatgpt 、X等 网站，同时用了 甬哥 代码避开了proxyip，不再当心proxyip失效。</p><h2 id="存在问题："><a href="#存在问题：" class="headerlink" title="存在问题："></a>存在问题：</h2><p>IP不停跳转，有一些网站或者一些网站的文件 写有对IP的限制，就会被限，但是这样的概率是很小的，我们最好留一个便宜的备用 科学上网代理 如proton 。</p><h1 id="一、在cloudflare创建worker"><a href="#一、在cloudflare创建worker" class="headerlink" title="一、在cloudflare创建worker"></a>一、在cloudflare创建worker</h1><p>worker命名不要写vpn、vps、代理、翻墙、科学上网 之类的词，避免被cloudflare查出来然后限掉。</p><p><img src="/2025/08/08/%E7%A7%91%E5%AD%A6%E9%82%A3%E4%B8%AA%E4%B8%8A%E7%BD%91/Cloudflare%E5%85%8D%E8%B4%B9%E4%BB%A3%E7%90%86%E8%8A%82%E7%82%B9%EF%BC%88%E5%8F%AF%E7%94%A8chatgpt%E3%80%81X%E7%AD%89%EF%BC%89%E6%95%99%E7%A8%8B/6a2292e308ec6a45c8d9161e2b3328b1.png" alt="6a2292e308ec6a45c8d9161e2b3328b1"></p><p><img src="/2025/08/08/%E7%A7%91%E5%AD%A6%E9%82%A3%E4%B8%AA%E4%B8%8A%E7%BD%91/Cloudflare%E5%85%8D%E8%B4%B9%E4%BB%A3%E7%90%86%E8%8A%82%E7%82%B9%EF%BC%88%E5%8F%AF%E7%94%A8chatgpt%E3%80%81X%E7%AD%89%EF%BC%89%E6%95%99%E7%A8%8B/8b6f801636850c85e77a99d0ba4c2a91.png" alt="8b6f801636850c85e77a99d0ba4c2a91"></p><h1 id="二、复制代码到worker"><a href="#二、复制代码到worker" class="headerlink" title="二、复制代码到worker"></a>二、复制代码到worker</h1><p>我们选择了<a href="https://github.com/yonggekkk/Cloudflare-vless-trojan/tree/main/Vless_workers_pages">Vless_workers_pages</a>，<a href="https://github.com/yonggekkk/Cloudflare-vless-trojan/commit/ccf3b0b7a160cac7f1ca5c4fe3d0efcfab85ce14">vless无需proxyip的nat64套壳版 (推荐使用).js</a></p><p><img src="/2025/08/08/%E7%A7%91%E5%AD%A6%E9%82%A3%E4%B8%AA%E4%B8%8A%E7%BD%91/Cloudflare%E5%85%8D%E8%B4%B9%E4%BB%A3%E7%90%86%E8%8A%82%E7%82%B9%EF%BC%88%E5%8F%AF%E7%94%A8chatgpt%E3%80%81X%E7%AD%89%EF%BC%89%E6%95%99%E7%A8%8B/c2e6be635ddea0c6fb5edcfdc2f07484-4641484.png" alt="c2e6be635ddea0c6fb5edcfdc2f07484"></p><p><img src="/2025/08/08/%E7%A7%91%E5%AD%A6%E9%82%A3%E4%B8%AA%E4%B8%8A%E7%BD%91/Cloudflare%E5%85%8D%E8%B4%B9%E4%BB%A3%E7%90%86%E8%8A%82%E7%82%B9%EF%BC%88%E5%8F%AF%E7%94%A8chatgpt%E3%80%81X%E7%AD%89%EF%BC%89%E6%95%99%E7%A8%8B/08d7365ac07f541098274c7b35479aea-4641565.png" alt="08d7365ac07f541098274c7b35479aea"></p><h1 id="三、通过环境变量修改uuid"><a href="#三、通过环境变量修改uuid" class="headerlink" title="三、通过环境变量修改uuid"></a>三、通过环境变量修改uuid</h1><p><img src="/2025/08/08/%E7%A7%91%E5%AD%A6%E9%82%A3%E4%B8%AA%E4%B8%8A%E7%BD%91/Cloudflare%E5%85%8D%E8%B4%B9%E4%BB%A3%E7%90%86%E8%8A%82%E7%82%B9%EF%BC%88%E5%8F%AF%E7%94%A8chatgpt%E3%80%81X%E7%AD%89%EF%BC%89%E6%95%99%E7%A8%8B/f22fbaba26feb01cb38803a6d29ebb28-4641379.png" alt="f22fbaba26feb01cb38803a6d29ebb28"></p><h1 id="四、使用自定义域名"><a href="#四、使用自定义域名" class="headerlink" title="四、使用自定义域名"></a>四、使用自定义域名</h1><p><img src="/2025/08/08/%E7%A7%91%E5%AD%A6%E9%82%A3%E4%B8%AA%E4%B8%8A%E7%BD%91/Cloudflare%E5%85%8D%E8%B4%B9%E4%BB%A3%E7%90%86%E8%8A%82%E7%82%B9%EF%BC%88%E5%8F%AF%E7%94%A8chatgpt%E3%80%81X%E7%AD%89%EF%BC%89%E6%95%99%E7%A8%8B/b5bc13c194f2f6817ae1b108a49a4401.png" alt="b5bc13c194f2f6817ae1b108a49a4401"></p><h1 id="五、查看节点连接并使用"><a href="#五、查看节点连接并使用" class="headerlink" title="五、查看节点连接并使用"></a>五、查看节点连接并使用</h1><p>我们用 cloudflare中worker下的  “自定义域”+斜杆&#x2F;+“自定义的文本变量uuid”来访问节点指导页面；</p><p><img src="/2025/08/08/%E7%A7%91%E5%AD%A6%E9%82%A3%E4%B8%AA%E4%B8%8A%E7%BD%91/Cloudflare%E5%85%8D%E8%B4%B9%E4%BB%A3%E7%90%86%E8%8A%82%E7%82%B9%EF%BC%88%E5%8F%AF%E7%94%A8chatgpt%E3%80%81X%E7%AD%89%EF%BC%89%E6%95%99%E7%A8%8B/%E6%88%AA%E5%B1%8F2025-08-08%2016.30.08.png" alt="截屏2025-08-08 16.30.08"></p><p><img src="/2025/08/08/%E7%A7%91%E5%AD%A6%E9%82%A3%E4%B8%AA%E4%B8%8A%E7%BD%91/Cloudflare%E5%85%8D%E8%B4%B9%E4%BB%A3%E7%90%86%E8%8A%82%E7%82%B9%EF%BC%88%E5%8F%AF%E7%94%A8chatgpt%E3%80%81X%E7%AD%89%EF%BC%89%E6%95%99%E7%A8%8B/%E6%88%AA%E5%B1%8F2025-08-08%2016.31.49.png" alt="截屏2025-08-08 16.31.49"></p><h2 id="以macOS下v2rayN为例："><a href="#以macOS下v2rayN为例：" class="headerlink" title="以macOS下v2rayN为例："></a>以macOS下v2rayN为例：</h2><p>我们用上图中的 “聚合通用订阅链接”，用GitHub 中的v2rayN 项目操作；</p><p>导入链接：</p><p><img src="/2025/08/08/%E7%A7%91%E5%AD%A6%E9%82%A3%E4%B8%AA%E4%B8%8A%E7%BD%91/Cloudflare%E5%85%8D%E8%B4%B9%E4%BB%A3%E7%90%86%E8%8A%82%E7%82%B9%EF%BC%88%E5%8F%AF%E7%94%A8chatgpt%E3%80%81X%E7%AD%89%EF%BC%89%E6%95%99%E7%A8%8B/2f85fe107c9d501af2056cbc7e3c59ab-4642195.png" alt="2f85fe107c9d501af2056cbc7e3c59ab"></p><p>更新订阅（不通过代理）：</p><p><img src="/2025/08/08/%E7%A7%91%E5%AD%A6%E9%82%A3%E4%B8%AA%E4%B8%8A%E7%BD%91/Cloudflare%E5%85%8D%E8%B4%B9%E4%BB%A3%E7%90%86%E8%8A%82%E7%82%B9%EF%BC%88%E5%8F%AF%E7%94%A8chatgpt%E3%80%81X%E7%AD%89%EF%BC%89%E6%95%99%E7%A8%8B/cba492cf556fbd28a6ef300c393d5a52.png" alt="cba492cf556fbd28a6ef300c393d5a52"></p><p><img src="/2025/08/08/%E7%A7%91%E5%AD%A6%E9%82%A3%E4%B8%AA%E4%B8%8A%E7%BD%91/Cloudflare%E5%85%8D%E8%B4%B9%E4%BB%A3%E7%90%86%E8%8A%82%E7%82%B9%EF%BC%88%E5%8F%AF%E7%94%A8chatgpt%E3%80%81X%E7%AD%89%EF%BC%89%E6%95%99%E7%A8%8B/f99915de4db2db677ed9d55e0623a7ff.png" alt="f99915de4db2db677ed9d55e0623a7ff"></p><p><img src="/2025/08/08/%E7%A7%91%E5%AD%A6%E9%82%A3%E4%B8%AA%E4%B8%8A%E7%BD%91/Cloudflare%E5%85%8D%E8%B4%B9%E4%BB%A3%E7%90%86%E8%8A%82%E7%82%B9%EF%BC%88%E5%8F%AF%E7%94%A8chatgpt%E3%80%81X%E7%AD%89%EF%BC%89%E6%95%99%E7%A8%8B/def170f7f1b0e8eb02289a9a9ccfb425.png" alt="def170f7f1b0e8eb02289a9a9ccfb425"></p><p>注意 v2rayN 左下角处，代理走的都是 10808 端口，如果chromo浏览器中有 ZeroOmega 代理插件的话，也要设置一个新的 10808端口的情景模式；</p><p>复制终端代理命令以后，在终端运行后，可以用下面命令来检查是否已经定位到了外部：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">curl ipinfo.io       <span class="comment"># 看你的所在位置。</span></span><br><span class="line">curl -I google.com   <span class="comment"># 返回200 2XX 就是 成功了。</span></span><br></pre></td></tr></table></figure><p>推荐用 curl 命令来经验而不用ping，是因为</p><p><code>ping</code> 命令使用的协议是 <strong>ICMP（Internet Control Message Protocol）</strong>，它工作在网络层（OSI 模型的第三层）。<code>ping</code> 命令会直接向目标服务器发送 ICMP Echo Request 数据包，并期待收到 Echo Reply 数据包。</p><p>而设置的代理 (<code>http_proxy</code>, <code>https_proxy</code>, <code>all_proxy</code> 等) 都是应用层代理，它们工作在 TCP&#x2F;IP 协议栈的上层。</p><h2 id="移动端的v2rayNG为例："><a href="#移动端的v2rayNG为例：" class="headerlink" title="移动端的v2rayNG为例："></a>移动端的v2rayNG为例：</h2><p>移动端的v2rayNG应用中需要启用本地dns、虚拟dns、分片Fragment； </p><p><img src="/2025/08/08/%E7%A7%91%E5%AD%A6%E9%82%A3%E4%B8%AA%E4%B8%8A%E7%BD%91/Cloudflare%E5%85%8D%E8%B4%B9%E4%BB%A3%E7%90%86%E8%8A%82%E7%82%B9%EF%BC%88%E5%8F%AF%E7%94%A8chatgpt%E3%80%81X%E7%AD%89%EF%BC%89%E6%95%99%E7%A8%8B/b87269748c92e254eca78e4bc22a4a46.jpg" alt="b87269748c92e254eca78e4bc22a4a46"></p><p><img src="/2025/08/08/%E7%A7%91%E5%AD%A6%E9%82%A3%E4%B8%AA%E4%B8%8A%E7%BD%91/Cloudflare%E5%85%8D%E8%B4%B9%E4%BB%A3%E7%90%86%E8%8A%82%E7%82%B9%EF%BC%88%E5%8F%AF%E7%94%A8chatgpt%E3%80%81X%E7%AD%89%EF%BC%89%E6%95%99%E7%A8%8B/28262364b250a64fc38a56cfb426ae5a.jpg" alt="28262364b250a64fc38a56cfb426ae5a"></p><h1 id="参考："><a href="#参考：" class="headerlink" title="参考："></a>参考：</h1><p><a href="https://www.youtube.com/watch?v=HcD4xYKXuRY&amp;t=178s">https://www.youtube.com/watch?v=HcD4xYKXuRY&amp;t=178s</a></p><h2 id="相关连接："><a href="#相关连接：" class="headerlink" title="相关连接："></a>相关连接：</h2><p>Cloudflare：<a href="https://www.youtube.com/redirect?event=video_description&redir_token=QUFFLUhqbDB6dmw3NDBxMXhVVzJLVHAwdGVyZmNQTEE5d3xBQ3Jtc0tsQk1Tb1hBS2NLN0ZEZTRZNE02RXY0Rnc2THZUY1ZLSS1jRGNzSG1KeTIzYWZMZzVhNFotcDE0UXpoMVZyRjZTb0ZhNng0SnhhNXk3RmoxQVNlZjF1QU02a2xqODE0aXlGZzhJTXRDSTVLLThSZE9iRQ&q=https://dash.cloudflare.com/&v=HcD4xYKXuRY">https://dash.cloudflare.com</a> </p><p>甬哥代码地址：<a href="https://www.youtube.com/redirect?event=video_description&redir_token=QUFFLUhqa3BSNnNiN3JnVHNPSnI0RWs2S2IyOE9mbk9fd3xBQ3Jtc0ttTFhEbF9RZk9YREtoQ1BTb3A3T2FjMXMtMXNMYXUwZTRUa0l1NXZlT095VF9falI0VHVLRUE1NWNRWkdud0dGVFVRenZLZk9HQTNGbjdkSFVHUFdFMURjdGFNYk5VUFEzRW5uLVRaemgyaTNLMUJjVQ&q=https://github.com/yonggekkk/Cloudflare-vless-trojan&v=HcD4xYKXuRY">https://github.com/yonggekkk/Cloudfla...</a> </p><p>UUID生成器：<a href="https://www.youtube.com/redirect?event=video_description&redir_token=QUFFLUhqbkx6TmQtczJudWhicFg3Uk9oWHMyVFppMmFnUXxBQ3Jtc0tuNUdBcGxYcjBlYU8xRnR1Y1ZfSjYzcUJEeE5oLVQ5eGQ0MmJGWjVqQWdEbFA4Y3F1T0dBYlZ1cXhRTExKNUM2S3E1WXBQYmVwUVNEbFRFajM3Z2hwTEVvTjFCTTdFdUxITXgxQl9rNEttdWliV3J2OA&q=https://www.uuidgenerator.net/&v=HcD4xYKXuRY">https://www.uuidgenerator.net/</a></p>]]></content>
+    
+    
+    <summary type="html">这是文章开头，显示在主页面，详情请点击此处。</summary>
+    
+    
+    
+    <category term="科学那个上网" scheme="http://example.com/categories/%E7%A7%91%E5%AD%A6%E9%82%A3%E4%B8%AA%E4%B8%8A%E7%BD%91/"/>
+    
+    
+    <category term="域名" scheme="http://example.com/tags/%E5%9F%9F%E5%90%8D/"/>
+    
+    <category term="cloudflare" scheme="http://example.com/tags/cloudflare/"/>
+    
+    <category term="代理" scheme="http://example.com/tags/%E4%BB%A3%E7%90%86/"/>
+    
+    <category term="科学上网" scheme="http://example.com/tags/%E7%A7%91%E5%AD%A6%E4%B8%8A%E7%BD%91/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>获取DigitalPlat免费域名</title>
+    <link href="http://example.com/2025/08/08/%E7%A7%91%E5%AD%A6%E9%82%A3%E4%B8%AA%E4%B8%8A%E7%BD%91/%E8%8E%B7%E5%8F%96DigitalPlat%E5%85%8D%E8%B4%B9%E5%9F%9F%E5%90%8D/"/>
+    <id>http://example.com/2025/08/08/%E7%A7%91%E5%AD%A6%E9%82%A3%E4%B8%AA%E4%B8%8A%E7%BD%91/%E8%8E%B7%E5%8F%96DigitalPlat%E5%85%8D%E8%B4%B9%E5%9F%9F%E5%90%8D/</id>
+    <published>2025-08-07T23:08:18.000Z</published>
+    <updated>2025-08-08T07:39:23.718Z</updated>
+    
+    <content type="html"><![CDATA[<p>按照这个 注册地址：<a href="https://dash.domain.digitalplat.org/">https://dash.domain.digitalplat.org</a> 或 <a href="https://register.us.kg/">https://register.us.kg</a> 一步一步来注册就好。</p><h1 id="注意点："><a href="#注意点：" class="headerlink" title="注意点："></a>注意点：</h1><p>KYC验证 ， 用GitHub等验证一下的意思。</p><h2 id="一、填写名称服务器"><a href="#一、填写名称服务器" class="headerlink" title="一、填写名称服务器"></a>一、填写名称服务器</h2><p>按照注册地址一步一步申请免费域名会遇到以下 需要填写 域名名称服务器的步骤；</p><p><img src="/2025/08/08/%E7%A7%91%E5%AD%A6%E9%82%A3%E4%B8%AA%E4%B8%8A%E7%BD%91/%E8%8E%B7%E5%8F%96DigitalPlat%E5%85%8D%E8%B4%B9%E5%9F%9F%E5%90%8D/ef6a7edf0e161c574322c839bf87d6e9.png" alt="ef6a7edf0e161c574322c839bf87d6e9"></p><p>这里的几个 Name Server 我们都用 cloudflare 来做。按照以下的来就行；</p><p>1、在cloudflare 中点击 “加入域”</p><p><img src="/2025/08/08/%E7%A7%91%E5%AD%A6%E9%82%A3%E4%B8%AA%E4%B8%8A%E7%BD%91/%E8%8E%B7%E5%8F%96DigitalPlat%E5%85%8D%E8%B4%B9%E5%9F%9F%E5%90%8D/129d96be3f717f06f5b9768189712267.png" alt="129d96be3f717f06f5b9768189712267"></p><p>2、一步一步来，复制好 dpdns中想申请的域名，填写好；然后看见以下情况；</p><p><img src="/2025/08/08/%E7%A7%91%E5%AD%A6%E9%82%A3%E4%B8%AA%E4%B8%8A%E7%BD%91/%E8%8E%B7%E5%8F%96DigitalPlat%E5%85%8D%E8%B4%B9%E5%9F%9F%E5%90%8D/32a7aefb17e8f089c959720c934a2c90.png" alt="32a7aefb17e8f089c959720c934a2c90"></p><p>可见两个域名名称服务器，把它们填写如前面的 域名申请中的 Name Server 1、2、3.中。</p><h2 id="二、等待生效"><a href="#二、等待生效" class="headerlink" title="二、等待生效"></a>二、等待生效</h2><p>前面的步骤全部完毕之后，我们还需要等待 cloudflare  “域” 中的 “SSL&#x2F;TLS” 的“边缘证书” 生效；</p><p><img src="/2025/08/08/%E7%A7%91%E5%AD%A6%E9%82%A3%E4%B8%AA%E4%B8%8A%E7%BD%91/%E8%8E%B7%E5%8F%96DigitalPlat%E5%85%8D%E8%B4%B9%E5%9F%9F%E5%90%8D/%E6%88%AA%E5%B1%8F2025-08-08%2015.30.42.png" alt="截屏2025-08-08 15.30.42"></p><h2 id="三、每半年需要续一次："><a href="#三、每半年需要续一次：" class="headerlink" title="三、每半年需要续一次："></a>三、每半年需要续一次：</h2><p><img src="/2025/08/08/%E7%A7%91%E5%AD%A6%E9%82%A3%E4%B8%AA%E4%B8%8A%E7%BD%91/%E8%8E%B7%E5%8F%96DigitalPlat%E5%85%8D%E8%B4%B9%E5%9F%9F%E5%90%8D/00c160b2da732711cebe1fe25f1bb759.png" alt="00c160b2da732711cebe1fe25f1bb759"></p><p>参考：<a href="https://www.youtube.com/watch?v=K_cqWsHQaGI&amp;t=603s">https://www.youtube.com/watch?v=K_cqWsHQaGI&amp;t=603s</a></p><h3 id="相关链接："><a href="#相关链接：" class="headerlink" title="相关链接："></a>相关链接：</h3><p>注册地址：<a href="https://dash.domain.digitalplat.org/">https://dash.domain.digitalplat.org</a> 或 <a href="https://register.us.kg/">https://register.us.kg</a></p><p>美国地址生成器：<a href="https://meiguodizhi.com/">https://meiguodizhi.com</a></p><p>DigitalPlat的Github仓库：<a href="https://github.com/DigitalPlatDev/FreeDomain">https://github.com/DigitalPlatDev/FreeDomain</a></p><p>Github官网：<a href="https://github.com/">https://github.com</a></p><p>Cloudflare官网：<a href="https://cloudflare.com/">https://cloudflare.com</a></p><p>Cloudflare Pages自定义域及SSL证书问题可查看这期视频</p><p><a href="https://youtu.be/cYud83gAhbs">https://youtu.be/cYud83gAhbs</a></p>]]></content>
+    
+    
+    <summary type="html">这是文章开头，显示在主页面，详情请点击此处。</summary>
+    
+    
+    
+    <category term="科学那个上网" scheme="http://example.com/categories/%E7%A7%91%E5%AD%A6%E9%82%A3%E4%B8%AA%E4%B8%8A%E7%BD%91/"/>
+    
+    
+    <category term="digitalplat" scheme="http://example.com/tags/digitalplat/"/>
+    
+    <category term="域名" scheme="http://example.com/tags/%E5%9F%9F%E5%90%8D/"/>
+    
+  </entry>
   
   <entry>
     <title>利用Dify+MCP开发定制功能Agent</title>
@@ -463,52 +513,6 @@
     
     
     <category term="eth" scheme="http://example.com/tags/eth/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>15-难度调整</title>
-    <link href="http://example.com/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/15-%E9%9A%BE%E5%BA%A6%E8%B0%83%E6%95%B4/"/>
-    <id>http://example.com/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/15-%E9%9A%BE%E5%BA%A6%E8%B0%83%E6%95%B4/</id>
-    <published>2025-01-10T13:14:12.000Z</published>
-    <updated>2025-01-29T14:52:26.530Z</updated>
-    
-    <content type="html"><![CDATA[<p>简介 <span id="more"></span></p><h1 id="总思路"><a href="#总思路" class="headerlink" title="总思路"></a>总思路</h1><p><img src="/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/15-%E9%9A%BE%E5%BA%A6%E8%B0%83%E6%95%B4/%E6%88%AA%E5%B1%8F2025-01-01%2021.16.51.png" alt="截屏2025-01-01 21.16.51"></p><h1 id="自适应难度调整"><a href="#自适应难度调整" class="headerlink" title="自适应难度调整"></a>自适应难度调整</h1><p><img src="/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/15-%E9%9A%BE%E5%BA%A6%E8%B0%83%E6%95%B4/%E6%88%AA%E5%B1%8F2025-01-01%2021.17.42.png" alt="截屏2025-01-01 21.17.42"></p><p><img src="/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/15-%E9%9A%BE%E5%BA%A6%E8%B0%83%E6%95%B4/%E6%88%AA%E5%B1%8F2025-01-01%2021.22.24.png" alt="截屏2025-01-01 21.22.24"></p><p><img src="/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/15-%E9%9A%BE%E5%BA%A6%E8%B0%83%E6%95%B4/%E6%88%AA%E5%B1%8F2025-01-01%2021.25.35.png" alt="截屏2025-01-01 21.25.35"></p><p>向下 取整；</p><p>例如：1-0、1-1、1-2</p><h1 id="难度炸弹"><a href="#难度炸弹" class="headerlink" title="难度炸弹"></a>难度炸弹</h1><p><img src="/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/15-%E9%9A%BE%E5%BA%A6%E8%B0%83%E6%95%B4/%E6%88%AA%E5%B1%8F2025-01-01%2021.36.48.png" alt="截屏2025-01-01 21.36.48"></p><p>​    <img src="/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/15-%E9%9A%BE%E5%BA%A6%E8%B0%83%E6%95%B4/%E6%88%AA%E5%B1%8F2025-01-01%2021.53.54.png" alt="截屏2025-01-01 21.53.54"></p><p><img src="/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/15-%E9%9A%BE%E5%BA%A6%E8%B0%83%E6%95%B4/%E6%88%AA%E5%B1%8F2025-01-01%2021.55.23.png" alt="截屏2025-01-01 21.55.23"></p><h1 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h1><p><img src="/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/15-%E9%9A%BE%E5%BA%A6%E8%B0%83%E6%95%B4/%E6%88%AA%E5%B1%8F2025-01-01%2021.59.10.png" alt="截屏2025-01-01 21.59.10"></p><p><img src="/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/15-%E9%9A%BE%E5%BA%A6%E8%B0%83%E6%95%B4/%E6%88%AA%E5%B1%8F2025-01-01%2022.09.58.png" alt="截屏2025-01-01 22.09.58"></p><p><img src="/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/15-%E9%9A%BE%E5%BA%A6%E8%B0%83%E6%95%B4/%E6%88%AA%E5%B1%8F2025-01-01%2022.11.08.png" alt="截屏2025-01-01 22.11.08"></p><h1 id="出块时间变化"><a href="#出块时间变化" class="headerlink" title="出块时间变化"></a>出块时间变化</h1><p><img src="/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/15-%E9%9A%BE%E5%BA%A6%E8%B0%83%E6%95%B4/%E6%88%AA%E5%B1%8F2025-01-01%2022.15.52.png" alt="截屏2025-01-01 22.15.52"></p><p>炸弹爆炸 导致了一次 出块时间激增，随着H的回调，又下来了。</p><h1 id="区块内难度体现"><a href="#区块内难度体现" class="headerlink" title="区块内难度体现"></a>区块内难度体现</h1><p><img src="/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/15-%E9%9A%BE%E5%BA%A6%E8%B0%83%E6%95%B4/%E6%88%AA%E5%B1%8F2025-01-01%2022.17.20.png" alt="截屏2025-01-01 22.17.20"></p><p>难度可以视为 工作量。</p><p>total 难度是 这条链上 难度的总和，也是工作量的总和。</p>]]></content>
-    
-    
-    <summary type="html">这是文章开头，显示在主页面，详情请点击此处。</summary>
-    
-    
-    
-    <category term="区块链" scheme="http://example.com/categories/%E5%8C%BA%E5%9D%97%E9%93%BE/"/>
-    
-    
-    <category term="eth" scheme="http://example.com/tags/eth/"/>
-    
-    <category term="挖矿" scheme="http://example.com/tags/%E6%8C%96%E7%9F%BF/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>14-挖矿算法</title>
-    <link href="http://example.com/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/14-%E6%8C%96%E7%9F%BF%E7%AE%97%E6%B3%95/"/>
-    <id>http://example.com/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/14-%E6%8C%96%E7%9F%BF%E7%AE%97%E6%B3%95/</id>
-    <published>2025-01-10T13:13:12.000Z</published>
-    <updated>2025-01-29T14:52:26.517Z</updated>
-    
-    <content type="html"><![CDATA[<p>简介 <span id="more"></span></p><p>mining 的人越多越民主，这条链一般来说就会越安全。</p><p>但是也有人认为，只有ASIC 专用化的矿机 才是 链安全的保证，因为发动攻击的成本变高了。</p><h1 id="LiteCoin"><a href="#LiteCoin" class="headerlink" title="LiteCoin"></a>LiteCoin</h1><p>bounty hunter 赏金猎人</p><p>bug bounty 赏金找bug</p><p>memory hard mining puzzle 内存硬挖矿迷雾，用来遏制 ASIC 挖矿机。</p><p>LiteCoin  莱特币 就是 memory hard mining puzzle  设计的。</p><p>它将 一条hash 链 存在数组中，如果不存在内存中，每一次算都要一条链 算很久，计算量很大，如果存在内存中，计算量就会小很多。这样的设计就是 对 ASIC 不友好的，ASIC assistance。</p><p>puzzle ：</p><p>​difficult to solve</p><p>​but easy to verify</p><p>轻结点 由于内存限制，对轻结点不友好。同时 LiteCoin 对GPU 挖矿不友好，目前看它失败了，也产生了它专用的矿机。</p><p>冷启动：</p><p>​早期的时候，恶意 占用 算力资源 恶搞的人会很多，宣传来的人有限，每一个链都会遇到这样的问题。</p><p>​LiteCoin 只有 少数几个点和 btc 有区别，其他都和 btc 一样的设计。</p><h1 id="eth"><a href="#eth" class="headerlink" title="eth"></a>eth</h1><p>设计有两个一大一小 数据集：</p><p>​16M cache；（轻结点）</p><p>​1G dataset DAG；</p><p><img src="/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/14-%E6%8C%96%E7%9F%BF%E7%AE%97%E6%B3%95/%E6%88%AA%E5%B1%8F2025-01-01%2010.43.13.png" alt="截屏2025-01-01 10.43.13"></p><p>16M 的数组中，用seed 生成一个头元素，然后hash 一下 放第二个元素，第二个元素再hash 一下 放第三个元素，这样塞满整个数组，用的时候用 伪随机数顺序  从数组中取数进行运算。</p><p>dataset 数组怎么生成呢？<br>比如第一次从cache读 A这个元素，然后hash算来算去，求出需要 B 这个元素，然后B算出要C… 这样读256个数求hash，放到dataset的 阴影位置，这样组成一个数组。</p><p>求解 puzzle 时候，用的是 dataset 中的数据，而不是 cache 中的数据。</p><p>先用block header nonce hash，用伪随机数顺序，也是hash 套hash 读64次，一次读两个相邻的元素，从 dataset 中读取128个数。</p><p>最后算出一个 hash 值，和  难度门槛 比较一下，是否符合难度要求，如果不符合就改nonce。</p><p><img src="/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/14-%E6%8C%96%E7%9F%BF%E7%AE%97%E6%B3%95/%E6%88%AA%E5%B1%8F2025-01-01%2010.58.30.png" alt="截屏2025-01-01 10.58.30"></p><h2 id="ethash-算法伪代码"><a href="#ethash-算法伪代码" class="headerlink" title="ethash 算法伪代码"></a>ethash 算法伪代码</h2><h3 id="第一步：生成cache"><a href="#第一步：生成cache" class="headerlink" title="第一步：生成cache"></a>第一步：生成cache</h3><p><img src="/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/14-%E6%8C%96%E7%9F%BF%E7%AE%97%E6%B3%95/%E6%88%AA%E5%B1%8F2025-01-01%2016.23.15.png" alt="截屏2025-01-01 16.23.15"></p><h3 id="第二步：利用-cache-生成-dataset-中的第i个元素"><a href="#第二步：利用-cache-生成-dataset-中的第i个元素" class="headerlink" title="第二步：利用 cache 生成 dataset 中的第i个元素"></a>第二步：利用 cache 生成 dataset 中的第i个元素</h3><p><img src="/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/14-%E6%8C%96%E7%9F%BF%E7%AE%97%E6%B3%95/%E6%88%AA%E5%B1%8F2025-01-01%2016.28.10.png" alt="截屏2025-01-01 16.28.10"></p><p>可见 是用dataset中这个位置的 hash 值 和cache中利用到的下一个位置的值，算出dataset中下一个位置的值。</p><h3 id="第三步：生成dataset"><a href="#第三步：生成dataset" class="headerlink" title="第三步：生成dataset"></a>第三步：生成dataset</h3><p><img src="/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/14-%E6%8C%96%E7%9F%BF%E7%AE%97%E6%B3%95/%E6%88%AA%E5%B1%8F2025-01-01%2016.31.44.png" alt="截屏2025-01-01 16.31.44"></p><h3 id="第四步：挖矿与验证"><a href="#第四步：挖矿与验证" class="headerlink" title="第四步：挖矿与验证"></a>第四步：挖矿与验证</h3><p><img src="/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/14-%E6%8C%96%E7%9F%BF%E7%AE%97%E6%B3%95/%E6%88%AA%E5%B1%8F2025-01-01%2016.39.10.png" alt="截屏2025-01-01 16.39.10"></p><p>从上面可见mining用到了 dataset 中相邻的两个不相关元素，最后hash（mix）来验证难度是否达标；</p><p>而轻结点的验证中，由于轻结点中没有存下 dataset 只存了 cache，就只能 调用 dataset的生成方法 重新构建一遍，最后验证 一下 是否一致。</p><p><img src="/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/14-%E6%8C%96%E7%9F%BF%E7%AE%97%E6%B3%95/%E6%88%AA%E5%B1%8F2025-01-01%2016.44.41.png" alt="截屏2025-01-01 16.44.41"></p><p><img src="/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/14-%E6%8C%96%E7%9F%BF%E7%AE%97%E6%B3%95/%E6%88%AA%E5%B1%8F2025-01-01%2016.46.58.png" alt="截屏2025-01-01 16.46.58"></p><p>两个字，非常巧妙。</p><p>老的 eth 都是 工作量证明，后来改 权益证明；</p><p><img src="/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/14-%E6%8C%96%E7%9F%BF%E7%AE%97%E6%B3%95/%E6%88%AA%E5%B1%8F2025-01-01%2016.58.06.png" alt="截屏2025-01-01 16.58.06"></p><h2 id="预挖矿-pre-mining"><a href="#预挖矿-pre-mining" class="headerlink" title="预挖矿 pre-mining"></a>预挖矿 pre-mining</h2><p>预挖矿不是挖矿，是货币发行的时候预留一部分货币 给 eth 的开发者；</p><p>pre-sale 指的就是把 这批pre-mining货币 卖掉，用于后续的开发工作，有点像拉风投；</p><p>投资人可以去买 pre-sale 风投；</p><p><img src="/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/14-%E6%8C%96%E7%9F%BF%E7%AE%97%E6%B3%95/%E6%88%AA%E5%B1%8F2025-01-01%2017.05.15.png" alt="截屏2025-01-01 17.05.15"></p><p>18年时，eth 大部分还是来自 原始的。</p>]]></content>
-    
-    
-    <summary type="html">这是文章开头，显示在主页面，详情请点击此处。</summary>
-    
-    
-    
-    <category term="区块链" scheme="http://example.com/categories/%E5%8C%BA%E5%9D%97%E9%93%BE/"/>
-    
-    
-    <category term="eth" scheme="http://example.com/tags/eth/"/>
-    
-    <category term="挖矿" scheme="http://example.com/tags/%E6%8C%96%E7%9F%BF/"/>
     
   </entry>
   
