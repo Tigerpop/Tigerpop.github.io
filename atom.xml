@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2025-08-30T10:06:26.915Z</updated>
+  <updated>2025-09-07T13:57:15.927Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,27 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>匹配大模型版本与本地显存方法</title>
+    <link href="http://example.com/2025/09/07/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E5%8C%B9%E9%85%8D%E5%A4%A7%E6%A8%A1%E5%9E%8B%E7%89%88%E6%9C%AC%E4%B8%8E%E6%9C%AC%E5%9C%B0%E6%98%BE%E5%AD%98%E6%96%B9%E6%B3%95/"/>
+    <id>http://example.com/2025/09/07/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E5%8C%B9%E9%85%8D%E5%A4%A7%E6%A8%A1%E5%9E%8B%E7%89%88%E6%9C%AC%E4%B8%8E%E6%9C%AC%E5%9C%B0%E6%98%BE%E5%AD%98%E6%96%B9%E6%B3%95/</id>
+    <published>2025-09-07T14:05:02.000Z</published>
+    <updated>2025-09-07T13:57:15.927Z</updated>
+    
+    <content type="html"><![CDATA[<p>我们看见大量的大语言模型在 modelscope 这类平台上，如何确定我们本地的GPU显存能否匹配上这个模型的基本要求？</p><p>这次我们搞这个。 </p><h1 id="看模型显存需求"><a href="#看模型显存需求" class="headerlink" title="看模型显存需求"></a>看模型显存需求</h1><p>大模型的计算单位都是2字节，也就是8*2&#x3D;16bit ；而 我们看见 标着 AWQ 或者 4int 等就是量化压缩到4bit 的意思，最终显存需求会是原来的1&#x2F;4。</p><p>Qwen-32B-AWQ </p><p>指的是32B个计算单位，原本FP16单位是32*2&#x3D;64G的显存需求，但是AWQ的压缩，导致只需要64&#x2F;4&#x3D; 16G显存。</p><p>Qwen2.5-72B-AWQ</p><p>指的是72B个计算单位，原本FP16 是72*2&#x3D;144G的显存需求，但是AWQ的压缩，导致只需要144&#x2F;4&#x3D; 36G显存。</p><p>通义千问 QwQ-32B</p><p>指的是32B个计算单位，FP16 大小就是 16bit的单位，也就是32*2&#x3D;64G的显存需求。</p><h1 id="计算任务拆分"><a href="#计算任务拆分" class="headerlink" title="计算任务拆分"></a>计算任务拆分</h1><p>ray 搞一个2个机器的集群，然后vllm 来平分GPU显存去计算。核心是vllm对计算的拆分。 </p><p>例如：</p><p><code>tensor_parallel_size=4</code> ，我们把计算任务用vllm 分4份给到GPU集群。 </p><p>我们的算力集群是由4张24G显存的GPU组成。 </p><h1 id="GPU单卡显存计算公式"><a href="#GPU单卡显存计算公式" class="headerlink" title="GPU单卡显存计算公式"></a>GPU单卡显存计算公式</h1><h2 id="总需求"><a href="#总需求" class="headerlink" title="总需求"></a>总需求</h2><p><code>单卡需求(GB) = (量化模型大小 ÷ tensor_parallel_size) + KV_Cache + 开销</code></p><h2 id="模型分片"><a href="#模型分片" class="headerlink" title="模型分片"></a>模型分片</h2><p>模型分片 &#x3D; (量化模型大小 ÷ tensor_parallel_size)</p><h2 id="KV-Cache"><a href="#KV-Cache" class="headerlink" title="KV_Cache"></a>KV_Cache</h2><p><code>KV_Cache ≈ 2 × batch_size × seq_len × 层数 × hidden_size × dtype_size × 0.6</code></p><p>大约<code>KV_Cache(GB) ≈ batch_size × seq_len × 0.0001</code></p><p>下方为 KV_Cache(GB) 例表：</p><table><thead><tr><th>batch&#x3D;4, seq&#x3D;2048</th><th>~0.8 GB</th></tr></thead><tbody><tr><td>batch&#x3D;8, seq&#x3D;4096</td><td>~3.2 GB</td></tr><tr><td>batch&#x3D;16, seq&#x3D;8192</td><td>~12.8 GB</td></tr></tbody></table><table><thead><tr><th><strong>vLLM</strong></th><th><code>--max-num-seqs</code></th><th>最大并发请求数（直接影响 batch_size）</th></tr></thead><tbody><tr><td></td><td><code>--max-num-batched-tokens</code></td><td>批处理的最大 token 数</td></tr></tbody></table><table><thead><tr><th><strong>vLLM</strong></th><th><code>--max-model-len</code></th><th>模型支持的最大序列长度（直接影响  seq_len）</th></tr></thead><tbody><tr><td></td><td><code>--max-num-batched-tokens</code></td><td>间接限制 seq_len</td></tr></tbody></table><h2 id="开销"><a href="#开销" class="headerlink" title="开销"></a>开销</h2><p>开销（固定值）</p><ul><li><p>中间激活值：1-2 GB</p></li><li><p>框架开销：1-2 GB</p></li><li><p><strong>总计</strong>：2-4 GB</p></li></ul><h2 id="启动峰值显存"><a href="#启动峰值显存" class="headerlink" title="启动峰值显存"></a>启动峰值显存</h2><p>启动峰值显存比稳态高 15-30%</p><h1 id="查看GPU单卡显存压力"><a href="#查看GPU单卡显存压力" class="headerlink" title="查看GPU单卡显存压力"></a>查看GPU单卡显存压力</h1><p>例如：</p><p>Qwen&#x2F;Qwen-32B-Chat</p><p><strong>FP16 大小</strong>：32B × 2 &#x3D; 64 GB</p><p>KV_Cache(GB) ≈ batch_size × seq_len × 0.0001 &#x3D;  8 × 8192 × 0.0001 &#x3D; 6.5536 GB ≈ 6.4 GB </p><table><thead><tr><th><code>batch_size</code></th><th>8</th><th>并发请求数</th></tr></thead><tbody><tr><td><code>seq_len</code></td><td>8192</td><td>上下文长度</td></tr></tbody></table><p><strong>单卡需求</strong>：</p><ul><li>模型分片：64GB ÷ 4 &#x3D; 16 GB</li><li>KV Cache：6.4 GB</li><li>开销：3.0 GB</li></ul><p>单卡需求 &#x3D;  25.4 &gt; 我单一GPU 24G显存</p><p>所以我无法部署此大模型。 </p><p>同时，由于启动峰值显存比稳态高 15-25%，上面的vllm配置中，即便是batch_size&#x3D;1,seq_len&#x3D;512, 在峰值依然超过了 显存余量，所以我无法部署此大模型。 </p><p>例如：</p><p>通义千问2.5-72B-Instruct-AWQ量化</p><p><strong>单卡需求</strong>：</p><ul><li>模型分片：36GB ÷ 4 &#x3D; 9 GB</li><li>KV Cache：6.4 GB</li><li>开销：3.0 GB</li></ul><p>单卡需求 &#x3D;  18.4 &gt; 我单一GPU 24G显存</p><p>启动峰值显存 ≈  18.4 * 1.25 &#x3D; 23 &lt; 我单一GPU 24G显存, 所以可以部署。</p><h1 id="查看GPU总显存压力"><a href="#查看GPU总显存压力" class="headerlink" title="查看GPU总显存压力"></a>查看GPU总显存压力</h1><p>满足一下即可：</p><p>模型需要显存大小 &lt; vllm总显存 </p>]]></content>
+    
+    
+    <summary type="html">这是文章开头，显示在主页面，详情请点击此处。</summary>
+    
+    
+    
+    <category term="机器学习" scheme="http://example.com/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
+    
+    
+    <category term="显存" scheme="http://example.com/tags/%E6%98%BE%E5%AD%98/"/>
+    
+  </entry>
   
   <entry>
     <title>构建一个写教案的智能体</title>
@@ -488,27 +509,6 @@
     <updated>2025-03-14T01:58:23.951Z</updated>
     
     <content type="html"><![CDATA[<p>简介 <span id="more"></span></p><h1 id="不智能"><a href="#不智能" class="headerlink" title="不智能"></a>不智能</h1><p>智能合约 其实 只是个自动化的合约而已，和智能不搭边。</p><p>一旦发现 漏洞 理论上 智能硬分叉解决，成本太高，而加补救规则 会导致 软分叉。</p><h1 id="实际可改"><a href="#实际可改" class="headerlink" title="实际可改"></a>实际可改</h1><p>但是 事实上 没有什么是真的完全不可改的。</p><p>智能合约是理论上不可改而已。</p><h1 id="solidity易被攻击"><a href="#solidity易被攻击" class="headerlink" title="solidity易被攻击"></a>solidity易被攻击</h1><p>表达能力强的语言，执行起来 可能出现 漏洞。</p><p>以后会被标准化库来搞。</p><h1 id="开源但是并没有变安全"><a href="#开源但是并没有变安全" class="headerlink" title="开源但是并没有变安全"></a>开源但是并没有变安全</h1><p>开源 大家也没有检查合约，导致了安全问题没被改善。</p><h1 id="decentralized"><a href="#decentralized" class="headerlink" title="decentralized"></a>decentralized</h1><p>以太坊团队 在dao中 硬分叉的例子也没有真的 实现 中心化，事实上还是 大部分 miner 感觉他们有号召力又符合自己的利益才用实际挖矿来支持的。</p><p>存在 分叉的选择 就是 民主的体现。</p><p>decentralized 不等于 distribute！</p><p>分布式可以运行 中心化的应用。</p><h1 id="适用场景"><a href="#适用场景" class="headerlink" title="适用场景"></a>适用场景</h1><p>state machine 状态机 的目的 是容错，而不是加速。</p><p>EMV 如果当分布式存储来看 开销就太大了gas费用，emv 适用的 是控制场景！</p><p>建立共识用的，控制用的，而不是 用于计算。</p>]]></content>
-    
-    
-    <summary type="html">这是文章开头，显示在主页面，详情请点击此处。</summary>
-    
-    
-    
-    <category term="区块链" scheme="http://example.com/categories/%E5%8C%BA%E5%9D%97%E9%93%BE/"/>
-    
-    
-    <category term="eth" scheme="http://example.com/tags/eth/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>18-the-DAO失败案例</title>
-    <link href="http://example.com/2025/02/03/%E5%8C%BA%E5%9D%97%E9%93%BE/18-the-DAO%E5%A4%B1%E8%B4%A5%E6%A1%88%E4%BE%8B/"/>
-    <id>http://example.com/2025/02/03/%E5%8C%BA%E5%9D%97%E9%93%BE/18-the-DAO%E5%A4%B1%E8%B4%A5%E6%A1%88%E4%BE%8B/</id>
-    <published>2025-02-03T14:17:12.000Z</published>
-    <updated>2025-03-14T01:58:23.945Z</updated>
-    
-    <content type="html"><![CDATA[<p>简介 <span id="more"></span></p><p>Decentralized Autonomous Organization</p><p>去中心化自治组织</p><h1 id="DAO-的核心特点："><a href="#DAO-的核心特点：" class="headerlink" title="DAO 的核心特点："></a><strong>DAO 的核心特点</strong>：</h1><ol><li><strong>去中心化（Decentralized）</strong><ul><li>没有传统公司的层级结构（如 CEO、董事会），决策权分散在组织的所有成员手中。</li><li>成员通常通过持有代币（Token）或贡献资源获得投票权。</li></ul></li><li><strong>自治（Autonomous）</strong><ul><li>通过区块链上的 <strong>智能合约</strong>（Smart Contract）自动执行规则和决策。</li><li>例如：资金分配、提案投票、奖励发放等流程完全由代码控制，无需人工干预。</li></ul></li><li><strong>透明性</strong><ul><li>所有规则、交易和决策记录在区块链上，公开可查，不可篡改。</li></ul></li><li><strong>社区驱动</strong><ul><li>成员通过提案和投票共同决定组织的发展方向，实现民主化治理。</li></ul></li></ol><h1 id="split"><a href="#split" class="headerlink" title="split"></a>split</h1><h2 id="例子："><a href="#例子：" class="headerlink" title="例子："></a>例子：</h2><p>一个人参与the dao，投入了一些eth 进去，然后拿回了一些 代币，这些代币可以投票决定某一些问题；</p><p>如果此时这个人需要拿回钱了，就需要通过the dao 的拆分的办法来实现；split dao；</p><p>拆分完 得到一个 child dao；子dao；</p><p>拆分过程中手中的代币要被收回，相应代币会打到这个子dao child dao中；</p><p>split dao 是投资人收回资金的唯一途径。</p><h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><p>split之前 有7天的辩论期（决定是否参加），split之后有28天的锁定期（补救）。</p><p><img src="/2025/02/03/%E5%8C%BA%E5%9D%97%E9%93%BE/18-the-DAO%E5%A4%B1%E8%B4%A5%E6%A1%88%E4%BE%8B/Screenshot%202025-02-05%20at%209.58.27%E2%80%AFPM.png" alt="Screenshot 2025-02-05 at 9.58.27 PM"></p><p>以上走钱的步骤是：</p><p>1、把钱给人</p><p>2、总资产减去相应值</p><p>3、把人的资产清零</p><p><strong>警惕：</strong> </p><p>正确的做法是 先清零账户，再进行转帐。</p><p>不然容易被hack  重入攻击。</p><h2 id="故事后续"><a href="#故事后续" class="headerlink" title="故事后续"></a>故事后续</h2><p>支持dao的和不支持dao 的，在 eth 中出现了分歧，有一些人不认可一切和dao 相关的交易，导致了eth 的软分叉。</p><p>软分叉之后 因为要退被hack搞走的钱，又设计了一次硬分叉，（软件升级把所有 dao 上的资金都转移到一个新的智能合约中去，新的智能合约只有一个功能就是退钱），旧矿工不会认可这样的做法，因为是强制的他们会觉得不是合法的交易。</p><p>最后通过投票，大家同意了这次硬分叉 ，hack 没有吃到好处。</p><p>硬分叉后 旧链 还是有一些在上面挖（不认可这次中心化投票导致的硬分叉），一些交易所上了这个旧的eth ，名字就叫 etc 以太坊经典，etc挖矿难度降低了因为一大批的人不挖它了。</p><p>由于etc 链和 eth 链 的大部分内容都是一致的，导致了 经常出现<strong>重放攻击</strong>。 </p><blockquote><p>重放攻击（Replay Attack）是一种网络安全攻击手段，攻击者通过截获并重复发送合法的通信数据，欺骗系统执行非授权操作。其核心在于利用“有效数据的重复使用”，而非破解或篡改数据。</p></blockquote><p>智能合约出现这样致命的bug 经常会导致 这个智能合约作废，</p>]]></content>
     
     
     <summary type="html">这是文章开头，显示在主页面，详情请点击此处。</summary>
