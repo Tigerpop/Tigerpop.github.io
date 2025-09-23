@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2025-09-13T14:20:06.456Z</updated>
+  <updated>2025-09-23T04:09:48.810Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,27 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Mac调整盒盖后深度睡眠模式</title>
+    <link href="http://example.com/2025/09/23/Mac/Mac%E8%B0%83%E6%95%B4%E7%9B%92%E7%9B%96%E5%90%8E%E6%B7%B1%E5%BA%A6%E7%9D%A1%E7%9C%A0%E6%A8%A1%E5%BC%8F/"/>
+    <id>http://example.com/2025/09/23/Mac/Mac%E8%B0%83%E6%95%B4%E7%9B%92%E7%9B%96%E5%90%8E%E6%B7%B1%E5%BA%A6%E7%9D%A1%E7%9C%A0%E6%A8%A1%E5%BC%8F/</id>
+    <published>2025-09-23T04:08:32.000Z</published>
+    <updated>2025-09-23T04:09:48.810Z</updated>
+    
+    <content type="html"><![CDATA[<p><code>sleepmode.sh</code></p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> [ <span class="string">&quot;<span class="variable">$1</span>&quot;</span> == <span class="string">&quot;fast&quot;</span> ]; <span class="keyword">then</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;切换到 快唤醒模式（hibernatemode=3，8小时后才进入深度睡眠，保留唤醒动画）...&quot;</span></span><br><span class="line">    sudo pmset -a hibernatemode 3           <span class="comment"># 普通睡眠+RAM供电，快速唤醒</span></span><br><span class="line">    sudo pmset -a standby 1                 <span class="comment"># 允许深度睡眠</span></span><br><span class="line">    sudo pmset -a standbydelayhigh 28800    <span class="comment"># 高电量延迟 8 小时</span></span><br><span class="line">    sudo pmset -a standbydelaylow 14400     <span class="comment"># 低电量延迟 4 小时</span></span><br><span class="line">    sudo pmset -a highstandbythreshold 50   <span class="comment"># 电量 &gt;50% 用高电量延迟</span></span><br><span class="line">    sudo pmset -a womp 0                    <span class="comment"># 关闭网络唤醒</span></span><br><span class="line">    sudo pmset -a powernap 0                <span class="comment"># 关闭 Power Nap，减少后台任务</span></span><br><span class="line">    sudo pmset -a proximitywake 1           <span class="comment"># 开启接近唤醒，保留唤醒动画</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;✅ 已切换为快唤醒模式（8小时后才进入深度睡眠，低电量4小时才进入深度睡眠）&quot;</span></span><br><span class="line"><span class="keyword">elif</span> [ <span class="string">&quot;<span class="variable">$1</span>&quot;</span> == <span class="string">&quot;save&quot;</span> ]; <span class="keyword">then</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;切换到 省电深度睡眠模式（hibernatemode=25）...&quot;</span></span><br><span class="line">    sudo pmset -a hibernatemode 25</span><br><span class="line">    sudo pmset -a standby 0</span><br><span class="line">    sudo pmset -a autopoweroff 0</span><br><span class="line">    sudo pmset -a womp 0</span><br><span class="line">    sudo pmset -a powernap 0</span><br><span class="line">    sudo pmset -a proximitywake 0</span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;✅ 已切换为省电深度睡眠模式&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">elif</span> [ <span class="string">&quot;<span class="variable">$1</span>&quot;</span> == <span class="string">&quot;restore&quot;</span> ]; <span class="keyword">then</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;恢复到 macOS 出厂默认盒盖睡眠设置...&quot;</span></span><br><span class="line">    sudo pmset -a hibernatemode 3</span><br><span class="line">    sudo pmset -a standby 1</span><br><span class="line">    sudo pmset -a standbydelayhigh 86400</span><br><span class="line">    sudo pmset -a standbydelaylow 10800</span><br><span class="line">    sudo pmset -a highstandbythreshold 50</span><br><span class="line">    sudo pmset -a autopoweroff 1</span><br><span class="line">    sudo pmset -a autopoweroffdelay 28800</span><br><span class="line">    sudo pmset -a womp 1</span><br><span class="line">    sudo pmset -a powernap 1</span><br><span class="line">    sudo pmset -a proximitywake 1</span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;✅ 已恢复为 macOS 默认设置&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;用法: &quot;</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;  ./sleepmode.sh fast     # 快唤醒模式&quot;</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;  ./sleepmode.sh save     # 省电深度睡眠模式&quot;</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;  ./sleepmode.sh restore  # 恢复 macOS 默认合盖睡眠设置&quot;</span></span><br><span class="line"><span class="keyword">fi</span></span><br></pre></td></tr></table></figure>]]></content>
+    
+    
+    <summary type="html">这是文章开头，显示在主页面，详情请点击此处。</summary>
+    
+    
+    
+    <category term="Mac" scheme="http://example.com/categories/Mac/"/>
+    
+    
+    <category term="Mac" scheme="http://example.com/tags/Mac/"/>
+    
+  </entry>
   
   <entry>
     <title>Ubuntu vs. CentOS\RHEL 密码重置流程对比</title>
@@ -502,27 +523,6 @@
     <category term="共享存储" scheme="http://example.com/tags/%E5%85%B1%E4%BA%AB%E5%AD%98%E5%82%A8/"/>
     
     <category term="iscs" scheme="http://example.com/tags/iscs/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>21-总结</title>
-    <link href="http://example.com/2025/02/06/%E5%8C%BA%E5%9D%97%E9%93%BE/21-%E6%80%BB%E7%BB%93/"/>
-    <id>http://example.com/2025/02/06/%E5%8C%BA%E5%9D%97%E9%93%BE/21-%E6%80%BB%E7%BB%93/</id>
-    <published>2025-02-06T14:17:12.000Z</published>
-    <updated>2025-02-06T10:06:18.020Z</updated>
-    
-    <content type="html"><![CDATA[<p>简介 <span id="more"></span></p><h1 id="区块链的应用问题"><a href="#区块链的应用问题" class="headerlink" title="区块链的应用问题"></a>区块链的应用问题</h1><p>有人说放保险，可以理赔快，但是实际上 是卡在了 理赔确认这一步上，区块链并没有优势；</p><p>有人说放 蔬菜溯源 上，利用区块链的不可篡改性，但是实际上 在进入区块链之前就被改过的话，标签就打错了，区块链也解决不了这样的问题；</p><p>区块链用于在互不信任的实体之间达成共识。</p><p>一个成功的商业模式中，中心化和去中心化 是可以同时存在的，比如 一个商店支持区块链币种支付，哈哈。</p><p>跨国交易 对区块链来说 确实是非常方便。但是一般的支付手段 区块链由于能耗高并无优势。</p><p>区块链对于价值交换比较在行，如果是价值交换信息交换同步进行的互联网，区块链可能有用武之地。</p><p>2018年的课程 说当时币价太高了，2025年看搞得心里拔凉拔凉的，哈哈。</p>]]></content>
-    
-    
-    <summary type="html">这是文章开头，显示在主页面，详情请点击此处。</summary>
-    
-    
-    
-    <category term="区块链" scheme="http://example.com/categories/%E5%8C%BA%E5%9D%97%E9%93%BE/"/>
-    
-    
-    <category term="eth" scheme="http://example.com/tags/eth/"/>
     
   </entry>
   
