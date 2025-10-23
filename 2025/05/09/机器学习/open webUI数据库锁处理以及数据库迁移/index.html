@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha256-AbA177XfpSnFEvgpYu1jMygiLabzPCJCRIBtR5jGc0k=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.13.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OpenwebUI数据库锁处理以及数据库迁移">
+<meta property="og:url" content="http://example.com/2025/05/09/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/open%20webUI%E6%95%B0%E6%8D%AE%E5%BA%93%E9%94%81%E5%A4%84%E7%90%86%E4%BB%A5%E5%8F%8A%E6%95%B0%E6%8D%AE%E5%BA%93%E8%BF%81%E7%A7%BB/index.html">
+<meta property="og:site_name" content="Tiger_pop&#39;s Blog">
+<meta property="og:description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2025/05/09/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/open%20webUI%E6%95%B0%E6%8D%AE%E5%BA%93%E9%94%81%E5%A4%84%E7%90%86%E4%BB%A5%E5%8F%8A%E6%95%B0%E6%8D%AE%E5%BA%93%E8%BF%81%E7%A7%BB/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20250509101133_160.png">
+<meta property="og:image" content="http://example.com/2025/05/09/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/open%20webUI%E6%95%B0%E6%8D%AE%E5%BA%93%E9%94%81%E5%A4%84%E7%90%86%E4%BB%A5%E5%8F%8A%E6%95%B0%E6%8D%AE%E5%BA%93%E8%BF%81%E7%A7%BB/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20250509101126_159.png">
+<meta property="og:image" content="http://example.com/2025/05/09/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/open%20webUI%E6%95%B0%E6%8D%AE%E5%BA%93%E9%94%81%E5%A4%84%E7%90%86%E4%BB%A5%E5%8F%8A%E6%95%B0%E6%8D%AE%E5%BA%93%E8%BF%81%E7%A7%BB/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20250509101137_161.png">
+<meta property="og:image" content="http://example.com/2025/05/09/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/open%20webUI%E6%95%B0%E6%8D%AE%E5%BA%93%E9%94%81%E5%A4%84%E7%90%86%E4%BB%A5%E5%8F%8A%E6%95%B0%E6%8D%AE%E5%BA%93%E8%BF%81%E7%A7%BB/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20250509102743_163.png">
+<meta property="og:image" content="http://example.com/2025/05/09/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/open%20webUI%E6%95%B0%E6%8D%AE%E5%BA%93%E9%94%81%E5%A4%84%E7%90%86%E4%BB%A5%E5%8F%8A%E6%95%B0%E6%8D%AE%E5%BA%93%E8%BF%81%E7%A7%BB/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20250509102746_164.png">
+<meta property="og:image" content="http://example.com/2025/05/09/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/open%20webUI%E6%95%B0%E6%8D%AE%E5%BA%93%E9%94%81%E5%A4%84%E7%90%86%E4%BB%A5%E5%8F%8A%E6%95%B0%E6%8D%AE%E5%BA%93%E8%BF%81%E7%A7%BB/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20250509102750_168.png">
+<meta property="og:image" content="http://example.com/2025/05/09/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/open%20webUI%E6%95%B0%E6%8D%AE%E5%BA%93%E9%94%81%E5%A4%84%E7%90%86%E4%BB%A5%E5%8F%8A%E6%95%B0%E6%8D%AE%E5%BA%93%E8%BF%81%E7%A7%BB/27a55a1370c41f0736ba094bdc8866c6c2878c16.png">
+<meta property="og:image" content="http://example.com/2025/05/09/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/open%20webUI%E6%95%B0%E6%8D%AE%E5%BA%93%E9%94%81%E5%A4%84%E7%90%86%E4%BB%A5%E5%8F%8A%E6%95%B0%E6%8D%AE%E5%BA%93%E8%BF%81%E7%A7%BB/%E6%88%AA%E5%B1%8F2025-05-09%2010.31.06.jpg">
+<meta property="article:published_time" content="2025-05-09T02:35:25.000Z">
+<meta property="article:modified_time" content="2025-05-09T02:36:49.146Z">
+<meta property="article:author" content="陈宇韶chenyushao">
+<meta property="article:tag" content="锁">
+<meta property="article:tag" content="PostgreSQL">
+<meta property="article:tag" content="sqlite">
+<meta property="article:tag" content="迁移">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2025/05/09/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/open%20webUI%E6%95%B0%E6%8D%AE%E5%BA%93%E9%94%81%E5%A4%84%E7%90%86%E4%BB%A5%E5%8F%8A%E6%95%B0%E6%8D%AE%E5%BA%93%E8%BF%81%E7%A7%BB/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20250509101133_160.png">
+
+
+<link rel="canonical" href="http://example.com/2025/05/09/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/open%20webUI%E6%95%B0%E6%8D%AE%E5%BA%93%E9%94%81%E5%A4%84%E7%90%86%E4%BB%A5%E5%8F%8A%E6%95%B0%E6%8D%AE%E5%BA%93%E8%BF%81%E7%A7%BB/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2025/05/09/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/open%20webUI%E6%95%B0%E6%8D%AE%E5%BA%93%E9%94%81%E5%A4%84%E7%90%86%E4%BB%A5%E5%8F%8A%E6%95%B0%E6%8D%AE%E5%BA%93%E8%BF%81%E7%A7%BB/","path":"2025/05/09/机器学习/open webUI数据库锁处理以及数据库迁移/","title":"OpenwebUI数据库锁处理以及数据库迁移"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>OpenwebUI数据库锁处理以及数据库迁移 | Tiger_pop's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="Tiger_pop's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Tiger_pop's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">tiger_pop 的博客</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%97%AE%E9%A2%98%EF%BC%9A"><span class="nav-number">1.</span> <span class="nav-text">问题：</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%B4%E6%97%B6%E5%A4%84%E7%90%86%EF%BC%9A"><span class="nav-number">2.</span> <span class="nav-text">临时处理：</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%95%BF%E6%9C%9F%E5%A4%84%E7%90%86-%EF%BC%88sqlite%E8%BF%81%E7%A7%BBPostgreSQL%EF%BC%89%EF%BC%9A"><span class="nav-number">3.</span> <span class="nav-text">长期处理 （sqlite迁移PostgreSQL）：</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81Docker-%E5%AE%89%E8%A3%85-PostgreSQL-%E5%B9%B6%E5%90%AF%E5%8A%A8"><span class="nav-number">3.1.</span> <span class="nav-text">一、Docker 安装 PostgreSQL 并启动</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E4%BD%BF%E7%94%A8%E8%84%9A%E6%9C%AC%E8%BF%81%E7%A7%BB"><span class="nav-number">3.2.</span> <span class="nav-text">二、使用脚本迁移</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%EF%BC%880%EF%BC%89%E5%87%86%E5%A4%87%E5%B7%A5%E4%BD%9C%EF%BC%9A"><span class="nav-number">3.2.1.</span> <span class="nav-text">（0）准备工作：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%EF%BC%881%EF%BC%89%E5%85%B3%E9%97%AD-Open-WebUI%E3%80%82"><span class="nav-number">3.2.2.</span> <span class="nav-text">（1）关闭 Open WebUI。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%EF%BC%882%EF%BC%89%E9%85%8D%E7%BD%AE-Open-WebUI-%E6%B7%BB%E5%8A%A0-PostgreSQL-%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F"><span class="nav-number">3.2.3.</span> <span class="nav-text">（2）配置 Open WebUI 添加 PostgreSQL 环境变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%EF%BC%883%EF%BC%89%E5%90%AF%E5%8A%A8-Open-WebUI-%E5%B9%B6%E5%B0%9D%E8%AF%95%E8%AE%BF%E9%97%AE%E7%BD%91%E7%AB%99%E3%80%82"><span class="nav-number">3.2.4.</span> <span class="nav-text">（3）启动 Open WebUI 并尝试访问网站。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%EF%BC%884%EF%BC%89%E5%86%8D%E6%AC%A1%E5%85%B3%E9%97%AD-Open-WebUI%E3%80%82"><span class="nav-number">3.2.5.</span> <span class="nav-text">（4）再次关闭 Open WebUI。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%EF%BC%885%EF%BC%89%E5%9C%A8%E6%9F%90%E4%B8%AA%E4%BD%8D%E7%BD%AE%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E6%96%B0%E7%9B%AE%E5%BD%95%E3%80%82"><span class="nav-number">3.2.6.</span> <span class="nav-text">（5）在某个位置创建一个新目录。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%EF%BC%886%EF%BC%89%E6%96%B0%E5%BB%BA%E4%B8%80%E4%B8%AApython%E7%9A%84%E8%BF%81%E7%A7%BB%E8%84%9A%E6%9C%AC"><span class="nav-number">3.2.7.</span> <span class="nav-text">（6）新建一个python的迁移脚本</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%EF%BC%887%EF%BC%89%E8%BF%90%E8%A1%8C%E8%84%9A%E6%9C%AC%E8%BF%81%E7%A7%BB"><span class="nav-number">3.2.8.</span> <span class="nav-text">（7）运行脚本迁移</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Open-WebUI-%E4%BD%BF%E7%94%A8-PostgreSQL"><span class="nav-number">4.</span> <span class="nav-text">Open WebUI 使用 PostgreSQL</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%84%9F%E8%B0%A2%EF%BC%9A"><span class="nav-number">5.</span> <span class="nav-text">感谢：</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="陈宇韶chenyushao"
+      src="/images/my.jpg">
+  <p class="site-author-name" itemprop="name">陈宇韶chenyushao</p>
+  <div class="site-description" itemprop="description">爱学习、爱工作、爱生活;         微信号: Tiger_and_master;         手机号码:18515678348 </div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">427</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">201</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2025/05/09/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/open%20webUI%E6%95%B0%E6%8D%AE%E5%BA%93%E9%94%81%E5%A4%84%E7%90%86%E4%BB%A5%E5%8F%8A%E6%95%B0%E6%8D%AE%E5%BA%93%E8%BF%81%E7%A7%BB/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/my.jpg">
+      <meta itemprop="name" content="陈宇韶chenyushao">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tiger_pop's Blog">
+      <meta itemprop="description" content="爱学习、爱工作、爱生活;         微信号: Tiger_and_master;         手机号码:18515678348 ">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="OpenwebUI数据库锁处理以及数据库迁移 | Tiger_pop's Blog">
+      <meta itemprop="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          OpenwebUI数据库锁处理以及数据库迁移
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2025-05-09 10:35:25 / 修改时间：10:36:49" itemprop="dateCreated datePublished" datetime="2025-05-09T10:35:25+08:00">2025-05-09</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+            <div class="post-description">这是文章开头，显示在主页面，详情请点击此处。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="问题："><a href="#问题：" class="headerlink" title="问题："></a>问题：</h1><p>Open WebUI 容器在访问 <code>/app/backend/data/*.sqlite</code> 时出现</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sqlite3.OperationalError: database is locked</span><br></pre></td></tr></table></figure>
+
+<p>因为 SQLite 在高并发或持久卷（如 NFS&#x2F;SMB）环境下容易被锁住，导致后续请求一直卡住无法读写数据库。</p>
+<h1 id="临时处理："><a href="#临时处理：" class="headerlink" title="临时处理："></a>临时处理：</h1><p>进入 open webUI 容器，然后 找出这个 SQLite 是哪个进程在用，直接给它杀死；</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 进入容器</span></span><br><span class="line">docker <span class="built_in">exec</span> -it &lt;CONTAINER_ID&gt; /bin/bash</span><br><span class="line"><span class="comment"># 然后在容器内运行</span></span><br><span class="line">lsof /app/backend/data/*.sqlite</span><br><span class="line"><span class="comment"># 或者</span></span><br><span class="line">fuser /app/backend/data/*.sqlite</span><br><span class="line"><span class="comment"># 或者</span></span><br><span class="line">ps aux | grep sqlite </span><br><span class="line"></span><br><span class="line"><span class="comment"># kill 杀死进程。</span></span><br></pre></td></tr></table></figure>
+
+<p>在宿主机重启 容器（<strong>注意：停下需要等待长一点的时间再重启</strong>）</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker compose down</span><br><span class="line"></span><br><span class="line">docker compose up -d </span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="长期处理-（sqlite迁移PostgreSQL）："><a href="#长期处理-（sqlite迁移PostgreSQL）：" class="headerlink" title="长期处理 （sqlite迁移PostgreSQL）："></a>长期处理 （sqlite迁移PostgreSQL）：</h1><p>参考：<br><a target="_blank" rel="noopener" href="https://linux.do/t/topic/251676/39">https://linux.do/t/topic/251676/39</a></p>
+<h2 id="一、Docker-安装-PostgreSQL-并启动"><a href="#一、Docker-安装-PostgreSQL-并启动" class="headerlink" title="一、Docker 安装 PostgreSQL 并启动"></a>一、Docker 安装 PostgreSQL 并启动</h2><p>这里为了模块化的思想贯彻到底，全部使用 docker 部署，推荐使用 docker compose。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /home/cys/data/docker-data</span><br><span class="line"><span class="built_in">mkdir</span> -p postgres_data</span><br><span class="line"><span class="built_in">chmod</span> 777 ./postgres_data/</span><br><span class="line"></span><br><span class="line"><span class="built_in">cd</span> /home/cys/docker_data</span><br><span class="line"><span class="built_in">mkdir</span> postgsql</span><br><span class="line">vim docker-compose.yaml</span><br><span class="line">------------------------------ docker-compose.yaml ------------------------------</span><br><span class="line">services:</span><br><span class="line">  postgres:</span><br><span class="line">    container_name: my-postgres-sql</span><br><span class="line">    image: postgres:15</span><br><span class="line">    restart: unless-stopped</span><br><span class="line">    environment:</span><br><span class="line">      POSTGRES_PASSWORD: jiusdfwmij18273ee</span><br><span class="line">      <span class="comment"># 可选配置：</span></span><br><span class="line">      <span class="comment"># POSTGRES_USER: myuser</span></span><br><span class="line">      <span class="comment"># POSTGRES_DB: mydb</span></span><br><span class="line">    ports:</span><br><span class="line">      - <span class="string">&quot;5432:5432&quot;</span></span><br><span class="line">    volumes:</span><br><span class="line">      - /home/cys/data/docker-data/postgres_data:/var/lib/postgresql/data</span><br><span class="line">    networks:</span><br><span class="line">      - my-network</span><br><span class="line">networks:</span><br><span class="line">  my-network:</span><br><span class="line">    external: <span class="literal">true</span></span><br><span class="line">    name: vllm-network</span><br><span class="line"></span><br><span class="line">------------------------------ docker-compose.yaml ------------------------------</span><br><span class="line"></span><br><span class="line">docker compose up -d </span><br><span class="line"></span><br><span class="line"><span class="built_in">chmod</span> 777 /home/cys/data/docker-data/postgres_data/</span><br><span class="line"></span><br><span class="line">docker ps <span class="comment"># 可以看见 my_postgres_sql 开始运行了。</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="二、使用脚本迁移"><a href="#二、使用脚本迁移" class="headerlink" title="二、使用脚本迁移"></a>二、使用脚本迁移</h2><p>通过 pgloader 工具 来实现 sqlite 到 PostgreSQL 的迁移，实测不能保证完全正确，无法继承全部数据。<br>所以我们通过 python 脚本来实现open webUI全部数据从 sqlite 到 PostgreSQL 的迁移。</p>
+<h3 id="（0）准备工作："><a href="#（0）准备工作：" class="headerlink" title="（0）准备工作："></a>（0）准备工作：</h3><p>为防迁移出错，建议先备份：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo <span class="built_in">cp</span> /home/cys/data/docker-data/open_webui_data/webui.db \</span><br><span class="line">   /home/cys/data/docker-data/open_webui_data/webui.db.bak</span><br></pre></td></tr></table></figure>
+
+<p><strong>生成一个空的 PostgreSQL 数据库</strong>：<br>PostgreSQL 容器生成的时候就会默认生成一个 <strong>空的 PostgreSQL 数据库</strong>，名字叫 postgres ，我们为了图省事，直接就用这个数据库了。</p>
+<p><strong>确保 PostgreSQL 已经启动</strong>。</p>
+<p><strong>注意</strong>：记住 前面的 yaml 中的 <code>POSTGRES_PASSWORD:</code> ,是第一次生成的时候确定的，之后即便是修改了再重启容器，数据库的密码也不会变，如果要修改这个密码，需要进入容器，然后修改，再重启容器。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">docker <span class="built_in">exec</span> -it my-postgres-sql psql -U postgres</span><br><span class="line"></span><br><span class="line">ALTER USER postgres WITH PASSWORD <span class="string">&#x27;jiusdfwmij18273ee&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="built_in">exit</span>;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker restart my_postgres_sql</span><br></pre></td></tr></table></figure>
+
+<p> PostgreSQL 中通过 <code>\l</code> 命令查看数据库列表，确认 <code>postgres</code> 数据库存在，\dt看有哪些表。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(dockerTest) cys@cysserver:~/docker_data/postgsql$ docker <span class="built_in">exec</span> -it my_postgres_sql psql -U postgres</span><br><span class="line">psql (15.12 (Debian 15.12-1.pgdg120+1))</span><br><span class="line">Type <span class="string">&quot;help&quot;</span> <span class="keyword">for</span> <span class="built_in">help</span>.</span><br><span class="line"></span><br><span class="line">postgres=<span class="comment"># \l</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/2025/05/09/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/open%20webUI%E6%95%B0%E6%8D%AE%E5%BA%93%E9%94%81%E5%A4%84%E7%90%86%E4%BB%A5%E5%8F%8A%E6%95%B0%E6%8D%AE%E5%BA%93%E8%BF%81%E7%A7%BB/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20250509101133_160.png" alt="微信图片_20250509101133_160"></p>
+<p>先删除掉可能有的数据库中的表，空的就不管了。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">\c postgres  <span class="comment">-- 或 \c XXXX（如果存在其他数据库）切换到其他数据库</span></span><br><span class="line"></span><br><span class="line"><span class="comment">-- 终止所有连接到 postgres 数据库的会话</span></span><br><span class="line"><span class="keyword">SELECT</span> pg_terminate_backend(pid)</span><br><span class="line"><span class="keyword">FROM</span> pg_stat_activity</span><br><span class="line"><span class="keyword">WHERE</span> datname <span class="operator">=</span> <span class="string">&#x27;postgres&#x27;</span> <span class="keyword">AND</span> pid <span class="operator">&lt;&gt;</span> pg_backend_pid();</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 删除目标数据库 postgres 中的表</span></span><br></pre></td></tr></table></figure>
+
+<p>看看宿主机中有没有以前 的 挂载的 文件夹也删除掉，不然可能出现 容器内数据库不匹配问题。</p>
+<h3 id="（1）关闭-Open-WebUI。"><a href="#（1）关闭-Open-WebUI。" class="headerlink" title="（1）关闭 Open WebUI。"></a>（1）<strong>关闭 Open WebUI</strong>。</h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /home/cys/docker_data/openwebui2</span><br><span class="line"></span><br><span class="line">docker compose down <span class="comment"># 关闭这个 yaml 文件创建的 容器。</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="（2）配置-Open-WebUI-添加-PostgreSQL-环境变量"><a href="#（2）配置-Open-WebUI-添加-PostgreSQL-环境变量" class="headerlink" title="（2）配置 Open WebUI 添加 PostgreSQL 环境变量"></a>（2）配置 Open WebUI 添加 PostgreSQL 环境变量</h3><p>在open webUI 的 yaml中的 环境变量中写上：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">- DATABASE_URL=postgresql://postgres:jiusdfwmij18273ee@postgres:5432/postgres</span><br></pre></td></tr></table></figure>
+
+<p><code>postgres</code> 是前面的服务名。</p>
+<p>open webUI的全部yaml文件</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">open-webui:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">ghcr.io/open-webui/open-webui:cuda</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="comment"># 禁用 ollama 连接（注释或删除该行）</span></span><br><span class="line">      <span class="comment"># - OLLAMA_API_BASE_URL=http://10.5.9.252:11434</span></span><br><span class="line">      </span><br><span class="line">      <span class="comment"># 启用 OpenAI 兼容 API（必须开启）</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">ENABLE_OPENAI_API=true</span></span><br><span class="line">      </span><br><span class="line">      <span class="comment"># 指向本地 vLLM 的 OpenAI 兼容接口,即使你设置 container_name 为 deepseek-container，Docker内部仍然会将这个容器注册为服务名 vllm-openai，所以其他同网络的容器可以通过 “vllm-openai” 访问它</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">OPENAI_API_BASE_URL=http://vllm-openai:8000/v1</span></span><br><span class="line">      </span><br><span class="line">      <span class="comment"># 设置与 vLLM 一致的 API 密钥</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">OPENAI_API_KEYS=jisudf*&amp;QW123</span></span><br><span class="line">      </span><br><span class="line">      <span class="comment"># 其他原有配置保持不变</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">GLOBAL_LOG_LEVEL=DEBUG</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">HF_ENDPOINT=https://hf-mirror.com</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">CORS_ALLOW_ORIGIN=*</span></span><br><span class="line">      <span class="comment"># - RAG_EMBEDDING_MODEL=bge-m3</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">DEFAULT_MODELS=deepseek-r1-70b-AWQ</span>  <span class="comment"># 需与 vLLM 的 --served-model-name 参数一致</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">ENABLE_OAUTH_SIGNUP=true</span></span><br><span class="line">      <span class="comment"># 设置默认的 Embedding 模型名称（用于内部记录或日志）</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">RAG_EMBEDDING_MODEL=ritrieve_zh_v1</span>     <span class="comment"># bge-large-zh-v1.5</span></span><br><span class="line">      <span class="comment"># 指定 Embedding API 服务的地址，确保该地址在同一网络内可访问</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">EMBEDDING_API_BASE_URL=http://10.5.9.252:8002/v1</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">EMBEDDING_API_KEYS=wiekdoid@JIDj124123</span>     <span class="comment"># 这里用相同的 Key 关联上</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">RAG_FILE_MAX_SIZE=10485760</span>  <span class="comment"># 10MB RAG 文件大小给一个最大上限。</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">DATABASE_URL=postgresql://postgres:jiusdfwmij18273ee@postgres:5432/postgres</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="number">8080</span><span class="string">:8080</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">/home/cys/data/docker-data/open_webui_data:/app/backend/data</span></span><br><span class="line">    <span class="attr">networks:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">my-network</span></span><br><span class="line"><span class="attr">networks:</span></span><br><span class="line">  <span class="attr">my-network:</span></span><br><span class="line">    <span class="attr">external:</span> <span class="literal">true</span></span><br><span class="line">    <span class="attr">name:</span> <span class="string">vllm-network</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="（3）启动-Open-WebUI-并尝试访问网站。"><a href="#（3）启动-Open-WebUI-并尝试访问网站。" class="headerlink" title="（3）启动 Open WebUI 并尝试访问网站。"></a>（3）<strong>启动 Open WebUI</strong> 并尝试访问网站。</h3><p>这一步会强制创建数据库的图表，没有这一步，迁移会失败。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /home/cys/docker_data/openwebui2</span><br><span class="line"></span><br><span class="line">docker compose up -d <span class="comment"># 或者 docker restart openwebuiXXX ...</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="（4）再次关闭-Open-WebUI。"><a href="#（4）再次关闭-Open-WebUI。" class="headerlink" title="（4）再次关闭 Open WebUI。"></a>（4）<strong>再次关闭 Open WebUI</strong>。</h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /home/cys/docker_data/openwebui2</span><br><span class="line"></span><br><span class="line">docker compose down </span><br></pre></td></tr></table></figure>
+
+<h3 id="（5）在某个位置创建一个新目录。"><a href="#（5）在某个位置创建一个新目录。" class="headerlink" title="（5）在某个位置创建一个新目录。"></a>（5）<strong>在某个位置创建一个新目录</strong>。</h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> /home/cys/data/docker-data/sqlite-to-postgres-migration</span><br><span class="line"></span><br><span class="line"><span class="built_in">cd</span> /home/cys/data/docker-data/sqlite-to-postgres-migration</span><br></pre></td></tr></table></figure>
+
+<h3 id="（6）新建一个python的迁移脚本"><a href="#（6）新建一个python的迁移脚本" class="headerlink" title="（6）新建一个python的迁移脚本"></a>（6）新建一个python的迁移脚本</h3><p>vim  migrate.py<br>主要需要填写的 是用来sqlite的位置： SQLITE_DB_PATH；以及 PostgreSQL 连接信息；这两个地方。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> sqlite3</span><br><span class="line"><span class="keyword">import</span> psycopg2</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"></span><br><span class="line"><span class="comment"># Configuration</span></span><br><span class="line">SQLITE_DB_PATH = <span class="string">&#x27;/home/cys/data/docker-data/open_webui_data/webui.db&#x27;</span>  <span class="comment"># 改成webui.db所在目录，默认为当前目录</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># PostgreSQL 连接信息</span></span><br><span class="line">PG_CONFIG = &#123;</span><br><span class="line">    <span class="string">&#x27;host&#x27;</span>: <span class="string">&#x27;10.5.9.252&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;port&#x27;</span>: <span class="number">5432</span>,</span><br><span class="line">    <span class="string">&#x27;database&#x27;</span>: <span class="string">&#x27;postgres&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;user&#x27;</span>: <span class="string">&#x27;postgres&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;password&#x27;</span>: <span class="string">&#x27;jiusdfwmij18273ee&#x27;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"># Helper function to convert SQLite types to PostgreSQL types</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">sqlite_to_pg_type</span>(<span class="params">sqlite_type</span>):</span><br><span class="line">    sqlite_type = sqlite_type.upper()</span><br><span class="line">    <span class="keyword">if</span> <span class="string">&#x27;INTEGER&#x27;</span> <span class="keyword">in</span> sqlite_type:</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&#x27;INTEGER&#x27;</span></span><br><span class="line">    <span class="keyword">elif</span> <span class="string">&#x27;REAL&#x27;</span> <span class="keyword">in</span> sqlite_type:</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&#x27;DOUBLE PRECISION&#x27;</span></span><br><span class="line">    <span class="keyword">elif</span> <span class="string">&#x27;TEXT&#x27;</span> <span class="keyword">in</span> sqlite_type:</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&#x27;TEXT&#x27;</span></span><br><span class="line">    <span class="keyword">elif</span> <span class="string">&#x27;BLOB&#x27;</span> <span class="keyword">in</span> sqlite_type:</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&#x27;BYTEA&#x27;</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&#x27;TEXT&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Helper function to handle reserved keywords</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">get_safe_identifier</span>(<span class="params">identifier</span>):</span><br><span class="line">    reserved_keywords = [<span class="string">&#x27;user&#x27;</span>, <span class="string">&#x27;group&#x27;</span>, <span class="string">&#x27;order&#x27;</span>, <span class="string">&#x27;table&#x27;</span>, <span class="string">&#x27;select&#x27;</span>, <span class="string">&#x27;where&#x27;</span>, <span class="string">&#x27;from&#x27;</span>, <span class="string">&#x27;index&#x27;</span>, <span class="string">&#x27;constraint&#x27;</span>]</span><br><span class="line">    <span class="keyword">if</span> identifier.lower() <span class="keyword">in</span> reserved_keywords:</span><br><span class="line">        <span class="keyword">return</span> <span class="string">f&#x27;&quot;<span class="subst">&#123;identifier&#125;</span>&quot;&#x27;</span></span><br><span class="line">    <span class="keyword">return</span> identifier</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">migrate</span>():</span><br><span class="line">    <span class="comment"># Connect to SQLite database</span></span><br><span class="line">    sqlite_conn = sqlite3.connect(SQLITE_DB_PATH)</span><br><span class="line">    sqlite_cursor = sqlite_conn.cursor()</span><br><span class="line"></span><br><span class="line">    <span class="comment"># Connect to PostgreSQL database</span></span><br><span class="line">    pg_conn = psycopg2.connect(</span><br><span class="line">        host=PG_CONFIG[<span class="string">&#x27;host&#x27;</span>],</span><br><span class="line">        port=PG_CONFIG[<span class="string">&#x27;port&#x27;</span>],</span><br><span class="line">        database=PG_CONFIG[<span class="string">&#x27;database&#x27;</span>],</span><br><span class="line">        user=PG_CONFIG[<span class="string">&#x27;user&#x27;</span>],</span><br><span class="line">        password=PG_CONFIG[<span class="string">&#x27;password&#x27;</span>]</span><br><span class="line">    )</span><br><span class="line">    pg_cursor = pg_conn.cursor()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        <span class="comment"># Get list of tables from SQLite</span></span><br><span class="line">        sqlite_cursor.execute(<span class="string">&quot;SELECT name FROM sqlite_master WHERE type=&#x27;table&#x27;&quot;</span>)</span><br><span class="line">        tables = sqlite_cursor.fetchall()</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> table <span class="keyword">in</span> tables:</span><br><span class="line">            table_name = table[<span class="number">0</span>]</span><br><span class="line"></span><br><span class="line">            <span class="comment"># Skip &quot;migratehistory&quot; and &quot;alembic_version&quot; tables</span></span><br><span class="line">            <span class="keyword">if</span> table_name <span class="keyword">in</span> [<span class="string">&quot;migratehistory&quot;</span>, <span class="string">&quot;alembic_version&quot;</span>]:</span><br><span class="line">                <span class="built_in">print</span>(<span class="string">f&quot;Skipping table: <span class="subst">&#123;table_name&#125;</span>&quot;</span>)</span><br><span class="line">                <span class="keyword">continue</span></span><br><span class="line"></span><br><span class="line">            safe_table_name = get_safe_identifier(table_name)</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">f&quot;Checking table: <span class="subst">&#123;table_name&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line">            <span class="comment"># Check if table exists in PostgreSQL and has any rows</span></span><br><span class="line">            <span class="keyword">try</span>:</span><br><span class="line">                pg_cursor.execute(<span class="string">f&quot;SELECT COUNT(*) FROM <span class="subst">&#123;safe_table_name&#125;</span>&quot;</span>)</span><br><span class="line">                row_count = <span class="built_in">int</span>(pg_cursor.fetchone()[<span class="number">0</span>])</span><br><span class="line">                </span><br><span class="line">                <span class="keyword">if</span> row_count &gt; <span class="number">0</span>:</span><br><span class="line">                    <span class="built_in">print</span>(<span class="string">f&quot;Skipping table: <span class="subst">&#123;table_name&#125;</span> because it has <span class="subst">&#123;row_count&#125;</span> existing rows&quot;</span>)</span><br><span class="line">                    <span class="keyword">continue</span></span><br><span class="line">            <span class="keyword">except</span> psycopg2.Error:</span><br><span class="line">                <span class="comment"># Table might not exist</span></span><br><span class="line">                <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line">            <span class="built_in">print</span>(<span class="string">f&quot;Migrating table: <span class="subst">&#123;table_name&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line">            <span class="comment"># Get table schema from SQLite</span></span><br><span class="line">            sqlite_cursor.execute(<span class="string">f&#x27;PRAGMA table_info(&quot;<span class="subst">&#123;table_name&#125;</span>&quot;)&#x27;</span>)</span><br><span class="line">            schema = sqlite_cursor.fetchall()</span><br><span class="line"></span><br><span class="line">            <span class="comment"># Get column names and types</span></span><br><span class="line">            columns = []</span><br><span class="line">            <span class="keyword">for</span> col <span class="keyword">in</span> schema:</span><br><span class="line">                col_name = get_safe_identifier(col[<span class="number">1</span>])</span><br><span class="line">                col_type = sqlite_to_pg_type(col[<span class="number">2</span>])</span><br><span class="line">                columns.append(<span class="string">f&quot;<span class="subst">&#123;col_name&#125;</span> <span class="subst">&#123;col_type&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line">            <span class="comment"># Create table in PostgreSQL if it doesn&#x27;t exist</span></span><br><span class="line">            create_table_sql = <span class="string">f&#x27;CREATE TABLE IF NOT EXISTS <span class="subst">&#123;safe_table_name&#125;</span> (<span class="subst">&#123;<span class="string">&quot;, &quot;</span>.join(columns)&#125;</span>)&#x27;</span></span><br><span class="line">            pg_cursor.execute(create_table_sql)</span><br><span class="line">            pg_conn.commit()</span><br><span class="line"></span><br><span class="line">            <span class="comment"># Get table schema from PostgreSQL to determine column types</span></span><br><span class="line">            pg_cursor.execute(</span><br><span class="line">                <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">                SELECT column_name, data_type</span></span><br><span class="line"><span class="string">                FROM information_schema.columns</span></span><br><span class="line"><span class="string">                WHERE table_name = %s</span></span><br><span class="line"><span class="string">                &quot;&quot;&quot;</span>, </span><br><span class="line">                (table_name,)</span><br><span class="line">            )</span><br><span class="line">            pg_schema = pg_cursor.fetchall()</span><br><span class="line">            pg_column_types = &#123;col[<span class="number">0</span>]: col[<span class="number">1</span>] <span class="keyword">for</span> col <span class="keyword">in</span> pg_schema&#125;</span><br><span class="line"></span><br><span class="line">            <span class="comment"># Get data from SQLite</span></span><br><span class="line">            sqlite_cursor.execute(<span class="string">f&#x27;SELECT * FROM &quot;<span class="subst">&#123;table_name&#125;</span>&quot;&#x27;</span>)</span><br><span class="line">            rows = sqlite_cursor.fetchall()</span><br><span class="line">            </span><br><span class="line">            <span class="comment"># Get column names</span></span><br><span class="line">            column_names = [col[<span class="number">1</span>] <span class="keyword">for</span> col <span class="keyword">in</span> schema]</span><br><span class="line">            safe_column_names = [get_safe_identifier(col) <span class="keyword">for</span> col <span class="keyword">in</span> column_names]</span><br><span class="line">            </span><br><span class="line">            <span class="comment"># Insert data into PostgreSQL</span></span><br><span class="line">            <span class="keyword">for</span> row <span class="keyword">in</span> rows:</span><br><span class="line">                values = []</span><br><span class="line">                <span class="keyword">for</span> i, value <span class="keyword">in</span> <span class="built_in">enumerate</span>(row):</span><br><span class="line">                    col_name = column_names[i]</span><br><span class="line">                    <span class="keyword">if</span> value <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">                        values.append(<span class="string">&quot;NULL&quot;</span>)</span><br><span class="line">                    <span class="keyword">elif</span> col_name <span class="keyword">in</span> pg_column_types <span class="keyword">and</span> pg_column_types[col_name] == <span class="string">&#x27;boolean&#x27;</span>:</span><br><span class="line">                        values.append(<span class="string">&#x27;true&#x27;</span> <span class="keyword">if</span> value == <span class="number">1</span> <span class="keyword">else</span> <span class="string">&#x27;false&#x27;</span>)</span><br><span class="line">                    <span class="keyword">elif</span> <span class="built_in">isinstance</span>(value, <span class="built_in">str</span>):</span><br><span class="line">                        escaped_value = value.replace(<span class="string">&quot;&#x27;&quot;</span>, <span class="string">&quot;&#x27;&#x27;&quot;</span>)</span><br><span class="line">                        values.append(<span class="string">f&quot;&#x27;<span class="subst">&#123;escaped_value&#125;</span>&#x27;&quot;</span>)</span><br><span class="line">                    <span class="keyword">else</span>:</span><br><span class="line">                        values.append(<span class="built_in">str</span>(value))</span><br><span class="line">                </span><br><span class="line">                insert_sql = <span class="string">f&quot;INSERT INTO <span class="subst">&#123;safe_table_name&#125;</span> (<span class="subst">&#123;<span class="string">&#x27;, &#x27;</span>.join(safe_column_names)&#125;</span>) VALUES (<span class="subst">&#123;<span class="string">&#x27;, &#x27;</span>.join(values)&#125;</span>)&quot;</span></span><br><span class="line">                pg_cursor.execute(insert_sql)</span><br><span class="line">            </span><br><span class="line">            pg_conn.commit()</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">f&quot;Migrated <span class="subst">&#123;<span class="built_in">len</span>(rows)&#125;</span> rows from <span class="subst">&#123;table_name&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;Migration completed successfully!&quot;</span>)</span><br><span class="line">    <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;Error during migration: <span class="subst">&#123;e&#125;</span>&quot;</span>)</span><br><span class="line">    <span class="keyword">finally</span>:</span><br><span class="line">        <span class="comment"># Close database connections</span></span><br><span class="line">        sqlite_conn.close()</span><br><span class="line">        pg_conn.close()</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    migrate()</span><br></pre></td></tr></table></figure>
+
+<h3 id="（7）运行脚本迁移"><a href="#（7）运行脚本迁移" class="headerlink" title="（7）运行脚本迁移"></a>（7）运行脚本迁移</h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">conda activate dockerTest</span><br><span class="line"></span><br><span class="line">python migrate.py <span class="comment"># 缺啥包补啥包即可</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/2025/05/09/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/open%20webUI%E6%95%B0%E6%8D%AE%E5%BA%93%E9%94%81%E5%A4%84%E7%90%86%E4%BB%A5%E5%8F%8A%E6%95%B0%E6%8D%AE%E5%BA%93%E8%BF%81%E7%A7%BB/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20250509101126_159.png" alt="微信图片_20250509101126_159"></p>
+<p>这样就是 迁移成功了。</p>
+<p>我们还能进入 PostgreSQL 容器中 进入 数据库 postgres ，看看里面有什么表了。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker <span class="built_in">exec</span> -it my-postgres-sql psql -U postgres</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">\dt</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2025/05/09/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/open%20webUI%E6%95%B0%E6%8D%AE%E5%BA%93%E9%94%81%E5%A4%84%E7%90%86%E4%BB%A5%E5%8F%8A%E6%95%B0%E6%8D%AE%E5%BA%93%E8%BF%81%E7%A7%BB/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20250509101137_161.png" alt="微信图片_20250509101137_161"></p>
+<p>看看user 表和 auth 检查一下，以这两个open webUI的表为 例子</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> auth LIMIT <span class="number">10</span>;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2025/05/09/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/open%20webUI%E6%95%B0%E6%8D%AE%E5%BA%93%E9%94%81%E5%A4%84%E7%90%86%E4%BB%A5%E5%8F%8A%E6%95%B0%E6%8D%AE%E5%BA%93%E8%BF%81%E7%A7%BB/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20250509102743_163.png" alt="微信图片_20250509102743_163"></p>
+<h1 id="Open-WebUI-使用-PostgreSQL"><a href="#Open-WebUI-使用-PostgreSQL" class="headerlink" title="Open WebUI 使用 PostgreSQL"></a>Open WebUI 使用 PostgreSQL</h1><p>重启一下 open webUI 容器</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">docker</span> <span class="string">compose</span> <span class="string">down</span> </span><br><span class="line"><span class="string">docker</span> <span class="string">compose</span> <span class="string">up</span> <span class="string">-d</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/2025/05/09/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/open%20webUI%E6%95%B0%E6%8D%AE%E5%BA%93%E9%94%81%E5%A4%84%E7%90%86%E4%BB%A5%E5%8F%8A%E6%95%B0%E6%8D%AE%E5%BA%93%E8%BF%81%E7%A7%BB/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20250509102746_164.png" alt="微信图片_20250509102746_164"></p>
+<p><img src="/2025/05/09/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/open%20webUI%E6%95%B0%E6%8D%AE%E5%BA%93%E9%94%81%E5%A4%84%E7%90%86%E4%BB%A5%E5%8F%8A%E6%95%B0%E6%8D%AE%E5%BA%93%E8%BF%81%E7%A7%BB/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20250509102750_168.png" alt="微信图片_20250509102750_168"></p>
+<h1 id="感谢："><a href="#感谢：" class="headerlink" title="感谢："></a>感谢：</h1><p>迁移 参考了很多  <a target="_blank" rel="noopener" href="https://linux.do/t/topic/251676/19">https://linux.do/t/topic/251676/19</a> 之中的内容，感谢 <strong><a target="_blank" rel="noopener" href="https://linux.do/u/fl0w1nd">fl0w1nd</a></strong><img src="/2025/05/09/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/open%20webUI%E6%95%B0%E6%8D%AE%E5%BA%93%E9%94%81%E5%A4%84%E7%90%86%E4%BB%A5%E5%8F%8A%E6%95%B0%E6%8D%AE%E5%BA%93%E8%BF%81%E7%A7%BB/27a55a1370c41f0736ba094bdc8866c6c2878c16.png" alt="tieba_003">这位大佬提供的无私教程。</p>
+<p><img src="/2025/05/09/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/open%20webUI%E6%95%B0%E6%8D%AE%E5%BA%93%E9%94%81%E5%A4%84%E7%90%86%E4%BB%A5%E5%8F%8A%E6%95%B0%E6%8D%AE%E5%BA%93%E8%BF%81%E7%A7%BB/%E6%88%AA%E5%B1%8F2025-05-09%2010.31.06.jpg" alt="截屏2025-05-09 10.31.06"></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E9%94%81/" rel="tag"># 锁</a>
+              <a href="/tags/PostgreSQL/" rel="tag"># PostgreSQL</a>
+              <a href="/tags/sqlite/" rel="tag"># sqlite</a>
+              <a href="/tags/%E8%BF%81%E7%A7%BB/" rel="tag"># 迁移</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2025/04/29/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E6%88%AA%E5%8F%96%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E6%B5%81%E5%86%99%E6%97%A5%E5%BF%97%E7%9A%84%E7%AE%80%E5%8D%95%E8%84%9A%E6%9C%AC/" rel="prev" title="截取输入输出流写日志的简单脚本">
+                  <i class="fa fa-chevron-left"></i> 截取输入输出流写日志的简单脚本
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2025/05/18/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/huggingface%E5%AE%89%E8%A3%85%E5%AE%89%E5%85%A8%E6%A8%A1%E5%9E%8B/" rel="next" title="huggingface安装安全模型">
+                  huggingface安装安全模型 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">陈宇韶chenyushao</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

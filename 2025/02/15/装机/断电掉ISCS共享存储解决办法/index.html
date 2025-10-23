@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha256-AbA177XfpSnFEvgpYu1jMygiLabzPCJCRIBtR5jGc0k=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.13.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="断电掉ISCS共享存储解决办法">
+<meta property="og:url" content="http://example.com/2025/02/15/%E8%A3%85%E6%9C%BA/%E6%96%AD%E7%94%B5%E6%8E%89ISCS%E5%85%B1%E4%BA%AB%E5%AD%98%E5%82%A8%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/index.html">
+<meta property="og:site_name" content="Tiger_pop&#39;s Blog">
+<meta property="og:description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2025/02/15/%E8%A3%85%E6%9C%BA/%E6%96%AD%E7%94%B5%E6%8E%89ISCS%E5%85%B1%E4%BA%AB%E5%AD%98%E5%82%A8%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/image-20250129165912465.png">
+<meta property="og:image" content="http://example.com/2025/02/15/%E8%A3%85%E6%9C%BA/%E6%96%AD%E7%94%B5%E6%8E%89ISCS%E5%85%B1%E4%BA%AB%E5%AD%98%E5%82%A8%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/Screenshot%202025-01-29%20at%2010.13.52%E2%80%AFPM.png">
+<meta property="og:image" content="http://example.com/2025/02/15/%E8%A3%85%E6%9C%BA/%E6%96%AD%E7%94%B5%E6%8E%89ISCS%E5%85%B1%E4%BA%AB%E5%AD%98%E5%82%A8%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/Screenshot%202025-01-29%20at%2010.15.54%E2%80%AFPM.png">
+<meta property="og:image" content="http://example.com/2025/02/15/%E8%A3%85%E6%9C%BA/%E6%96%AD%E7%94%B5%E6%8E%89ISCS%E5%85%B1%E4%BA%AB%E5%AD%98%E5%82%A8%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/Screenshot%202025-02-16%20at%2011.29.03%E2%80%AFAM.png">
+<meta property="og:image" content="http://example.com/2025/02/15/%E8%A3%85%E6%9C%BA/%E6%96%AD%E7%94%B5%E6%8E%89ISCS%E5%85%B1%E4%BA%AB%E5%AD%98%E5%82%A8%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/Screenshot%202025-02-16%20at%2011.32.42%E2%80%AFAM.png">
+<meta property="og:image" content="http://example.com/2025/02/15/%E8%A3%85%E6%9C%BA/%E6%96%AD%E7%94%B5%E6%8E%89ISCS%E5%85%B1%E4%BA%AB%E5%AD%98%E5%82%A8%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/Screenshot%202025-02-16%20at%2011.34.09%E2%80%AFAM.png">
+<meta property="article:published_time" content="2025-02-15T14:25:10.000Z">
+<meta property="article:modified_time" content="2025-03-14T01:58:24.117Z">
+<meta property="article:author" content="陈宇韶chenyushao">
+<meta property="article:tag" content="共享存储">
+<meta property="article:tag" content="iscs">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2025/02/15/%E8%A3%85%E6%9C%BA/%E6%96%AD%E7%94%B5%E6%8E%89ISCS%E5%85%B1%E4%BA%AB%E5%AD%98%E5%82%A8%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/image-20250129165912465.png">
+
+
+<link rel="canonical" href="http://example.com/2025/02/15/%E8%A3%85%E6%9C%BA/%E6%96%AD%E7%94%B5%E6%8E%89ISCS%E5%85%B1%E4%BA%AB%E5%AD%98%E5%82%A8%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2025/02/15/%E8%A3%85%E6%9C%BA/%E6%96%AD%E7%94%B5%E6%8E%89ISCS%E5%85%B1%E4%BA%AB%E5%AD%98%E5%82%A8%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/","path":"2025/02/15/装机/断电掉ISCS共享存储解决办法/","title":"断电掉ISCS共享存储解决办法"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>断电掉ISCS共享存储解决办法 | Tiger_pop's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="Tiger_pop's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Tiger_pop's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">tiger_pop 的博客</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%83%8C%E6%99%AF%EF%BC%9A"><span class="nav-number">1.</span> <span class="nav-text">背景：</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%88%91%E7%9A%84%E5%A4%84%E7%90%86%E5%9B%9E%E9%A1%BE%EF%BC%9A"><span class="nav-number">2.</span> <span class="nav-text">我的处理回顾：</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1%E3%80%81iSCSIconfig%E6%96%87%E4%BB%B6%E6%8D%A2%E4%BA%86%E3%80%82"><span class="nav-number">2.1.</span> <span class="nav-text">1、iSCSIconfig文件换了。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2%E3%80%81%E6%94%B9%E5%8A%A8-hosts%E6%96%87%E4%BB%B6%E3%80%82"><span class="nav-number">2.2.</span> <span class="nav-text">2、改动 hosts文件。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3%E3%80%81%E5%9C%A8%E5%85%B1%E4%BA%AB%E5%AD%98%E5%82%A8%E6%9C%8D%E5%8A%A1%E5%99%A8-%E8%BF%9E%E4%BA%86-%E4%B8%BB%E6%9C%BA%E4%B8%8B%E7%9A%84%E6%98%A0%E5%B0%84%E7%AB%AF%E5%8F%A3%E3%80%82"><span class="nav-number">2.3.</span> <span class="nav-text">3、在共享存储服务器 连了 主机下的映射端口。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4%E3%80%81%E5%9C%A8%E7%AE%A1%E7%90%86%E5%B9%B3%E5%8F%B0%E6%B7%BB%E5%8A%A0"><span class="nav-number">2.4.</span> <span class="nav-text">4、在管理平台添加</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="陈宇韶chenyushao"
+      src="/images/my.jpg">
+  <p class="site-author-name" itemprop="name">陈宇韶chenyushao</p>
+  <div class="site-description" itemprop="description">爱学习、爱工作、爱生活;         微信号: Tiger_and_master;         手机号码:18515678348 </div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">427</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">201</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2025/02/15/%E8%A3%85%E6%9C%BA/%E6%96%AD%E7%94%B5%E6%8E%89ISCS%E5%85%B1%E4%BA%AB%E5%AD%98%E5%82%A8%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/my.jpg">
+      <meta itemprop="name" content="陈宇韶chenyushao">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tiger_pop's Blog">
+      <meta itemprop="description" content="爱学习、爱工作、爱生活;         微信号: Tiger_and_master;         手机号码:18515678348 ">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="断电掉ISCS共享存储解决办法 | Tiger_pop's Blog">
+      <meta itemprop="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          断电掉ISCS共享存储解决办法
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2025-02-15 22:25:10" itemprop="dateCreated datePublished" datetime="2025-02-15T22:25:10+08:00">2025-02-15</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-03-14 09:58:24" itemprop="dateModified" datetime="2025-03-14T09:58:24+08:00">2025-03-14</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E8%A3%85%E6%9C%BA/" itemprop="url" rel="index"><span itemprop="name">装机</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+            <div class="post-description">这是文章开头，显示在主页面，详情请点击此处。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="背景："><a href="#背景：" class="headerlink" title="背景："></a>背景：</h1><p>​	有两台物理机，每台物理机器内 有4个虚拟机，一共4张GPU卡，华三的 云服务部署在 共享存储中，可以通过  云管理平台来 实现对这8台虚拟机的控制，共享存储用的是 iscs协议连接。</p>
+<p>老的 虚拟机的共享存储，在断电情况下，突发了物理机器连不上 共享存储的情况。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 脱机的是 </span></span><br><span class="line">iscsiadm -m session</span><br><span class="line">iscsiadm: No active sessions.</span><br><span class="line"></span><br><span class="line"><span class="comment"># 正常的是 </span></span><br><span class="line">iscsiadm -m session</span><br><span class="line">tcp: [1] 172.26.1.207:3260,6 iqn.2004-12.com.inspur:mcs.inspurstore.node2 (non-flash)</span><br><span class="line">tcp: [2] 172.26.1.206:3260,6 iqn.2004-12.com.inspur:mcs.inspurstore.node1 (non-flash)</span><br></pre></td></tr></table></figure>
+
+<p>在云管理平台上可见，其中一台物理机器的iscs连接脱机了。我并不清楚发生了什么改变。</p>
+<p><img src="/2025/02/15/%E8%A3%85%E6%9C%BA/%E6%96%AD%E7%94%B5%E6%8E%89ISCS%E5%85%B1%E4%BA%AB%E5%AD%98%E5%82%A8%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/image-20250129165912465.png" alt="image-20250129165912465"></p>
+<h1 id="我的处理回顾："><a href="#我的处理回顾：" class="headerlink" title="我的处理回顾："></a>我的处理回顾：</h1><h2 id="1、iSCSIconfig文件换了。"><a href="#1、iSCSIconfig文件换了。" class="headerlink" title="1、iSCSIconfig文件换了。"></a>1、iSCSIconfig文件换了。</h2><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">systemctl status iscsid</span><br><span class="line"></span><br><span class="line"><span class="comment"># 列出已发现的目标：</span></span><br><span class="line">iscsiadm -m discovery -t sendtargets -p &lt;iSCSI 目标 IP&gt;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看回话：</span></span><br><span class="line">iscsiadm -m session</span><br><span class="line"></span><br><span class="line"><span class="comment">#  iSCSI 配置文件</span></span><br><span class="line"><span class="built_in">cat</span> /etc/iscsi/iscsid.conf</span><br><span class="line"></span><br><span class="line"><span class="comment"># 检查iscs报错</span></span><br><span class="line">journalctl -xe | grep iscsi</span><br><span class="line"></span><br><span class="line"><span class="comment"># 确认防火墙没有阻止 iSCSI 端口（默认 3260） </span></span><br><span class="line">自己搞吧</span><br><span class="line"></span><br><span class="line"><span class="comment"># 删除现有的 iSCSI 配置</span></span><br><span class="line">iscsiadm -m node -o delete -T iqn.2004-12.com.inspur:mcs.inspurstore.node1 -p 172.26.1.206</span><br><span class="line">iscsiadm -m node -o delete -T iqn.2004-12.com.inspur:mcs.inspurstore.node2 -p 172.26.1.207</span><br><span class="line"></span><br><span class="line"><span class="comment"># 删除后再执行目标发现命令</span></span><br><span class="line">iscsiadm -m discovery -t sendtargets -p 172.26.1.206</span><br><span class="line">iscsiadm -m discovery -t sendtargets -p 172.26.1.207</span><br><span class="line"></span><br><span class="line"><span class="comment"># sudo iscsiadm -m discovery -t st -p &lt;iSCSI 存储 IP 地址&gt;</span></span><br><span class="line">sudo iscsiadm -m discovery -t st -p 172.26.1.206</span><br><span class="line">sudo iscsiadm -m discovery -t st -p 172.26.1.207</span><br><span class="line">sudo iscsiadm -m node --login</span><br></pre></td></tr></table></figure>
+
+<p>换 iscsconfig 文件 </p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br><span class="line">267</span><br><span class="line">268</span><br><span class="line">269</span><br><span class="line">270</span><br><span class="line">271</span><br><span class="line">272</span><br><span class="line">273</span><br><span class="line">274</span><br><span class="line">275</span><br><span class="line">276</span><br><span class="line">277</span><br><span class="line">278</span><br><span class="line">279</span><br><span class="line">280</span><br><span class="line">281</span><br><span class="line">282</span><br><span class="line">283</span><br><span class="line">284</span><br><span class="line">285</span><br><span class="line">286</span><br><span class="line">287</span><br><span class="line">288</span><br><span class="line">289</span><br><span class="line">290</span><br><span class="line">291</span><br><span class="line">292</span><br><span class="line">293</span><br><span class="line">294</span><br><span class="line">295</span><br><span class="line">296</span><br><span class="line">297</span><br><span class="line">298</span><br><span class="line">299</span><br><span class="line">300</span><br><span class="line">301</span><br><span class="line">302</span><br><span class="line">303</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Open-iSCSI default configuration.</span></span><br><span class="line"><span class="comment"># Could be located at /etc/iscsi/iscsid.conf or ~/.iscsid.conf</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># Note: To set any of these values for a specific node/session run</span></span><br><span class="line"><span class="comment"># the iscsiadm --mode node --op command for the value. See the README</span></span><br><span class="line"><span class="comment"># and man page for iscsiadm for details on the --op command.</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"></span><br><span class="line"><span class="comment">######################</span></span><br><span class="line"><span class="comment"># iscsid daemon config</span></span><br><span class="line"><span class="comment">######################</span></span><br><span class="line"><span class="comment"># If you want iscsid to start the first time a iscsi tool</span></span><br><span class="line"><span class="comment"># needs to access it, instead of starting it when the init</span></span><br><span class="line"><span class="comment"># scripts run, set the iscsid startup command here. This</span></span><br><span class="line"><span class="comment"># should normally only need to be done by distro package</span></span><br><span class="line"><span class="comment"># maintainers.</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># Default for Fedora and RHEL. (uncomment to activate).</span></span><br><span class="line"><span class="comment"># iscsid.startup = /etc/rc.d/init.d/iscsid force-start</span></span><br><span class="line"><span class="comment"># </span></span><br><span class="line"><span class="comment"># Default for upstream open-iscsi scripts (uncomment to activate).</span></span><br><span class="line">iscsid.startup = /usr/sbin/iscsid</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">#############################</span></span><br><span class="line"><span class="comment"># NIC/HBA and driver settings</span></span><br><span class="line"><span class="comment">#############################</span></span><br><span class="line"><span class="comment"># open-iscsi can create a session and bind it to a NIC/HBA.</span></span><br><span class="line"><span class="comment"># To set this up see the example iface config file.</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#*****************</span></span><br><span class="line"><span class="comment"># Startup settings</span></span><br><span class="line"><span class="comment">#*****************</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># To request that the iscsi initd scripts startup a session set to &quot;automatic&quot;.</span></span><br><span class="line"><span class="comment"># node.startup = automatic</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># To manually startup the session set to &quot;manual&quot;. The default is manual.</span></span><br><span class="line">node.startup = manual</span><br><span class="line"></span><br><span class="line"><span class="comment"># For &quot;automatic&quot; startup nodes, setting this to &quot;Yes&quot; will try logins on each</span></span><br><span class="line"><span class="comment"># available iface until one succeeds, and then stop.  The default &quot;No&quot; will try</span></span><br><span class="line"><span class="comment"># logins on all availble ifaces simultaneously.</span></span><br><span class="line">node.leading_login = No</span><br><span class="line"></span><br><span class="line"><span class="comment"># *************</span></span><br><span class="line"><span class="comment"># CHAP Settings</span></span><br><span class="line"><span class="comment"># *************</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># To enable CHAP authentication set node.session.auth.authmethod</span></span><br><span class="line"><span class="comment"># to CHAP. The default is None.</span></span><br><span class="line"><span class="comment">#node.session.auth.authmethod = CHAP</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># To set a CHAP username and password for initiator</span></span><br><span class="line"><span class="comment"># authentication by the target(s), uncomment the following lines:</span></span><br><span class="line"><span class="comment">#node.session.auth.username = username</span></span><br><span class="line"><span class="comment">#node.session.auth.password = password</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># To set a CHAP username and password for target(s)</span></span><br><span class="line"><span class="comment"># authentication by the initiator, uncomment the following lines:</span></span><br><span class="line"><span class="comment">#node.session.auth.username_in = username_in</span></span><br><span class="line"><span class="comment">#node.session.auth.password_in = password_in</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># To enable CHAP authentication for a discovery session to the target</span></span><br><span class="line"><span class="comment"># set discovery.sendtargets.auth.authmethod to CHAP. The default is None.</span></span><br><span class="line"><span class="comment">#discovery.sendtargets.auth.authmethod = CHAP</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># To set a discovery session CHAP username and password for the initiator</span></span><br><span class="line"><span class="comment"># authentication by the target(s), uncomment the following lines:</span></span><br><span class="line"><span class="comment">#discovery.sendtargets.auth.username = username</span></span><br><span class="line"><span class="comment">#discovery.sendtargets.auth.password = password</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># To set a discovery session CHAP username and password for target(s)</span></span><br><span class="line"><span class="comment"># authentication by the initiator, uncomment the following lines:</span></span><br><span class="line"><span class="comment">#discovery.sendtargets.auth.username_in = username_in</span></span><br><span class="line"><span class="comment">#discovery.sendtargets.auth.password_in = password_in</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># ********</span></span><br><span class="line"><span class="comment"># Timeouts</span></span><br><span class="line"><span class="comment"># ********</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># See the iSCSI REAME&#x27;s Advanced Configuration section for tips</span></span><br><span class="line"><span class="comment"># on setting timeouts when using multipath or doing root over iSCSI.</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># To specify the length of time to wait for session re-establishment</span></span><br><span class="line"><span class="comment"># before failing SCSI commands back to the application when running</span></span><br><span class="line"><span class="comment"># the Linux SCSI Layer error handler, edit the line.</span></span><br><span class="line"><span class="comment"># The value is in seconds and the default is 120 seconds.</span></span><br><span class="line"><span class="comment"># Special values:</span></span><br><span class="line"><span class="comment"># - If the value is 0, IO will be failed immediately.</span></span><br><span class="line"><span class="comment"># - If the value is less than 0, IO will remain queued until the session</span></span><br><span class="line"><span class="comment"># is logged back in, or until the user runs the logout command.</span></span><br><span class="line">node.session.timeo.replacement_timeout = 17</span><br><span class="line"></span><br><span class="line"><span class="comment"># To specify the time to wait for login to complete, edit the line.</span></span><br><span class="line"><span class="comment"># The value is in seconds and the default is 15 seconds.</span></span><br><span class="line">node.conn[0].timeo.login_timeout = 15</span><br><span class="line"></span><br><span class="line"><span class="comment"># To specify the time to wait for logout to complete, edit the line.</span></span><br><span class="line"><span class="comment"># The value is in seconds and the default is 15 seconds.</span></span><br><span class="line">node.conn[0].timeo.logout_timeout = 15</span><br><span class="line"></span><br><span class="line"><span class="comment"># Time interval to wait for on connection before sending a ping.</span></span><br><span class="line">node.conn[0].timeo.noop_out_interval = 3</span><br><span class="line"></span><br><span class="line"><span class="comment"># To specify the time to wait for a Nop-out response before failing</span></span><br><span class="line"><span class="comment"># the connection, edit this line. Failing the connection will</span></span><br><span class="line"><span class="comment"># cause IO to be failed back to the SCSI layer. If using dm-multipath</span></span><br><span class="line"><span class="comment"># this will cause the IO to be failed to the multipath layer.</span></span><br><span class="line">node.conn[0].timeo.noop_out_timeout = 5</span><br><span class="line"></span><br><span class="line"><span class="comment"># To specify the time to wait for abort response before</span></span><br><span class="line"><span class="comment"># failing the operation and trying a logical unit reset edit the line.</span></span><br><span class="line"><span class="comment"># The value is in seconds and the default is 15 seconds.</span></span><br><span class="line">node.session.err_timeo.abort_timeout = 15</span><br><span class="line"></span><br><span class="line"><span class="comment"># To specify the time to wait for a logical unit response</span></span><br><span class="line"><span class="comment"># before failing the operation and trying session re-establishment</span></span><br><span class="line"><span class="comment"># edit the line.</span></span><br><span class="line"><span class="comment"># The value is in seconds and the default is 30 seconds.</span></span><br><span class="line">node.session.err_timeo.lu_reset_timeout = 30</span><br><span class="line"></span><br><span class="line"><span class="comment"># To specify the time to wait for a target response</span></span><br><span class="line"><span class="comment"># before failing the operation and trying session re-establishment</span></span><br><span class="line"><span class="comment"># edit the line.</span></span><br><span class="line"><span class="comment"># The value is in seconds and the default is 30 seconds.</span></span><br><span class="line">node.session.err_timeo.tgt_reset_timeout = 30</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">#******</span></span><br><span class="line"><span class="comment"># Retry</span></span><br><span class="line"><span class="comment">#******</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># To specify the number of times iscsid should retry a login</span></span><br><span class="line"><span class="comment"># if the login attempt fails due to the node.conn[0].timeo.login_timeout</span></span><br><span class="line"><span class="comment"># expiring modify the following line. Note that if the login fails</span></span><br><span class="line"><span class="comment"># quickly (before node.conn[0].timeo.login_timeout fires) because the network</span></span><br><span class="line"><span class="comment"># layer or the target returns an error, iscsid may retry the login more than</span></span><br><span class="line"><span class="comment"># node.session.initial_login_retry_max times.</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># This retry count along with node.conn[0].timeo.login_timeout</span></span><br><span class="line"><span class="comment"># determines the maximum amount of time iscsid will try to</span></span><br><span class="line"><span class="comment"># establish the initial login. node.session.initial_login_retry_max is</span></span><br><span class="line"><span class="comment"># multiplied by the node.conn[0].timeo.login_timeout to determine the</span></span><br><span class="line"><span class="comment"># maximum amount.</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># The default node.session.initial_login_retry_max is 8 and</span></span><br><span class="line"><span class="comment"># node.conn[0].timeo.login_timeout is 15 so we have:</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># node.conn[0].timeo.login_timeout * node.session.initial_login_retry_max =</span></span><br><span class="line"><span class="comment">#								120 seconds</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># Valid values are any integer value. This only</span></span><br><span class="line"><span class="comment"># affects the initial login. Setting it to a high value can slow</span></span><br><span class="line"><span class="comment"># down the iscsi service startup. Setting it to a low value can</span></span><br><span class="line"><span class="comment"># cause a session to not get logged into, if there are distuptions</span></span><br><span class="line"><span class="comment"># during startup or if the network is not ready at that time.</span></span><br><span class="line">node.session.initial_login_retry_max = 8</span><br><span class="line"></span><br><span class="line"><span class="comment">################################</span></span><br><span class="line"><span class="comment"># session and device queue depth</span></span><br><span class="line"><span class="comment">################################</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># To control how many commands the session will queue set</span></span><br><span class="line"><span class="comment"># node.session.cmds_max to an integer between 2 and 2048 that is also</span></span><br><span class="line"><span class="comment"># a power of 2. The default is 128.</span></span><br><span class="line">node.session.cmds_max = 128</span><br><span class="line"></span><br><span class="line"><span class="comment"># To control the device&#x27;s queue depth set node.session.queue_depth</span></span><br><span class="line"><span class="comment"># to a value between 1 and 1024. The default is 32.</span></span><br><span class="line">node.session.queue_depth = 32</span><br><span class="line"></span><br><span class="line"><span class="comment">##################################</span></span><br><span class="line"><span class="comment"># MISC SYSTEM PERFORMANCE SETTINGS</span></span><br><span class="line"><span class="comment">##################################</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># For software iscsi (iscsi_tcp) and iser (ib_iser) each session</span></span><br><span class="line"><span class="comment"># has a thread used to transmit or queue data to the hardware. For</span></span><br><span class="line"><span class="comment"># cxgb3i you will get a thread per host.</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># Setting the thread&#x27;s priority to a lower value can lead to higher throughput</span></span><br><span class="line"><span class="comment"># and lower latencies. The lowest value is -20. Setting the priority to</span></span><br><span class="line"><span class="comment"># a higher value, can lead to reduced IO performance, but if you are seeing</span></span><br><span class="line"><span class="comment"># the iscsi or scsi threads dominate the use of the CPU then you may want</span></span><br><span class="line"><span class="comment"># to set this value higher.</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># Note: For cxgb3i you must set all sessions to the same value, or the</span></span><br><span class="line"><span class="comment"># behavior is not defined.</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># The default value is -20. The setting must be between -20 and 20.</span></span><br><span class="line">node.session.xmit_thread_priority = -20</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">#***************</span></span><br><span class="line"><span class="comment"># iSCSI settings</span></span><br><span class="line"><span class="comment">#***************</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># To enable R2T flow control (i.e., the initiator must wait for an R2T</span></span><br><span class="line"><span class="comment"># command before sending any data), uncomment the following line:</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment">#node.session.iscsi.InitialR2T = Yes</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># To disable R2T flow control (i.e., the initiator has an implied</span></span><br><span class="line"><span class="comment"># initial R2T of &quot;FirstBurstLength&quot; at offset 0), uncomment the following line:</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># The defaults is No.</span></span><br><span class="line">node.session.iscsi.InitialR2T = No</span><br><span class="line"></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># To disable immediate data (i.e., the initiator does not send</span></span><br><span class="line"><span class="comment"># unsolicited data with the iSCSI command PDU), uncomment the following line:</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment">#node.session.iscsi.ImmediateData = No</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># To enable immediate data (i.e., the initiator sends unsolicited data</span></span><br><span class="line"><span class="comment"># with the iSCSI command packet), uncomment the following line:</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># The default is Yes</span></span><br><span class="line">node.session.iscsi.ImmediateData = Yes</span><br><span class="line"></span><br><span class="line"><span class="comment"># To specify the maximum number of unsolicited data bytes the initiator</span></span><br><span class="line"><span class="comment"># can send in an iSCSI PDU to a target, edit the following line.</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># The value is the number of bytes in the range of 512 to (2^24-1) and</span></span><br><span class="line"><span class="comment"># the default is 262144</span></span><br><span class="line">node.session.iscsi.FirstBurstLength = 262144</span><br><span class="line"></span><br><span class="line"><span class="comment"># To specify the maximum SCSI payload that the initiator will negotiate</span></span><br><span class="line"><span class="comment"># with the target for, edit the following line.</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># The value is the number of bytes in the range of 512 to (2^24-1) and</span></span><br><span class="line"><span class="comment"># the defauls it 16776192</span></span><br><span class="line">node.session.iscsi.MaxBurstLength = 16776192</span><br><span class="line"></span><br><span class="line"><span class="comment"># To specify the maximum number of data bytes the initiator can receive</span></span><br><span class="line"><span class="comment"># in an iSCSI PDU from a target, edit the following line.</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># The value is the number of bytes in the range of 512 to (2^24-1) and</span></span><br><span class="line"><span class="comment"># the default is 262144</span></span><br><span class="line">node.conn[0].iscsi.MaxRecvDataSegmentLength = 262144</span><br><span class="line"></span><br><span class="line"><span class="comment"># To specify the maximum number of data bytes the initiator will send</span></span><br><span class="line"><span class="comment"># in an iSCSI PDU to the target, edit the following line.</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># The value is the number of bytes in the range of 512 to (2^24-1).</span></span><br><span class="line"><span class="comment"># Zero is a special case. If set to zero, the initiator will use</span></span><br><span class="line"><span class="comment"># the target&#x27;s MaxRecvDataSegmentLength for the MaxXmitDataSegmentLength.</span></span><br><span class="line"><span class="comment"># The default is 0.</span></span><br><span class="line">node.conn[0].iscsi.MaxXmitDataSegmentLength = 0</span><br><span class="line"></span><br><span class="line"><span class="comment"># To specify the maximum number of data bytes the initiator can receive</span></span><br><span class="line"><span class="comment"># in an iSCSI PDU from a target during a discovery session, edit the</span></span><br><span class="line"><span class="comment"># following line.</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># The value is the number of bytes in the range of 512 to (2^24-1) and</span></span><br><span class="line"><span class="comment"># the default is 32768</span></span><br><span class="line"><span class="comment"># </span></span><br><span class="line">discovery.sendtargets.iscsi.MaxRecvDataSegmentLength = 32768</span><br><span class="line"></span><br><span class="line"><span class="comment"># To allow the targets to control the setting of the digest checking,</span></span><br><span class="line"><span class="comment"># with the initiator requesting a preference of enabling the checking, uncomment# one or both of the following lines:</span></span><br><span class="line"><span class="comment">#node.conn[0].iscsi.HeaderDigest = CRC32C,None</span></span><br><span class="line"><span class="comment">#node.conn[0].iscsi.DataDigest = CRC32C,None</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># To allow the targets to control the setting of the digest checking,</span></span><br><span class="line"><span class="comment"># with the initiator requesting a preference of disabling the checking,</span></span><br><span class="line"><span class="comment"># uncomment one or both of the following lines:</span></span><br><span class="line"><span class="comment">#node.conn[0].iscsi.HeaderDigest = None,CRC32C</span></span><br><span class="line"><span class="comment">#node.conn[0].iscsi.DataDigest = None,CRC32C</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># To enable CRC32C digest checking for the header and/or data part of</span></span><br><span class="line"><span class="comment"># iSCSI PDUs, uncomment one or both of the following lines:</span></span><br><span class="line"><span class="comment">#node.conn[0].iscsi.HeaderDigest = CRC32C</span></span><br><span class="line"><span class="comment">#node.conn[0].iscsi.DataDigest = CRC32C</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># To disable digest checking for the header and/or data part of</span></span><br><span class="line"><span class="comment"># iSCSI PDUs, uncomment one or both of the following lines:</span></span><br><span class="line"><span class="comment">#node.conn[0].iscsi.HeaderDigest = None</span></span><br><span class="line"><span class="comment">#node.conn[0].iscsi.DataDigest = None</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># The default is to never use DataDigests or HeaderDigests.</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># For multipath configurations, you may want more than one session to be</span></span><br><span class="line"><span class="comment"># created on each iface record.  If node.session.nr_sessions is greater</span></span><br><span class="line"><span class="comment"># than 1, performing a &#x27;login&#x27; for that node will ensure that the</span></span><br><span class="line"><span class="comment"># appropriate number of sessions is created.</span></span><br><span class="line">node.session.nr_sessions = 1</span><br><span class="line"></span><br><span class="line"><span class="comment">#************</span></span><br><span class="line"><span class="comment"># Workarounds</span></span><br><span class="line"><span class="comment">#************</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Some targets like IET prefer after an initiator has sent a task</span></span><br><span class="line"><span class="comment"># management function like an ABORT TASK or LOGICAL UNIT RESET, that</span></span><br><span class="line"><span class="comment"># it does not respond to PDUs like R2Ts. To enable this behavior uncomment</span></span><br><span class="line"><span class="comment"># the following line (The default behavior is Yes):</span></span><br><span class="line">node.session.iscsi.FastAbort = Yes</span><br><span class="line"></span><br><span class="line"><span class="comment"># Some targets like Equalogic prefer that after an initiator has sent</span></span><br><span class="line"><span class="comment"># a task management function like an ABORT TASK or LOGICAL UNIT RESET, that</span></span><br><span class="line"><span class="comment"># it continue to respond to R2Ts. To enable this uncomment this line</span></span><br><span class="line"><span class="comment"># node.session.iscsi.FastAbort = No</span></span><br></pre></td></tr></table></figure>
+
+<p>重启一下服务</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">systemctl status iscsid</span><br><span class="line">systemctl restart iscsid</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="2、改动-hosts文件。"><a href="#2、改动-hosts文件。" class="headerlink" title="2、改动 hosts文件。"></a>2、改动 hosts文件。</h2><p>这一步保证了，云管理平台的正常访问。</p>
+<p>第一台机器</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1 localhost</span><br><span class="line">172.26.0.203 cvknode2</span><br><span class="line">127.0.0.1 localhost localhost.localdomain localhost4 localhost4.localdomain4</span><br><span class="line">172.26.0.202 cvknode1</span><br><span class="line">::1 localhost localhost.localdomain localhost6 localhost6.localdomain6</span><br><span class="line">172.26.0.202 center.authorization.h3c.com</span><br></pre></td></tr></table></figure>
+
+<p>第二台机器</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1 localhost</span><br><span class="line">172.26.0.203 cvknode2</span><br><span class="line">127.0.0.1 localhost localhost.localdomain localhost4 localhost4.localdomain4</span><br><span class="line">172.26.0.202 cvknode1</span><br><span class="line">::1 localhost localhost.localdomain localhost6 localhost6.localdomain6</span><br></pre></td></tr></table></figure>
+
+<p>由此可见，第一台机器似乎决定了 云管理平台的访问 DNS。</p>
+<h2 id="3、在共享存储服务器-连了-主机下的映射端口。"><a href="#3、在共享存储服务器-连了-主机下的映射端口。" class="headerlink" title="3、在共享存储服务器 连了 主机下的映射端口。"></a>3、在共享存储服务器 连了 主机下的映射端口。</h2><p>进入共享存储的web 管理页面，进入主机；</p>
+<p><img src="/2025/02/15/%E8%A3%85%E6%9C%BA/%E6%96%AD%E7%94%B5%E6%8E%89ISCS%E5%85%B1%E4%BA%AB%E5%AD%98%E5%82%A8%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/Screenshot%202025-01-29%20at%2010.13.52%E2%80%AFPM.png" alt="Screenshot 2025-01-29 at 10.13.52 PM"></p>
+<p>查看主机属性，重新添加一遍。</p>
+<p><img src="/2025/02/15/%E8%A3%85%E6%9C%BA/%E6%96%AD%E7%94%B5%E6%8E%89ISCS%E5%85%B1%E4%BA%AB%E5%AD%98%E5%82%A8%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/Screenshot%202025-01-29%20at%2010.15.54%E2%80%AFPM.png" alt="Screenshot 2025-01-29 at 10.15.54 PM"></p>
+<h2 id="4、在管理平台添加"><a href="#4、在管理平台添加" class="headerlink" title="4、在管理平台添加"></a>4、在管理平台添加</h2><p> 先集群添加，</p>
+<p><img src="/2025/02/15/%E8%A3%85%E6%9C%BA/%E6%96%AD%E7%94%B5%E6%8E%89ISCS%E5%85%B1%E4%BA%AB%E5%AD%98%E5%82%A8%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/Screenshot%202025-02-16%20at%2011.29.03%E2%80%AFAM.png" alt="Screenshot 2025-02-16 at 11.29.03 AM"></p>
+<p>再每台机器添加。</p>
+<p><img src="/2025/02/15/%E8%A3%85%E6%9C%BA/%E6%96%AD%E7%94%B5%E6%8E%89ISCS%E5%85%B1%E4%BA%AB%E5%AD%98%E5%82%A8%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/Screenshot%202025-02-16%20at%2011.32.42%E2%80%AFAM.png" alt="Screenshot 2025-02-16 at 11.32.42 AM"></p>
+<p><img src="/2025/02/15/%E8%A3%85%E6%9C%BA/%E6%96%AD%E7%94%B5%E6%8E%89ISCS%E5%85%B1%E4%BA%AB%E5%AD%98%E5%82%A8%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/Screenshot%202025-02-16%20at%2011.34.09%E2%80%AFAM.png" alt="Screenshot 2025-02-16 at 11.34.09 AM"></p>
+<p>IP地址可以物理机器 用 命令看见 </p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo iscsiadm -m session</span><br></pre></td></tr></table></figure>
+
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%85%B1%E4%BA%AB%E5%AD%98%E5%82%A8/" rel="tag"># 共享存储</a>
+              <a href="/tags/iscs/" rel="tag"># iscs</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2025/02/06/%E5%8C%BA%E5%9D%97%E9%93%BE/21-%E6%80%BB%E7%BB%93/" rel="prev" title="21-总结">
+                  <i class="fa fa-chevron-left"></i> 21-总结
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2025/04/02/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E6%9C%AC%E5%9C%B0%E9%83%A8%E7%BD%B2Deepseek%E5%AE%9E%E7%8E%B0RAG%E5%B9%B6%E8%81%94%E7%BD%91%E6%90%9C%E7%B4%A2/" rel="next" title="本地部署Deepseek实现RAG并联网搜索">
+                  本地部署Deepseek实现RAG并联网搜索 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">陈宇韶chenyushao</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha256-AbA177XfpSnFEvgpYu1jMygiLabzPCJCRIBtR5jGc0k=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.13.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="centos7安装Hadoop">
+<meta property="og:url" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/centos7%E5%AE%89%E8%A3%85Hadoop/index.html">
+<meta property="og:site_name" content="Tiger_pop&#39;s Blog">
+<meta property="og:description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/centos7%E5%AE%89%E8%A3%85Hadoop/%E6%88%AA%E5%B1%8F2022-02-25%2014.55.36-7026137.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/centos7%E5%AE%89%E8%A3%85Hadoop/%E6%88%AA%E5%B1%8F2022-02-25%2015.06.40.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/centos7%E5%AE%89%E8%A3%85Hadoop/%E6%88%AA%E5%B1%8F2022-02-25%2015.37.18.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/centos7%E5%AE%89%E8%A3%85Hadoop/%E6%88%AA%E5%B1%8F2022-02-25%2016.05.19-7026137.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/centos7%E5%AE%89%E8%A3%85Hadoop/%E6%88%AA%E5%B1%8F2022-02-25%2016.12.11.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/centos7%E5%AE%89%E8%A3%85Hadoop/%E6%88%AA%E5%B1%8F2022-02-25%2016.35.13.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/centos7%E5%AE%89%E8%A3%85Hadoop/%E6%88%AA%E5%B1%8F2022-02-25%2016.35.38.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/centos7%E5%AE%89%E8%A3%85Hadoop/%E6%88%AA%E5%B1%8F2022-02-25%2020.34.42.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/centos7%E5%AE%89%E8%A3%85Hadoop/%E6%88%AA%E5%B1%8F2022-02-25%2021.14.09.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/centos7%E5%AE%89%E8%A3%85Hadoop/%E6%88%AA%E5%B1%8F2022-02-25%2021.17.46.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/centos7%E5%AE%89%E8%A3%85Hadoop/%E6%88%AA%E5%B1%8F2022-02-26%2012.10.56.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/centos7%E5%AE%89%E8%A3%85Hadoop/%E6%88%AA%E5%B1%8F2022-02-26%2017.57.46.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/centos7%E5%AE%89%E8%A3%85Hadoop/%E6%88%AA%E5%B1%8F2022-02-26%2018.19.47.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/centos7%E5%AE%89%E8%A3%85Hadoop/%E6%88%AA%E5%B1%8F2022-02-26%2018.19.15.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/centos7%E5%AE%89%E8%A3%85Hadoop/%E6%88%AA%E5%B1%8F2022-03-01%2020.51.31.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/centos7%E5%AE%89%E8%A3%85Hadoop/%E6%88%AA%E5%B1%8F2022-02-26%2023.05.27.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/centos7%E5%AE%89%E8%A3%85Hadoop/%E6%88%AA%E5%B1%8F2022-02-26%2023.07.40.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/centos7%E5%AE%89%E8%A3%85Hadoop/%E6%88%AA%E5%B1%8F2022-02-26%2023.08.36.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/centos7%E5%AE%89%E8%A3%85Hadoop/%E6%88%AA%E5%B1%8F2022-02-27%2019.26.09.jpg">
+<meta property="article:published_time" content="2022-10-29T06:44:42.000Z">
+<meta property="article:modified_time" content="2022-10-29T06:58:16.404Z">
+<meta property="article:author" content="陈宇韶chenyushao">
+<meta property="article:tag" content="centos">
+<meta property="article:tag" content="hadoop">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/centos7%E5%AE%89%E8%A3%85Hadoop/%E6%88%AA%E5%B1%8F2022-02-25%2014.55.36-7026137.jpg">
+
+
+<link rel="canonical" href="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/centos7%E5%AE%89%E8%A3%85Hadoop/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/centos7%E5%AE%89%E8%A3%85Hadoop/","path":"2022/10/29/Hive学习/centos7安装Hadoop/","title":"centos7安装Hadoop"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>centos7安装Hadoop | Tiger_pop's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="Tiger_pop's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Tiger_pop's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">tiger_pop 的博客</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E5%8E%BB%E5%90%84%E8%87%AA%E5%AE%98%E7%BD%91%E5%85%88%E6%8A%8A%E4%B8%9C%E8%A5%BF%E9%83%BD%E4%B8%8B%E8%BD%BD%E5%A5%BD"><span class="nav-number">1.</span> <span class="nav-text">一、去各自官网先把东西都下载好</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E5%AE%89%E8%A3%85%E6%AF%94%E8%BE%83%E6%96%B0%E7%9A%84java%EF%BC%9A"><span class="nav-number">2.</span> <span class="nav-text">二、安装比较新的java：</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E5%A4%8D%E5%88%B6%E4%B8%80%E4%B8%AA%E8%99%9A%E6%8B%9F%E6%9C%BA"><span class="nav-number">3.</span> <span class="nav-text">三、复制一个虚拟机</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9B%9B%E3%80%81%E4%BF%AE%E6%94%B9%E4%B8%BB%E6%9C%BA%E5%90%8D%E5%92%8Chosts%E6%96%87%E4%BB%B6"><span class="nav-number">4.</span> <span class="nav-text">四、修改主机名和hosts文件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%94%E3%80%81%E8%99%9A%E6%8B%9F%E6%9C%BA%E4%B9%8B%E9%97%B4%E8%AE%BE%E7%BD%AEssh%E6%97%A0%E5%AF%86%E7%A0%81%E7%99%BB%E5%BD%95%EF%BC%8C%E5%90%8C%E6%97%B6%E5%85%B3%E9%97%AD%E9%98%B2%E7%81%AB%E5%A2%99%E3%80%82"><span class="nav-number">5.</span> <span class="nav-text">五、虚拟机之间设置ssh无密码登录，同时关闭防火墙。</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%85%AD%E3%80%81%E5%9C%A8node01%E5%AE%89%E8%A3%85Hadoop"><span class="nav-number">6.</span> <span class="nav-text">六、在node01安装Hadoop</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1%E3%80%81%E9%85%8D%E7%BD%AEjava%E5%92%8CHadoop%E7%8E%AF%E5%A2%83"><span class="nav-number">6.1.</span> <span class="nav-text">1、配置java和Hadoop环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%EF%BC%88%E5%90%8E%E7%BB%AD%E7%BB%BC%E8%BF%B0%EF%BC%89"><span class="nav-number">6.2.</span> <span class="nav-text">（后续综述）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2%E3%80%81%E9%85%8D%E7%BD%AEhadoop-env-sh%EF%BC%88%E7%9B%AE%E7%9A%84%E6%98%AF%E7%BB%91%E5%AE%9Ajava%E5%92%8CHadoop%EF%BC%89"><span class="nav-number">6.3.</span> <span class="nav-text">2、配置hadoop-env.sh（目的是绑定java和Hadoop）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3%E3%80%81%E9%85%8D%E7%BD%AEcore-site-xml%EF%BC%88Hadoop%E6%A0%B8%E5%BF%83%E6%96%87%E4%BB%B6%E9%85%8D%E7%BD%AE%EF%BC%89"><span class="nav-number">6.4.</span> <span class="nav-text">3、配置core-site.xml（Hadoop核心文件配置）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4%E3%80%81%E9%85%8D%E7%BD%AEyarn-env-sh"><span class="nav-number">6.5.</span> <span class="nav-text">4、配置yarn-env.sh</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5%E3%80%81%E9%85%8D%E7%BD%AEhdfs-site-xml-hdfs%E5%AD%98%E5%82%A8%E9%85%8D%E7%BD%AE"><span class="nav-number">6.6.</span> <span class="nav-text">5、配置hdfs-site.xml (hdfs存储配置)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6%E3%80%81%E9%85%8D%E7%BD%AEmapred-site-xml"><span class="nav-number">6.7.</span> <span class="nav-text">6、配置mapred-site.xml</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7%E3%80%81%E9%85%8D%E7%BD%AEyarn-site-xml-%E5%AE%9A%E4%B9%89yarn%E9%9B%86%E7%BE%A4"><span class="nav-number">6.8.</span> <span class="nav-text">7、配置yarn-site.xml(定义yarn集群)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8%E3%80%81%E9%85%8D%E7%BD%AEworkers"><span class="nav-number">6.9.</span> <span class="nav-text">8、配置workers</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#9%E3%80%81%E5%B0%86Hadoop%E6%96%87%E4%BB%B6%E5%8F%91%E9%80%81%E5%88%B0%E5%85%B6%E5%AE%83%E8%8A%82%E7%82%B9"><span class="nav-number">6.10.</span> <span class="nav-text">9、将Hadoop文件发送到其它节点</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%83%E3%80%81%E5%88%9D%E5%A7%8B%E5%8C%96%E3%80%81%E5%90%AF%E5%8A%A8%E3%80%81%E9%AA%8C%E8%AF%81Hadoop%E3%80%82"><span class="nav-number">7.</span> <span class="nav-text">七、初始化、启动、验证Hadoop。</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE%E5%AE%8C%E4%B9%8B%E5%90%8E%E7%9A%84%E5%B0%8F%E6%8F%92%E6%9B%B2%EF%BC%9A"><span class="nav-number">8.</span> <span class="nav-text">安装配置完之后的小插曲：</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC%E4%BA%8C%E5%A4%A9"><span class="nav-number">8.1.</span> <span class="nav-text">第二天</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%8A%E4%B8%AA%E6%9C%88%E4%BB%A5%E5%90%8E"><span class="nav-number">8.2.</span> <span class="nav-text">半个月以后</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="陈宇韶chenyushao"
+      src="/images/my.jpg">
+  <p class="site-author-name" itemprop="name">陈宇韶chenyushao</p>
+  <div class="site-description" itemprop="description">爱学习、爱工作、爱生活;         微信号: Tiger_and_master;         手机号码:18515678348 </div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">427</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">201</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/centos7%E5%AE%89%E8%A3%85Hadoop/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/my.jpg">
+      <meta itemprop="name" content="陈宇韶chenyushao">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tiger_pop's Blog">
+      <meta itemprop="description" content="爱学习、爱工作、爱生活;         微信号: Tiger_and_master;         手机号码:18515678348 ">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="centos7安装Hadoop | Tiger_pop's Blog">
+      <meta itemprop="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          centos7安装Hadoop
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2022-10-29 14:44:42 / 修改时间：14:58:16" itemprop="dateCreated datePublished" datetime="2022-10-29T14:44:42+08:00">2022-10-29</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/hive/" itemprop="url" rel="index"><span itemprop="name">hive</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+            <div class="post-description">这是文章开头，显示在主页面，详情请点击此处。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>先下载 <span id="more"></span></p>
+<h1 id="一、去各自官网先把东西都下载好"><a href="#一、去各自官网先把东西都下载好" class="headerlink" title="一、去各自官网先把东西都下载好"></a>一、去各自官网先把东西都下载好</h1><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/centos7%E5%AE%89%E8%A3%85Hadoop/%E6%88%AA%E5%B1%8F2022-02-25%2014.55.36-7026137.jpg" alt="截屏2022-02-25 14.55.36" style="zoom:25%;">
+
+<p>​		centos系统相关的安装部署可以参考之前Linux学习的笔记，什么固定虚拟机IP啦，安装mysql啦，远程文件传输啦，这里就不重复说了。</p>
+<p>​		把这些工具下载好，然后在&#x2F;opt 下新建hadoop文件夹、spark文件夹等等，把对应的压缩包放进去。</p>
+<h1 id="二、安装比较新的java："><a href="#二、安装比较新的java：" class="headerlink" title="二、安装比较新的java："></a>二、安装比较新的java：<img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/centos7%E5%AE%89%E8%A3%85Hadoop/%E6%88%AA%E5%B1%8F2022-02-25%2015.06.40.jpg" alt="截屏2022-02-25 15.06.40"></h1><h1 id="三、复制一个虚拟机"><a href="#三、复制一个虚拟机" class="headerlink" title="三、复制一个虚拟机"></a>三、复制一个虚拟机</h1><p>（先关闭vmware程序，再把vmwarevm文件夹复制一个就好了，里面什么东西都是一样的，双击vmwarevm文件夹打开就能运行。）</p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/centos7%E5%AE%89%E8%A3%85Hadoop/%E6%88%AA%E5%B1%8F2022-02-25%2015.37.18.jpg" alt="截屏2022-02-25 15.37.18"></p>
+<p>​		记得把不同机器的IP改一下，固定在同一网段不同的IP上。之前我固定的虚拟机的网关是192.168.200.2，node1机器固定的IP是192.168.200.100。记得把node2改为192.168.200.101。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 修改固定ip，参考之前Linux学习固定IP的内容，这里仅仅需要改动一下ip即可，别的网关什么的都不用动。</span></span><br><span class="line">vim /etc/sysconfig/network-scripts/ifcfg-ens33</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/centos7%E5%AE%89%E8%A3%85Hadoop/%E6%88%AA%E5%B1%8F2022-02-25%2016.05.19-7026137.jpg" alt="截屏2022-02-25 16.05.19"></p>
+<h1 id="四、修改主机名和hosts文件"><a href="#四、修改主机名和hosts文件" class="headerlink" title="四、修改主机名和hosts文件"></a>四、修改主机名和hosts文件</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 最好设置成node01、node02这样以后好区分，甚至是用户名也设置为node01、node02 以后容易区分。</span></span><br><span class="line">su</span><br><span class="line">vim /etc/hostname</span><br><span class="line">vim /etc/hosts</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/centos7%E5%AE%89%E8%A3%85Hadoop/%E6%88%AA%E5%B1%8F2022-02-25%2016.12.11.jpg" alt="截屏2022-02-25 16.12.11"></p>
+<h1 id="五、虚拟机之间设置ssh无密码登录，同时关闭防火墙。"><a href="#五、虚拟机之间设置ssh无密码登录，同时关闭防火墙。" class="headerlink" title="五、虚拟机之间设置ssh无密码登录，同时关闭防火墙。"></a>五、虚拟机之间设置ssh无密码登录，同时关闭防火墙。</h1><p>​		机器关闭防火墙（不然后面hadoop启动了找不到结点）：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 每个机器都操作一遍。</span></span><br><span class="line">systemctl stop firewalld     <span class="comment"># 关闭防火墙</span></span><br><span class="line">systemctl <span class="built_in">disable</span> firewalld  <span class="comment"># 关闭防火墙的开机自启动。 </span></span><br></pre></td></tr></table></figure>
+
+<p>​		相互把公钥放在对面对应存公钥的位置。</p>
+<p>补充知识点：</p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/centos7%E5%AE%89%E8%A3%85Hadoop/%E6%88%AA%E5%B1%8F2022-02-25%2016.35.13.jpg" alt="截屏2022-02-25 16.35.13"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/centos7%E5%AE%89%E8%A3%85Hadoop/%E6%88%AA%E5%B1%8F2022-02-25%2016.35.38.jpg" alt="截屏2022-02-25 16.35.38"></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 先两台机器相互ssh登录一下对方。再如下操作。</span></span><br><span class="line"><span class="comment">#[root@node01 .ssh]#</span></span><br><span class="line">ssh-keygen -t dsa -P <span class="string">&#x27;&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#[root@node01 .ssh]# 把一号机的公钥放进公钥池子里。</span></span><br><span class="line"><span class="built_in">cat</span> id_dsa.pub &gt;&gt; authorized_keys</span><br><span class="line"></span><br><span class="line"><span class="comment">#[root@node01 .ssh]# 一号机把公钥池内容 追加到二号机公钥池 。</span></span><br><span class="line">scp authorized_keys root@node02:/root/.ssh/authorized_keys</span><br><span class="line"></span><br><span class="line"><span class="comment">#[root@node02 .ssh]# 把二号机的公钥放进二号机公钥池子里。（此时二号机公钥池已经有了一号机、二号机的公钥了。）</span></span><br><span class="line"><span class="built_in">cat</span> id_dsa.pub &gt;&gt; authorized_keys</span><br><span class="line"></span><br><span class="line"><span class="comment">#[root@node02 .ssh]# 二号机把公钥池内容 追加到一号机公钥池 。此时一号机公钥池也已经有了一号机、二号机的公钥了。）</span></span><br><span class="line">scp authorized_keys root@node01:/root/.ssh/authorized_keys</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 以后在root权限下 </span></span><br><span class="line"><span class="comment"># &lt;ssh 用户名@hosts&gt; 我这里已经把hosts改成了 node01 和 node02了。</span></span><br><span class="line"><span class="comment"># 或者直接</span></span><br><span class="line"><span class="comment"># ssh node01 、 ssh node02 </span></span><br><span class="line"><span class="comment"># 登录其它虚拟机就不用输入对方root密码了，进去了就是root用户。  </span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 如果有多台虚拟机，以此类推即可。</span></span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h1 id="六、在node01安装Hadoop"><a href="#六、在node01安装Hadoop" class="headerlink" title="六、在node01安装Hadoop"></a>六、在node01安装Hadoop</h1><h2 id="1、配置java和Hadoop环境"><a href="#1、配置java和Hadoop环境" class="headerlink" title="1、配置java和Hadoop环境"></a>1、配置java和Hadoop环境</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 找java位置。</span></span><br><span class="line">whereis java</span><br><span class="line"><span class="comment"># java: /usr/bin/java /usr/lib/java /etc/java /usr/share/java /usr/share/man/man1/java.1.gz</span></span><br></pre></td></tr></table></figure>
+
+<p>因为是yum安装的java，我们先whereis，再不断了 ll 软连接,溯源找到java实体文件，不再是软连接时，结合这个地址可以分析得到, JAVA_HOME 的值应该就是jre前面这一截。</p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/centos7%E5%AE%89%E8%A3%85Hadoop/%E6%88%AA%E5%B1%8F2022-02-25%2020.34.42.jpg" alt="截屏2022-02-25 20.34.42"></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 这个就应该被设置为环境变量中的  JAVA_HOME 。</span></span><br><span class="line">/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.322.b06-1.el7_9.x86_64</span><br></pre></td></tr></table></figure>
+
+<p>运行<a target="_blank" rel="noopener" href="https://so.csdn.net/so/search?q=javac&spm=1001.2101.3001.7020">javac</a>命令报错：bash:javac:command not found；</p>
+<p>最后发现自带的<a target="_blank" rel="noopener" href="https://so.csdn.net/so/search?q=jdk&spm=1001.2101.3001.7020">jdk</a>是没有安装开发环境的，需要安装devel才有javac命令。</p>
+<p>（找到jdk的安装目录下，发现只有<a target="_blank" rel="noopener" href="https://so.csdn.net/so/search?q=jre&spm=1001.2101.3001.7020">jre</a>文件夹，没有bin、lib等文件夹）。</p>
+<p><strong>解决方法</strong>：使用<a target="_blank" rel="noopener" href="https://so.csdn.net/so/search?q=yum&spm=1001.2101.3001.7020">yum</a>安装开发环境 devel。（注意下载对应的版本。所以最好用yum找到准确的devel版本名字，精准下载）</p>
+<p>用yum查找可以安装的jdk：yum search java|grep jdk</p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/centos7%E5%AE%89%E8%A3%85Hadoop/%E6%88%AA%E5%B1%8F2022-02-25%2021.14.09.jpg" alt="截屏2022-02-25 21.14.09"></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">yum install java-1.8.0-openjdk-devel.x86_64</span><br><span class="line"><span class="comment"># 下载了开发环境后，再看看 javac 命令不会报错了。同时，到/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.322.b06-1.el7_9.x86_64文件夹下，可以看见出了jre 又多了bin 等等一些文件夹了。</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/centos7%E5%AE%89%E8%A3%85Hadoop/%E6%88%AA%E5%B1%8F2022-02-25%2021.17.46.jpg" alt="截屏2022-02-25 21.17.46"></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">vim /root/.bash_profile <span class="comment"># 添加环境</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">export</span> JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.322.b06-1.el7_9.x86_64</span><br><span class="line"><span class="built_in">export</span> PATH=.:<span class="variable">$JAVA_HOME</span>:<span class="variable">$JAVA_HOME</span>/bin:<span class="variable">$PATH</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">export</span> HADOOP_HOME=/opt/hadoop/hadoop</span><br><span class="line"><span class="built_in">export</span> PATH=.:<span class="variable">$JAVA_HOME</span>:<span class="variable">$JAVA_HOME</span>/bin:<span class="variable">$HADOOP_HOME</span>/bin:<span class="variable">$HADOOP_HOME</span>/sbin:<span class="variable">$PATH</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">source</span> /root/.bash_profile <span class="comment"># 生效</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 此时 可以 检查hadoop是否安装好了。</span></span><br><span class="line">hadoop version</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<hr>
+<h2 id="（后续综述）"><a href="#（后续综述）" class="headerlink" title="（后续综述）"></a>（后续综述）</h2><p>配置文件目录： &#x2F;opt&#x2F;hadoop&#x2F;hadoop&#x2F;etc&#x2F;hadoop   需要修改的配置文件：hadoop-env.sh，core-site.xml， hdfs-site.xml ，（配置mapreduce）yarn-site.xml，mapred-site.xml ，workers</p>
+<hr>
+<h2 id="2、配置hadoop-env-sh（目的是绑定java和Hadoop）"><a href="#2、配置hadoop-env-sh（目的是绑定java和Hadoop）" class="headerlink" title="2、配置hadoop-env.sh（目的是绑定java和Hadoop）"></a>2、配置hadoop-env.sh（目的是绑定java和Hadoop）</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">vim /opt/hadoop/hadoop/etc/hadoop/hadoop-env.sh</span><br><span class="line"><span class="comment"># 配置 jdk的home路径</span></span><br><span class="line"><span class="comment"># 绑定java和hadoop的原因是centos有一些更新不允许Hadoop去访问系统的配置。</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.322.b06-1.el7_9.x86_64</span><br><span class="line"></span><br><span class="line"><span class="built_in">export</span> HDFS_NAMENODE_USER=root</span><br><span class="line"><span class="built_in">export</span> HDFS_DATANODE_USER=root</span><br><span class="line"><span class="built_in">export</span> HDFS_SECONDARYNAMENODE_USER=root</span><br><span class="line"><span class="built_in">export</span> YARN_RESOURCEMANAGER_USER=root</span><br><span class="line"><span class="built_in">export</span> YARN_NODEMANAGER_USER=root</span><br><span class="line"></span><br><span class="line"><span class="built_in">export</span> HADOOP_PID_DIR=/opt/hadoop/hadoop/data/pids</span><br><span class="line"><span class="built_in">export</span> HADOOP_LOG_DIR=/opt/hadoop/hadoop/data/logs</span><br></pre></td></tr></table></figure>
+
+<h2 id="3、配置core-site-xml（Hadoop核心文件配置）"><a href="#3、配置core-site-xml（Hadoop核心文件配置）" class="headerlink" title="3、配置core-site.xml（Hadoop核心文件配置）"></a>3、配置core-site.xml（Hadoop核心文件配置）</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">vim /opt/hadoop/hadoop/etc/hadoop/core-site.xml</span><br><span class="line"><span class="comment"># 核心配置文件，例如HDFS、MapReduce和YARN查用的I/O设置</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&lt;configuration&gt;</span><br><span class="line">		&lt;!--指定文件系统的入口地址，可以为主机名或IP --&gt;</span><br><span class="line">		&lt;!--端口默认8020 --&gt;</span><br><span class="line">		&lt;property&gt;　　</span><br><span class="line">				&lt;name&gt;fs.defaultFS&lt;/name&gt;　　</span><br><span class="line">				&lt;value&gt;hdfs://node01:9000&lt;/value&gt;</span><br><span class="line">		&lt;/property&gt;</span><br><span class="line">		&lt;!--HDFS的存储目录,也就是Hadoop临时工作存放目录--&gt;</span><br><span class="line">		&lt;property&gt;</span><br><span class="line">				&lt;name&gt;hadoop.tmp.dir&lt;/name&gt;</span><br><span class="line">				&lt;value&gt;/opt/hadoop/hadoop/tmp&lt;/value&gt;</span><br><span class="line">		&lt;/property&gt;</span><br><span class="line">&lt;/configuration&gt;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/centos7%E5%AE%89%E8%A3%85Hadoop/%E6%88%AA%E5%B1%8F2022-02-26%2012.10.56.jpg" alt="截屏2022-02-26 12.10.56"></p>
+<h2 id="4、配置yarn-env-sh"><a href="#4、配置yarn-env-sh" class="headerlink" title="4、配置yarn-env.sh"></a>4、配置yarn-env.sh</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim /opt/hadoop/hadoop/etc/hadoop/yarn-env.sh</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 把java环境再搞上去。</span></span><br><span class="line"><span class="built_in">export</span> JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.322.b06-1.el7_9.x86_64</span><br></pre></td></tr></table></figure>
+
+<h2 id="5、配置hdfs-site-xml-hdfs存储配置"><a href="#5、配置hdfs-site-xml-hdfs存储配置" class="headerlink" title="5、配置hdfs-site.xml (hdfs存储配置)"></a>5、配置hdfs-site.xml (hdfs存储配置)</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">vim /opt/hadoop/hadoop/etc/hadoop/hdfs-site.xml</span><br><span class="line"><span class="comment"># 布式文件系统的核心配置 决定了数据存放在哪个路径，数据的副本，数据的block块大小等等</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">&lt;configuration&gt;</span><br><span class="line">&lt;!--指定hdfs备份数量，小于等于从节点数目,就是从属设备的数量。 --&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">        &lt;name&gt;dfs.replication&lt;/name&gt;</span><br><span class="line">        &lt;value&gt;1&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line"></span><br><span class="line">&lt;!--自定义hdfs的namenode存储位置。 --&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">        &lt;name&gt;dfs.namenode.name.dir&lt;/name&gt;</span><br><span class="line">        &lt;value&gt;file:/opt/hadoop/hadoop/data/name&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line">&lt;!--自定义hdfs的datanode存储位置。 --&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">        &lt;name&gt;dfs.datanode.data.dir&lt;/name&gt;</span><br><span class="line">        &lt;value&gt;file:/opt/hadoop/hadoop/data/data&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line"></span><br><span class="line">&lt;property&gt;</span><br><span class="line">        &lt;name&gt;mapreduce.framework.name&lt;/name&gt;</span><br><span class="line">        &lt;value&gt;yarn&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line"></span><br><span class="line">&lt;!--注意Hadoop3以后端口由50070改为了9870 --&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">        <span class="comment"># &lt;name&gt;dfs.namenode.secondary.http-address&lt;/name&gt;</span></span><br><span class="line">        <span class="comment"># 这里好危险，我找logs日志才发现这里写错了。</span></span><br><span class="line">        &lt;name&gt;dfs.namenode.http-address&lt;/name&gt;</span><br><span class="line">        &lt;value&gt;node01:9870&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line"></span><br><span class="line">&lt;/configuration&gt;</span><br></pre></td></tr></table></figure>
+
+<h2 id="6、配置mapred-site-xml"><a href="#6、配置mapred-site-xml" class="headerlink" title="6、配置mapred-site.xml"></a>6、配置mapred-site.xml</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim /opt/hadoop/hadoop/etc/hadoop/mapred-site.xml</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">&lt;configuration&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">    &lt;name&gt;mapred.job.tracker&lt;/name&gt;</span><br><span class="line">    &lt;value&gt;node01:9001&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line"></span><br><span class="line">&lt;!--hadoop的mapreduce程序运行在yarn上,默认值为<span class="built_in">local</span> --&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">    &lt;name&gt;mapreduce.framework.name&lt;/name&gt;</span><br><span class="line">    &lt;value&gt;yarn&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line"></span><br><span class="line">&lt;property&gt;  </span><br><span class="line">    &lt;name&gt;mapreduce.application.classpath&lt;/name&gt;  </span><br><span class="line">    &lt;value&gt;/opt/hadoop/hadoop/share/hadoop/mapreduce/*, /opt/hadoop/hadoop/share/hadoop/mapreduce/lib/*&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line">&lt;/configuration&gt;</span><br></pre></td></tr></table></figure>
+
+<h2 id="7、配置yarn-site-xml-定义yarn集群"><a href="#7、配置yarn-site-xml-定义yarn集群" class="headerlink" title="7、配置yarn-site.xml(定义yarn集群)"></a>7、配置yarn-site.xml(定义yarn集群)</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim /opt/hadoop/hadoop/etc/hadoop/yarn-site.xml</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&lt;configuration&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">       &lt;name&gt;yarn.nodemanager.aux-services&lt;/name&gt;</span><br><span class="line">       &lt;value&gt;mapreduce_shuffle&lt;/value&gt;</span><br><span class="line">   &lt;/property&gt;</span><br><span class="line">   &lt;property&gt;</span><br><span class="line">       &lt;name&gt;yarn.resourcemanager.hostname&lt;/name&gt;</span><br><span class="line">       &lt;value&gt;node01&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line">&lt;/configuration&gt;</span><br></pre></td></tr></table></figure>
+
+<h2 id="8、配置workers"><a href="#8、配置workers" class="headerlink" title="8、配置workers"></a>8、配置workers</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">vim /opt/hadoop/hadoop/etc/hadoop/workers</span><br><span class="line"><span class="comment"># 把所有从节点的主机名写到这儿就可以，这是告诉hadoop进程哪些机器是从节点 每行写一个</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">node02 <span class="comment"># 我就设置了一个从节点。</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="9、将Hadoop文件发送到其它节点"><a href="#9、将Hadoop文件发送到其它节点" class="headerlink" title="9、将Hadoop文件发送到其它节点"></a>9、将Hadoop文件发送到其它节点</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># scp 是将文件复制到 用ssh登录机器的指定位置。我每个虚拟机的/opt下的第一个hadoop文件夹都是无意义的自己多建了一层。（时间可能要几分钟，喝杯牛奶等一等。）</span></span><br><span class="line">scp -r /opt/hadoop/hadoop  node02:/opt/hadoop</span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="七、初始化、启动、验证Hadoop。"><a href="#七、初始化、启动、验证Hadoop。" class="headerlink" title="七、初始化、启动、验证Hadoop。"></a>七、初始化、启动、验证Hadoop。</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /opt/hadoop/hadoop/bin</span><br><span class="line"><span class="comment"># 到主机器（我这机器名是node01）Hadoop根目录的bin中 运行如下初始化命令。</span></span><br><span class="line">hdfs namenode -format</span><br><span class="line"></span><br><span class="line"><span class="built_in">cd</span> /opt/hadoop/hadoop/sbin</span><br><span class="line"></span><br><span class="line"><span class="comment"># 到主机器（我这机器名是node01）sbin中 运行</span></span><br><span class="line"><span class="comment"># 由于我之前的环境变量都是在 /root/.bash)profile 中，所以每次启动前都要让这个环境变量生效一次。</span></span><br><span class="line"><span class="built_in">source</span> /root/.bash_profile</span><br><span class="line">start-dfs.sh</span><br><span class="line">start-yarn.sh</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/centos7%E5%AE%89%E8%A3%85Hadoop/%E6%88%AA%E5%B1%8F2022-02-26%2017.57.46.jpg" alt="截屏2022-02-26 17.57.46"></p>
+<p>细心的看看可以发现我前面有个小问题，因为我复制出node02时，node02继承了node01的java，但是那时node01还没有装devel开发环境，我们在node02机器javac会说找不到此命令，因此我回到 《六-1、配置java和Hadoop环境》在node02机器重复一遍</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 进入node02机器。</span></span><br><span class="line">yum install java-1.8.0-openjdk-devel.x86_64</span><br><span class="line"></span><br><span class="line">vim /root/.bash_profile <span class="comment"># 添加环境</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">export</span> JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.322.b06-1.el7_9.x86_64</span><br><span class="line"><span class="built_in">export</span> PATH=.:<span class="variable">$JAVA_HOME</span>:<span class="variable">$JAVA_HOME</span>/bin:<span class="variable">$PATH</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">export</span> HADOOP_HOME=/opt/hadoop/hadoop</span><br><span class="line"><span class="built_in">export</span> PATH=.:<span class="variable">$JAVA_HOME</span>:<span class="variable">$JAVA_HOME</span>/bin:<span class="variable">$HADOOP_HOME</span>/bin:<span class="variable">$HADOOP_HOME</span>/sbin:<span class="variable">$PATH</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">source</span> /root/.bash_profile <span class="comment"># 生效</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 回到node01主机器</span></span><br><span class="line"><span class="built_in">source</span> /root/.bash_profile</span><br><span class="line"></span><br><span class="line"><span class="built_in">cd</span> /opt/hadoop/hadoop/bin</span><br><span class="line">hdfs namenode -format</span><br><span class="line"></span><br><span class="line"><span class="built_in">cd</span> /opt/hadoop/hadoop/sbin</span><br><span class="line">start-dfs.sh</span><br><span class="line">start-yarn.sh</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>此时在主节点node01 输入 jps可以看到已经成功启动的进程：</p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/centos7%E5%AE%89%E8%A3%85Hadoop/%E6%88%AA%E5%B1%8F2022-02-26%2018.19.47.jpg" alt="截屏2022-02-26 18.19.47"></p>
+<p>此时在从属节点node012输入 jps可以看到已经成功启动的进程：<img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/centos7%E5%AE%89%E8%A3%85Hadoop/%E6%88%AA%E5%B1%8F2022-02-26%2018.19.15.jpg" alt="截屏2022-02-26 18.19.15"></p>
+<hr>
+<p>特殊情况补充：</p>
+<p>​		如果 jps 之后 看见了 </p>
+<p>​		【进程号】 – process information unavailable</p>
+<p>​		这时可以通过进入本地文件系统的&#x2F;tmp目录下，删除名称为<br>hsperfdata_{username}的文件夹，然后重新启动Hadoop。<br>注意：要将所有用户的这个类似的文件夹全部删除掉才行。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /tmp </span><br><span class="line"><span class="built_in">ls</span> | grep hsperfdata</span><br><span class="line"><span class="comment"># 依次删除即可。</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/centos7%E5%AE%89%E8%A3%85Hadoop/%E6%88%AA%E5%B1%8F2022-03-01%2020.51.31.jpg" alt="截屏2022-03-01 20.51.31"></p>
+<hr>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 在node01的浏览器中输入 </span></span><br><span class="line">node01:9870</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/centos7%E5%AE%89%E8%A3%85Hadoop/%E6%88%AA%E5%B1%8F2022-02-26%2023.05.27.jpg" alt="截屏2022-02-26 23.05.27"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/centos7%E5%AE%89%E8%A3%85Hadoop/%E6%88%AA%E5%B1%8F2022-02-26%2023.07.40.jpg" alt="截屏2022-02-26 23.07.40"></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 在node01的浏览器中输入 </span></span><br><span class="line">node01:8088</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/centos7%E5%AE%89%E8%A3%85Hadoop/%E6%88%AA%E5%B1%8F2022-02-26%2023.08.36.jpg" alt="截屏2022-02-26 23.08.36"></p>
+<p>​		可以看见我只有两个运行的结点，子结点只有一个，实际上应该至少搞三个子结点，重复操作几遍新建结点的步骤即可。</p>
+<h1 id="安装配置完之后的小插曲："><a href="#安装配置完之后的小插曲：" class="headerlink" title="安装配置完之后的小插曲："></a>安装配置完之后的小插曲：</h1><h2 id="第二天"><a href="#第二天" class="headerlink" title="第二天"></a>第二天</h2><p>​		第二天我重新又装了一遍Hadoop练手，jps后发现secondarynamenode死活没有启动，按照网上的建议删进程重新开服务也不行，我只好去logs里找：</p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/centos7%E5%AE%89%E8%A3%85Hadoop/%E6%88%AA%E5%B1%8F2022-02-27%2019.26.09.jpg" alt="截屏2022-02-27 19.26.09"></p>
+<p>​		发现问题原来出在这里！！</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim /opt/hadoop/hadoop/etc/hadoop/hdfs-site.xml</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;property&gt;</span><br><span class="line">        <span class="comment"># &lt;name&gt;dfs.namenode.secondary.http-address&lt;/name&gt;</span></span><br><span class="line">        <span class="comment"># 这里好危险，我找logs日志才发现这里写错了。</span></span><br><span class="line">        &lt;name&gt;dfs.namenode.http-address&lt;/name&gt;</span><br><span class="line">        &lt;value&gt;node01:9870&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br></pre></td></tr></table></figure>
+
+<p>​		结论：一定要养成常看logs文件排错的好习惯！</p>
+<h2 id="半个月以后"><a href="#半个月以后" class="headerlink" title="半个月以后"></a>半个月以后</h2><p>​		问题：在slave子机器node02 上 启动Hadoop时，通过jps目录发现没有datanode进程。</p>
+<p>​		解决方案: clusterID不匹配导致的问题，步骤如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">1、执行./stop-all.sh关闭集群</span><br><span class="line">2、在slave机器上直接删除Hadoop。</span><br><span class="line">3、在master上 删除存放hdfs数据块的文件夹(hadoop/tmp/)，然后重建该文件夹</span><br><span class="line">4、在master上 删除hadoop下的日志文件logs，我的在hadoop/data/logs，这个直接删除即可。</span><br><span class="line">5、在master上 把 namenode和datanode 存放位置的文件夹删除，我的在 hadoop/data/name和hadoop/data/data。</span><br><span class="line">6、在master上 将Hadoop文件发送到slave机器：scp -r /opt/hadoop/hadoop  node02:/opt/hadoop</span><br><span class="line">7、在master上 执行hadoop namenode -format格式化hadoop</span><br><span class="line"><span class="comment"># 重启hadoop集群</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 网上的说法都是由于进行hadoop格式化的时候没有事先结束所有进程，或者多次进行了format导致的datanode的clusterID 和 namenode的clusterID不匹配，从而在启动后没有datanode进程。我的原因是hive执行命令时不小心overwrite了关键文件夹，以后重写一定要小心！</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 如果装了hive ，完成上述步骤之后，在master机器内如下操作。</span></span><br><span class="line">1、再mysql内删除 hive生成的存储元数据的database（从hive-site.xml 中可以看见 我之前设置的就是 一个叫 ”hive“ 的databases，里面74个表）。</span><br><span class="line">2、开启Hadoop服务。</span><br><span class="line">3、在hive 的bin中初始化metadata，指定元数据在mysql当中。</span><br><span class="line">		<span class="built_in">cd</span> /opt/hive/apache-hive-3.1.2-bin/bin</span><br><span class="line">		schematool -initSchema -dbType mysql -verbos</span><br></pre></td></tr></table></figure>
+
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/centos/" rel="tag"># centos</a>
+              <a href="/tags/hadoop/" rel="tag"># hadoop</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/centos7%E5%AE%89%E8%A3%85Hive/" rel="prev" title="centos7安装Hive">
+                  <i class="fa fa-chevron-left"></i> centos7安装Hive
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/DML%E3%80%81DQL/" rel="next" title="Hive SQL 数据操控、查询语言 DML、DQL">
+                  Hive SQL 数据操控、查询语言 DML、DQL <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">陈宇韶chenyushao</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha256-AbA177XfpSnFEvgpYu1jMygiLabzPCJCRIBtR5jGc0k=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.13.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="12-ETH中的数据结构">
+<meta property="og:url" content="http://example.com/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/12-ETH%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/index.html">
+<meta property="og:site_name" content="Tiger_pop&#39;s Blog">
+<meta property="og:description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/12-ETH%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/%E6%88%AA%E5%B1%8F2024-12-17%2020.57.46.png">
+<meta property="og:image" content="http://example.com/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/12-ETH%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/%E6%88%AA%E5%B1%8F2024-12-17%2021.03.38.png">
+<meta property="og:image" content="http://example.com/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/12-ETH%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/%E6%88%AA%E5%B1%8F2024-12-17%2021.07.27.png">
+<meta property="og:image" content="http://example.com/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/12-ETH%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/%E6%88%AA%E5%B1%8F2024-12-17%2021.07.35.png">
+<meta property="og:image" content="http://example.com/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/12-ETH%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/%E6%88%AA%E5%B1%8F2024-12-17%2021.19.54.png">
+<meta property="og:image" content="http://example.com/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/12-ETH%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/%E6%88%AA%E5%B1%8F2024-12-23%2021.28.17.png">
+<meta property="og:image" content="http://example.com/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/12-ETH%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/%E6%88%AA%E5%B1%8F2024-12-23%2020.39.15.png">
+<meta property="og:image" content="http://example.com/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/12-ETH%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/%E6%88%AA%E5%B1%8F2024-12-23%2021.03.03.png">
+<meta property="og:image" content="http://example.com/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/12-ETH%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/%E6%88%AA%E5%B1%8F2024-12-23%2021.09.15.png">
+<meta property="og:image" content="http://example.com/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/12-ETH%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/%E6%88%AA%E5%B1%8F2024-12-23%2021.19.03.png">
+<meta property="og:image" content="http://example.com/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/12-ETH%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/%E6%88%AA%E5%B1%8F2024-12-23%2021.21.45.png">
+<meta property="og:image" content="http://example.com/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/12-ETH%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/%E6%88%AA%E5%B1%8F2024-12-25%2016.22.07.png">
+<meta property="og:image" content="http://example.com/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/12-ETH%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/%E6%88%AA%E5%B1%8F2024-12-25%2021.41.43.png">
+<meta property="og:image" content="http://example.com/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/12-ETH%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/%E6%88%AA%E5%B1%8F2024-12-25%2021.52.19.png">
+<meta property="og:image" content="http://example.com/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/12-ETH%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/%E6%88%AA%E5%B1%8F2024-12-25%2021.53.51.png">
+<meta property="og:image" content="http://example.com/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/12-ETH%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/%E6%88%AA%E5%B1%8F2024-12-25%2021.56.58.png">
+<meta property="og:image" content="http://example.com/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/12-ETH%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/%E6%88%AA%E5%B1%8F2024-12-25%2021.57.57.png">
+<meta property="og:image" content="http://example.com/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/12-ETH%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/%E6%88%AA%E5%B1%8F2024-12-25%2022.00.23.png">
+<meta property="og:image" content="http://example.com/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/12-ETH%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/%E6%88%AA%E5%B1%8F2024-12-25%2022.07.15.png">
+<meta property="article:published_time" content="2025-01-10T13:12:12.000Z">
+<meta property="article:modified_time" content="2025-03-14T01:58:23.787Z">
+<meta property="article:author" content="陈宇韶chenyushao">
+<meta property="article:tag" content="eth">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/12-ETH%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/%E6%88%AA%E5%B1%8F2024-12-17%2020.57.46.png">
+
+
+<link rel="canonical" href="http://example.com/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/12-ETH%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/12-ETH%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/","path":"2025/01/10/区块链/12-ETH中的数据结构/","title":"12-ETH中的数据结构"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>12-ETH中的数据结构 | Tiger_pop's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="Tiger_pop's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Tiger_pop's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">tiger_pop 的博客</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#trie"><span class="nav-number">1.</span> <span class="nav-text">trie</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#patricia-tree"><span class="nav-number">2.</span> <span class="nav-text">patricia tree</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#state-tree-%E7%8A%B6%E6%80%81%E6%A0%91"><span class="nav-number">3.</span> <span class="nav-text">state tree 状态树</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#merkle-Patricia-tree-%EF%BC%88MPT%EF%BC%89"><span class="nav-number">3.1.</span> <span class="nav-text">merkle Patricia tree （MPT）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9E%E6%BB%9A%E5%9B%B0%E5%A2%83"><span class="nav-number">3.2.</span> <span class="nav-text">回滚困境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#header-%E5%9D%97%E7%BB%93%E6%9E%84"><span class="nav-number">3.3.</span> <span class="nav-text">header 块结构</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%A4%E6%98%93%E6%A0%91%E3%80%81%E6%94%B6%E6%8D%AE%E6%A0%91"><span class="nav-number">4.</span> <span class="nav-text">交易树、收据树</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#bloom-filter-%E5%B8%83%E9%9A%86%E8%BF%87%E6%BB%A4%E5%99%A8"><span class="nav-number">4.1.</span> <span class="nav-text">bloom filter 布隆过滤器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9F%A5%E6%89%BE%E8%BF%87%E5%8E%BB%E5%8D%81%E5%A4%A9-%E5%92%8C%E8%BF%99%E4%B8%AA%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6%E7%9B%B8%E5%85%B3%E7%9A%84%E6%89%80%E6%9C%89%E4%BA%A4%E6%98%93%EF%BC%9A"><span class="nav-number">4.2.</span> <span class="nav-text">查找过去十天 和这个智能合约相关的所有交易：</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#transaction-driven-state-machine"><span class="nav-number">5.</span> <span class="nav-text">transaction-driven state machine</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E4%B8%AD%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84"><span class="nav-number">6.</span> <span class="nav-text">代码中数据结构</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="陈宇韶chenyushao"
+      src="/images/my.jpg">
+  <p class="site-author-name" itemprop="name">陈宇韶chenyushao</p>
+  <div class="site-description" itemprop="description">爱学习、爱工作、爱生活;         微信号: Tiger_and_master;         手机号码:18515678348 </div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">427</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">201</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/12-ETH%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/my.jpg">
+      <meta itemprop="name" content="陈宇韶chenyushao">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tiger_pop's Blog">
+      <meta itemprop="description" content="爱学习、爱工作、爱生活;         微信号: Tiger_and_master;         手机号码:18515678348 ">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="12-ETH中的数据结构 | Tiger_pop's Blog">
+      <meta itemprop="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          12-ETH中的数据结构
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2025-01-10 21:12:12" itemprop="dateCreated datePublished" datetime="2025-01-10T21:12:12+08:00">2025-01-10</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-03-14 09:58:23" itemprop="dateModified" datetime="2025-03-14T09:58:23+08:00">2025-03-14</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%8C%BA%E5%9D%97%E9%93%BE/" itemprop="url" rel="index"><span itemprop="name">区块链</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+            <div class="post-description">这是文章开头，显示在主页面，详情请点击此处。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>简介 <span id="more"></span></p>
+<p>账户地址到 账户状态的映射</p>
+<p>eth的addr是160b的数，一般表示为 40个 16进制的数；</p>
+<h1 id="trie"><a href="#trie" class="headerlink" title="trie"></a>trie</h1><p>我们先介绍一下 trie 结构：</p>
+<p><img src="/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/12-ETH%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/%E6%88%AA%E5%B1%8F2024-12-17%2020.57.46.png" alt="截屏2024-12-17 20.57.46"></p>
+<p>trie 结构，只要地址不一样，就一定会映射到trie 树的两个不同的分支，</p>
+<p>它不会碰撞；</p>
+<p>给定的单词不变，顺序打乱，不影响树的结构；</p>
+<p>更新如果是局部性的，只需要改变一条分支即可；</p>
+<h1 id="patricia-tree"><a href="#patricia-tree" class="headerlink" title="patricia tree"></a>patricia tree</h1><p>patricia tree路径压缩的trie，会如下：</p>
+<p><img src="/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/12-ETH%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/%E6%88%AA%E5%B1%8F2024-12-17%2021.03.38.png" alt="截屏2024-12-17 21.03.38"></p>
+<p><img src="/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/12-ETH%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/%E6%88%AA%E5%B1%8F2024-12-17%2021.07.27.png" alt="截屏2024-12-17 21.07.27"><img src="/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/12-ETH%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/%E6%88%AA%E5%B1%8F2024-12-17%2021.07.35.png" alt="截屏2024-12-17 21.07.35"></p>
+<p>以上这样密集的情况路径压缩比较好；<br>但是eth地址是160位，也就是2**160 是一个非常大的数，所以地址在这个地址空间中，其实非常稀疏（为了防碰撞），不需要压缩；</p>
+<h1 id="state-tree-状态树"><a href="#state-tree-状态树" class="headerlink" title="state tree 状态树"></a>state tree 状态树</h1><h2 id="merkle-Patricia-tree-（MPT）"><a href="#merkle-Patricia-tree-（MPT）" class="headerlink" title="merkle Patricia tree （MPT）"></a>merkle Patricia tree （MPT）</h2><p><img src="/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/12-ETH%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/%E6%88%AA%E5%B1%8F2024-12-17%2021.19.54.png" alt="截屏2024-12-17 21.19.54"></p>
+<p>右上角是四个账户，假设只有7位的地址，账户状态只显示了余额；</p>
+<p>第一个账户是 45个 eth；第二个是 1 wei；第三个 1.1eth；第四个 0.12 eth。</p>
+<p>如果有路径压缩就会有 extension node；</p>
+<p>可以看见他们 root 结点 a7 ，后面就分支了；就是一个 树的结构。</p>
+<p>最后，这个 root 结点取hash 得到了一个hash 值写在block header 中。</p>
+<p>都是 一个结点算hash 值，这个值放进上一个结点中作值，来实现指针。</p>
+<p><img src="/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/12-ETH%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/%E6%88%AA%E5%B1%8F2024-12-23%2021.28.17.png" alt="截屏2024-12-23 21.28.17"></p>
+<p>这个value的实现是靠 RLP 序列化。</p>
+<p><img src="/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/12-ETH%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/%E6%88%AA%E5%B1%8F2024-12-23%2020.39.15.png" alt="截屏2024-12-23 20.39.15"></p>
+<p>上图是 两个 block 相连的例子；</p>
+<p>state root 在block header中，但是 每一个block 中的 状态树state tree 下的结点，都共用了很多个结点， 看见右边的block state tree中大部分结点都指向了左边状态树的结点，只有那些发生改变的结点需要新建分支；</p>
+<p>上面图片的例子中只有一个结点 的值 ，从29变成 45，这就是上图表达的意思；</p>
+<p>对于全结点而言，每新建一个block ，就需要在本地维护一个新的 merkle Patricia tree，只不过大部分结点是重复利用上的。</p>
+<h2 id="回滚困境"><a href="#回滚困境" class="headerlink" title="回滚困境"></a>回滚困境</h2><p><img src="/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/12-ETH%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/%E6%88%AA%E5%B1%8F2024-12-23%2021.03.03.png" alt="截屏2024-12-23 21.03.03"></p>
+<p>淘汰掉的一条链，想要直接回滚是不可能的，因为eth 中有智能合约，智能合约 可能非常复杂，合约执行完之后想要回滚实现不了。</p>
+<p>所以想要回滚必须要 保存历史状态；</p>
+<h2 id="header-块结构"><a href="#header-块结构" class="headerlink" title="header 块结构"></a>header 块结构</h2><p><img src="/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/12-ETH%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/%E6%88%AA%E5%B1%8F2024-12-23%2021.09.15.png" alt="截屏2024-12-23 21.09.15"></p>
+<p>前一个 block header的 hash 值；</p>
+<p>叔叔区块hash值；</p>
+<p>coinbase 矿工地址 ；</p>
+<p>Root 是 状态树的根hash；</p>
+<p>TxHash 是交易树的根hash；</p>
+<p>receipthHash 是收据树的根hash；</p>
+<p>bloom 查询某种交易的执行结果；</p>
+<p>Gas 消耗的汽油费用；</p>
+<p>Time 是block 的产生时间；</p>
+<p>Nonce 也是 挖矿时候的随机数；</p>
+<p><img src="/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/12-ETH%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/%E6%88%AA%E5%B1%8F2024-12-23%2021.19.03.png" alt="截屏2024-12-23 21.19.03"></p>
+<p>transaction是这个block 中交易的列表；</p>
+<p><img src="/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/12-ETH%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/%E6%88%AA%E5%B1%8F2024-12-23%2021.21.45.png" alt="截屏2024-12-23 21.21.45"></p>
+<p>这个区块真正发布出去在网上 就是上面external的这些信息；</p>
+<h1 id="交易树、收据树"><a href="#交易树、收据树" class="headerlink" title="交易树、收据树"></a>交易树、收据树</h1><h2 id="bloom-filter-布隆过滤器"><a href="#bloom-filter-布隆过滤器" class="headerlink" title="bloom filter 布隆过滤器"></a>bloom filter 布隆过滤器</h2><p><img src="/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/12-ETH%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/%E6%88%AA%E5%B1%8F2024-12-25%2016.22.07.png" alt="截屏2024-12-25 16.22.07"></p>
+<p>就是一个 hash表的结构，看一个元素是不是真的在 abc 这个集合中，就对这个元素 hash，算出来的值看看在不在hash 表中，有冲突可能性，也就是可能错报，但是不可能漏报。</p>
+<p>删除的操作，只存0和1的基础情况下，bloom filter 不支持删除操作，因为理论上可能多个 集合内的元素落在hash 表的一个位置上，你想改0，可能会破坏 整体存储情况。</p>
+<p>每一笔交易执行完之后，会形成一个收据，收据内就会包含一个bloom filter ，记录交易的地址、类型 等七七八八的信息。 </p>
+<p>发布的区块在 block header中 也有一个 总的 bloom filter，这个总的 bloom filter 是这个block 中所有交易的bloom filter的并集。</p>
+<h2 id="查找过去十天-和这个智能合约相关的所有交易："><a href="#查找过去十天-和这个智能合约相关的所有交易：" class="headerlink" title="查找过去十天 和这个智能合约相关的所有交易："></a>查找过去十天 和这个智能合约相关的所有交易：</h2><p>1、查哪个区块的 block header 中的 总bloom filter 中有我要的交易的类型。如果 block header 中没有的话，这个block 就不是我们想要的；</p>
+<p>2、如果block filter中总 bloom filter 中有，就从这个 block 所对应的交易所对应的收据树里面的bloom filter里面找；</p>
+<h1 id="transaction-driven-state-machine"><a href="#transaction-driven-state-machine" class="headerlink" title="transaction-driven state machine"></a>transaction-driven state machine</h1><p>交易驱动状态机</p>
+<p>state 指的是eth 所有账户的状态，每次发布的 block 中 包含的交易，通过执行这些交易，让eth 系统的状态从一个状态到下一个状态；</p>
+<blockquote>
+<p>为什么要有状态树？</p>
+<p>eth 和 btc 一样 创建一个账户是可以私下完成的，只有当这个账户第一次收到钱的时候，才能被记录进链中；</p>
+<p>状态树 是保留全部账户 状态信息的，而不是 交易树、收据树 仅仅包含交易相关的账户的信息，这样的好处在于 当 A-&gt;B 转账时，B 是新建账户时，不用一路回溯 全部结点找一遍来确认 B 是一个新建的账户，而有状态树 可以快速发现B不在状态树中，快速确认了B是一个新建账户，而将其纳入状态树。</p>
+</blockquote>
+<h1 id="代码中数据结构"><a href="#代码中数据结构" class="headerlink" title="代码中数据结构"></a>代码中数据结构</h1><p><img src="/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/12-ETH%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/%E6%88%AA%E5%B1%8F2024-12-25%2021.41.43.png" alt="截屏2024-12-25 21.41.43"></p>
+<p>以上是交易树和收据树的创建过程。<br>bloom 就是 前面说的 bloom filter ，散列表。</p>
+<p><img src="/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/12-ETH%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/%E6%88%AA%E5%B1%8F2024-12-25%2021.52.19.png" alt="截屏2024-12-25 21.52.19"></p>
+<p><img src="/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/12-ETH%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/%E6%88%AA%E5%B1%8F2024-12-25%2021.53.51.png" alt="截屏2024-12-25 21.53.51"></p>
+<p><img src="/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/12-ETH%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/%E6%88%AA%E5%B1%8F2024-12-25%2021.56.58.png" alt="截屏2024-12-25 21.56.58"></p>
+<p><img src="/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/12-ETH%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/%E6%88%AA%E5%B1%8F2024-12-25%2021.57.57.png" alt="截屏2024-12-25 21.57.57"></p>
+<p>block header 中的bloom 是由 bloom 汇总来的。</p>
+<p><img src="/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/12-ETH%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/%E6%88%AA%E5%B1%8F2024-12-25%2022.00.23.png" alt="截屏2024-12-25 22.00.23"></p>
+<p><img src="/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/12-ETH%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/%E6%88%AA%E5%B1%8F2024-12-25%2022.07.15.png" alt="截屏2024-12-25 22.07.15"></p>
+<p>bloomlookup 是查看 bloom filter 中有没有我们感兴趣的topic；</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/eth/" rel="tag"># eth</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/13-ghost/" rel="prev" title="13-ghost">
+                  <i class="fa fa-chevron-left"></i> 13-ghost
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/14-%E6%8C%96%E7%9F%BF%E7%AE%97%E6%B3%95/" rel="next" title="14-挖矿算法">
+                  14-挖矿算法 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">陈宇韶chenyushao</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

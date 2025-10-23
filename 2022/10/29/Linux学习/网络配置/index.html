@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha256-AbA177XfpSnFEvgpYu1jMygiLabzPCJCRIBtR5jGc0k=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.13.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="linux网络配置">
+<meta property="og:url" content="http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE/index.html">
+<meta property="og:site_name" content="Tiger_pop&#39;s Blog">
+<meta property="og:description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE/image-20220113201254463-7030863.png">
+<meta property="og:image" content="http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE/image-20220113221033107.png">
+<meta property="og:image" content="http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE/image-20220113210644619.png">
+<meta property="og:image" content="http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE/image-20220114114625705.png">
+<meta property="og:image" content="http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE/%E6%88%AA%E5%B1%8F2022-02-25%2011.10.18.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE/%E6%88%AA%E5%B1%8F2022-02-25%2011.13.51.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE/%E6%88%AA%E5%B1%8F2022-02-25%2011.35.59.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE/%E6%88%AA%E5%B1%8F2022-02-25%2011.51.42.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE/image-20220114104352280.png">
+<meta property="article:published_time" content="2022-10-29T07:42:07.000Z">
+<meta property="article:modified_time" content="2022-10-29T08:36:16.031Z">
+<meta property="article:author" content="陈宇韶chenyushao">
+<meta property="article:tag" content="网络">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE/image-20220113201254463-7030863.png">
+
+
+<link rel="canonical" href="http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE/","path":"2022/10/29/Linux学习/网络配置/","title":"linux网络配置"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>linux网络配置 | Tiger_pop's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="Tiger_pop's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Tiger_pop's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">tiger_pop 的博客</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9B%BA%E5%AE%9AIP"><span class="nav-number">1.</span> <span class="nav-text">固定IP</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%BB%E6%9C%BA%E5%90%8D%E5%92%8Chosts%E6%98%A0%E5%B0%84"><span class="nav-number">2.</span> <span class="nav-text">主机名和hosts映射</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Hosts-DNS"><span class="nav-number">3.</span> <span class="nav-text">Hosts\DNS</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%97%B2%E8%81%8A"><span class="nav-number">4.</span> <span class="nav-text">闲聊</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="陈宇韶chenyushao"
+      src="/images/my.jpg">
+  <p class="site-author-name" itemprop="name">陈宇韶chenyushao</p>
+  <div class="site-description" itemprop="description">爱学习、爱工作、爱生活;         微信号: Tiger_and_master;         手机号码:18515678348 </div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">427</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">201</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/my.jpg">
+      <meta itemprop="name" content="陈宇韶chenyushao">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tiger_pop's Blog">
+      <meta itemprop="description" content="爱学习、爱工作、爱生活;         微信号: Tiger_and_master;         手机号码:18515678348 ">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="linux网络配置 | Tiger_pop's Blog">
+      <meta itemprop="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          linux网络配置
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2022-10-29 15:42:07 / 修改时间：16:36:16" itemprop="dateCreated datePublished" datetime="2022-10-29T15:42:07+08:00">2022-10-29</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+            <div class="post-description">这是文章开头，显示在主页面，详情请点击此处。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>简介 <span id="more"></span></p>
+<h1 id="固定IP"><a href="#固定IP" class="headerlink" title="固定IP"></a>固定IP</h1><p><img src="/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE/image-20220113201254463-7030863.png" alt="image-20220113201254463"></p>
+<p>​		</p>
+<p>​		linux工作中要固定IP。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/sysconfig/network-scripts/ifcfg-自己的网卡</span><br><span class="line">// 编辑以上文件。</span><br><span class="line">// Ubuntu会有点不一样。</span><br><span class="line">//注意： Ubuntu20中的ip地址配置文件与Centos中不同，Centos中的配置文件在 /etc/sysconfig/network-scripts/目录下，文件名类似于ifcfg-ens33。而Ubuntu的ip地址配置文件则位于/etc/netplan/目录下，配置文件名为01-network-manager-all.yaml</span><br></pre></td></tr></table></figure>
+
+<p>​		centos要改4个地方，下面以我之前的为例。</p>
+<p>​		“dhcp” ： 是自动分配IP的意思，要改为”static” 。</p>
+<p>​		IPADDR：192.168.200.100  &#x2F;&#x2F; 固定IP</p>
+<p>​		GATEWAY ： 192.168.200.2  &#x2F;&#x2F;网关</p>
+<p>​		DNS1： 192.168.200.2</p>
+<p>​		ONBOOT&#x3D;yes  #设置网卡启动方式为 开机启动 并且可以通过系统服务管理器 systemctl 控制网卡</p>
+<p>​		centos</p>
+<p><img src="/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE/image-20220113221033107.png" alt="image-20220113221033107"></p>
+<p>​		ubuntu 要改的有点不一样。				<img src="/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE/image-20220113210644619.png" alt="image-20220113210644619"></p>
+<p>​		如果Linux是虚拟机，还要改虚拟机设置，打开edit、虚拟机网络编辑器，改子网。</p>
+<p><img src="/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE/image-20220114114625705.png" alt="image-20220114114625705"></p>
+<p>​		另外值得一提的是：在Linux为虚拟机的情况下，虚拟机主机的IP固定为192.168.200.100，GATEWAY ： 192.168.200.2  &#x2F;&#x2F;网关，主机分配给虚拟机的IP自动为192.168.200.1，主机自己在路由器局域网的IP为192.168.31.134 。 两个在不同的网段。</p>
+<p>​		vmnet8是NAT模式。此处仅对网卡vmnet8 进行修改，母机如果是Ubuntu网络中打开就行了。母鸡如果是Mac，如下操作：</p>
+<p>Mac 特别篇 （始）———————————————————————————————————</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo vim /Library/Preferences/VMware\ Fusion/networking <span class="comment"># 如下第一幅截图，将 DHCP 设置为 no， 即使用静态IP。 将 SUBNET 修改为自己想用的网段，此处我填的是 192.168.200.0 网段。</span></span><br><span class="line">sudo vim /Library/Preferences/VMware\ Fusion/vmnet8/nat.conf <span class="comment"># 定网关ip和子网掩码netmask。</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE/%E6%88%AA%E5%B1%8F2022-02-25%2011.10.18.jpg" alt="截屏2022-02-25 11.10.18"></p>
+<p><img src="/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE/%E6%88%AA%E5%B1%8F2022-02-25%2011.13.51.jpg" alt="截屏2022-02-25 11.13.51"></p>
+<p>查Mac本机的DNS地址 </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cat</span> /etc/resolv.conf <span class="comment"># 看nameserver</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE/%E6%88%AA%E5%B1%8F2022-02-25%2011.35.59.jpg" alt="截屏2022-02-25 11.35.59"></p>
+<p>进入虚拟机,以之前母鸡Mac定好的网段为基础，选一个自己要固定的子网ip，我这里用的是192.168.200.100，网关用刚刚在Mac上定好的192.168.200.2，子网掩码用查到的255.255.255.0， dns用刚刚Mac上找到的192.168.31.1。保持bootproto&#x3D;static，noboot&#x3D;yes。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">su  <span class="comment"># 获取root权限</span></span><br><span class="line">vim /etc/sysconfig/network-scripts/ifcfg-ens33</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE/%E6%88%AA%E5%B1%8F2022-02-25%2011.51.42.jpg" alt="截屏2022-02-25 11.51.42"></p>
+<p>然后 重启母鸡Mac。</p>
+<p>Mac 特别篇（终)———————————————————————————————————</p>
+<p>改完了记得重启服务	</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">netplan apply    <span class="comment"># Ubuntu</span></span><br><span class="line">nmcli c reload   <span class="comment"># Centos8 </span></span><br><span class="line">service network restart  </span><br><span class="line">systemctl restart network <span class="comment"># Centos7 </span></span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="主机名和hosts映射"><a href="#主机名和hosts映射" class="headerlink" title="主机名和hosts映射"></a>主机名和hosts映射</h1><p>​		hosts 是一个 主机名和IP映射关系文件。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hostname  // 查看主机名</span><br><span class="line">// 在 /etc/hostname 修改主机名。</span><br></pre></td></tr></table></figure>
+
+<p>​		指定IP地址与主机名之间的对应关系。（Windows和Linux\macos位置不一样但是都在etc&#x2F;hosts文件中。）</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/hosts</span><br><span class="line"><span class="comment"># ip 空格 主机名</span></span><br><span class="line">192.168.31.134 myY400</span><br><span class="line"><span class="comment"># 意思是 当我们ping myY400 时 ，会自动ping 192.168.31.134</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="Hosts-DNS"><a href="#Hosts-DNS" class="headerlink" title="Hosts\DNS"></a>Hosts\DNS</h1><p>​	DNS (domain name system) </p>
+<p><img src="/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE/image-20220114104352280.png" alt="image-20220114104352280"></p>
+<p>​		有的坏人就是偷偷改了hosts文件，域名劫持。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">192.168.31.74 www.baidu.com</span><br></pre></td></tr></table></figure>
+
+<p>​		</p>
+<h1 id="闲聊"><a href="#闲聊" class="headerlink" title="闲聊"></a>闲聊</h1><p>​		最后说说我的实验环境，我是用一台MacBook Pro写代码，用老电脑装了一个Ubuntu，Ubuntu里面的vmware安装了一个centos8的虚拟机，我想从mac远程登录centos来做实验。</p>
+<p>​		方法一：把虚拟机联网方式从NAT模式改为桥接模式，centos内从&#x2F;etc&#x2F;sysconfig&#x2F;network-scripts&#x2F;ifcfg-自己centos的网卡，  固定好自己的静态IP，直接把虚拟机联入家里路由器的局域网，在mac的finalshell直接远程登录虚拟机。</p>
+<p>​		方法二：Mac 的 finalshell 远程登录Ubuntu，虚拟机还是保持NAT模式，我从finalshell内再 【shh 用户名@虚拟机IP 】 ssh登录到centos里面。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E7%BD%91%E7%BB%9C/" rel="tag"># 网络</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%BF%AB%E7%85%A7/" rel="prev" title="linux虚拟机快照">
+                  <i class="fa fa-chevron-left"></i> linux虚拟机快照
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2022/10/29/Linux%E5%AD%A6%E4%B9%A0/%E7%BD%91%E7%BB%9C%E8%BF%9E%E6%8E%A5%E7%9A%84%E4%B8%89%E7%A7%8D%E6%A8%A1%E5%BC%8F/" rel="next" title="linux网络连接的三种模式">
+                  linux网络连接的三种模式 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">陈宇韶chenyushao</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

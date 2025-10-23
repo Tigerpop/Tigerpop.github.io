@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha256-AbA177XfpSnFEvgpYu1jMygiLabzPCJCRIBtR5jGc0k=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.13.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="kafka流式数据">
+<meta property="og:url" content="http://example.com/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E6%B5%81%E5%BC%8F%E6%95%B0%E6%8D%AE/index.html">
+<meta property="og:site_name" content="Tiger_pop&#39;s Blog">
+<meta property="og:description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E6%B5%81%E5%BC%8F%E6%95%B0%E6%8D%AE/%E6%88%AA%E5%B1%8F2022-05-06%2020.42.53-7028984.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E6%B5%81%E5%BC%8F%E6%95%B0%E6%8D%AE/%E6%88%AA%E5%B1%8F2022-05-06%2020.45.49.jpg">
+<meta property="article:published_time" content="2022-10-29T07:41:14.000Z">
+<meta property="article:modified_time" content="2022-10-29T07:50:28.768Z">
+<meta property="article:author" content="陈宇韶chenyushao">
+<meta property="article:tag" content="kafka">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E6%B5%81%E5%BC%8F%E6%95%B0%E6%8D%AE/%E6%88%AA%E5%B1%8F2022-05-06%2020.42.53-7028984.jpg">
+
+
+<link rel="canonical" href="http://example.com/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E6%B5%81%E5%BC%8F%E6%95%B0%E6%8D%AE/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E6%B5%81%E5%BC%8F%E6%95%B0%E6%8D%AE/","path":"2022/10/29/kafka学习/kafka流式数据/","title":"kafka流式数据"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>kafka流式数据 | Tiger_pop's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="Tiger_pop's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Tiger_pop's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">tiger_pop 的博客</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#kafka-Streams"><span class="nav-number">1.</span> <span class="nav-text">kafka Streams</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Spark-Streaming-%E7%AE%80%E4%BB%8B"><span class="nav-number">2.</span> <span class="nav-text">Spark Streaming 简介</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E6%B5%81%E5%A4%84%E7%90%86"><span class="nav-number">2.1.</span> <span class="nav-text">一、流处理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-%E9%9D%99%E6%80%81%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86"><span class="nav-number">2.1.1.</span> <span class="nav-text">1.1 静态数据处理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-%E6%B5%81%E5%A4%84%E7%90%86"><span class="nav-number">2.1.2.</span> <span class="nav-text">1.2 流处理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81Spark-Streaming"><span class="nav-number">2.2.</span> <span class="nav-text">二、Spark Streaming</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-%E7%AE%80%E4%BB%8B"><span class="nav-number">2.2.1.</span> <span class="nav-text">2.1 简介</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-DStream"><span class="nav-number">2.2.2.</span> <span class="nav-text">2.2 DStream</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-Spark-amp-Storm-amp-Flink"><span class="nav-number">2.2.3.</span> <span class="nav-text">2.3 Spark &amp; Storm &amp; Flink</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Spark-Streaming-%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C"><span class="nav-number">3.</span> <span class="nav-text">Spark Streaming 基本操作</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E6%A1%88%E4%BE%8B%E5%BC%95%E5%85%A5"><span class="nav-number">3.1.</span> <span class="nav-text">一、案例引入</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="陈宇韶chenyushao"
+      src="/images/my.jpg">
+  <p class="site-author-name" itemprop="name">陈宇韶chenyushao</p>
+  <div class="site-description" itemprop="description">爱学习、爱工作、爱生活;         微信号: Tiger_and_master;         手机号码:18515678348 </div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">427</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">201</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E6%B5%81%E5%BC%8F%E6%95%B0%E6%8D%AE/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/my.jpg">
+      <meta itemprop="name" content="陈宇韶chenyushao">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tiger_pop's Blog">
+      <meta itemprop="description" content="爱学习、爱工作、爱生活;         微信号: Tiger_and_master;         手机号码:18515678348 ">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="kafka流式数据 | Tiger_pop's Blog">
+      <meta itemprop="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          kafka流式数据
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2022-10-29 15:41:14 / 修改时间：15:50:28" itemprop="dateCreated datePublished" datetime="2022-10-29T15:41:14+08:00">2022-10-29</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/kafka/" itemprop="url" rel="index"><span itemprop="name">kafka</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+            <div class="post-description">这是文章开头，显示在主页面，详情请点击此处。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>简介 <span id="more"></span></p>
+<h1 id="kafka-Streams"><a href="#kafka-Streams" class="headerlink" title="kafka Streams"></a>kafka Streams</h1><p>​		之前学习的spark 就是流式处理 框架。</p>
+<p>​		kafka streams 流式处理框架 不如spark streaming 好使，跳过把，直接用kafka配合spark streaming流式处理框架干活才是上策。</p>
+<p>​		所以这里我“挂羊头卖狗肉”一回。</p>
+<p>​		</p>
+<h1 id="Spark-Streaming-简介"><a href="#Spark-Streaming-简介" class="headerlink" title="Spark Streaming 简介"></a>Spark Streaming 简介</h1><h2 id="一、流处理"><a href="#一、流处理" class="headerlink" title="一、流处理"></a>一、流处理</h2><h3 id="1-1-静态数据处理"><a href="#1-1-静态数据处理" class="headerlink" title="1.1 静态数据处理"></a>1.1 静态数据处理</h3><p>​		在流处理之前，数据通常存储在数据库，文件系统或其他形式的存储系统中。应用程序根据需要查询数据或计算数据。这就是传统的静态数据处理架构。Hadoop 采用 HDFS 进行数据存储，采用 MapReduce 进行数据查询或分析，这就是典型的静态数据处理架构。</p>
+<h3 id="1-2-流处理"><a href="#1-2-流处理" class="headerlink" title="1.2 流处理"></a>1.2 流处理</h3><p>​		而流处理则是直接对运动中的数据的处理，在接收数据时直接计算数据。</p>
+<p>大多数数据都是连续的流：传感器事件，网站上的用户活动，金融交易等等 ，所有这些数据都是随着时间的推移而创建的。</p>
+<p>​		接收和发送数据流并执行应用程序或分析逻辑的系统称为<strong>流处理器</strong>。流处理器的基本职责是确保数据有效流动，同时具备可扩展性和容错能力，Storm 和 Flink 就是其代表性的实现。</p>
+<p>​        流式处理优点：			</p>
+<ul>
+<li><strong>应用程序立即对数据做出反应</strong>：降低了数据的滞后性，使得数据更具有时效性，更能反映对未来的预期；</li>
+<li><strong>流处理可以处理更大的数据量</strong>：直接处理数据流，并且只保留数据中有意义的子集，并将其传送到下一个处理单元，逐级过滤数据，降低需要处理的数据量，从而能够承受更大的数据量；</li>
+<li><strong>流处理更贴近现实的数据模型</strong>：在实际的环境中，一切数据都是持续变化的，要想能够通过过去的数据推断未来的趋势，必须保证数据的不断输入和模型的不断修正，典型的就是金融市场、股票市场，流处理能更好的应对这些数据的连续性的特征和及时性的需求；</li>
+<li><strong>流处理分散和分离基础设施</strong>：流式处理减少了对大型数据库的需求。相反，每个流处理程序通过流处理框架维护了自己的数据和状态，这使得流处理程序更适合微服务架构。</li>
+</ul>
+<h2 id="二、Spark-Streaming"><a href="#二、Spark-Streaming" class="headerlink" title="二、Spark Streaming"></a>二、Spark Streaming</h2><h3 id="2-1-简介"><a href="#2-1-简介" class="headerlink" title="2.1 简介"></a>2.1 简介</h3><p>​		Spark Streaming 是 Spark 的一个子模块，用于快速构建可扩展，高吞吐量，高容错的流处理程序。具有以下特点：</p>
+<ul>
+<li>通过高级 API 构建应用程序，简单易用；</li>
+<li>支持多种语言，如 Java，Scala 和 Python；</li>
+<li>良好的容错性，Spark Streaming 支持快速从失败中恢复丢失的操作状态；</li>
+<li>能够和 Spark 其他模块无缝集成，将流处理与批处理完美结合；</li>
+<li>Spark Streaming 可以从 HDFS，Flume，Kafka，Twitter 和 ZeroMQ 读取数据，也支持自定义数据源。</li>
+</ul>
+<p><img src="/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E6%B5%81%E5%BC%8F%E6%95%B0%E6%8D%AE/%E6%88%AA%E5%B1%8F2022-05-06%2020.42.53-7028984.jpg" alt="截屏2022-05-06 20.42.53"></p>
+<h3 id="2-2-DStream"><a href="#2-2-DStream" class="headerlink" title="2.2 DStream"></a>2.2 DStream</h3><p>​		Spark Streaming 提供称为离散流 (DStream) 的高级抽象，用于表示连续的数据流。 DStream 可以从来自 Kafka，Flume 和 Kinesis 等数据源的输入数据流创建，也可以由其他 DStream 转化而来。<strong>在内部，DStream 表示为一系列 RDD</strong>。</p>
+<p><img src="/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E6%B5%81%E5%BC%8F%E6%95%B0%E6%8D%AE/%E6%88%AA%E5%B1%8F2022-05-06%2020.45.49.jpg" alt="截屏2022-05-06 20.45.49"></p>
+<h3 id="2-3-Spark-amp-Storm-amp-Flink"><a href="#2-3-Spark-amp-Storm-amp-Flink" class="headerlink" title="2.3 Spark &amp; Storm &amp; Flink"></a>2.3 Spark &amp; Storm &amp; Flink</h3><p>​		storm 和 Flink 都是真正意义上的流计算框架，但 Spark Streaming 只是将数据流进行极小粒度的拆分，拆分为多个批处理，使得其能够得到接近于流处理的效果，但其本质上还是批处理（或微批处理）。</p>
+<h1 id="Spark-Streaming-基本操作"><a href="#Spark-Streaming-基本操作" class="headerlink" title="Spark Streaming 基本操作"></a>Spark Streaming 基本操作</h1><h2 id="一、案例引入"><a href="#一、案例引入" class="headerlink" title="一、案例引入"></a>一、案例引入</h2><p>​		</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/kafka/" rel="tag"># kafka</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E5%AE%89%E8%A3%85%E5%8F%8A%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/" rel="prev" title="kafka安装及常用命令">
+                  <i class="fa fa-chevron-left"></i> kafka安装及常用命令
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E5%86%99%E5%85%A5-%E5%AD%98%E5%82%A8-%E6%B6%88%E8%B4%B9%E6%B5%81%E7%A8%8B/" rel="next" title="kafka写入_存储_消费流程">
+                  kafka写入_存储_消费流程 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">陈宇韶chenyushao</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

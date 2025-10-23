@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha256-AbA177XfpSnFEvgpYu1jMygiLabzPCJCRIBtR5jGc0k=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.13.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="python正则中转义字符相关问题！！！">
+<meta property="og:url" content="http://example.com/2022/11/11/python%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E7%AC%AC3%E7%89%88/python%E6%AD%A3%E5%88%99%E4%B8%AD%E8%BD%AC%E4%B9%89%E5%AD%97%E7%AC%A6%E7%9B%B8%E5%85%B3%E9%97%AE%E9%A2%98%EF%BC%81%EF%BC%81%EF%BC%81/index.html">
+<meta property="og:site_name" content="Tiger_pop&#39;s Blog">
+<meta property="og:description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-11-11T14:37:07.000Z">
+<meta property="article:modified_time" content="2022-11-11T14:39:44.654Z">
+<meta property="article:author" content="陈宇韶chenyushao">
+<meta property="article:tag" content="正则">
+<meta property="article:tag" content="转义字符">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://example.com/2022/11/11/python%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E7%AC%AC3%E7%89%88/python%E6%AD%A3%E5%88%99%E4%B8%AD%E8%BD%AC%E4%B9%89%E5%AD%97%E7%AC%A6%E7%9B%B8%E5%85%B3%E9%97%AE%E9%A2%98%EF%BC%81%EF%BC%81%EF%BC%81/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2022/11/11/python%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E7%AC%AC3%E7%89%88/python%E6%AD%A3%E5%88%99%E4%B8%AD%E8%BD%AC%E4%B9%89%E5%AD%97%E7%AC%A6%E7%9B%B8%E5%85%B3%E9%97%AE%E9%A2%98%EF%BC%81%EF%BC%81%EF%BC%81/","path":"2022/11/11/python基础知识第3版/python正则中转义字符相关问题！！！/","title":"python正则中转义字符相关问题！！！"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>python正则中转义字符相关问题！！！ | Tiger_pop's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="Tiger_pop's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Tiger_pop's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">tiger_pop 的博客</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#python%E6%AD%A3%E5%88%99%E4%B8%AD%E8%BD%AC%E4%B9%89%E5%AD%97%E7%AC%A6%E7%9B%B8%E5%85%B3%E9%97%AE%E9%A2%98%EF%BC%81%EF%BC%81%EF%BC%81"><span class="nav-number">1.</span> <span class="nav-text">python正则中转义字符相关问题！！！</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E7%90%86%E8%A7%A3-python%E7%9A%84-%E8%BD%AC%E4%B9%89%E5%AD%97%E7%AC%A6%EF%BC%9F"><span class="nav-number">1.1.</span> <span class="nav-text">如何理解 python的 转义字符？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E9%81%93-%E8%AE%A1%E7%AE%97%E8%BF%87%E7%A8%8B%E4%B8%AD%EF%BC%8C-%E6%AD%A3%E5%88%99%E5%8C%96-%E5%8F%98-%E7%9A%84%E6%A1%88%E4%BE%8B%E9%A2%98%E3%80%82"><span class="nav-number">1.2.</span> <span class="nav-text">一道 计算过程中， \\ 正则化 变 \\\\的案例题。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8F%8F%E8%BF%B0"><span class="nav-number">1.3.</span> <span class="nav-text">描述</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="陈宇韶chenyushao"
+      src="/images/my.jpg">
+  <p class="site-author-name" itemprop="name">陈宇韶chenyushao</p>
+  <div class="site-description" itemprop="description">爱学习、爱工作、爱生活;         微信号: Tiger_and_master;         手机号码:18515678348 </div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">427</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">201</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/11/11/python%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E7%AC%AC3%E7%89%88/python%E6%AD%A3%E5%88%99%E4%B8%AD%E8%BD%AC%E4%B9%89%E5%AD%97%E7%AC%A6%E7%9B%B8%E5%85%B3%E9%97%AE%E9%A2%98%EF%BC%81%EF%BC%81%EF%BC%81/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/my.jpg">
+      <meta itemprop="name" content="陈宇韶chenyushao">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tiger_pop's Blog">
+      <meta itemprop="description" content="爱学习、爱工作、爱生活;         微信号: Tiger_and_master;         手机号码:18515678348 ">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="python正则中转义字符相关问题！！！ | Tiger_pop's Blog">
+      <meta itemprop="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          python正则中转义字符相关问题！！！
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2022-11-11 22:37:07 / 修改时间：22:39:44" itemprop="dateCreated datePublished" datetime="2022-11-11T22:37:07+08:00">2022-11-11</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/python%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E7%AC%AC3%E7%89%88/" itemprop="url" rel="index"><span itemprop="name">python基础知识第3版</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+            <div class="post-description">这是文章开头，显示在主页面，详情请点击此处。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="python正则中转义字符相关问题！！！"><a href="#python正则中转义字符相关问题！！！" class="headerlink" title="python正则中转义字符相关问题！！！"></a>python正则中转义字符相关问题！！！</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> re</span><br><span class="line"></span><br><span class="line">b = <span class="string">&#x27;\\d&#x27;</span></span><br><span class="line"><span class="built_in">print</span>(b)  <span class="comment"># 返回 \d</span></span><br><span class="line">b = <span class="string">r&#x27;\\d&#x27;</span></span><br><span class="line"><span class="built_in">print</span>(b)  <span class="comment"># 返回 \\d</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string"><span class="meta">&gt;&gt;&gt; </span>b = r&#x27;\\d&#x27;  # 终端内 可见 ：直接 输出b 和 print(b) 的结果不一样！！！</span></span><br><span class="line"><span class="string"><span class="meta">&gt;&gt;&gt; </span>b           # 因为print一次就用到了 python 3.7 的解释器，进行了一次转义。</span></span><br><span class="line"><span class="string">&#x27;\\\\d&#x27;</span></span><br><span class="line"><span class="string"><span class="meta">&gt;&gt;&gt; </span>b = &#x27;\\d&#x27;</span></span><br><span class="line"><span class="string"><span class="meta">&gt;&gt;&gt; </span>b</span></span><br><span class="line"><span class="string">&#x27;\\d&#x27;</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="comment"># (一)</span></span><br><span class="line">b = <span class="string">r&#x27;\\d&#x27;</span></span><br><span class="line"><span class="built_in">print</span>(b)  <span class="comment"># 返回 \\d</span></span><br><span class="line"><span class="built_in">print</span>(re.sub(b,<span class="string">&#x27;ok&#x27;</span>,<span class="string">&#x27;00\d00&#x27;</span>)) <span class="comment">#  返回 00ok00</span></span><br><span class="line"><span class="comment"># (二)</span></span><br><span class="line">a = <span class="string">&#x27;\\d&#x27;</span></span><br><span class="line"><span class="built_in">print</span>(a)  <span class="comment"># 返回 \d</span></span><br><span class="line"><span class="built_in">print</span>(re.sub(a,<span class="string">&#x27;ok&#x27;</span>,<span class="string">&#x27;00\d00&#x27;</span>)) <span class="comment">#  返回 okok\dokok</span></span><br><span class="line"></span><br><span class="line">案例解释：</span><br><span class="line"></span><br><span class="line">（一）<span class="string">r&#x27;\\d&#x27;</span> 字符串前的这个 r 表示python 在r修饰的字符串过 python解释器时 不被转义；</span><br><span class="line">		只会在通过 正则解释器 时 被转义一次，\\d 被 转义为 \d ，以 \d 形态进入正则层！！！</span><br><span class="line">		在正则层内，正则匹配过程直接把 所有的 \d 与之匹配;</span><br><span class="line"></span><br><span class="line">（二）<span class="string">&#x27;\\d&#x27;</span> 字符串，\\d 过python解释器时 已经被转义为 \d，</span><br><span class="line">		过正则解释器时 \d 被转义为 <span class="string">&quot;数字&quot;</span> ，以<span class="string">&quot;数字&quot;</span>形态进入正则层！！！</span><br><span class="line">		正则层内，正则匹配过程直接把 所有<span class="string">&quot;数字&quot;</span> 与之进行匹配。</span><br></pre></td></tr></table></figure>
+
+<h2 id="如何理解-python的-转义字符？"><a href="#如何理解-python的-转义字符？" class="headerlink" title="如何理解 python的 转义字符？"></a>如何理解 python的 转义字符？</h2><p>可以把字符串进入正则过程，分为为三层：<br>1、字符串层<br>   （通过python解释器后，才能进入python层，过解释器的时候<code>&#39;\\&#39;</code>会被转义成<code>&#39;\&#39;</code>）</p>
+<p>2、python层<br>   （通过正则解释器后，才能进入正则流程，过正则解释器的时候 <code>&#39;\\&#39;</code>又会被转义成 <code>&#39;\&#39;</code>）<br>3、正则层<br>      (终于可以开始正则匹配了！)</p>
+<h2 id="一道-计算过程中，-正则化-变-的案例题。"><a href="#一道-计算过程中，-正则化-变-的案例题。" class="headerlink" title="一道 计算过程中， \\ 正则化 变 \\\\的案例题。"></a>一道 计算过程中， <code>\\</code> 正则化 变 <code>\\\\</code>的案例题。</h2><p>​		本题来源于 牛客华为HJ74 参数解析</p>
+<p><a target="_blank" rel="noopener" href="https://www.nowcoder.com/practice/668603dc307e4ef4bb07bcd0615ea677?tpId=37&amp;tqId=21297&amp;rp=1&amp;ru=/exam/oj/ta&amp;qru=/exam/oj/ta&amp;sourceUrl=/exam/oj/ta?page=2&tpId=37&type=37&amp;difficulty=undefined&amp;judgeStatus=undefined&amp;tags=&amp;title=">https://www.nowcoder.com/practice/668603dc307e4ef4bb07bcd0615ea677?tpId=37&amp;tqId=21297&amp;rp=1&amp;ru=/exam/oj/ta&amp;qru=/exam/oj/ta&amp;sourceUrl=%2Fexam%2Foj%2Fta%3Fpage%3D2%26tpId%3D37%26type%3D37&amp;difficulty=undefined&amp;judgeStatus=undefined&amp;tags=&amp;title=</a></p>
+<h2 id="描述"><a href="#描述" class="headerlink" title="描述"></a>描述</h2><p>在命令行输入如下命令：</p>
+<p>xcopy &#x2F;s c:\ d:\e，</p>
+<p>各个参数如下：</p>
+<p>参数1：命令字xcopy</p>
+<p>参数2：字符串&#x2F;s</p>
+<p>参数3：字符串c:\</p>
+<p>参数4: 字符串d:\e</p>
+<p>请编写一个参数解析程序，实现将命令行各个参数解析出来。</p>
+<p>解析规则：</p>
+<p>1.参数分隔符为空格<br>2.对于用””包含起来的参数，如果中间有空格，不能解析为多个参数。比如在命令行输入xcopy &#x2F;s “C:\program files” “d:&quot;时，参数仍然是4个，第3个参数应该是字符串C:\program files，而不是C:\program，注意输出参数时，需要将””去掉，引号不存在嵌套情况。<br>3.参数不定长</p>
+<p>4.输入由用例保证，不会出现不符合要求的输入</p>
+<p>数据范围：字符串长度：1\le s\le 1000\1≤<em>s</em>≤1000 </p>
+<p>进阶：时间复杂度：O(n)*O*(<em>n</em>) ，空间复杂度：O(n)*O*(<em>n</em>) </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 我在这里剑走偏锋，用python的re正则，非常简单的解决了问题；</span></span><br><span class="line"><span class="comment"># 首先是正则把 “ ” 内容 放进一个list中备用，并把原str 中 “ ” 内容用一个 已用的标记占住。 </span></span><br><span class="line"><span class="comment"># 再用空格切分str 为 list ，遍历此 list，遇到 占位标记 就从 备用list 中取值填过来即可。</span></span><br><span class="line"><span class="comment"># 这可能是 最简单的 解法了，借助正则化跳过了 复杂的算法。</span></span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line">a = <span class="built_in">input</span>()</span><br><span class="line">pattern = <span class="string">r&#x27;&quot;.*?&quot;&#x27;</span></span><br><span class="line">change_a = re.sub(<span class="string">r&#x27;&quot;.*?&quot;&#x27;</span>,<span class="string">&#x27;used&#x27;</span>,a)           </span><br><span class="line">temp_list = re.findall(pattern,a)</span><br><span class="line"><span class="comment"># 虽然在过程中 转义字符\ 会显示变 \\,但是后面输出会自动复原！！！</span></span><br><span class="line"><span class="comment"># print(temp_list) # 会显示 [&#x27;&quot;c:\\\\&quot;&#x27;, &#x27;&quot;d:\\\\e&quot;&#x27;] 没关系，输出temp_list.pop(0)[1:-1] 会自动复原。</span></span><br><span class="line">a = change_a.split(<span class="string">&#x27; &#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">len</span>(a))</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> a:</span><br><span class="line">    <span class="keyword">if</span> i==<span class="string">&#x27;used&#x27;</span>:</span><br><span class="line">        <span class="built_in">print</span>(temp_list.pop(<span class="number">0</span>)[<span class="number">1</span>:-<span class="number">1</span>])</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="built_in">print</span>(i)</span><br></pre></td></tr></table></figure>
+
+
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%AD%A3%E5%88%99/" rel="tag"># 正则</a>
+              <a href="/tags/%E8%BD%AC%E4%B9%89%E5%AD%97%E7%AC%A6/" rel="tag"># 转义字符</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/11/07/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/%E7%89%9B%E5%AE%A2%E5%8D%8E%E4%B8%BAHJ35%E8%9B%87%E5%BD%A2%E7%9F%A9%E9%98%B5/" rel="prev" title="牛客华为HJ35蛇形矩阵">
+                  <i class="fa fa-chevron-left"></i> 牛客华为HJ35蛇形矩阵
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2022/11/11/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/%E7%89%9B%E5%AE%A2%E5%8D%8E%E4%B8%BAHJ56%E5%AE%8C%E5%85%A8%E6%95%B0%E8%AE%A1%E7%AE%97/" rel="next" title="牛客华为HJ56完全数计算">
+                  牛客华为HJ56完全数计算 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">陈宇韶chenyushao</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

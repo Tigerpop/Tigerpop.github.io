@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha256-AbA177XfpSnFEvgpYu1jMygiLabzPCJCRIBtR5jGc0k=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.13.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="kafka安装及常用命令">
+<meta property="og:url" content="http://example.com/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E5%AE%89%E8%A3%85%E5%8F%8A%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/index.html">
+<meta property="og:site_name" content="Tiger_pop&#39;s Blog">
+<meta property="og:description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E5%AE%89%E8%A3%85%E5%8F%8A%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/%E6%88%AA%E5%B1%8F2022-04-22%2022.31.24-7028933.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E5%AE%89%E8%A3%85%E5%8F%8A%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/%E6%88%AA%E5%B1%8F2022-04-23%2015.03.58.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E5%AE%89%E8%A3%85%E5%8F%8A%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/%E6%88%AA%E5%B1%8F2022-04-23%2020.13.54.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E5%AE%89%E8%A3%85%E5%8F%8A%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/%E6%88%AA%E5%B1%8F2022-04-23%2020.49.32.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E5%AE%89%E8%A3%85%E5%8F%8A%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/%E6%88%AA%E5%B1%8F2022-04-24%2016.48.36.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E5%AE%89%E8%A3%85%E5%8F%8A%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/%E6%88%AA%E5%B1%8F2022-04-24%2016.14.26.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E5%AE%89%E8%A3%85%E5%8F%8A%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/%E6%88%AA%E5%B1%8F2022-04-24%2016.56.56.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E5%AE%89%E8%A3%85%E5%8F%8A%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/%E6%88%AA%E5%B1%8F2022-04-24%2017.17.29.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E5%AE%89%E8%A3%85%E5%8F%8A%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/%E6%88%AA%E5%B1%8F2022-04-24%2019.19.09.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E5%AE%89%E8%A3%85%E5%8F%8A%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/%E6%88%AA%E5%B1%8F2022-04-24%2019.35.23.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E5%AE%89%E8%A3%85%E5%8F%8A%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/%E6%88%AA%E5%B1%8F2022-04-24%2019.37.02.jpg">
+<meta property="article:published_time" content="2022-10-29T07:40:59.000Z">
+<meta property="article:modified_time" content="2022-10-29T16:49:33.872Z">
+<meta property="article:author" content="陈宇韶chenyushao">
+<meta property="article:tag" content="kafka">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E5%AE%89%E8%A3%85%E5%8F%8A%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/%E6%88%AA%E5%B1%8F2022-04-22%2022.31.24-7028933.jpg">
+
+
+<link rel="canonical" href="http://example.com/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E5%AE%89%E8%A3%85%E5%8F%8A%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E5%AE%89%E8%A3%85%E5%8F%8A%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/","path":"2022/10/29/kafka学习/kafka安装及常用命令/","title":"kafka安装及常用命令"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>kafka安装及常用命令 | Tiger_pop's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="Tiger_pop's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Tiger_pop's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">tiger_pop 的博客</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#kafka%E7%AE%80%E5%8D%95%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.</span> <span class="nav-text">kafka简单介绍</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8D%A1%E5%A4%AB%E5%8D%A1%E6%9E%B6%E6%9E%84"><span class="nav-number">2.</span> <span class="nav-text">卡夫卡架构</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#kafka%E9%9B%86%E7%BE%A4%E9%83%A8%E7%BD%B2"><span class="nav-number">3.</span> <span class="nav-text">kafka集群部署</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%85scala"><span class="nav-number">3.1.</span> <span class="nav-text">安装scala</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%85kafka"><span class="nav-number">3.2.</span> <span class="nav-text">安装kafka</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A3%80%E6%9F%A5%E6%98%AF%E5%90%A6%E5%AE%89%E8%A3%85%E6%88%90%E5%8A%9F"><span class="nav-number">3.3.</span> <span class="nav-text">检查是否安装成功</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#kafka-%E7%B2%97%E7%95%A5%E8%AE%B2%E8%A7%A3"><span class="nav-number">4.</span> <span class="nav-text">kafka 粗略讲解</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="陈宇韶chenyushao"
+      src="/images/my.jpg">
+  <p class="site-author-name" itemprop="name">陈宇韶chenyushao</p>
+  <div class="site-description" itemprop="description">爱学习、爱工作、爱生活;         微信号: Tiger_and_master;         手机号码:18515678348 </div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">427</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">201</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E5%AE%89%E8%A3%85%E5%8F%8A%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/my.jpg">
+      <meta itemprop="name" content="陈宇韶chenyushao">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tiger_pop's Blog">
+      <meta itemprop="description" content="爱学习、爱工作、爱生活;         微信号: Tiger_and_master;         手机号码:18515678348 ">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="kafka安装及常用命令 | Tiger_pop's Blog">
+      <meta itemprop="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          kafka安装及常用命令
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2022-10-29 15:40:59" itemprop="dateCreated datePublished" datetime="2022-10-29T15:40:59+08:00">2022-10-29</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2022-10-30 00:49:33" itemprop="dateModified" datetime="2022-10-30T00:49:33+08:00">2022-10-30</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/kafka/" itemprop="url" rel="index"><span itemprop="name">kafka</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+            <div class="post-description">这是文章开头，显示在主页面，详情请点击此处。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>简介 <span id="more"></span></p>
+<h1 id="kafka简单介绍"><a href="#kafka简单介绍" class="headerlink" title="kafka简单介绍"></a>kafka简单介绍</h1><p><img src="/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E5%AE%89%E8%A3%85%E5%8F%8A%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/%E6%88%AA%E5%B1%8F2022-04-22%2022.31.24-7028933.jpg" alt="截屏2022-04-22 22.31.24"></p>
+<p>​				消息队列 的 发布订阅模式可以避免 拉取数据后就清除。</p>
+<p>以上部分名词解释：</p>
+<p>1、解耦：生成、消费、数据存储、三者分解开，耦合性低，拓展性就强。</p>
+<p>2、冗余：数据存储有备份。像交叉存放等等。</p>
+<p>3、拓展性：这样的分布式集群，可以自由加机器，多加机器可以提高负载能力。</p>
+<p>4、峰值处理能力：可以均衡速率。不是由生产者一股脑推送给消费者，而是数据存放在这里，由消费者自由取数据，消费者高峰数据得到消峰处理。</p>
+<p>5、可恢复性：一个服务器宕机了，别的有备份的服务器接替工作，但是此时宕机服务器又恢复了，数据又恢复在此服务器进行。</p>
+<p>6、顺序保证：订单数据放入同一个分区中，可以保证顺序，因为是队列。但是订单数据有时候放1分区有时候放2分区就无法保证顺序。如何保证订单数据都往一个分区里送，就涉及到 hash 算法了。</p>
+<p>8、异步通信：发送完，即可进行下一步操作；而同步通信则是发送完消息还要等接收方接收完毕才能下一步操作。</p>
+<p>​		<strong>Kafka</strong>是一个分布式消息队列。Kafka对消息保存时根据<code>Topic</code>进行归类，发送消息者称为Producer，消息接受者称为Consumer，此外kafka集群有多个kafka实例组成，每个实例(server)称为broker。<code>broker 就是代理服务器agent的意思，也就是服务器server</code>。</p>
+<p>​		无论是kafka集群，还是consumer都依赖于<strong>zookeeper</strong>集群保存一些meta信息，来保证系统可用性。</p>
+<h1 id="卡夫卡架构"><a href="#卡夫卡架构" class="headerlink" title="卡夫卡架构"></a>卡夫卡架构</h1><p>​		名词：</p>
+<p>​		replication： 拷贝（备份）；</p>
+<p>​		broker&#x3D;agent&#x3D;server，一个broker可以容纳多个topic；</p>
+<p>​		topic： 消息管理工具，实际是一个队列；</p>
+<p>​		consumer group：  消费者组：旨在增加消费能力，每个成员读一部分数据，大家凑一起读完即可，因为组内数据共享。这是kafka用来实现一个topic消息的广播（发给所有的consumer）和单播（发给任意一个consumer）的手段。一个topic可以有多个CG。topic的消息会复制（不是真的复制，是概念上的）到所有的CG，但每个partion只会把消息发给该CG中的一个consumer。</p>
+<p>​		leader：  主broker；producer 和 consumer 读与写都只针对 leader- broker。</p>
+<p>​		follower： 从broker；仅仅作为leader的备份，当leader宕机follower顶上。</p>
+<p>​		zookeeper： 之前spark配置时学过，这里zookeeper存放了集群信息、消息队列信息、消费者消费到的位置（ offset偏移量 ）。</p>
+<p>​		Partition：为了实现扩展性，一个非常大的topic可以分布到多个broker（即服务器）上，一个topic可以分为多个partition，每个partition是一个有序的队列。partition中的每条消息都会被分配一个有序的id（offset）。kafka只保证按一个partition中的顺序将消息发给consumer，不保证一个topic的整体（多个partition间）的顺序；</p>
+<p><img src="/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E5%AE%89%E8%A3%85%E5%8F%8A%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/%E6%88%AA%E5%B1%8F2022-04-23%2015.03.58.jpg" alt="截屏2022-04-23 15.03.58"></p>
+<p>​		想要增加kafka的消费能力，增加partition数量，再增加消费者 是一个办法。</p>
+<p>​		想要 保持 某一个业务的消息的顺序，要把此业务的消息都往一个partition中发送，（当然topic 不一定只有一个分区，这个两码事），一个partition中一定是有序队列，如果消息进入了两个partition ，消费者不能保证先读了哪一个partition，自然顺序就无法保证。</p>
+<p>​		leader和follower都是副本，在replication-factor 参数设置时 设置2 就是一个leader一个follower的模式。</p>
+<h1 id="kafka集群部署"><a href="#kafka集群部署" class="headerlink" title="kafka集群部署"></a>kafka集群部署</h1><p>​		我这里是 安装配置好了 Hadoop、hive、spark、 zookeeper 之后再配置kafka 的，有的内容就不再重复了。</p>
+<p>​		 Kafka安装依赖Scala、ZooKeeper，所以需要先安装Scala与ZooKeeper。我们已经安装配置好了zookeeper ，所以先从安装scala 语言开始。</p>
+<p>​		查询想要下载的kafka对应的scala版本号</p>
+<p>​		<a target="_blank" rel="noopener" href="https://kafka.apache.org/downloads.html">https://kafka.apache.org/downloads.html</a></p>
+<p>​		例如 <code>kafka_2.13-3.1.0.tgz</code> 中 2.13 对应的就是scala的版本号，3.10是kafka 的版本号。</p>
+<p>​		下载Scala 2.13</p>
+<p>​		<a target="_blank" rel="noopener" href="https://www.scala-lang.org/download/all.html">https://www.scala-lang.org/download/all.html</a> </p>
+<p>​		下载 kafka- manager（管理工具，以后有需要再用）</p>
+<p>​		<a target="_blank" rel="noopener" href="https://github.com/yahoo/CMAK/releases">https://github.com/yahoo/CMAK/releases</a></p>
+<h2 id="安装scala"><a href="#安装scala" class="headerlink" title="安装scala"></a>安装scala</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">node01中开始</span></span><br><span class="line">cd /opt</span><br><span class="line">mkdir scala</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">把下载好的Scala文件 放进scale文件夹解压。</span></span><br><span class="line">tar -zxvf scala-2.13.7.tgz </span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">添加环境变量</span></span><br><span class="line">vim /etc/profile</span><br><span class="line">--------------------------------------------------------------</span><br><span class="line">export SCALA_HOME=/opt/scala/scala-2.13.7</span><br><span class="line">export PATH=$SCALA_HOME/bin # 这个是添加在最后的 ：分隔。</span><br><span class="line">source /etc/profile</span><br><span class="line">--------------------------------------------------------------</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">分发配置好的文件</span> </span><br><span class="line">scp -r scala node02:/opt/</span><br><span class="line">scp -r scala node03:/opt/</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">在node02\node03机器上配置环境变量</span></span><br><span class="line">vim /etc/profile</span><br><span class="line">--------------------------------------------------------------</span><br><span class="line">export SCALA_HOME=/opt/scala/scala-2.13.7</span><br><span class="line">export PATH=$SCALA_HOME/bin </span><br><span class="line">source /etc/profile</span><br><span class="line">--------------------------------------------------------------</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="安装kafka"><a href="#安装kafka" class="headerlink" title="安装kafka"></a>安装kafka</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">node01中开始</span></span><br><span class="line">mkdir kafka</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">解压</span></span><br><span class="line">tar -zxvf kafka_2.13-3.1.0.tgz </span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">添加环境变量</span></span><br><span class="line">vim /opt/profile</span><br><span class="line">--------------------------------------------------------------</span><br><span class="line">export KAFKA_HOME=/opt/kafka/kafka_2.13-3.1.0</span><br><span class="line">export PATH=$KAFKA_HOME/bin</span><br><span class="line">--------------------------------------------------------------</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">新建logs文件夹</span></span><br><span class="line">mkdir /opt/kafka/kafka_2.13-3.1.0/logs</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">编辑配置文件</span></span><br><span class="line">vim /opt/kafka/kafka_2.13-3.1.0/config/server.properties</span><br><span class="line">--------------------------------------------------------------</span><br><span class="line">//在配置集群的时候，必须设置,不然以后的操作会报找不到leader的错误</span><br><span class="line">listeners = PLAINTEXT://node3.cn:9092</span><br><span class="line">broker.id=1</span><br><span class="line">//端口暂时不变</span><br><span class="line">port=9092</span><br><span class="line">//hostname修改为本机的主机名</span><br><span class="line">host.name=node01</span><br><span class="line">//可选配置项，将日志输出到指定的位置</span><br><span class="line">log.dirs=/opt/kafka/kafka_2.13-3.1.0/logs</span><br><span class="line">//必须配置自己的zookeeper</span><br><span class="line">zookeeper.connect=node01:2181,node02:2181,node03:2181</span><br><span class="line">--------------------------------------------------------------</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">分发配置好的文件</span></span><br><span class="line">scp -r /opt/kafka node02:/opt  </span><br><span class="line">scp -r /opt/kafka node03:/opt  </span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">在node02\node03机器上修改信息、配置环境变量。</span></span><br><span class="line">vim /opt/profile</span><br><span class="line">--------------------------------------------------------------</span><br><span class="line">export KAFKA_HOME=/opt/kafka/kafka_2.13-3.1.0</span><br><span class="line">export PATH=$KAFKA_HOME/bin</span><br><span class="line">--------------------------------------------------------------</span><br><span class="line">vim /opt/kafka/kafka_2.13-3.1.0/config/server.properties</span><br><span class="line">--------------------------------------------------------------</span><br><span class="line">//node02:</span><br><span class="line">broker.id=2</span><br><span class="line">listeners=PLAINTEXT://node02:9092</span><br><span class="line">hostname=node02</span><br><span class="line">//node03:</span><br><span class="line">broker.id=3</span><br><span class="line">listeners=PLAINTEXT://node03:9092</span><br><span class="line">hostname=node03</span><br><span class="line">--------------------------------------------------------------</span><br></pre></td></tr></table></figure>
+
+<h2 id="检查是否安装成功"><a href="#检查是否安装成功" class="headerlink" title="检查是否安装成功"></a>检查是否安装成功</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">启动zookeeper集群，在每台机器上开启。</span></span><br><span class="line">/opt/zookeeper/bin/zkServer.sh start</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">查看各个节点状态，在每台机器上查看。</span></span><br><span class="line">/opt/zookeeper/bin/zkServer.sh status</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">集群各节点 启动 kafka 服务。</span></span><br><span class="line">/opt/kafka/kafka_2.13-3.1.0/bin/kafka-server-start.sh -daemon /opt/kafka/kafka_2.13-3.1.0/config/server.properties</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">各个节点 jps 都可见 kafka 进程启动了。</span></span><br><span class="line">jps</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">测试topic创建和删除</span></span><br><span class="line"><span class="meta prompt_">			# </span><span class="language-bash">补充：（2.2 及更高版本）的 Kafka 不再需要 ZooKeeper 连接字符串，即 --zookeeper localhost:2181。使用 Kafka Broker的 --bootstrap-server localhost:9092来替代- -zookeeper localhost:2181。</span></span><br><span class="line">kafka-topics.sh --bootstrap-server node01:9092 --create --topic test-topic --partitions 3 --replication-factor 2</span><br><span class="line"><span class="meta prompt_">		# </span><span class="language-bash">补充：也可以用多个机器。</span></span><br><span class="line">kafka-topics.sh --bootstrap-server node01:9092,node02:9092,node03:9092 --create --topic test-topic --partitions 3 --replication-factor 2</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">查看topic列表</span></span><br><span class="line">kafka-topics.sh --bootstrap-server node01:9092 --list</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">验证创建的 topic</span> </span><br><span class="line">kafka-topics.sh --describe --topic test-topic --bootstrap-server node01:9092</span><br></pre></td></tr></table></figure>
+
+<p>​		<img src="/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E5%AE%89%E8%A3%85%E5%8F%8A%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/%E6%88%AA%E5%B1%8F2022-04-23%2020.13.54.jpg" alt="截屏2022-04-23 20.13.54"></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">测试消息发送与消费</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Kafka提供了一个命令行的工具，可以从输入文件或者命令行中读取消息并发送给Kafka集群。每一行是一条消息。</span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">开一个终端作为producer: （然后在控制台输入几条消息到服务器）ctrl+c 退出生产者。</span></span><br><span class="line">kafka-console-producer.sh --broker-list node01:9092,node02:9092,node03:9092 --topic test-topic</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">&gt;</span><span class="language-bash">this is message</span></span><br><span class="line"><span class="meta prompt_">&gt;</span><span class="language-bash">this is another message</span></span><br><span class="line"><span class="meta prompt_">&gt;</span><span class="language-bash"></span></span><br><span class="line"><span class="language-bash"></span><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">开一个终端作为consumer: （producer输入完消息一回车，consumer这就显示出那边的消息，一行一行显示。）ctrl+c 退出消费者。</span></span><br><span class="line">kafka-console-consumer.sh --bootstrap-server node01:9092,node02:9092,node03:9092 --topic test-topic --from-beginning</span><br><span class="line"></span><br><span class="line">this is message</span><br><span class="line">this is another message</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">如果你有2台不同的终端上运行上述命令，那么当你在运行生产者时，两个消费者都能消费到生产者发送的消息，如下图：</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E5%AE%89%E8%A3%85%E5%8F%8A%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/%E6%88%AA%E5%B1%8F2022-04-23%2020.49.32.jpg" alt="截屏2022-04-23 20.49.32"></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">删除创建的topic。(删除topic后，消费者很快就停了，生产者不受影响。)</span></span><br><span class="line">kafka-topics.sh --bootstrap-server node01:9092 --delete --topic test-topic </span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Kafka——彻底删除Topic</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">彻底退出消费者、生产者，才能删除topic。</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">但是这样的删除是逻辑删除，实际文件还啊是存在，要物理删除，需要在配置文件中打开 delete.topic.enable=<span class="literal">true</span> .</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">停止kafka（每台机器都运行一遍）</span></span><br><span class="line">1、ctrl+c 退出生产者、消费者。</span><br><span class="line">2、/opt/kafka/kafka_2.13-3.1.0/bin/kafka-server-stop.sh</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">停止zookeeper（每台机器都运行一遍）</span></span><br><span class="line">/opt/zookeeper/bin/zkServer.sh stop</span><br></pre></td></tr></table></figure>
+
+<p>​			</p>
+<h1 id="kafka-粗略讲解"><a href="#kafka-粗略讲解" class="headerlink" title="kafka 粗略讲解"></a>kafka 粗略讲解</h1><p>​		在3个机器组成的kafka集群中，开启了一个3分区2备份的topic <code>test-topic</code>。</p>
+<p><code>kafka-topics.sh --bootstrap-server node01:9092 --create --topic test-topic --partitions 3 --replication-factor 2</code></p>
+<p>​		此时node01在kafka的自定义logs 文件夹上层文件夹  <code>tree logs</code> 可见2个分区：<img src="/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E5%AE%89%E8%A3%85%E5%8F%8A%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/%E6%88%AA%E5%B1%8F2022-04-24%2016.48.36.jpg" alt="截屏2022-04-24 16.48.36"></p>
+<hr>
+<p>​		补充：如果改动一下，改成2个机器组成的kafka集群，开3个分区2个备份的topic，logs中会有3个分区。理由其实很简单 ，一共要6个，均分到两台机器一个上面就要放3个，logs 中会是如下情况：<img src="/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E5%AE%89%E8%A3%85%E5%8F%8A%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/%E6%88%AA%E5%B1%8F2022-04-24%2016.14.26.jpg" alt="截屏2022-04-24 16.14.26"></p>
+<hr>
+<p>​		node01的logs内是test- topic-0、test- topic-1；</p>
+<p>​		node02的logs内是test- topic-1、test- topic-2；</p>
+<p>​		node03的logs内是test- topic-0、test- topic-2；</p>
+<p>​		查看 topic 的分配情况：</p>
+<p>​		<code>kafka-topics.sh --bootstrap-server node01:9092 --describe --topic test-topic</code>		</p>
+<p><img src="/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E5%AE%89%E8%A3%85%E5%8F%8A%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/%E6%88%AA%E5%B1%8F2022-04-24%2016.56.56.jpg" alt="截屏2022-04-24 16.56.56"></p>
+<p>解释一下上图：</p>
+<p>​		partition0 的leader副本 放在 3号机器（配置文件中定义了机器号）；</p>
+<p>​		partition0 的replicas副本 放在 1号机器；		</p>
+<p>​		partition1 的leader副本 放在 1号机器；</p>
+<p>​		partition1 的replicas副本 放在 2号机器；</p>
+<p>​		partition2 的leader副本 放在 2号机器；</p>
+<p>​		partition2 的replicas副本 放在 3号机器；</p>
+<p>​		前面说过，实际操作都是针对 leader副本进行。</p>
+<p>​		Isr: 哪些机器正在同步此分区副本。</p>
+<p>此时，我们突然kill掉node03机器的kafka进程，再describe 一下此topic，可见：</p>
+<p><img src="/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E5%AE%89%E8%A3%85%E5%8F%8A%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/%E6%88%AA%E5%B1%8F2022-04-24%2017.17.29.jpg" alt="截屏2022-04-24 17.17.29"></p>
+<p>​		isr 正在同步的机器里看不见 3号机器了，原本partition0 的leader副本在3好机器上，partition0的 replicas 副本在 1号机器上。3号机器一出问题，备用的副本马上转正，1号机器上的partition0 replicas副本转为leader副本投入使用。1号机器上运行着 分区0和分区1 两个leader副本了。</p>
+<p>​		如果node03的kafka服务 又重新恢复，describe 里面可见 isr 同步中3号机器又回来了，别的机器宕机3号机器又会顶上。</p>
+<p><img src="/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E5%AE%89%E8%A3%85%E5%8F%8A%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/%E6%88%AA%E5%B1%8F2022-04-24%2019.19.09.jpg" alt="截屏2022-04-24 19.19.09"></p>
+<p>​		此时虽然3号机器回来了，但是partition0和partition1 的leader 副本都集中到了 1号机器中，这样的集中并不是好事，此时我们可以选择手动让分配再平衡一些，如下操作。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">该 bin/kafka-preferred-replica-election.sh 命令行工具已被弃用。已由代替 bin/kafka-leader-election.sh</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">对 指定topic 的0分区 重新选举一个最优 的leader 副本存放位置。</span></span><br><span class="line">kafka-leader-election.sh --bootstrap-server node01:9092 --topic test-topic --election-type preferred --partition 0</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E5%AE%89%E8%A3%85%E5%8F%8A%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/%E6%88%AA%E5%B1%8F2022-04-24%2019.35.23.jpg" alt="截屏2022-04-24 19.35.23"></p>
+<p>​		此时我们再 查看topic 分配情况 <code>kafka-topics.sh --bootstrap-server node01:9092 --describe --topic test-topic</code>，可见partition0 的leader副本 回到了3号机器上 ：</p>
+<p><img src="/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E5%AE%89%E8%A3%85%E5%8F%8A%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/%E6%88%AA%E5%B1%8F2022-04-24%2019.37.02.jpg" alt="截屏2022-04-24 19.37.02"></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">开一个终端作为producer: （然后在控制台输入几条消息到服务器）ctrl+c 退出生产者。</span></span><br><span class="line">kafka-console-producer.sh --broker-list node01:9092 --topic test-topic</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">&gt;</span><span class="language-bash">I love kafka !</span> </span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">开一个终端作为consumer: （producer输入完消息一回车，consumer这就显示出那边的消息，一行一行显示。）ctrl+c 退出消费者,--from-beginning是从头读取的意思。</span></span><br><span class="line">kafka-console-consumer.sh --bootstrap-server node01:9092 --topic test-topic --from-beginning</span><br></pre></td></tr></table></figure>
+
+<p>​		此时我们从3台机器的logs 文件夹中找 消息到底存放在哪里。我的这个消息出现在 node01的logs的 test- topic-0 中，实际上，这个消息发送到了哪个partition 目前来看还是随机的。		</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/kafka/" rel="tag"># kafka</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E5%88%86%E5%B8%83%E5%BC%8F%E6%9E%B6%E6%9E%84%E5%8E%9F%E7%90%86/" rel="prev" title="kafka分布式架构原理">
+                  <i class="fa fa-chevron-left"></i> kafka分布式架构原理
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E6%B5%81%E5%BC%8F%E6%95%B0%E6%8D%AE/" rel="next" title="kafka流式数据">
+                  kafka流式数据 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">陈宇韶chenyushao</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

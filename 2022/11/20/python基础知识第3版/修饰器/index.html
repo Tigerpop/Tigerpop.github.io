@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha256-AbA177XfpSnFEvgpYu1jMygiLabzPCJCRIBtR5jGc0k=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.13.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="修饰器">
+<meta property="og:url" content="http://example.com/2022/11/20/python%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E7%AC%AC3%E7%89%88/%E4%BF%AE%E9%A5%B0%E5%99%A8/index.html">
+<meta property="og:site_name" content="Tiger_pop&#39;s Blog">
+<meta property="og:description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-11-20T04:00:06.000Z">
+<meta property="article:modified_time" content="2022-11-25T12:19:29.246Z">
+<meta property="article:author" content="陈宇韶chenyushao">
+<meta property="article:tag" content="闭包">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://example.com/2022/11/20/python%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E7%AC%AC3%E7%89%88/%E4%BF%AE%E9%A5%B0%E5%99%A8/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2022/11/20/python%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E7%AC%AC3%E7%89%88/%E4%BF%AE%E9%A5%B0%E5%99%A8/","path":"2022/11/20/python基础知识第3版/修饰器/","title":"修饰器"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>修饰器 | Tiger_pop's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="Tiger_pop's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Tiger_pop's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">tiger_pop 的博客</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%97%AD%E5%8C%85%E7%9A%84%E7%90%86%E8%A7%A3"><span class="nav-number">1.</span> <span class="nav-text">闭包的理解</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%A5%E4%B8%8B%E5%9D%87%E4%B8%BA%E5%8F%82%E8%80%83%E7%9A%84%E5%86%85%E5%AE%B9"><span class="nav-number">2.</span> <span class="nav-text">以下均为参考的内容</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%8E%B0%E5%AE%9E%E9%97%AE%E9%A2%98"><span class="nav-number">2.1.</span> <span class="nav-text">现实问题</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BF%AE%E9%A5%B0%E5%87%BD%E6%95%B0"><span class="nav-number">3.</span> <span class="nav-text">修饰函数</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%97%A0%E5%8F%82%E6%95%B0%E6%97%A0%E8%BF%94%E5%9B%9E"><span class="nav-number">3.1.</span> <span class="nav-text">无参数无返回</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%97%A0%E5%8F%82%E6%95%B0%E6%9C%89%E8%BF%94%E5%9B%9E"><span class="nav-number">3.2.</span> <span class="nav-text">无参数有返回</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%89%E5%8F%82%E6%95%B0%E6%97%A0%E8%BF%94%E5%9B%9E"><span class="nav-number">3.3.</span> <span class="nav-text">有参数无返回</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%89%E5%8F%82%E6%95%B0%E6%9C%89%E8%BF%94%E5%9B%9E"><span class="nav-number">3.4.</span> <span class="nav-text">有参数有返回</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A3%85%E9%A5%B0%E5%99%A8%E5%B8%A6%E5%8F%82%E6%95%B0"><span class="nav-number">3.5.</span> <span class="nav-text">装饰器带参数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B6%88%E9%99%A4%E5%89%AF%E4%BD%9C%E7%94%A8"><span class="nav-number">3.6.</span> <span class="nav-text">消除副作用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%9A%E4%B8%AA%E8%A3%85%E9%A5%B0%E5%99%A8"><span class="nav-number">3.7.</span> <span class="nav-text">多个装饰器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%89%A7%E8%A1%8C%E9%A1%BA%E5%BA%8F"><span class="nav-number">3.7.1.</span> <span class="nav-text">执行顺序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8C%85%E8%A3%B9%E5%BD%A2%E5%BC%8F"><span class="nav-number">3.7.2.</span> <span class="nav-text">包裹形式</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BF%AE%E9%A5%B0%E7%B1%BB"><span class="nav-number">4.</span> <span class="nav-text">修饰类</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="陈宇韶chenyushao"
+      src="/images/my.jpg">
+  <p class="site-author-name" itemprop="name">陈宇韶chenyushao</p>
+  <div class="site-description" itemprop="description">爱学习、爱工作、爱生活;         微信号: Tiger_and_master;         手机号码:18515678348 </div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">427</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">201</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/11/20/python%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E7%AC%AC3%E7%89%88/%E4%BF%AE%E9%A5%B0%E5%99%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/my.jpg">
+      <meta itemprop="name" content="陈宇韶chenyushao">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tiger_pop's Blog">
+      <meta itemprop="description" content="爱学习、爱工作、爱生活;         微信号: Tiger_and_master;         手机号码:18515678348 ">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="修饰器 | Tiger_pop's Blog">
+      <meta itemprop="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          修饰器
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2022-11-20 12:00:06" itemprop="dateCreated datePublished" datetime="2022-11-20T12:00:06+08:00">2022-11-20</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2022-11-25 20:19:29" itemprop="dateModified" datetime="2022-11-25T20:19:29+08:00">2022-11-25</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/python%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E7%AC%AC3%E7%89%88/" itemprop="url" rel="index"><span itemprop="name">python基础知识第3版</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+            <div class="post-description">这是文章开头，显示在主页面，详情请点击此处。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>简介 <span id="more"></span></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># coding:utf-8</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 修饰器  就是一个嵌套函数模版，对输入的参数函数进行加工，再以一个新的函数输出。</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">check_str</span>(<span class="params">func</span>):</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;func :&#x27;</span>,func)</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">inner</span>(<span class="params">*args,**kwargs</span>):   <span class="comment"># 这里inner获得的是参数函数func 的参数。</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&#x27;args:&#x27;</span>,args,<span class="string">&#x27;  &#x27;</span>,<span class="string">&#x27;kwargs: &#x27;</span>,kwargs)</span><br><span class="line">        func(*args,**kwargs)    <span class="comment"># 这里把参数 还给参数函数。</span></span><br><span class="line">        result = func(*args,**kwargs)</span><br><span class="line">        <span class="keyword">if</span> result == <span class="string">&#x27;ok&#x27;</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="string">&#x27;result is %s&#x27;</span>%result</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="string">&#x27;result is failed %s&#x27;</span>%result</span><br><span class="line">    <span class="keyword">return</span> inner      <span class="comment"># 但是注意return的不是inner()而是inner，从这里可以看出修饰器不是简单的函数嵌套，而是“闭包”，下面有讲解。</span></span><br><span class="line"></span><br><span class="line"><span class="meta">@check_str        </span><span class="comment"># test作为参数函数使用修饰器check_str 的格式规范。另一种用法见下方#引用部分。</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">test</span>(<span class="params">data</span>):</span><br><span class="line">    <span class="keyword">return</span> data</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">result = test(<span class="string">&#x27;no&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(result)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;~~~~~~~~~~~~~~~~~~~~~~~&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">test2</span>(<span class="params">data</span>):</span><br><span class="line">    <span class="keyword">return</span> data</span><br><span class="line"></span><br><span class="line">test2 = check_str(test2)  <span class="comment">#另一种使用修饰器的方式。不管有无参数都这样写。</span></span><br><span class="line">                        <span class="comment">#因为这是方法的 定义过程。</span></span><br><span class="line"></span><br><span class="line">result = test2(data = <span class="string">&#x27;ok&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(result)</span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="闭包的理解"><a href="#闭包的理解" class="headerlink" title="闭包的理解"></a>闭包的理解</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 简单的方法嵌套</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">outer</span>():</span><br><span class="line">    x = <span class="number">1</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">inner</span>():</span><br><span class="line">        <span class="built_in">print</span>(x)</span><br><span class="line">    inner() <span class="comment"># 注意这里有括号，直接被调用</span></span><br><span class="line"></span><br><span class="line">outer() <span class="comment"># 1</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 闭包</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">outer</span>(<span class="params">x</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">inner</span>():</span><br><span class="line">        <span class="built_in">print</span>(x)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> inner <span class="comment">#没括号，不被直接调用</span></span><br><span class="line">closure = outer(<span class="number">1</span>) <span class="comment"># closure就是一个闭包</span></span><br><span class="line">closure() <span class="comment"># 1</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 同样是嵌套函数，只是稍改动一下，把局部变量 x 作为参数了传递进来，嵌套函数不再直接在函数里被调用，而是作为返回值返回，这里的 closure就是一个闭包，本质上它还是函数，闭包是引用了自由变量(x)的函数(inner)。</span></span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+<p>​		更多装饰器 的学习，可以参考，本文下面都是 别人写的内容，总结的非常浅显易懂。</p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/willsdu/p/16422647.html">https://www.cnblogs.com/willsdu/p/16422647.html</a></p>
+<h1 id="以下均为参考的内容"><a href="#以下均为参考的内容" class="headerlink" title="以下均为参考的内容"></a>以下均为参考的内容</h1><h2 id="现实问题"><a href="#现实问题" class="headerlink" title="现实问题"></a>现实问题</h2><p>在实际的项目中，经常会遇到需要在原有项目上加一些功能，但是这些功能可能很快被删除掉，如何实现这种要求呢？下面举例一个简单的函数</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">foo</span>():</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;hello&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>如果想打印该函数的执行时间：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> time <span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">foo</span>():</span><br><span class="line">    t1 = time()</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;hello&#x27;</span>)</span><br><span class="line">    t2 = time()</span><br><span class="line">    <span class="built_in">print</span>(t2 - t1)</span><br></pre></td></tr></table></figure>
+
+<p>这种在原有函数里面加代码，也不符合开闭原则，那么我可以新增加一个函数：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> time <span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">run_time</span>(<span class="params">func</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">wrap</span>():</span><br><span class="line">        t1 = time()</span><br><span class="line">        func()</span><br><span class="line">        t2 = time()</span><br><span class="line">        <span class="built_in">print</span>(t2 - t1)</span><br><span class="line">    <span class="keyword">return</span> wrap</span><br></pre></td></tr></table></figure>
+
+<p>这么写的确不用修改原来的代码，但是新增函数还是要被调用的。Python参照Java，提供了注解来优化该场景，上述场景可以简写如下</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> time <span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">run_time</span>(<span class="params">func</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">wrap</span>():</span><br><span class="line">        t1 = time()</span><br><span class="line">        func()</span><br><span class="line">        t2 = time()</span><br><span class="line">        <span class="built_in">print</span>(t2 - t1)</span><br><span class="line">    <span class="keyword">return</span> wrap</span><br><span class="line"></span><br><span class="line"><span class="meta">@run_time</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">foo</span>():</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;hello&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+<h1 id="修饰函数"><a href="#修饰函数" class="headerlink" title="修饰函数"></a>修饰函数</h1><p>Python注解修饰函数时，函数定义的不同，注解的实现也不同</p>
+<h2 id="无参数无返回"><a href="#无参数无返回" class="headerlink" title="无参数无返回"></a>无参数无返回</h2><p>上面的例子就是无参数无返回值</p>
+<h2 id="无参数有返回"><a href="#无参数有返回" class="headerlink" title="无参数有返回"></a>无参数有返回</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> time <span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">run_time</span>(<span class="params">func</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">wrap</span>():</span><br><span class="line">        t1 = time()</span><br><span class="line">        r = func()</span><br><span class="line">        t2 = time()</span><br><span class="line">        <span class="built_in">print</span>(t2-t1)</span><br><span class="line">        <span class="keyword">return</span> r</span><br><span class="line">    <span class="keyword">return</span> wrap</span><br><span class="line"></span><br><span class="line"><span class="meta">@run_time</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">foo</span>():</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&#x27;hello&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(foo())</span><br></pre></td></tr></table></figure>
+
+<h2 id="有参数无返回"><a href="#有参数无返回" class="headerlink" title="有参数无返回"></a>有参数无返回</h2><p>有参数无返回这种情况较少</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> time <span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">run_time</span>(<span class="params">func</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">wrap</span>(<span class="params">a, b</span>):</span><br><span class="line">        t1 = time()</span><br><span class="line">        func(a, b)</span><br><span class="line">        t2 = time()</span><br><span class="line">        <span class="built_in">print</span>(t2 - t1)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> wrap</span><br><span class="line"></span><br><span class="line"><span class="meta">@run_time</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">foo</span>(<span class="params">a, b</span>):</span><br><span class="line">    <span class="built_in">print</span>(a + b)</span><br><span class="line"></span><br><span class="line">foo(<span class="number">2</span>, <span class="number">45</span>)</span><br></pre></td></tr></table></figure>
+
+<h2 id="有参数有返回"><a href="#有参数有返回" class="headerlink" title="有参数有返回"></a>有参数有返回</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> time <span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">run_time</span>(<span class="params">func</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">wrap</span>(<span class="params">a, b</span>):</span><br><span class="line">        t1 = time()</span><br><span class="line">        r=func(a, b)</span><br><span class="line">        t2 = time()</span><br><span class="line">        <span class="built_in">print</span>(t2 - t1)</span><br><span class="line">        <span class="keyword">return</span> r</span><br><span class="line">    <span class="keyword">return</span> wrap</span><br><span class="line"></span><br><span class="line"><span class="meta">@run_time</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">foo</span>(<span class="params">a, b</span>):</span><br><span class="line">    <span class="keyword">return</span> a + b</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(foo(<span class="number">2</span>, <span class="number">45</span>))</span><br></pre></td></tr></table></figure>
+
+<h2 id="装饰器带参数"><a href="#装饰器带参数" class="headerlink" title="装饰器带参数"></a>装饰器带参数</h2><p>有时候装饰器可能需要一些参数，这个场景更复杂，具体实现也就是多层套娃来容纳不同的参数</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">namedDecorator</span>(<span class="params">name</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">run_time</span>(<span class="params">func</span>):</span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">wrap</span>(<span class="params">a, b</span>):</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&#x27;this is:&#123;&#125;&#x27;</span>.<span class="built_in">format</span>(name))</span><br><span class="line">            r = func(a, b)</span><br><span class="line">            <span class="keyword">return</span> r</span><br><span class="line">        <span class="keyword">return</span> wrap</span><br><span class="line">    <span class="keyword">return</span> run_time</span><br><span class="line"></span><br><span class="line"><span class="meta">@namedDecorator(<span class="params"><span class="string">&quot;装饰器带参数&quot;</span></span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">foo</span>(<span class="params">a, b</span>):</span><br><span class="line">    <span class="keyword">return</span> a + b</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(foo(<span class="number">2</span>, <span class="number">45</span>))</span><br></pre></td></tr></table></figure>
+
+<h2 id="消除副作用"><a href="#消除副作用" class="headerlink" title="消除副作用"></a>消除副作用</h2><p>上述的装饰后，foo函数已经不是原来的foo了，已经是被装饰后的函数了</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">namedDecorator</span>(<span class="params">name</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">run_time</span>(<span class="params">func</span>):</span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">wrap</span>(<span class="params">a, b</span>):</span><br><span class="line">            <span class="string">&#x27;&#x27;&#x27;my decorator&#x27;&#x27;&#x27;</span></span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&#x27;this is:&#123;&#125;&#x27;</span>.<span class="built_in">format</span>(name))</span><br><span class="line">            r = func(a, b)</span><br><span class="line">            <span class="keyword">return</span> r</span><br><span class="line">        <span class="keyword">return</span> wrap</span><br><span class="line">    <span class="keyword">return</span> run_time</span><br><span class="line"></span><br><span class="line"><span class="meta">@namedDecorator(<span class="params"><span class="string">&quot;装饰器带参数&quot;</span></span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">foo</span>(<span class="params">a, b</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;example docstring&quot;&quot;&quot;</span> </span><br><span class="line">    <span class="keyword">return</span> a + b</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(foo(<span class="number">2</span>, <span class="number">45</span>))</span><br><span class="line"><span class="built_in">print</span>(foo.__name__, foo.__doc__)</span><br></pre></td></tr></table></figure>
+
+<p>返回</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">this</span> <span class="keyword">is</span>:装饰器带参数</span><br><span class="line"><span class="number">47</span></span><br><span class="line">wrap my decorator</span><br></pre></td></tr></table></figure>
+
+<p>使用@wraps装饰器可以消除这种影响</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> functools <span class="keyword">import</span> wraps</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">namedDecorator</span>(<span class="params">name</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">run_time</span>(<span class="params">func</span>):</span><br><span class="line"><span class="meta">        @wraps(<span class="params">func</span>)</span></span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">wraper</span>(<span class="params">a, b</span>):</span><br><span class="line">            <span class="string">&#x27;&#x27;&#x27;my decorator&#x27;&#x27;&#x27;</span></span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&#x27;this is:&#123;&#125;&#x27;</span>.<span class="built_in">format</span>(name))</span><br><span class="line">            r = func(a, b)</span><br><span class="line">            <span class="keyword">return</span> r</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> wraper</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> run_time</span><br><span class="line"></span><br><span class="line"><span class="meta">@namedDecorator(<span class="params"><span class="string">&quot;装饰器带参数&quot;</span></span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">foo</span>(<span class="params">a, b</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;example docstring&quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">return</span> a + b</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(foo(<span class="number">2</span>, <span class="number">45</span>))</span><br><span class="line"><span class="built_in">print</span>(foo.__name__, foo.__doc__)</span><br></pre></td></tr></table></figure>
+
+<p>执行结果</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">this</span> <span class="keyword">is</span>:装饰器带参数</span><br><span class="line"><span class="number">47</span></span><br><span class="line">foo example docstring</span><br></pre></td></tr></table></figure>
+
+<h2 id="多个装饰器"><a href="#多个装饰器" class="headerlink" title="多个装饰器"></a>多个装饰器</h2><p>如果想要多个装饰器装饰同一个函数会怎样呢？</p>
+<h3 id="执行顺序"><a href="#执行顺序" class="headerlink" title="执行顺序"></a>执行顺序</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> time <span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">run_time_1</span>(<span class="params">func</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">wrap</span>(<span class="params">a, b</span>):</span><br><span class="line">        r = func(a, b)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&#x27;run_time_1&#x27;</span>)</span><br><span class="line">        <span class="keyword">return</span> r</span><br><span class="line">    <span class="keyword">return</span> wrap</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">run_time_2</span>(<span class="params">func</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">wrap</span>(<span class="params">a, b</span>):</span><br><span class="line">        r = func(a, b)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&#x27;run_time_2&#x27;</span>)</span><br><span class="line">        <span class="keyword">return</span> r</span><br><span class="line">    <span class="keyword">return</span> wrap</span><br><span class="line"></span><br><span class="line"><span class="meta">@run_time_1</span></span><br><span class="line"><span class="meta">@run_time_2</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">foo</span>(<span class="params">a, b</span>):</span><br><span class="line">    <span class="keyword">return</span> a + b</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(foo(<span class="number">2</span>, <span class="number">45</span>))</span><br></pre></td></tr></table></figure>
+
+<p>返回结果：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">run_time_2</span><br><span class="line">run_time_1</span><br><span class="line">47</span><br></pre></td></tr></table></figure>
+
+<p>结论：离被修饰函数最近的一侧先执行</p>
+<h3 id="包裹形式"><a href="#包裹形式" class="headerlink" title="包裹形式"></a>包裹形式</h3><p>我们在上面的代码上加几行代码</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> time <span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">run_time_1</span>(<span class="params">func</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">wrap</span>(<span class="params">a, b</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;run_time_1 docstring&quot;&quot;&quot;</span></span><br><span class="line">        <span class="built_in">print</span>(func.__name__, func.__doc__)</span><br><span class="line">        r = func(a, b)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&#x27;run_time_1&#x27;</span>)</span><br><span class="line">        <span class="keyword">return</span> r</span><br><span class="line">    <span class="keyword">return</span> wrap</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">run_time_2</span>(<span class="params">func</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">wrap</span>(<span class="params">a, b</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;run_time_2 docstring&quot;&quot;&quot;</span></span><br><span class="line">        r = func(a, b)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&#x27;run_time_2&#x27;</span>)</span><br><span class="line">        <span class="keyword">return</span> r</span><br><span class="line">    <span class="keyword">return</span> wrap</span><br><span class="line"></span><br><span class="line"><span class="meta">@run_time_1</span></span><br><span class="line"><span class="meta">@run_time_2</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">foo</span>(<span class="params">a, b</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;foo docstring&quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">return</span> a + b</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(foo(<span class="number">2</span>, <span class="number">45</span>))</span><br><span class="line"><span class="built_in">print</span>(foo.__name__, foo.__doc__)</span><br></pre></td></tr></table></figure>
+
+<p>输出结果：</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">wrap</span> run_time_2 docstring</span><br><span class="line">run_time_2</span><br><span class="line">run_time_1</span><br><span class="line"><span class="number">47</span></span><br><span class="line"><span class="built_in">wrap</span> run_time_1 docstring</span><br></pre></td></tr></table></figure>
+
+<p>结论：这是洋葱一样，一层包一层的结构<br>当然这可以使用@wrap消除影响，就不加代码了</p>
+<h1 id="修饰类"><a href="#修饰类" class="headerlink" title="修饰类"></a>修饰类</h1><p>装饰器还可以装饰类，本质不变，都是执行一段自定义代码后再返回，可以用套娃，洋葱打比方</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">decorator</span>(<span class="params">cls</span>):</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;这里可以写被装饰类新增的功能&quot;</span>)</span><br><span class="line">    <span class="keyword">return</span> cls</span><br><span class="line"></span><br><span class="line"><span class="meta">@decorator</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">A</span>(<span class="title class_ inherited__">object</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">test</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;test&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>执行结果</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">这里可以写被装饰类新增的功能</span><br></pre></td></tr></table></figure>
+
+<p>与装饰函数不同的是，被装饰的函数需要调用下，被装饰的类，不需要调用，申明阶段即可发挥作用</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E9%97%AD%E5%8C%85/" rel="tag"># 闭包</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/11/16/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/416%E5%88%86%E5%89%B2%E7%AD%89%E5%92%8C%E5%AD%90%E9%9B%86/" rel="prev" title="416分割等和子集">
+                  <i class="fa fa-chevron-left"></i> 416分割等和子集
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2022/11/25/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/HJ65%E6%9F%A5%E6%89%BE%E4%B8%A4%E4%B8%AA%E5%AD%97%E7%AC%A6%E4%B8%B2a-b%E4%B8%AD%E7%9A%84%E6%9C%80%E9%95%BF%E5%85%AC%E5%85%B1%E5%AD%90%E4%B8%B2/" rel="next" title="HJ65查找两个字符串a,b中的最长公共子串">
+                  HJ65查找两个字符串a,b中的最长公共子串 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">陈宇韶chenyushao</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

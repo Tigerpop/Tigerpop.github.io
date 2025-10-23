@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha256-AbA177XfpSnFEvgpYu1jMygiLabzPCJCRIBtR5jGc0k=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.13.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Cloudflare免费代理节点（可用chatgpt、X等）教程">
+<meta property="og:url" content="http://example.com/2025/08/08/%E7%A7%91%E5%AD%A6%E9%82%A3%E4%B8%AA%E4%B8%8A%E7%BD%91/Cloudflare%E5%85%8D%E8%B4%B9%E4%BB%A3%E7%90%86%E8%8A%82%E7%82%B9%EF%BC%88%E5%8F%AF%E7%94%A8chatgpt%E3%80%81X%E7%AD%89%EF%BC%89%E6%95%99%E7%A8%8B/index.html">
+<meta property="og:site_name" content="Tiger_pop&#39;s Blog">
+<meta property="og:description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2025/08/08/%E7%A7%91%E5%AD%A6%E9%82%A3%E4%B8%AA%E4%B8%8A%E7%BD%91/Cloudflare%E5%85%8D%E8%B4%B9%E4%BB%A3%E7%90%86%E8%8A%82%E7%82%B9%EF%BC%88%E5%8F%AF%E7%94%A8chatgpt%E3%80%81X%E7%AD%89%EF%BC%89%E6%95%99%E7%A8%8B/%E6%88%AA%E5%B1%8F2025-08-08%2015.48.17.png">
+<meta property="og:image" content="http://example.com/2025/08/08/%E7%A7%91%E5%AD%A6%E9%82%A3%E4%B8%AA%E4%B8%8A%E7%BD%91/Cloudflare%E5%85%8D%E8%B4%B9%E4%BB%A3%E7%90%86%E8%8A%82%E7%82%B9%EF%BC%88%E5%8F%AF%E7%94%A8chatgpt%E3%80%81X%E7%AD%89%EF%BC%89%E6%95%99%E7%A8%8B/6a2292e308ec6a45c8d9161e2b3328b1.png">
+<meta property="og:image" content="http://example.com/2025/08/08/%E7%A7%91%E5%AD%A6%E9%82%A3%E4%B8%AA%E4%B8%8A%E7%BD%91/Cloudflare%E5%85%8D%E8%B4%B9%E4%BB%A3%E7%90%86%E8%8A%82%E7%82%B9%EF%BC%88%E5%8F%AF%E7%94%A8chatgpt%E3%80%81X%E7%AD%89%EF%BC%89%E6%95%99%E7%A8%8B/8b6f801636850c85e77a99d0ba4c2a91.png">
+<meta property="og:image" content="http://example.com/2025/08/08/%E7%A7%91%E5%AD%A6%E9%82%A3%E4%B8%AA%E4%B8%8A%E7%BD%91/Cloudflare%E5%85%8D%E8%B4%B9%E4%BB%A3%E7%90%86%E8%8A%82%E7%82%B9%EF%BC%88%E5%8F%AF%E7%94%A8chatgpt%E3%80%81X%E7%AD%89%EF%BC%89%E6%95%99%E7%A8%8B/c2e6be635ddea0c6fb5edcfdc2f07484-4641484.png">
+<meta property="og:image" content="http://example.com/2025/08/08/%E7%A7%91%E5%AD%A6%E9%82%A3%E4%B8%AA%E4%B8%8A%E7%BD%91/Cloudflare%E5%85%8D%E8%B4%B9%E4%BB%A3%E7%90%86%E8%8A%82%E7%82%B9%EF%BC%88%E5%8F%AF%E7%94%A8chatgpt%E3%80%81X%E7%AD%89%EF%BC%89%E6%95%99%E7%A8%8B/08d7365ac07f541098274c7b35479aea-4641565.png">
+<meta property="og:image" content="http://example.com/2025/08/08/%E7%A7%91%E5%AD%A6%E9%82%A3%E4%B8%AA%E4%B8%8A%E7%BD%91/Cloudflare%E5%85%8D%E8%B4%B9%E4%BB%A3%E7%90%86%E8%8A%82%E7%82%B9%EF%BC%88%E5%8F%AF%E7%94%A8chatgpt%E3%80%81X%E7%AD%89%EF%BC%89%E6%95%99%E7%A8%8B/f22fbaba26feb01cb38803a6d29ebb28-4641379.png">
+<meta property="og:image" content="http://example.com/2025/08/08/%E7%A7%91%E5%AD%A6%E9%82%A3%E4%B8%AA%E4%B8%8A%E7%BD%91/Cloudflare%E5%85%8D%E8%B4%B9%E4%BB%A3%E7%90%86%E8%8A%82%E7%82%B9%EF%BC%88%E5%8F%AF%E7%94%A8chatgpt%E3%80%81X%E7%AD%89%EF%BC%89%E6%95%99%E7%A8%8B/b5bc13c194f2f6817ae1b108a49a4401.png">
+<meta property="og:image" content="http://example.com/2025/08/08/%E7%A7%91%E5%AD%A6%E9%82%A3%E4%B8%AA%E4%B8%8A%E7%BD%91/Cloudflare%E5%85%8D%E8%B4%B9%E4%BB%A3%E7%90%86%E8%8A%82%E7%82%B9%EF%BC%88%E5%8F%AF%E7%94%A8chatgpt%E3%80%81X%E7%AD%89%EF%BC%89%E6%95%99%E7%A8%8B/%E6%88%AA%E5%B1%8F2025-08-08%2016.30.08.png">
+<meta property="og:image" content="http://example.com/2025/08/08/%E7%A7%91%E5%AD%A6%E9%82%A3%E4%B8%AA%E4%B8%8A%E7%BD%91/Cloudflare%E5%85%8D%E8%B4%B9%E4%BB%A3%E7%90%86%E8%8A%82%E7%82%B9%EF%BC%88%E5%8F%AF%E7%94%A8chatgpt%E3%80%81X%E7%AD%89%EF%BC%89%E6%95%99%E7%A8%8B/%E6%88%AA%E5%B1%8F2025-08-08%2016.31.49.png">
+<meta property="og:image" content="http://example.com/2025/08/08/%E7%A7%91%E5%AD%A6%E9%82%A3%E4%B8%AA%E4%B8%8A%E7%BD%91/Cloudflare%E5%85%8D%E8%B4%B9%E4%BB%A3%E7%90%86%E8%8A%82%E7%82%B9%EF%BC%88%E5%8F%AF%E7%94%A8chatgpt%E3%80%81X%E7%AD%89%EF%BC%89%E6%95%99%E7%A8%8B/2f85fe107c9d501af2056cbc7e3c59ab-4642195.png">
+<meta property="og:image" content="http://example.com/2025/08/08/%E7%A7%91%E5%AD%A6%E9%82%A3%E4%B8%AA%E4%B8%8A%E7%BD%91/Cloudflare%E5%85%8D%E8%B4%B9%E4%BB%A3%E7%90%86%E8%8A%82%E7%82%B9%EF%BC%88%E5%8F%AF%E7%94%A8chatgpt%E3%80%81X%E7%AD%89%EF%BC%89%E6%95%99%E7%A8%8B/cba492cf556fbd28a6ef300c393d5a52.png">
+<meta property="og:image" content="http://example.com/2025/08/08/%E7%A7%91%E5%AD%A6%E9%82%A3%E4%B8%AA%E4%B8%8A%E7%BD%91/Cloudflare%E5%85%8D%E8%B4%B9%E4%BB%A3%E7%90%86%E8%8A%82%E7%82%B9%EF%BC%88%E5%8F%AF%E7%94%A8chatgpt%E3%80%81X%E7%AD%89%EF%BC%89%E6%95%99%E7%A8%8B/f99915de4db2db677ed9d55e0623a7ff.png">
+<meta property="og:image" content="http://example.com/2025/08/08/%E7%A7%91%E5%AD%A6%E9%82%A3%E4%B8%AA%E4%B8%8A%E7%BD%91/Cloudflare%E5%85%8D%E8%B4%B9%E4%BB%A3%E7%90%86%E8%8A%82%E7%82%B9%EF%BC%88%E5%8F%AF%E7%94%A8chatgpt%E3%80%81X%E7%AD%89%EF%BC%89%E6%95%99%E7%A8%8B/def170f7f1b0e8eb02289a9a9ccfb425.png">
+<meta property="og:image" content="http://example.com/2025/08/08/%E7%A7%91%E5%AD%A6%E9%82%A3%E4%B8%AA%E4%B8%8A%E7%BD%91/Cloudflare%E5%85%8D%E8%B4%B9%E4%BB%A3%E7%90%86%E8%8A%82%E7%82%B9%EF%BC%88%E5%8F%AF%E7%94%A8chatgpt%E3%80%81X%E7%AD%89%EF%BC%89%E6%95%99%E7%A8%8B/b87269748c92e254eca78e4bc22a4a46.jpg">
+<meta property="og:image" content="http://example.com/2025/08/08/%E7%A7%91%E5%AD%A6%E9%82%A3%E4%B8%AA%E4%B8%8A%E7%BD%91/Cloudflare%E5%85%8D%E8%B4%B9%E4%BB%A3%E7%90%86%E8%8A%82%E7%82%B9%EF%BC%88%E5%8F%AF%E7%94%A8chatgpt%E3%80%81X%E7%AD%89%EF%BC%89%E6%95%99%E7%A8%8B/28262364b250a64fc38a56cfb426ae5a.jpg">
+<meta property="article:published_time" content="2025-08-08T00:08:18.000Z">
+<meta property="article:modified_time" content="2025-08-25T02:26:52.996Z">
+<meta property="article:author" content="陈宇韶chenyushao">
+<meta property="article:tag" content="cloudflare">
+<meta property="article:tag" content="域名">
+<meta property="article:tag" content="代理">
+<meta property="article:tag" content="科学上网">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2025/08/08/%E7%A7%91%E5%AD%A6%E9%82%A3%E4%B8%AA%E4%B8%8A%E7%BD%91/Cloudflare%E5%85%8D%E8%B4%B9%E4%BB%A3%E7%90%86%E8%8A%82%E7%82%B9%EF%BC%88%E5%8F%AF%E7%94%A8chatgpt%E3%80%81X%E7%AD%89%EF%BC%89%E6%95%99%E7%A8%8B/%E6%88%AA%E5%B1%8F2025-08-08%2015.48.17.png">
+
+
+<link rel="canonical" href="http://example.com/2025/08/08/%E7%A7%91%E5%AD%A6%E9%82%A3%E4%B8%AA%E4%B8%8A%E7%BD%91/Cloudflare%E5%85%8D%E8%B4%B9%E4%BB%A3%E7%90%86%E8%8A%82%E7%82%B9%EF%BC%88%E5%8F%AF%E7%94%A8chatgpt%E3%80%81X%E7%AD%89%EF%BC%89%E6%95%99%E7%A8%8B/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2025/08/08/%E7%A7%91%E5%AD%A6%E9%82%A3%E4%B8%AA%E4%B8%8A%E7%BD%91/Cloudflare%E5%85%8D%E8%B4%B9%E4%BB%A3%E7%90%86%E8%8A%82%E7%82%B9%EF%BC%88%E5%8F%AF%E7%94%A8chatgpt%E3%80%81X%E7%AD%89%EF%BC%89%E6%95%99%E7%A8%8B/","path":"2025/08/08/科学那个上网/Cloudflare免费代理节点（可用chatgpt、X等）教程/","title":"Cloudflare免费代理节点（可用chatgpt、X等）教程"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Cloudflare免费代理节点（可用chatgpt、X等）教程 | Tiger_pop's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="Tiger_pop's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Tiger_pop's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">tiger_pop 的博客</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8E%9F%E7%90%86"><span class="nav-number">1.</span> <span class="nav-text">原理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A3%E5%86%B3%E9%97%AE%E9%A2%98%EF%BC%9A"><span class="nav-number">1.1.</span> <span class="nav-text">解决问题：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AD%98%E5%9C%A8%E9%97%AE%E9%A2%98%EF%BC%9A"><span class="nav-number">1.2.</span> <span class="nav-text">存在问题：</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E5%9C%A8cloudflare%E5%88%9B%E5%BB%BAworker"><span class="nav-number">2.</span> <span class="nav-text">一、在cloudflare创建worker</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E5%A4%8D%E5%88%B6%E4%BB%A3%E7%A0%81%E5%88%B0worker"><span class="nav-number">3.</span> <span class="nav-text">二、复制代码到worker</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E9%80%9A%E8%BF%87%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E4%BF%AE%E6%94%B9uuid"><span class="nav-number">4.</span> <span class="nav-text">三、通过环境变量修改uuid</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9B%9B%E3%80%81%E4%BD%BF%E7%94%A8%E8%87%AA%E5%AE%9A%E4%B9%89%E5%9F%9F%E5%90%8D"><span class="nav-number">5.</span> <span class="nav-text">四、使用自定义域名</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%94%E3%80%81%E6%9F%A5%E7%9C%8B%E8%8A%82%E7%82%B9%E8%BF%9E%E6%8E%A5%E5%B9%B6%E4%BD%BF%E7%94%A8"><span class="nav-number">6.</span> <span class="nav-text">五、查看节点连接并使用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%A5macOS%E4%B8%8Bv2rayN%E4%B8%BA%E4%BE%8B%EF%BC%9A"><span class="nav-number">6.1.</span> <span class="nav-text">以macOS下v2rayN为例：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A7%BB%E5%8A%A8%E7%AB%AF%E7%9A%84v2rayNG%E4%B8%BA%E4%BE%8B%EF%BC%9A"><span class="nav-number">6.2.</span> <span class="nav-text">移动端的v2rayNG为例：</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%BD%E5%8A%A0HTTP%E4%BB%A3%E7%90%86%E8%87%B3VPN"><span class="nav-number">6.2.1.</span> <span class="nav-text">追加HTTP代理至VPN</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%82%E8%80%83%EF%BC%9A"><span class="nav-number">7.</span> <span class="nav-text">参考：</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%B8%E5%85%B3%E8%BF%9E%E6%8E%A5%EF%BC%9A"><span class="nav-number">7.1.</span> <span class="nav-text">相关连接：</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="陈宇韶chenyushao"
+      src="/images/my.jpg">
+  <p class="site-author-name" itemprop="name">陈宇韶chenyushao</p>
+  <div class="site-description" itemprop="description">爱学习、爱工作、爱生活;         微信号: Tiger_and_master;         手机号码:18515678348 </div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">427</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">201</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2025/08/08/%E7%A7%91%E5%AD%A6%E9%82%A3%E4%B8%AA%E4%B8%8A%E7%BD%91/Cloudflare%E5%85%8D%E8%B4%B9%E4%BB%A3%E7%90%86%E8%8A%82%E7%82%B9%EF%BC%88%E5%8F%AF%E7%94%A8chatgpt%E3%80%81X%E7%AD%89%EF%BC%89%E6%95%99%E7%A8%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/my.jpg">
+      <meta itemprop="name" content="陈宇韶chenyushao">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tiger_pop's Blog">
+      <meta itemprop="description" content="爱学习、爱工作、爱生活;         微信号: Tiger_and_master;         手机号码:18515678348 ">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Cloudflare免费代理节点（可用chatgpt、X等）教程 | Tiger_pop's Blog">
+      <meta itemprop="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Cloudflare免费代理节点（可用chatgpt、X等）教程
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2025-08-08 08:08:18" itemprop="dateCreated datePublished" datetime="2025-08-08T08:08:18+08:00">2025-08-08</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-08-25 10:26:52" itemprop="dateModified" datetime="2025-08-25T10:26:52+08:00">2025-08-25</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%A7%91%E5%AD%A6%E9%82%A3%E4%B8%AA%E4%B8%8A%E7%BD%91/" itemprop="url" rel="index"><span itemprop="name">科学那个上网</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+            <div class="post-description">这是文章开头，显示在主页面，详情请点击此处。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h1><p>利用 cloudflare 中的 workers ，我们自行修改 脚本实现代码 完成科学上网。</p>
+<p><img src="/2025/08/08/%E7%A7%91%E5%AD%A6%E9%82%A3%E4%B8%AA%E4%B8%8A%E7%BD%91/Cloudflare%E5%85%8D%E8%B4%B9%E4%BB%A3%E7%90%86%E8%8A%82%E7%82%B9%EF%BC%88%E5%8F%AF%E7%94%A8chatgpt%E3%80%81X%E7%AD%89%EF%BC%89%E6%95%99%E7%A8%8B/%E6%88%AA%E5%B1%8F2025-08-08%2015.48.17.png" alt="截屏2025-08-08 15.48.17"></p>
+<p>实测效果相当优秀，4k视频毫无压力。好评，感谢  甬哥 提供的代码和 <a target="_blank" rel="noopener" href="https://7techlife.blogspot.com/">Seven科技生活</a>的讲解；</p>
+<h2 id="解决问题："><a href="#解决问题：" class="headerlink" title="解决问题："></a>解决问题：</h2><p>1、之前通过 cloudflare 代理有时候 会失效是 因为proxyip 经常久了以后就失效了；</p>
+<p>2、同时通过 cloudflare代理 不能访问 chatgpt、X等 网站。这是因为 这些网站也是cloudflare来解析的域名，cloudflare 为了避免内部相互访问加了措施，所以不能访问。</p>
+<p>这里我们用了 甬哥代码方案解决上述两个问题，实现科学上网，这种方法是把我们的cloudflare伪装成了外部的，从而实现对 chatgpt 、X等 网站，同时用了 甬哥 代码避开了proxyip，不再当心proxyip失效。</p>
+<h2 id="存在问题："><a href="#存在问题：" class="headerlink" title="存在问题："></a>存在问题：</h2><p>IP不停跳转，有一些网站或者一些网站的文件 写有对IP的限制，就会被限，但是这样的概率是很小的，我们最好留一个便宜的备用 科学上网代理 如proton 。</p>
+<h1 id="一、在cloudflare创建worker"><a href="#一、在cloudflare创建worker" class="headerlink" title="一、在cloudflare创建worker"></a>一、在cloudflare创建worker</h1><p>worker命名不要写vpn、vps、代理、翻墙、科学上网 之类的词，避免被cloudflare查出来然后限掉。</p>
+<p><img src="/2025/08/08/%E7%A7%91%E5%AD%A6%E9%82%A3%E4%B8%AA%E4%B8%8A%E7%BD%91/Cloudflare%E5%85%8D%E8%B4%B9%E4%BB%A3%E7%90%86%E8%8A%82%E7%82%B9%EF%BC%88%E5%8F%AF%E7%94%A8chatgpt%E3%80%81X%E7%AD%89%EF%BC%89%E6%95%99%E7%A8%8B/6a2292e308ec6a45c8d9161e2b3328b1.png" alt="6a2292e308ec6a45c8d9161e2b3328b1"></p>
+<p><img src="/2025/08/08/%E7%A7%91%E5%AD%A6%E9%82%A3%E4%B8%AA%E4%B8%8A%E7%BD%91/Cloudflare%E5%85%8D%E8%B4%B9%E4%BB%A3%E7%90%86%E8%8A%82%E7%82%B9%EF%BC%88%E5%8F%AF%E7%94%A8chatgpt%E3%80%81X%E7%AD%89%EF%BC%89%E6%95%99%E7%A8%8B/8b6f801636850c85e77a99d0ba4c2a91.png" alt="8b6f801636850c85e77a99d0ba4c2a91"></p>
+<h1 id="二、复制代码到worker"><a href="#二、复制代码到worker" class="headerlink" title="二、复制代码到worker"></a>二、复制代码到worker</h1><p>我们选择了<a target="_blank" rel="noopener" href="https://github.com/yonggekkk/Cloudflare-vless-trojan/tree/main/Vless_workers_pages">Vless_workers_pages</a>，<a target="_blank" rel="noopener" href="https://github.com/yonggekkk/Cloudflare-vless-trojan/commit/ccf3b0b7a160cac7f1ca5c4fe3d0efcfab85ce14">vless无需proxyip的nat64套壳版 (推荐使用).js</a></p>
+<p><img src="/2025/08/08/%E7%A7%91%E5%AD%A6%E9%82%A3%E4%B8%AA%E4%B8%8A%E7%BD%91/Cloudflare%E5%85%8D%E8%B4%B9%E4%BB%A3%E7%90%86%E8%8A%82%E7%82%B9%EF%BC%88%E5%8F%AF%E7%94%A8chatgpt%E3%80%81X%E7%AD%89%EF%BC%89%E6%95%99%E7%A8%8B/c2e6be635ddea0c6fb5edcfdc2f07484-4641484.png" alt="c2e6be635ddea0c6fb5edcfdc2f07484"></p>
+<p><img src="/2025/08/08/%E7%A7%91%E5%AD%A6%E9%82%A3%E4%B8%AA%E4%B8%8A%E7%BD%91/Cloudflare%E5%85%8D%E8%B4%B9%E4%BB%A3%E7%90%86%E8%8A%82%E7%82%B9%EF%BC%88%E5%8F%AF%E7%94%A8chatgpt%E3%80%81X%E7%AD%89%EF%BC%89%E6%95%99%E7%A8%8B/08d7365ac07f541098274c7b35479aea-4641565.png" alt="08d7365ac07f541098274c7b35479aea"></p>
+<h1 id="三、通过环境变量修改uuid"><a href="#三、通过环境变量修改uuid" class="headerlink" title="三、通过环境变量修改uuid"></a>三、通过环境变量修改uuid</h1><p><img src="/2025/08/08/%E7%A7%91%E5%AD%A6%E9%82%A3%E4%B8%AA%E4%B8%8A%E7%BD%91/Cloudflare%E5%85%8D%E8%B4%B9%E4%BB%A3%E7%90%86%E8%8A%82%E7%82%B9%EF%BC%88%E5%8F%AF%E7%94%A8chatgpt%E3%80%81X%E7%AD%89%EF%BC%89%E6%95%99%E7%A8%8B/f22fbaba26feb01cb38803a6d29ebb28-4641379.png" alt="f22fbaba26feb01cb38803a6d29ebb28"></p>
+<h1 id="四、使用自定义域名"><a href="#四、使用自定义域名" class="headerlink" title="四、使用自定义域名"></a>四、使用自定义域名</h1><p><img src="/2025/08/08/%E7%A7%91%E5%AD%A6%E9%82%A3%E4%B8%AA%E4%B8%8A%E7%BD%91/Cloudflare%E5%85%8D%E8%B4%B9%E4%BB%A3%E7%90%86%E8%8A%82%E7%82%B9%EF%BC%88%E5%8F%AF%E7%94%A8chatgpt%E3%80%81X%E7%AD%89%EF%BC%89%E6%95%99%E7%A8%8B/b5bc13c194f2f6817ae1b108a49a4401.png" alt="b5bc13c194f2f6817ae1b108a49a4401"></p>
+<h1 id="五、查看节点连接并使用"><a href="#五、查看节点连接并使用" class="headerlink" title="五、查看节点连接并使用"></a>五、查看节点连接并使用</h1><p>我们用 cloudflare中worker下的  “自定义域”+斜杆&#x2F;+“自定义的文本变量uuid”来访问节点指导页面；</p>
+<p><img src="/2025/08/08/%E7%A7%91%E5%AD%A6%E9%82%A3%E4%B8%AA%E4%B8%8A%E7%BD%91/Cloudflare%E5%85%8D%E8%B4%B9%E4%BB%A3%E7%90%86%E8%8A%82%E7%82%B9%EF%BC%88%E5%8F%AF%E7%94%A8chatgpt%E3%80%81X%E7%AD%89%EF%BC%89%E6%95%99%E7%A8%8B/%E6%88%AA%E5%B1%8F2025-08-08%2016.30.08.png" alt="截屏2025-08-08 16.30.08"></p>
+<p><img src="/2025/08/08/%E7%A7%91%E5%AD%A6%E9%82%A3%E4%B8%AA%E4%B8%8A%E7%BD%91/Cloudflare%E5%85%8D%E8%B4%B9%E4%BB%A3%E7%90%86%E8%8A%82%E7%82%B9%EF%BC%88%E5%8F%AF%E7%94%A8chatgpt%E3%80%81X%E7%AD%89%EF%BC%89%E6%95%99%E7%A8%8B/%E6%88%AA%E5%B1%8F2025-08-08%2016.31.49.png" alt="截屏2025-08-08 16.31.49"></p>
+<h2 id="以macOS下v2rayN为例："><a href="#以macOS下v2rayN为例：" class="headerlink" title="以macOS下v2rayN为例："></a>以macOS下v2rayN为例：</h2><p>我们用上图中的 “聚合通用订阅链接”，用GitHub 中的v2rayN 项目操作；</p>
+<p>导入链接：</p>
+<p><img src="/2025/08/08/%E7%A7%91%E5%AD%A6%E9%82%A3%E4%B8%AA%E4%B8%8A%E7%BD%91/Cloudflare%E5%85%8D%E8%B4%B9%E4%BB%A3%E7%90%86%E8%8A%82%E7%82%B9%EF%BC%88%E5%8F%AF%E7%94%A8chatgpt%E3%80%81X%E7%AD%89%EF%BC%89%E6%95%99%E7%A8%8B/2f85fe107c9d501af2056cbc7e3c59ab-4642195.png" alt="2f85fe107c9d501af2056cbc7e3c59ab"></p>
+<p>更新订阅（不通过代理）：</p>
+<p><img src="/2025/08/08/%E7%A7%91%E5%AD%A6%E9%82%A3%E4%B8%AA%E4%B8%8A%E7%BD%91/Cloudflare%E5%85%8D%E8%B4%B9%E4%BB%A3%E7%90%86%E8%8A%82%E7%82%B9%EF%BC%88%E5%8F%AF%E7%94%A8chatgpt%E3%80%81X%E7%AD%89%EF%BC%89%E6%95%99%E7%A8%8B/cba492cf556fbd28a6ef300c393d5a52.png" alt="cba492cf556fbd28a6ef300c393d5a52"></p>
+<p><img src="/2025/08/08/%E7%A7%91%E5%AD%A6%E9%82%A3%E4%B8%AA%E4%B8%8A%E7%BD%91/Cloudflare%E5%85%8D%E8%B4%B9%E4%BB%A3%E7%90%86%E8%8A%82%E7%82%B9%EF%BC%88%E5%8F%AF%E7%94%A8chatgpt%E3%80%81X%E7%AD%89%EF%BC%89%E6%95%99%E7%A8%8B/f99915de4db2db677ed9d55e0623a7ff.png" alt="f99915de4db2db677ed9d55e0623a7ff"></p>
+<p><img src="/2025/08/08/%E7%A7%91%E5%AD%A6%E9%82%A3%E4%B8%AA%E4%B8%8A%E7%BD%91/Cloudflare%E5%85%8D%E8%B4%B9%E4%BB%A3%E7%90%86%E8%8A%82%E7%82%B9%EF%BC%88%E5%8F%AF%E7%94%A8chatgpt%E3%80%81X%E7%AD%89%EF%BC%89%E6%95%99%E7%A8%8B/def170f7f1b0e8eb02289a9a9ccfb425.png" alt="def170f7f1b0e8eb02289a9a9ccfb425"></p>
+<p>注意 v2rayN 左下角处，代理走的都是 10808 端口，如果chromo浏览器中有 ZeroOmega 代理插件的话，也要设置一个新的 10808端口的情景模式；</p>
+<p>复制终端代理命令以后，在终端运行后，可以用下面命令来检查是否已经定位到了外部：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">curl ipinfo.io       <span class="comment"># 看你的所在位置。</span></span><br><span class="line">curl -I google.com   <span class="comment"># 返回200 2XX 就是 成功了。</span></span><br></pre></td></tr></table></figure>
+
+<p>推荐用 curl 命令来经验而不用ping，是因为</p>
+<p><code>ping</code> 命令使用的协议是 <strong>ICMP（Internet Control Message Protocol）</strong>，它工作在网络层（OSI 模型的第三层）。<code>ping</code> 命令会直接向目标服务器发送 ICMP Echo Request 数据包，并期待收到 Echo Reply 数据包。</p>
+<p>而设置的代理 (<code>http_proxy</code>, <code>https_proxy</code>, <code>all_proxy</code> 等) 都是应用层代理，它们工作在 TCP&#x2F;IP 协议栈的上层。</p>
+<h2 id="移动端的v2rayNG为例："><a href="#移动端的v2rayNG为例：" class="headerlink" title="移动端的v2rayNG为例："></a>移动端的v2rayNG为例：</h2><p>移动端的v2rayNG应用中需要启用本地dns、虚拟dns、分片Fragment； </p>
+<p><img src="/2025/08/08/%E7%A7%91%E5%AD%A6%E9%82%A3%E4%B8%AA%E4%B8%8A%E7%BD%91/Cloudflare%E5%85%8D%E8%B4%B9%E4%BB%A3%E7%90%86%E8%8A%82%E7%82%B9%EF%BC%88%E5%8F%AF%E7%94%A8chatgpt%E3%80%81X%E7%AD%89%EF%BC%89%E6%95%99%E7%A8%8B/b87269748c92e254eca78e4bc22a4a46.jpg" alt="b87269748c92e254eca78e4bc22a4a46"></p>
+<p><img src="/2025/08/08/%E7%A7%91%E5%AD%A6%E9%82%A3%E4%B8%AA%E4%B8%8A%E7%BD%91/Cloudflare%E5%85%8D%E8%B4%B9%E4%BB%A3%E7%90%86%E8%8A%82%E7%82%B9%EF%BC%88%E5%8F%AF%E7%94%A8chatgpt%E3%80%81X%E7%AD%89%EF%BC%89%E6%95%99%E7%A8%8B/28262364b250a64fc38a56cfb426ae5a.jpg" alt="28262364b250a64fc38a56cfb426ae5a"></p>
+<h3 id="追加HTTP代理至VPN"><a href="#追加HTTP代理至VPN" class="headerlink" title="追加HTTP代理至VPN"></a>追加HTTP代理至VPN</h3><p>​	按照上面的操作，手机浏览器是可以科学上网的，但是ChatGPT等相关应用是不行的。为了解决这个应用都能科学上网，我们需要追加HTTP代理至VPN。</p>
+<p>​	需要关闭 “分片Fragment”，而开启 “追加HTTP代理至VPN”，才能访问Chatgpt，而且需要重启一下 v2rayNG 一次，才能生效；</p>
+<p>原理解释是：</p>
+<p>就是把原本的“间接”转发方式改成了“直接”转发。</p>
+<ul>
+<li><p><strong>传统方式 (未开启此选项)：</strong> </p>
+<p>浏览器 -&gt; 虚拟网卡设备 -&gt; v2rayNG -&gt; 代理服务器</p>
+</li>
+<li><p><strong>开启此选项后 (针对支持的应用)：</strong> </p>
+<p>浏览器 -&gt; v2rayNG (直接HTTP代理) -&gt; 代理服务器</p>
+</li>
+</ul>
+<p>无论你的流量是经过虚拟网卡还是直接通过HTTP代理转发，v2rayNG都会对其进行<strong>加密和代理</strong>。最终，你的数据还是会以加密的形式传输到v2ray服务器，再由服务器转发到目标网站。</p>
+<h1 id="参考："><a href="#参考：" class="headerlink" title="参考："></a>参考：</h1><p><a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=HcD4xYKXuRY&amp;t=178s">https://www.youtube.com/watch?v=HcD4xYKXuRY&amp;t=178s</a></p>
+<h2 id="相关连接："><a href="#相关连接：" class="headerlink" title="相关连接："></a>相关连接：</h2><p>Cloudflare：<a target="_blank" rel="noopener" href="https://www.youtube.com/redirect?event=video_description&redir_token=QUFFLUhqbDB6dmw3NDBxMXhVVzJLVHAwdGVyZmNQTEE5d3xBQ3Jtc0tsQk1Tb1hBS2NLN0ZEZTRZNE02RXY0Rnc2THZUY1ZLSS1jRGNzSG1KeTIzYWZMZzVhNFotcDE0UXpoMVZyRjZTb0ZhNng0SnhhNXk3RmoxQVNlZjF1QU02a2xqODE0aXlGZzhJTXRDSTVLLThSZE9iRQ&q=https://dash.cloudflare.com/&v=HcD4xYKXuRY">https://dash.cloudflare.com</a> </p>
+<p>甬哥代码地址：<a target="_blank" rel="noopener" href="https://www.youtube.com/redirect?event=video_description&redir_token=QUFFLUhqa3BSNnNiN3JnVHNPSnI0RWs2S2IyOE9mbk9fd3xBQ3Jtc0ttTFhEbF9RZk9YREtoQ1BTb3A3T2FjMXMtMXNMYXUwZTRUa0l1NXZlT095VF9falI0VHVLRUE1NWNRWkdud0dGVFVRenZLZk9HQTNGbjdkSFVHUFdFMURjdGFNYk5VUFEzRW5uLVRaemgyaTNLMUJjVQ&q=https://github.com/yonggekkk/Cloudflare-vless-trojan&v=HcD4xYKXuRY">https://github.com/yonggekkk/Cloudfla...</a> </p>
+<p>UUID生成器：<a target="_blank" rel="noopener" href="https://www.youtube.com/redirect?event=video_description&redir_token=QUFFLUhqbkx6TmQtczJudWhicFg3Uk9oWHMyVFppMmFnUXxBQ3Jtc0tuNUdBcGxYcjBlYU8xRnR1Y1ZfSjYzcUJEeE5oLVQ5eGQ0MmJGWjVqQWdEbFA4Y3F1T0dBYlZ1cXhRTExKNUM2S3E1WXBQYmVwUVNEbFRFajM3Z2hwTEVvTjFCTTdFdUxITXgxQl9rNEttdWliV3J2OA&q=https://www.uuidgenerator.net/&v=HcD4xYKXuRY">https://www.uuidgenerator.net/</a></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/cloudflare/" rel="tag"># cloudflare</a>
+              <a href="/tags/%E5%9F%9F%E5%90%8D/" rel="tag"># 域名</a>
+              <a href="/tags/%E4%BB%A3%E7%90%86/" rel="tag"># 代理</a>
+              <a href="/tags/%E7%A7%91%E5%AD%A6%E4%B8%8A%E7%BD%91/" rel="tag"># 科学上网</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2025/08/08/%E7%A7%91%E5%AD%A6%E9%82%A3%E4%B8%AA%E4%B8%8A%E7%BD%91/%E8%8E%B7%E5%8F%96DigitalPlat%E5%85%8D%E8%B4%B9%E5%9F%9F%E5%90%8D/" rel="prev" title="获取DigitalPlat免费域名">
+                  <i class="fa fa-chevron-left"></i> 获取DigitalPlat免费域名
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2025/08/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/Dify%E7%AC%94%E8%AE%B0/" rel="next" title="Dify笔记">
+                  Dify笔记 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">陈宇韶chenyushao</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

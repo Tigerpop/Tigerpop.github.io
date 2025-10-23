@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha256-AbA177XfpSnFEvgpYu1jMygiLabzPCJCRIBtR5jGc0k=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.13.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="hive函数应用的案例">
+<meta property="og:url" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/index.html">
+<meta property="og:site_name" content="Tiger_pop&#39;s Blog">
+<meta property="og:description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-15%2017.07.37-7025351.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-15%2017.09.11.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-16%2011.01.25.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-16%2011.03.34.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-16%2011.05.30.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-16%2011.11.09.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-16%2011.12.39.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-16%2011.15.30.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-16%2011.18.30.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-17%2013.08.44.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-17%2014.22.54.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-17%2016.26.43.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-17%2016.31.55.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-17%2016.33.49.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-17%2016.35.42.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-17%2016.36.17.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-17%2016.38.29.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-17%2016.39.10.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-17%2016.39.53.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-17%2016.41.31.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-17%2016.43.58.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-17%2016.46.04.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-17%2016.47.09.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-17%2016.55.30.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-17%2016.57.43.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-17%2016.58.49.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-17%2016.59.26.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-17%2017.38.13.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-17%2017.40.21.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-17%2017.41.46.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-17%2017.42.57.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-17%2017.53.02.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-17%2018.16.53.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-17%2018.17.59.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-17%2018.20.57.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-17%2018.28.32.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-17%2018.30.18.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-17%2018.31.14.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-17%2018.35.25.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-17%2018.36.17.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-17%2018.38.57.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-17%2018.42.03.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-17%2021.30.38.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-17%2021.31.40.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-17%2021.33.44.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-17%2021.34.25.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-17%2021.35.03.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-17%2021.35.47.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-17%2021.36.32.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-17%2021.37.06.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-17%2021.41.03.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-17%2021.42.07.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-17%2021.42.54.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-17%2021.45.31.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-17%2021.53.11.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-17%2021.58.29.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-17%2022.00.52.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-17%2022.01.46.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-17%2022.16.13.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-17%2022.18.49.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-17%2022.26.25.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-19%2010.48.31.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-19%2010.56.13.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-19%2014.59.41.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-19%2015.01.35.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-19%2015.02.07.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-19%2015.09.43.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-19%2015.11.54.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-19%2015.16.12.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-19%2015.17.17.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-19%2015.18.07.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-19%2015.20.44.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-19%2015.21.56.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-19%2015.23.30.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-19%2015.24.35.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-19%2015.25.24.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-19%2015.25.47.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-19%2015.31.36.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-19%2015.31.57.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-19%2015.33.38.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-19%2015.35.52.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-19%2015.36.49.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-19%2015.38.00.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-19%2015.39.02.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-19%2015.55.59.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-19%2016.05.24.jpg">
+<meta property="article:published_time" content="2022-10-29T06:32:48.000Z">
+<meta property="article:modified_time" content="2022-10-29T06:57:41.814Z">
+<meta property="article:author" content="陈宇韶chenyushao">
+<meta property="article:tag" content="hive">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-15%2017.07.37-7025351.jpg">
+
+
+<link rel="canonical" href="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/","path":"2022/10/29/Hive学习/函数应用的案例/","title":"hive函数应用的案例"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>hive函数应用的案例 | Tiger_pop's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="Tiger_pop's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Tiger_pop's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">tiger_pop 的博客</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%A4%9A%E5%AD%97%E8%8A%82%E5%88%86%E9%9A%94%E5%A4%84%E7%90%86"><span class="nav-number">1.</span> <span class="nav-text">多字节分隔处理</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#url%E4%B8%93%E7%94%A8%E8%A7%A3%E6%9E%90%E5%87%BD%E6%95%B0"><span class="nav-number">2.</span> <span class="nav-text">url专用解析函数</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#hive%E8%A1%8C%E5%88%97%E8%BD%AC%E6%8D%A2"><span class="nav-number">3.</span> <span class="nav-text">hive行列转换</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%9A%E8%A1%8C%E8%BD%AC%E5%A4%9A%E5%88%97"><span class="nav-number">3.1.</span> <span class="nav-text">多行转多列</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%9A%E8%A1%8C%E8%BD%AC%E5%8D%95%E5%88%97"><span class="nav-number">3.2.</span> <span class="nav-text">多行转单列</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%9A%E5%88%97%E8%BD%AC%E5%A4%9A%E8%A1%8C"><span class="nav-number">3.3.</span> <span class="nav-text">多列转多行</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%95%E5%88%97%E8%BD%AC%E5%A4%9A%E8%A1%8C%EF%BC%88%E9%87%8D%E8%A6%81%EF%BC%89"><span class="nav-number">3.4.</span> <span class="nav-text">单列转多行（重要）</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#json%E6%A0%BC%E5%BC%8F%E5%A4%84%E7%90%86"><span class="nav-number">4.</span> <span class="nav-text">json格式处理</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%BF%9E%E7%BB%AD%E7%99%BB%E5%BD%95%E7%BB%9F%E8%AE%A1"><span class="nav-number">5.</span> <span class="nav-text">连续登录统计</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BA%A7%E8%BF%9E%E7%B4%AF%E5%8A%A0%E6%B1%82%E5%92%8C"><span class="nav-number">6.</span> <span class="nav-text">级连累加求和</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%88%86%E7%BB%84top-n"><span class="nav-number">7.</span> <span class="nav-text">分组top n</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8B%89%E9%93%BE%E8%A1%A8%E7%9A%84%E8%AE%BE%E8%AE%A1%E5%92%8C%E5%AE%9E%E7%8E%B0"><span class="nav-number">8.</span> <span class="nav-text">拉链表的设计和实现</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="陈宇韶chenyushao"
+      src="/images/my.jpg">
+  <p class="site-author-name" itemprop="name">陈宇韶chenyushao</p>
+  <div class="site-description" itemprop="description">爱学习、爱工作、爱生活;         微信号: Tiger_and_master;         手机号码:18515678348 </div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">427</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">201</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/my.jpg">
+      <meta itemprop="name" content="陈宇韶chenyushao">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tiger_pop's Blog">
+      <meta itemprop="description" content="爱学习、爱工作、爱生活;         微信号: Tiger_and_master;         手机号码:18515678348 ">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="hive函数应用的案例 | Tiger_pop's Blog">
+      <meta itemprop="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          hive函数应用的案例
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2022-10-29 14:32:48 / 修改时间：14:57:41" itemprop="dateCreated datePublished" datetime="2022-10-29T14:32:48+08:00">2022-10-29</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/hive/" itemprop="url" rel="index"><span itemprop="name">hive</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+            <div class="post-description">这是文章开头，显示在主页面，详情请点击此处。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>hive函数 <span id="more"></span></p>
+<h1 id="多字节分隔处理"><a href="#多字节分隔处理" class="headerlink" title="多字节分隔处理"></a>多字节分隔处理</h1><p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-15%2017.07.37-7025351.jpg" alt="截屏2022-03-15 17.07.37"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-15%2017.09.11.jpg" alt="截屏2022-03-15 17.09.11"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-16%2011.01.25.jpg" alt="截屏2022-03-16 11.01.25"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-16%2011.03.34.jpg" alt="截屏2022-03-16 11.03.34"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-16%2011.05.30.jpg" alt="截屏2022-03-16 11.05.30"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-16%2011.11.09.jpg" alt="截屏2022-03-16 11.11.09"></p>
+<p>文件小的时候用python修改，多的时候，用mapreduce分布式处理。把两个｜替换成一个｜ 。</p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-16%2011.12.39.jpg" alt="截屏2022-03-16 11.12.39"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-16%2011.15.30.jpg" alt="截屏2022-03-16 11.15.30"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-16%2011.18.30.jpg" alt="截屏2022-03-16 11.18.30"></p>
+<p>可以找一个在线正则表达式测试网站检查一下。这样挺方便。</p>
+<p>第三种方法 ，相当于把第一种方法读的数据先清洗写进脚本，用自己写的脚本替代hive 的读取组件。不推荐使用。</p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-17%2013.08.44.jpg" alt="截屏2022-03-17 13.08.44"></p>
+<p>​		这里解释一下以上的正则表达式</p>
+<p>​		在大的模式下，有7个（）包裹的子模式，模式匹配时，从左至右匹配，每个成功匹配的子模式会被当成hive表中的一个字段。</p>
+<p>​		1号子模式匹配任意多个非空格的字符，192.168.88.134已经匹配，遇到空格，1号子模式匹配失败。</p>
+<p>​		2号子模式匹配任意多个非 } 字符，从1号子模式匹配失败的空格位置往后，一直到换行符，2号子模式匹配失败。</p>
+<p>​		总模式的后面几个括号都没有用上。</p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-17%2014.22.54.jpg" alt="截屏2022-03-17 14.22.54"></p>
+<p>​		用正确的正则表达式：（注意：java的转义字符”\\“要两个,python一个\，hive是java写的，记得用java的转义字符写法。 ）</p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-17%2016.26.43.jpg" alt="截屏2022-03-17 16.26.43"></p>
+<h1 id="url专用解析函数"><a href="#url专用解析函数" class="headerlink" title="url专用解析函数"></a>url专用解析函数</h1><p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-17%2016.31.55.jpg" alt="截屏2022-03-17 16.31.55"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-17%2016.33.49.jpg" alt="截屏2022-03-17 16.33.49"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-17%2016.35.42.jpg" alt="截屏2022-03-17 16.35.42"></p>
+<img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-17%2016.36.17.jpg" alt="截屏2022-03-17 16.36.17" style="zoom:50%;">
+
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-17%2016.38.29.jpg" alt="截屏2022-03-17 16.38.29"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-17%2016.39.10.jpg" alt="截屏2022-03-17 16.39.10"></p>
+<p>​		注意参数要大写，小写不识别。</p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-17%2016.39.53.jpg" alt="截屏2022-03-17 16.39.53"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-17%2016.41.31.jpg" alt="截屏2022-03-17 16.41.31"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-17%2016.43.58.jpg" alt="截屏2022-03-17 16.43.58"></p>
+<img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-17%2016.46.04.jpg" alt="截屏2022-03-17 16.46.04" style="zoom:50%;">
+
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-17%2016.47.09.jpg" alt="截屏2022-03-17 16.47.09"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-17%2016.55.30.jpg" alt="截屏2022-03-17 16.55.30"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-17%2016.57.43.jpg" alt="截屏2022-03-17 16.57.43"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-17%2016.58.49.jpg" alt="截屏2022-03-17 16.58.49"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-17%2016.59.26.jpg" alt="截屏2022-03-17 16.59.26"></p>
+<h1 id="hive行列转换"><a href="#hive行列转换" class="headerlink" title="hive行列转换"></a>hive行列转换</h1><h2 id="多行转多列"><a href="#多行转多列" class="headerlink" title="多行转多列"></a>多行转多列</h2><p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-17%2017.38.13.jpg" alt="截屏2022-03-17 17.38.13"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-17%2017.40.21.jpg" alt="截屏2022-03-17 17.40.21"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-17%2017.41.46.jpg" alt="截屏2022-03-17 17.41.46"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-17%2017.42.57.jpg" alt="截屏2022-03-17 17.42.57"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-17%2017.53.02.jpg" alt="截屏2022-03-17 17.53.02"></p>
+<h2 id="多行转单列"><a href="#多行转单列" class="headerlink" title="多行转单列"></a>多行转单列</h2><p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-17%2018.16.53.jpg" alt="截屏2022-03-17 18.16.53"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-17%2018.17.59.jpg" alt="截屏2022-03-17 18.17.59"></p>
+<p>​		concat 拼接的元素有一个为null，拼接结果就是null，concat_ws拼接的元素有不为空的，结果就不会是空。</p>
+<p>​		<img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-17%2018.20.57.jpg" alt="截屏2022-03-17 18.20.57"></p>
+<p>collect_list 收集元素保留元素类型，但是concat_ws 只能拼接string 类型，记得有时候要类型转换cast（a as string）。</p>
+<img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-17%2018.28.32.jpg" alt="截屏2022-03-17 18.28.32" style="zoom:50%;">
+
+<h2 id="多列转多行"><a href="#多列转多行" class="headerlink" title="多列转多行"></a>多列转多行</h2><p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-17%2018.30.18.jpg" alt="截屏2022-03-17 18.30.18"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-17%2018.31.14.jpg" alt="截屏2022-03-17 18.31.14"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-17%2018.35.25.jpg" alt="截屏2022-03-17 18.35.25"></p>
+<h2 id="单列转多行（重要）"><a href="#单列转多行（重要）" class="headerlink" title="单列转多行（重要）"></a>单列转多行（重要）</h2><p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-17%2018.36.17.jpg" alt="截屏2022-03-17 18.36.17"></p>
+<p>explode爆炸函数只接受array和map类型输入。</p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-17%2018.38.57.jpg" alt="截屏2022-03-17 18.38.57"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-17%2018.42.03.jpg" alt="截屏2022-03-17 18.42.03"></p>
+<h1 id="json格式处理"><a href="#json格式处理" class="headerlink" title="json格式处理"></a>json格式处理</h1><p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-17%2021.30.38.jpg" alt="截屏2022-03-17 21.30.38"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-17%2021.31.40.jpg" alt="截屏2022-03-17 21.31.40"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-17%2021.33.44.jpg" alt="截屏2022-03-17 21.33.44"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-17%2021.34.25.jpg" alt="截屏2022-03-17 21.34.25"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-17%2021.35.03.jpg" alt="截屏2022-03-17 21.35.03"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-17%2021.35.47.jpg" alt="截屏2022-03-17 21.35.47"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-17%2021.36.32.jpg" alt="截屏2022-03-17 21.36.32"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-17%2021.37.06.jpg" alt="截屏2022-03-17 21.37.06"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-17%2021.41.03.jpg" alt="截屏2022-03-17 21.41.03"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-17%2021.42.07.jpg" alt="截屏2022-03-17 21.42.07"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-17%2021.42.54.jpg" alt="截屏2022-03-17 21.42.54"></p>
+<p>​		注意 time用了反引号 引起来了，不然会和 默认的 time 冲突。</p>
+<h1 id="连续登录统计"><a href="#连续登录统计" class="headerlink" title="连续登录统计"></a>连续登录统计</h1><p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-17%2021.45.31.jpg" alt="截屏2022-03-17 21.45.31"></p>
+<p>​		利用笛卡尔积，把所有的可能性都列出来，再筛选。</p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-17%2021.53.11.jpg" alt="截屏2022-03-17 21.53.11"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-17%2021.58.29.jpg" alt="截屏2022-03-17 21.58.29"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-17%2022.00.52.jpg" alt="截屏2022-03-17 22.00.52"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-17%2022.01.46.jpg" alt="截屏2022-03-17 22.01.46"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-17%2022.16.13.jpg" alt="截屏2022-03-17 22.16.13"></p>
+<p>​		比较 下一次登录的日期 和 明天的日期，两者相等就是连续登录。</p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-17%2022.18.49.jpg" alt="截屏2022-03-17 22.18.49"></p>
+<p>​		注意：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span></span><br><span class="line">    userid,</span><br><span class="line">    logintime,</span><br><span class="line">    date_add(logintime,<span class="number">1</span>) <span class="keyword">as</span> nextday,</span><br><span class="line">    <span class="built_in">lead</span>(logintime,<span class="number">1</span>,<span class="number">0</span>) <span class="keyword">over</span>(<span class="keyword">partition</span> <span class="keyword">by</span> userid <span class="keyword">order</span> <span class="keyword">by</span> logintime) <span class="keyword">as</span> nextlog</span><br><span class="line"><span class="keyword">from</span> tb_continue_log <span class="keyword">where</span> nextday<span class="operator">=</span>nextlog;</span><br><span class="line"><span class="comment">-- 这样是错的！ 因为 nextday 和 nextlog 的生成都用到了logintime ，where 不能用他们作判断。</span></span><br><span class="line"><span class="comment">-- Invalid table alias or column reference &#x27;nextday&#x27;: (possible column names are: userid, logintime)</span></span><br><span class="line"><span class="comment">-- 需要把这个select的结果 做成一个表，用这个新的表的where 缩小范围。</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-17%2022.26.25.jpg" alt="截屏2022-03-17 22.26.25"></p>
+<p>​		同样的道理，如果往后推3天，正好是登录的第3天，说明这三天一定是连续登录的		。</p>
+<p>​		连续n 天登录用窗口函数over实现，有共性，比前面的方法要好，前提是要分好组排好序。</p>
+<h1 id="级连累加求和"><a href="#级连累加求和" class="headerlink" title="级连累加求和"></a>级连累加求和</h1><p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-19%2010.48.31.jpg" alt="截屏2022-03-19 10.48.31"></p>
+<p>​		先自己对自己做cross join 笛卡尔积，但是要用on去限定笛卡尔积的范围，那就是a.userid&#x3D;b.userid 的部分，用A 和 A 、B 和 B做笛卡尔积。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">注意：</span><br><span class="line"></span><br><span class="line">​		就算是a和b表<span class="keyword">join</span><span class="operator">+</span><span class="keyword">on</span>仍然会有[笛卡尔积]的形式</span><br><span class="line"></span><br><span class="line">​		因为如果a表和b表的id都有<span class="number">1</span>对多的形式时，就是笛卡尔积</span><br><span class="line"></span><br><span class="line">​		比如a中id<span class="operator">=</span><span class="number">1</span>的记录有<span class="number">3</span>条（ID，维修时间），</span><br><span class="line"></span><br><span class="line">​		b中id<span class="operator">=</span><span class="number">1</span>的记录有<span class="number">2</span>条（ID，用户上报时间）</span><br><span class="line"></span><br><span class="line">​		，<span class="keyword">join</span>，<span class="keyword">on</span>之后就会有<span class="number">6</span>条！</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 例子： a.id [1,2,3]  b.id[1,2,2,3]</span></span><br><span class="line"><span class="comment">-- a join b on a.id=b.id;</span></span><br><span class="line"><span class="comment">-- 先 a 和 b 做笛卡尔积得到 1-1 1-2 1-2 1-3，2-1 2-2 2-2 2-3，3-1 3-2 3-2 3-3。</span></span><br><span class="line"><span class="comment">-- 再 根据on 后的条件做筛选 保留 1-1 2-2 2-2 3-3，有4条。因为a.id=2有一条 b.id=2有两条。</span></span><br><span class="line"></span><br><span class="line"><span class="comment">-- 例子：a.id [1,1,1]  b.id[1,1,1]</span></span><br><span class="line"><span class="comment">-- a join b on a.id=b.id;</span></span><br><span class="line"><span class="comment">-- 结果是9条，因为 a.id=1有三条 b.id=1有三条。</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-19%2010.56.13.jpg" alt="截屏2022-03-19 10.56.13"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-19%2014.59.41.jpg" alt="截屏2022-03-19 14.59.41"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-19%2015.01.35.jpg" alt="截屏2022-03-19 15.01.35"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-19%2015.02.07.jpg" alt="截屏2022-03-19 15.02.07"></p>
+<p>窗口函数over里面有order by 外面的sum 就自动是累积排序的了。</p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-19%2015.09.43.jpg" alt="截屏2022-03-19 15.09.43"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-19%2015.11.54.jpg" alt="截屏2022-03-19 15.11.54"></p>
+<h1 id="分组top-n"><a href="#分组top-n" class="headerlink" title="分组top n"></a>分组top n</h1><p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-19%2015.16.12.jpg" alt="截屏2022-03-19 15.16.12"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-19%2015.17.17.jpg" alt="截屏2022-03-19 15.17.17"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-19%2015.18.07.jpg" alt="截屏2022-03-19 15.18.07"></p>
+<h1 id="拉链表的设计和实现"><a href="#拉链表的设计和实现" class="headerlink" title="拉链表的设计和实现"></a>拉链表的设计和实现</h1><p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-19%2015.20.44.jpg" alt="截屏2022-03-19 15.20.44"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-19%2015.21.56.jpg" alt="截屏2022-03-19 15.21.56"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-19%2015.23.30.jpg" alt="截屏2022-03-19 15.23.30"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-19%2015.24.35.jpg" alt="截屏2022-03-19 15.24.35"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-19%2015.25.24.jpg" alt="截屏2022-03-19 15.25.24"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-19%2015.25.47.jpg" alt="截屏2022-03-19 15.25.47"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-19%2015.31.36.jpg" alt="截屏2022-03-19 15.31.36"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-19%2015.31.57.jpg" alt="截屏2022-03-19 15.31.57"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-19%2015.33.38.jpg" alt="截屏2022-03-19 15.33.38"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-19%2015.35.52.jpg" alt="截屏2022-03-19 15.35.52"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-19%2015.36.49.jpg" alt="截屏2022-03-19 15.36.49"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-19%2015.38.00.jpg" alt="截屏2022-03-19 15.38.00"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-19%2015.39.02.jpg" alt="截屏2022-03-19 15.39.02"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-19%2015.55.59.jpg" alt="截屏2022-03-19 15.55.59"></p>
+<p><img src="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8%E7%9A%84%E6%A1%88%E4%BE%8B/%E6%88%AA%E5%B1%8F2022-03-19%2016.05.24.jpg" alt="截屏2022-03-19 16.05.24"></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/hive/" rel="tag"># hive</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/10/28/anaconda%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83%E3%80%81jupyternotebook%E8%B7%AF%E5%BE%84%E7%9B%B8%E5%85%B3/anaconda%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83%E3%80%81jupyternotebook%E8%B7%AF%E5%BE%84%E7%9B%B8%E5%85%B3/" rel="prev" title="anaconda虚拟环境、jupyternotebook路径相关">
+                  <i class="fa fa-chevron-left"></i> anaconda虚拟环境、jupyternotebook路径相关
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2022/10/29/Hive%E5%AD%A6%E4%B9%A0/centos7%E5%AE%89%E8%A3%85Hive/" rel="next" title="centos7安装Hive">
+                  centos7安装Hive <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">陈宇韶chenyushao</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha256-AbA177XfpSnFEvgpYu1jMygiLabzPCJCRIBtR5jGc0k=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.13.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="k-means聚类分析">
+<meta property="og:url" content="http://example.com/2022/10/28/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/k-means/index.html">
+<meta property="og:site_name" content="Tiger_pop&#39;s Blog">
+<meta property="og:description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-10-28T13:07:36.000Z">
+<meta property="article:modified_time" content="2022-10-28T13:31:10.031Z">
+<meta property="article:author" content="陈宇韶chenyushao">
+<meta property="article:tag" content="聚类算法">
+<meta property="article:tag" content="无监督学习(unsupervised learning)">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://example.com/2022/10/28/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/k-means/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2022/10/28/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/k-means/","path":"2022/10/28/机器学习/k-means/","title":"k-means聚类分析"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>k-means聚类分析 | Tiger_pop's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="Tiger_pop's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Tiger_pop's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">tiger_pop 的博客</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#K-means%E8%81%9A%E7%B1%BB%E7%AE%97%E6%B3%95%E7%9A%84%E5%AE%9E%E7%8E%B0%E4%B8%8E%E5%BA%94%E7%94%A8"><span class="nav-number">1.</span> <span class="nav-text">K-means聚类算法的实现与应用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E5%AE%9E%E9%AA%8C%E7%AE%80%E4%BB%8B"><span class="nav-number">1.1.</span> <span class="nav-text">一、实验简介</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%EF%BC%88%E4%B8%80%EF%BC%89%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0"><span class="nav-number">1.1.1.</span> <span class="nav-text">（一）问题描述</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81-%E5%AE%9E%E9%AA%8C%E4%BB%BB%E5%8A%A1%E4%B8%8E%E8%A6%81%E6%B1%82"><span class="nav-number">1.2.</span> <span class="nav-text">二、 实验任务与要求</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E5%AE%9E%E9%AA%8C%E6%AD%A5%E9%AA%A4"><span class="nav-number">1.3.</span> <span class="nav-text">三、实验步骤</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%EF%BC%88%E4%B8%80%EF%BC%89%E7%AE%97%E6%B3%95%E5%AE%9E%E7%8E%B0"><span class="nav-number">1.3.1.</span> <span class="nav-text">（一）算法实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%EF%BC%88%E4%BA%8C%EF%BC%89%E7%AE%97%E6%B3%95%E5%BA%94%E7%94%A8"><span class="nav-number">1.3.2.</span> <span class="nav-text">（二）算法应用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%EF%BC%88%E4%B8%89%EF%BC%89%E5%BA%94%E7%94%A8%E6%95%88%E6%9E%9C%E5%8F%AF%E8%A7%86%E5%8C%96"><span class="nav-number">1.3.3.</span> <span class="nav-text">（三）应用效果可视化</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E3%80%81%E7%BB%93%E6%9E%9C%E5%88%86%E6%9E%90"><span class="nav-number">1.4.</span> <span class="nav-text">五、结果分析</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="陈宇韶chenyushao"
+      src="/images/my.jpg">
+  <p class="site-author-name" itemprop="name">陈宇韶chenyushao</p>
+  <div class="site-description" itemprop="description">爱学习、爱工作、爱生活;         微信号: Tiger_and_master;         手机号码:18515678348 </div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">427</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">201</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/10/28/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/k-means/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/my.jpg">
+      <meta itemprop="name" content="陈宇韶chenyushao">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tiger_pop's Blog">
+      <meta itemprop="description" content="爱学习、爱工作、爱生活;         微信号: Tiger_and_master;         手机号码:18515678348 ">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="k-means聚类分析 | Tiger_pop's Blog">
+      <meta itemprop="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          k-means聚类分析
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2022-10-28 21:07:36 / 修改时间：21:31:10" itemprop="dateCreated datePublished" datetime="2022-10-28T21:07:36+08:00">2022-10-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+            <div class="post-description">这是文章开头，显示在主页面，详情请点击此处。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>#%% md <span id="more"></span></p>
+<h1 id="K-means聚类算法的实现与应用"><a href="#K-means聚类算法的实现与应用" class="headerlink" title="K-means聚类算法的实现与应用"></a>K-means聚类算法的实现与应用</h1><p>#%% md</p>
+<h2 id="一、实验简介"><a href="#一、实验简介" class="headerlink" title="一、实验简介"></a>一、实验简介</h2><p>#%% md</p>
+<h3 id="（一）问题描述"><a href="#（一）问题描述" class="headerlink" title="（一）问题描述"></a>（一）问题描述</h3><p>K-means聚类算法的主要思想是：将所有输入的数据划分成为K个子集合，并且要求每个子集合内各个元素之间的差异性尽可能的小，而不同子集合间元素的差异性尽可能的大。</p>
+<p>K-maens算法是聚类算法的一种，一般应用于维度、数值都比较小且连续的数据集中，比如，从随机分布的事物集合中将相同事物进行分组。聚类算法除了K-means算法外还有其他聚类算法，比如，基于密度的聚类算法、基于高斯混合模型的最大期望聚类算法。由于K-means算法的解释性强、计算简单、易于理解等优点使它成为本实验中最合适的聚类算法。</p>
+<p>本实验将对K-means聚类算法原理进行介绍，并根据原理构建算法的实现思路。按照算法实现思路，借助Python编程语言，以及相关科学计算包实现算法。实现好的算法将应用到手动生成的数据集中，对这个数据集的数据进行聚类。</p>
+<p>#%% md</p>
+<h2 id="二、-实验任务与要求"><a href="#二、-实验任务与要求" class="headerlink" title="二、 实验任务与要求"></a>二、 实验任务与要求</h2><p>本实验首先根据K-means聚类算法原理设计并实现K-means聚类算法模型，然后将实现好的模型应用到手动生成的数据集中做聚类。具体实验要求如下：</p>
+<p>1.算法实现：对K-means聚类算法原理简单介绍，再采用面向对象程序设计的思想实现K-means聚类算法。</p>
+<p>2.算法应用：加载数据，将数据集按8：2的比例划分为训练集和测试集，使用训练集数据分别训练k值为3、5、7时的K-means聚类算法模型，得到训练集的簇中心，将训练完成的算法模型对测试集进行聚类。</p>
+<p>3.应用效果可视化：将聚类结果用不同颜色标记并进行可视化，同时标出每个簇的簇中心。</p>
+<p>#%% md</p>
+<h2 id="三、实验步骤"><a href="#三、实验步骤" class="headerlink" title="三、实验步骤"></a>三、实验步骤</h2><p>#%% md</p>
+<h3 id="（一）算法实现"><a href="#（一）算法实现" class="headerlink" title="（一）算法实现"></a>（一）算法实现</h3><p>1.算法原理</p>
+<p>对于给定的样本集，按照样本之间的距离大小，将样本集划分为K个簇。让簇内的点尽量紧密的连在一起，而让簇间的距离尽量的大。假设需要将样本集划为k个簇（$C_1$,$C_2$,…$C_k$），每个簇都有一个簇中心，则目标是最小化簇内所有样本与簇中心的平方误差：<br>$$Loss &#x3D; \sum_{i&#x3D;1}^k\sum_{x \in C_i}||x-\mu_i||^2_2$$(式中的k是簇的数量，$C_i$是簇内样本，$x$是单个样本，$\mu_i$是簇中心，也可以说是簇内样本均值，$||z||^2_2$是求z向量的大小的平方)，上式中的簇中心求解公式：$$\mu_i &#x3D; \frac1{|C_i|}\sum_{x \in C_i}x$$</p>
+<p>#%% md</p>
+<p>2.算法实现</p>
+<p>定义一个K-meanss算法类KMeans，该算法类的主要方法是算法模型的训练方法(fit()函数)和预测方法(predict()函数)。</p>
+<ul>
+<li><p>fit()函数的流程如下：<br>（1）初始化选择k个簇中心，本算法选取训练集数据中的前k个样本数据做为簇中心；<br>（2）对于k个簇，求离其最近的样本，并将这些样本划分到该簇中；<br>（3）对于每个簇，更新簇中心的向量（求簇内的样本的属性的均值）；<br>（4）重复2~3步骤直到算法收敛，或者迭代到了指定的次数为止，得到k个簇中心向量。  </p>
+</li>
+<li><p>predict()函数的流程如下：<br>（1）对输入数据的每一个样本计算与k个簇中心的距离，选择距离最近的簇作为该样本数据的类属。</p>
+</li>
+</ul>
+<p>算法实现代码如下：</p>
+<p>#%%</p>
+<p>import operator<br>import numpy as np#科学计算包<br>import copy<br>import matplotlib.pyplot as plt#画图包</p>
+<p>#%%</p>
+<p>class KMeans:<br>    def <strong>init</strong>(self, k,max_iter&#x3D;20):<br>        “””<br>        :param k: int，簇的数量（数据集要聚成多少类）<br>        :param max_iter: int，聚类的最大迭代数<br>        “””<br>        self._k &#x3D; k      #簇的数量<br>        self._max_iter &#x3D; max_iter        #聚类迭代次数</p>
+<pre><code>def init_centers(self,k, dataset):
+    &quot;&quot;&quot;
+    初始化簇中心：
+    选取数据集中的前k个样本数据作为簇中心
+    :param k：int，簇的个数
+    :param dataset：ndarray，数据集
+    &quot;&quot;&quot;
+    self.center_dict = &#123;&#125;
+    for i in range(k):
+        self.center_dict[i] = dataset[i]
+
+def get_centers(self):
+    &quot;&quot;&quot;
+    获取簇中心：
+    主要用于外部实例化对象调用
+    &quot;&quot;&quot;
+    return self.center_dict
+
+def calc_dist(self,simple1, simple2):
+    &quot;&quot;&quot;
+    计算距离：
+    该函数是计算两个点之间的欧式距离，该函数首先将点转为向量的形式，之后用norm()函数求向量的大小。
+    :param simple1：ndarray，第一个样本点的位置
+    :param simple2：ndarray，第二个样本点的位置
+    &quot;&quot;&quot;
+    return np.linalg.norm(simple1-simple2) 
+
+
+def fit(self, x): 
+    &quot;&quot;&quot;
+    模型拟合：（模型训练）
+    给数据集的最后一列插入默认为-1的类标签，通过循环不断更新簇中心，同时也不断改变数据集的类标签，直到迭代次数达到最大迭代次数或
+    所有类簇内距离总和两次都不变时为止,最终得到数据集训练出来的每类的簇中心。
+    :param x：ndarray，样本数据
+    &quot;&quot;&quot;
+    ds = copy.deepcopy(x)  # 复制一份数据
+    epoch = 0 # 迭代次数
+    self.init_centers(self._k, ds)  # 第一次迭代时，初始化k个聚类中心
+
+    ds = np.insert(ds, 2, values=-1, axis=1)  # 插入一列作为类标签，默认为-1
+    total_last = np.inf  # 上一次迭代距离总和
+    while epoch &lt;= self._max_iter:  # 迭代次数少于20次时继续迭代，也可以直接设为True，当目标函数已收敛时自动结束迭代
+        cluster_dist = &#123;i:0 for i in range(self._k)&#125;  # 记录每一个类簇距离总和
+        for simple in ds:
+            min_dist = np.inf   # simple 到最近的聚类中心的距离
+            min_label = -1    # 最近的聚类中心类标签
+            for label in self.center_dict.keys():
+                dist = self.calc_dist(simple[:2], self.center_dict[label])
+                if dist &lt; min_dist:
+                    min_dist = dist
+                    min_label = label
+            simple[2] = min_label  # 将当前样本点划分到最近的聚类中心所在聚类中
+            cluster_dist[int(min_label)] = cluster_dist[int(min_label)] + min_dist  # 更新类簇内部距离总和
+        
+        loss_now = sum(cluster_dist.values())  # 所有类簇内部距离总和
+        if total_last == loss_now:  # 如果两次迭代距离总和都不变，证明已收敛，跳出循环
+            break
+        total_last = loss_now         #将当前所有类簇内距离作为上一个所有类簇内距离
+        
+        for label in self.center_dict.keys():  # 更新簇中心
+            simple_list = ds[ds[:,2]==label]  # 挑选出类标签为k的所有样本
+            x = np.mean(simple_list[:, 0])     #求同类样本数据第一列特征数据的均值
+            y = np.mean(simple_list[:, 1])
+            self.center_dict[label] = [x, y]      #更新簇中心
+        epoch += 1
+
+def predict(self, arr_data): 
+    &quot;&quot;&quot;
+    模型预测：
+    预测新数据属于哪个类，注意这个类是零时类、假想类
+    :param arr_data：ndarray，样本数据
+    &quot;&quot;&quot;
+    ret_lst_label =[]         #存储预测值的列表
+    for sample in arr_data:   #迭代数据集
+        lst_d = []
+        for key in self.center_dict:  #迭代每类的簇中心
+            d = self.calc_dist(sample, self.center_dict[key])  #计算每个样本数据与簇中心的距离
+            lst_d.append(d)                 
+        index_min = np.argmin(lst_d)          #获取列表中最小值的索引
+        label = list(self.center_dict.keys())[index_min]  #得到该样本数据所属的类
+        ret_lst_label.append(label)         #添加到预测值列表中去
+    return ret_lst_label          
+</code></pre>
+<p>#%% md</p>
+<h3 id="（二）算法应用"><a href="#（二）算法应用" class="headerlink" title="（二）算法应用"></a>（二）算法应用</h3><p>本阶段操作内容：<br>本阶段首先将手动生成的三批数据合成一批后按8：2划分为训练集和测试集，然后借助本实验中编写好的聚类算法模型对训练集进行学习，得到簇中心，之后用测试集数据进行聚类测试。 </p>
+<p>#%% md</p>
+<p>1.数据介绍</p>
+<p>本阶段所要用到的数据集是手工制作的，总共生成了3批数据，每批包含300个样本数据，每个样本数据有两个属性，每个属性的数据是由不同均值，同一方差的高斯函数生成的，不同批样本数据间属性数据的均值差别较大，同批样本数据中属性数据均值相差较小。下面分别介绍三批数据各属性数据高斯分布的均值和方差： </p>
+<table>
+<thead>
+<tr>
+<th>数据批数</th>
+<th>属性一均值与方差</th>
+<th>属性二均值与方差</th>
+<th>数据个数</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>第一批</td>
+<td>（20，5）</td>
+<td>（15，5）</td>
+<td>300</td>
+</tr>
+<tr>
+<td>第二批</td>
+<td>（20，5）</td>
+<td>（45，5）</td>
+<td>300</td>
+</tr>
+<tr>
+<td>第三批</td>
+<td>（55，5）</td>
+<td>（35，5）</td>
+<td>300</td>
+</tr>
+</tbody></table>
+<p>#%% md</p>
+<p>2.准备数据</p>
+<p>#%%</p>
+<p>#加载数据集<br>#此处加载的数据的后缀名是.npy（numpy数组的形式存储），因此可以直接利用numpy中的数据加载函数load()<br>dataset &#x3D; np.load(‘cluster_data.npy’)<br>dataset</p>
+<p>#%% md</p>
+<p>数据划分是对总数据集的行顺序进行随机重置，将重置后的样本数据的前80%作为训练集数据，剩余的20%作为测试集数据。<br>将训练集数据和测试集数据的第一个属性作为x轴，第二个属性作为y轴，用散点图的形式进行可视化。</p>
+<p>#%%</p>
+<p>np.random.shuffle(dataset)<br>index_split &#x3D; int(dataset.shape[0]*0.8)   #获取数据集在80%处的样本索引<br>#划分训练集和测试集<br>train_X &#x3D; dataset[:index_split]<br>test_X &#x3D; dataset[index_split:]</p>
+<p>#%% md</p>
+<p>3.数据可视化<br>对原数据的分布进行散点图可视化，用于对比后面的模型应用效果的可视化图。</p>
+<p>#%%</p>
+<p>plt.figure(figsize&#x3D;(16, 6))    #定义画布大小，20是画布的宽，8是画布的高<br>plt.subplot(121)               #定义子图121表示这组图有1行2列，该子图在第1幅图<br>for i in train_X:<br>    plt.scatter(i[0], i[1],c&#x3D;’black’,s&#x3D;6)<br>plt.xlabel(‘property_one’)          #设置x坐标<br>plt.ylabel(‘property_two’)</p>
+<p>plt.subplot(122)<br>for i in test_X:<br>    plt.scatter(i[0], i[1],c&#x3D;’black’,s&#x3D;6)<br>plt.xlabel(‘property_one’)<br>plt.ylabel(‘property_two’)<br>plt.show()</p>
+<p>#%% md</p>
+<p>4.模型训练、预测</p>
+<p>#%%</p>
+<p>#模型调用<br>model1 &#x3D; KMeans(3)<br>model2 &#x3D; KMeans(5)<br>model3 &#x3D; KMeans(7)</p>
+<p>#模型训练<br>model1.fit(train_X)<br>model2.fit(train_X)<br>model3.fit(train_X)</p>
+<p>#模型预测<br>pred1 &#x3D; model1.predict(test_X)<br>pred2 &#x3D; model2.predict(test_X)<br>pred3 &#x3D; model3.predict(test_X)</p>
+<p>#%% md</p>
+<h3 id="（三）应用效果可视化"><a href="#（三）应用效果可视化" class="headerlink" title="（三）应用效果可视化"></a>（三）应用效果可视化</h3><p>本阶段操作：<br>K-means算法是无监督学习算法，所用到的样本是没有标签的，因此不易了解样本数据聚类的实际情况，需要对聚类后不同类样本数据用不同颜色的点进行可视化观测。</p>
+<p>#%% md</p>
+<p>下面用3个子图分别可视化k值为3、5、7时K-means聚类算法模型对测试集的聚类结果（不同类别样本用不同颜色表示），以及每个簇的簇中心（用黑点表示）。此处是编写了一个draw_pred_result（date,pred,centers_dic,plt）函数，用来可视化单个k值模型的聚类结果，其参数解释如下：</p>
+<pre><code>data：数据集；
+pred：聚类结果；
+centers_dic：每个簇的簇中心（字典结构）；
+plt：画子图的对象。
+</code></pre>
+<p>#%%</p>
+<p>def draw_pred_result(date,pred,centers_dic,plt):<br>    color &#x3D; [‘red’,’green’,’blue’,’yellow’,’orange’,’pink’,’cyan’]    #由于这里最大聚成7个簇，因此这里设置了7中颜色<br>    #画每个簇的样本<br>    for index,i in enumerate(pred):                        #迭代pred的值并获取其值的索引<br>        plt.scatter(date[index,0], date[index,1],c&#x3D;color[i],s&#x3D;6)<br>     #画簇中心<br>    for key in centers_dic:<br>        plt.scatter(centers_dic[key][0], centers_dic[key][1],c&#x3D;’black’)<br>    plt.xlabel(‘property_one’)<br>    plt.ylabel(‘property_two’)</p>
+<p>#%%</p>
+<p>plt.figure(figsize&#x3D;(21, 6))    #定义画布大小，20是画布的宽，8是画布的高<br>plt.subplot(131)               #定义子图121表示这组图有1行2列，该子图在第1幅图<br>draw_pred_result(test_X,pred1,model1.get_centers(),plt)<br>plt.title(‘k&#x3D;3’)<br>plt.subplot(132)               #定义子图121表示这组图有1行2列，该子图在第1幅图<br>draw_pred_result(test_X,pred2,model2.get_centers(),plt)<br>plt.title(‘k&#x3D;5’)<br>plt.subplot(133)               #定义子图121表示这组图有1行2列，该子图在第1幅图<br>draw_pred_result(test_X,pred3,model3.get_centers(),plt)<br>plt.title(‘k&#x3D;7’)</p>
+<p>#%% md</p>
+<h2 id="五、结果分析"><a href="#五、结果分析" class="headerlink" title="五、结果分析"></a>五、结果分析</h2><p>在次实验中首先对K-means算法原理进行了介绍，然后根据算法的原理实现了算法的训练、预测等功能，最后将搭建好的算法模型以不同的K值（k&#x3D;3、5、7)应用到手动制作的数据集中，并对这几个算法模型的聚类结果进行了可视化，从可视化图可以看出，该测试集数据聚成三个簇比较合适。结合原理，该算法在训练时，首先初始化簇中心，之后迭代计算簇内样本的均值更新簇中心；在对测试集进行预测时，选取离其最近的簇中心作为样本标签类，整个过程并没有表达如何选取合适的K值，因此该算法有个较大的缺点就是需要手动选取K值。然而手动选取就如上面可视化的三幅图一样，有可能是合适的，也有可能都不合适。</p>
+<p>#%%</p>
+<p>from sklearn.cluster import KMeans<br>from sklearn.datasets import load_iris</p>
+<p>#%%</p>
+<p>data &#x3D; load_iris()</p>
+<p>#%%</p>
+<p>data.data,data.target</p>
+<p>#%%</p>
+<p>data_x &#x3D; data.data</p>
+<p>#%%</p>
+<p>model &#x3D; KMeans(n_clusters&#x3D;3)</p>
+<p>#%%</p>
+<p>model.fit(data_x)</p>
+<p>#%%</p>
+<p>model.labels_#预测出来的标签</p>
+<p>#%%</p>
+<p>data.target#真实的标签</p>
+<p>#%%</p>
+<p>data.target_names#标签的名称</p>
+<p>#%%</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E8%81%9A%E7%B1%BB%E7%AE%97%E6%B3%95/" rel="tag"># 聚类算法</a>
+              <a href="/tags/%E6%97%A0%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0-unsupervised-learning/" rel="tag"># 无监督学习(unsupervised learning)</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/10/28/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/pca/" rel="prev" title="PCA主成分分析">
+                  <i class="fa fa-chevron-left"></i> PCA主成分分析
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2022/10/28/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/KNN/" rel="next" title="KNNk近邻分类\回归">
+                  KNNk近邻分类\回归 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">陈宇韶chenyushao</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

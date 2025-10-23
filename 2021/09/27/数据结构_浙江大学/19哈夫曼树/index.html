@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha256-AbA177XfpSnFEvgpYu1jMygiLabzPCJCRIBtR5jGc0k=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.13.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="19哈夫曼树">
+<meta property="og:url" content="http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/19%E5%93%88%E5%A4%AB%E6%9B%BC%E6%A0%91/index.html">
+<meta property="og:site_name" content="Tiger_pop&#39;s Blog">
+<meta property="og:description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-09-27T12:00:36.000Z">
+<meta property="article:modified_time" content="2022-10-28T15:42:39.445Z">
+<meta property="article:author" content="陈宇韶chenyushao">
+<meta property="article:tag" content="哈夫曼树">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/19%E5%93%88%E5%A4%AB%E6%9B%BC%E6%A0%91/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/19%E5%93%88%E5%A4%AB%E6%9B%BC%E6%A0%91/","path":"2021/09/27/数据结构_浙江大学/19哈夫曼树/","title":"19哈夫曼树"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>19哈夫曼树 | Tiger_pop's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="Tiger_pop's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Tiger_pop's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">tiger_pop 的博客</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-overview-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="陈宇韶chenyushao"
+      src="/images/my.jpg">
+  <p class="site-author-name" itemprop="name">陈宇韶chenyushao</p>
+  <div class="site-description" itemprop="description">爱学习、爱工作、爱生活;         微信号: Tiger_and_master;         手机号码:18515678348 </div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">427</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">201</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/19%E5%93%88%E5%A4%AB%E6%9B%BC%E6%A0%91/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/my.jpg">
+      <meta itemprop="name" content="陈宇韶chenyushao">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tiger_pop's Blog">
+      <meta itemprop="description" content="爱学习、爱工作、爱生活;         微信号: Tiger_and_master;         手机号码:18515678348 ">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="19哈夫曼树 | Tiger_pop's Blog">
+      <meta itemprop="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          19哈夫曼树
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2021-09-27 20:00:36" itemprop="dateCreated datePublished" datetime="2021-09-27T20:00:36+08:00">2021-09-27</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2022-10-28 23:42:39" itemprop="dateModified" datetime="2022-10-28T23:42:39+08:00">2022-10-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%B5%99%E5%A4%A7%E7%AE%97%E6%B3%95%E4%B8%8E%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B-python%E5%AE%9E%E7%8E%B0/" itemprop="url" rel="index"><span itemprop="name">浙大算法与数据结构课程(python实现)</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+            <div class="post-description">这是文章开头，显示在主页面，详情请点击此处。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">先回顾一下，数据存储空间知识。</span></span><br><span class="line"><span class="string">位bit：</span></span><br><span class="line"><span class="string">二进制数，例如1001就是&quot;四位&quot;的二进制数，表示若干状态。</span></span><br><span class="line"><span class="string">字节byte：</span></span><br><span class="line"><span class="string">1 字节 == 8 位，是计算机处理的基本单位。通常1个字节可以存入一个ASCII码，2个字节可以存放一个汉字国标码。</span></span><br><span class="line"><span class="string">字：</span></span><br><span class="line"><span class="string">计算机进行数据处理时，一次存取、加工和传送的数据长度称为字（word）。一个字通常由一个或多个（一般是字节的整数位）字节构成。例如286微机的字由2个字节组成，它的字长为16；486微机的字由4个字节组成，它的字长为32位机。</span></span><br><span class="line"><span class="string">ASCII码:</span></span><br><span class="line"><span class="string">由美国国家标准局(ANSI)制定的ASCII码（American Standard Code for Information Interchange，美国标准信息交换码），它已被国际标准化组织（ISO）定为国际标准，称为ISO 646标准。适用于所有拉丁文字字母，ASCII码有7位码和8位码两种形式</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">哈夫曼树</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">如何根据结点的不同查找频率构造更有效的搜索树？</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">带权路径长度WPL:</span></span><br><span class="line"><span class="string">二叉树n个叶子结点，每个叶子结点带有权值 W（k），从根结点到叶子结点的长度为L(k)</span></span><br><span class="line"><span class="string">每个叶子结点的带权路径长度之和 WPL = SUM(W(k)*L(k))</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">最优二叉树/哈夫曼树： WPL 最小的二叉树。</span></span><br><span class="line"><span class="string">哈夫曼树不是堆！！只不过哈夫曼树的建立过程用最小堆会快一些。</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 哈夫曼树的构造：</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 在权值列表中，把最小的两权值建树，树根为权值和，</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 再在权值列表中用 此权值和 代替最小两个权值，形成新的列表。</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 在新的列表中找两个最小的权值，建树，树根为这两的权值和</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># ...</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 直到 列表中只有两权值，建最后一颗树，树根为权值和。</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 值得一提：</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 在n个数中，选取两个最小的权值然后形成新的值，</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 用排序 不如用堆 的效率高，</span></span><br><span class="line"></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">（我并不明白为什么这里用堆比排序效率高）</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 哈夫曼树的特点：</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 1、没有度为1 的结点。n1 = 0</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 2、n个叶子结点的哈夫曼树 有2n-1个结点。 因为 n2 = n0 -1</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 3、哈夫曼树非叶结点的左右子树交换后仍是哈夫曼树。</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 4、同一组权值 ，可能存在不同构的两颗哈夫曼树。</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 科学建立哈夫曼树需要用到最小堆。 O(Nlog N)</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">HeapStruct_2</span>():</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self,elements=[<span class="literal">None</span>],addre=<span class="number">0</span>,capacity=<span class="number">0</span></span>):</span><br><span class="line">        self.elements = elements</span><br><span class="line">        self.addre = addre <span class="comment"># addre 相当于指针，表明堆中最大的那个位置。</span></span><br><span class="line">        self.capacity = capacity</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">MinHeapCreate</span>(<span class="params">self,Capacity_Size</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&#x27; 若插入数值，请确保插入数值在 0 以上 。结点容量为%d&#x27;</span>%Capacity_Size)</span><br><span class="line">        self.elements = [<span class="literal">None</span>] * (Capacity_Size+<span class="number">1</span>) <span class="comment"># 因为有&quot;哨兵&quot;。</span></span><br><span class="line">        self.capacity = Capacity_Size</span><br><span class="line">        self.elements[<span class="number">0</span>] = self.MinData() <span class="comment"># 定义哨兵，其值小于堆中最小值，便于以后更快操作。</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&#x27;self capacity = %s&#x27;</span>%self.capacity)</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">MinData</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">return</span> Node(<span class="number">0</span>)</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">Insert</span>(<span class="params">self,item</span>):   <span class="comment"># 这里插入的都是结点。</span></span><br><span class="line">        <span class="keyword">if</span> self.IsFull():</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&#x27;最小堆已满&#x27;</span>)</span><br><span class="line">            <span class="keyword">return</span></span><br><span class="line">        i = self.addre + <span class="number">1</span></span><br><span class="line">        <span class="keyword">if</span> self.elements[<span class="number">0</span>].weight &gt;= item.weight:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&#x27;插入数值大小小于下限&#x27;</span>)</span><br><span class="line">            <span class="keyword">return</span></span><br><span class="line">        <span class="keyword">while</span> self.elements[i//<span class="number">2</span>].weight &gt; item.weight: <span class="comment"># i/2 address是父结点的位置。加入值比父类结点小就往上走。这个循环是找到插入位置，并为插入点腾开位置。</span></span><br><span class="line">            self.elements[i] = self.elements[i//<span class="number">2</span>] <span class="comment"># 值得一提：树结构中移动，有的可变动值，而不动结点结构。</span></span><br><span class="line">            i //= <span class="number">2</span></span><br><span class="line">        self.elements[i] = item</span><br><span class="line">        self.addre += <span class="number">1</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">IsFull</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">if</span> self.addre == self.capacity:</span><br><span class="line">            <span class="built_in">print</span>( self.addre,self.capacity)</span><br><span class="line">            <span class="keyword">return</span> <span class="number">1</span></span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">IsEmpty</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">if</span> self.addre == <span class="number">0</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="number">1</span></span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">DeleteMin</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">if</span> self.IsEmpty():</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&#x27;最小堆已空。&#x27;</span>)</span><br><span class="line">            <span class="keyword">return</span></span><br><span class="line">        minitem = self.elements[<span class="number">1</span>]</span><br><span class="line">        temp = self.elements[self.addre]</span><br><span class="line">        self.elements[self.addre] = <span class="literal">None</span></span><br><span class="line">        self.addre -= <span class="number">1</span> <span class="comment"># 拿掉最后一个结点。</span></span><br><span class="line">        parent = <span class="number">1</span></span><br><span class="line">        <span class="comment"># 保证比最小的儿子还要小，就向上走。</span></span><br><span class="line">        <span class="keyword">while</span> parent*<span class="number">2</span> &lt;= self.addre: <span class="comment"># 保证有儿子（必有左儿子）（可能有右儿子）</span></span><br><span class="line">            left_child = parent * <span class="number">2</span></span><br><span class="line">            <span class="keyword">if</span> self.addre != left_child <span class="keyword">and</span> self.elements[left_child+<span class="number">1</span>].weight &lt; self.elements[left_child].weight:</span><br><span class="line">                child = left_child + <span class="number">1</span></span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                child = left_child</span><br><span class="line">            <span class="keyword">if</span> self.elements[child].weight &lt;= temp.weight: <span class="comment"># 假定temp在根位置。</span></span><br><span class="line">                self.elements[parent] = self.elements[child]</span><br><span class="line">                parent = child  <span class="comment"># 沿着最小儿子的路径往下走。</span></span><br><span class="line">            <span class="keyword">elif</span> self.elements[child].weight &gt; temp.weight:</span><br><span class="line">                self.elements[parent] = temp <span class="comment"># 找到适合位置。</span></span><br><span class="line">                <span class="keyword">return</span> minitem</span><br><span class="line">        self.elements[parent] = temp  <span class="comment"># 在有儿子的情况到循环结束，没有temp的落脚点，此时叶子结点parent那个位置适合temp。</span></span><br><span class="line">        <span class="keyword">return</span> minitem</span><br><span class="line"></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">哈夫曼树的建立算法：</span></span><br><span class="line"><span class="string">1、 将 权值序列 建立最小堆，element_list 中存放树的结点,而不是单纯的数字。</span></span><br><span class="line"><span class="string">    </span></span><br><span class="line"><span class="string">2、 从最小堆中(按结点值)取出两个最小的元素，再(按结点值)求和建立根结点，</span></span><br><span class="line"><span class="string">    形成一个链表结构的树 T ，返回根结点。</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">3、 将求和形成的根结点插入最小堆，</span></span><br><span class="line"><span class="string">    此时堆中走了两个元素，来了一个新的元素，只不过这个新元素是 T 的根结点。</span></span><br><span class="line"><span class="string">    </span></span><br><span class="line"><span class="string">4、 重复1、2、3 步骤。直到堆中元素只有一个元素(作n-1次合并)，完成世界线收束，哈夫曼树建立完毕。</span></span><br><span class="line"><span class="string">    此时堆中只有一个元素，而这个元素是哈夫曼树的根结点。</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">整体复杂度为 O(Nlog N)</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Node</span>():</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self,weight=<span class="number">0</span>,left=<span class="literal">None</span>,right=<span class="literal">None</span></span>):</span><br><span class="line">        self.weight = weight</span><br><span class="line">        self.left = left</span><br><span class="line">        self.right = right</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">HFM_Tree</span>():</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self,H</span>):</span><br><span class="line">        h = HeapStruct_2()</span><br><span class="line">        h.MinHeapCreate(<span class="number">10</span>)</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> H:</span><br><span class="line">            h.Insert(Node(i))   <span class="comment"># 笨办法建堆。</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(h.addre-<span class="number">1</span>): <span class="comment"># 作n-1次合并</span></span><br><span class="line">            T = Node()</span><br><span class="line">            T.left = h.DeleteMin()</span><br><span class="line">            T.right = h.DeleteMin()</span><br><span class="line">            T.weight = T.left.weight + T.right.weight</span><br><span class="line">            h.Insert(T)</span><br><span class="line">        <span class="comment"># 循环后最小堆中只有一个元素，它是哈夫曼树的根结点。</span></span><br><span class="line">        T = h.DeleteMin()</span><br><span class="line">        self.HFM_tree = T  <span class="comment"># 哈夫曼树构建完毕。</span></span><br><span class="line">        <span class="comment"># print(self.HFM_tree.weight)</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">preorder</span>(<span class="params">self,BT,list_=[]</span>): <span class="comment"># 利用可变对象特性遍历。</span></span><br><span class="line">        <span class="keyword">if</span> BT:</span><br><span class="line">            list_.append(BT.weight)</span><br><span class="line">            self.preorder(BT.left,list_)</span><br><span class="line">            self.preorder(BT.right,list_)</span><br><span class="line">        <span class="keyword">return</span> list_</span><br><span class="line"></span><br><span class="line">H = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>]</span><br><span class="line">hfm = HFM_Tree(H)</span><br><span class="line">list_ = hfm.preorder(hfm.HFM_tree)</span><br><span class="line"><span class="built_in">print</span>(list_)</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%93%88%E5%A4%AB%E6%9B%BC%E6%A0%91/" rel="tag"># 哈夫曼树</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/21%E9%9B%86%E5%90%88/" rel="prev" title="21集合">
+                  <i class="fa fa-chevron-left"></i> 21集合
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/17%E6%90%9C%E7%B4%A2%E6%A0%91%E4%B9%A0%E9%A2%98(%E6%B2%A1%E5%81%9A%E5%AE%8C)/" rel="next" title="17搜索树习题(没做完)">
+                  17搜索树习题(没做完) <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">陈宇韶chenyushao</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

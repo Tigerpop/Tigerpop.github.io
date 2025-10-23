@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha256-AbA177XfpSnFEvgpYu1jMygiLabzPCJCRIBtR5jGc0k=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.13.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="17-eth 智能合约">
+<meta property="og:url" content="http://example.com/2025/02/03/%E5%8C%BA%E5%9D%97%E9%93%BE/17-eth%20%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6/index.html">
+<meta property="og:site_name" content="Tiger_pop&#39;s Blog">
+<meta property="og:description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2025/02/03/%E5%8C%BA%E5%9D%97%E9%93%BE/17-eth%20%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6/%E6%88%AA%E5%B1%8F2025-01-08%2020.33.03.png">
+<meta property="og:image" content="http://example.com/2025/02/03/%E5%8C%BA%E5%9D%97%E9%93%BE/17-eth%20%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6/%E6%88%AA%E5%B1%8F2025-01-08%2020.40.12.png">
+<meta property="og:image" content="http://example.com/2025/02/03/%E5%8C%BA%E5%9D%97%E9%93%BE/17-eth%20%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6/%E6%88%AA%E5%B1%8F2025-01-08%2021.06.35.png">
+<meta property="og:image" content="http://example.com/2025/02/03/%E5%8C%BA%E5%9D%97%E9%93%BE/17-eth%20%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6/%E6%88%AA%E5%B1%8F2025-01-08%2021.13.04.png">
+<meta property="og:image" content="http://example.com/2025/02/03/%E5%8C%BA%E5%9D%97%E9%93%BE/17-eth%20%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6/%E6%88%AA%E5%B1%8F2025-01-08%2021.25.42.png">
+<meta property="og:image" content="http://example.com/2025/02/03/%E5%8C%BA%E5%9D%97%E9%93%BE/17-eth%20%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6/%E6%88%AA%E5%B1%8F2025-01-08%2021.36.07.png">
+<meta property="og:image" content="http://example.com/2025/02/03/%E5%8C%BA%E5%9D%97%E9%93%BE/17-eth%20%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6/%E6%88%AA%E5%B1%8F2025-01-08%2020.33.03.png">
+<meta property="og:image" content="http://example.com/2025/02/03/%E5%8C%BA%E5%9D%97%E9%93%BE/17-eth%20%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6/%E6%88%AA%E5%B1%8F2025-01-08%2021.53.03.jpg">
+<meta property="og:image" content="http://example.com/2025/02/03/%E5%8C%BA%E5%9D%97%E9%93%BE/17-eth%20%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6/%E6%88%AA%E5%B1%8F2025-01-08%2021.54.40.png">
+<meta property="og:image" content="http://example.com/2025/02/03/%E5%8C%BA%E5%9D%97%E9%93%BE/17-eth%20%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6/Screenshot%202025-02-03%20at%205.54.02%E2%80%AFPM.png">
+<meta property="og:image" content="http://example.com/2025/02/03/%E5%8C%BA%E5%9D%97%E9%93%BE/17-eth%20%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6/Screenshot%202025-02-03%20at%205.59.18%E2%80%AFPM.png">
+<meta property="og:image" content="http://example.com/2025/02/03/%E5%8C%BA%E5%9D%97%E9%93%BE/17-eth%20%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6/Screenshot%202025-02-03%20at%206.09.07%E2%80%AFPM.png">
+<meta property="og:image" content="http://example.com/2025/02/03/%E5%8C%BA%E5%9D%97%E9%93%BE/17-eth%20%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6/Screenshot%202025-02-03%20at%206.12.20%E2%80%AFPM.png">
+<meta property="og:image" content="http://example.com/2025/02/03/%E5%8C%BA%E5%9D%97%E9%93%BE/17-eth%20%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6/Screenshot%202025-02-03%20at%206.17.51%E2%80%AFPM.png">
+<meta property="og:image" content="http://example.com/2025/02/03/%E5%8C%BA%E5%9D%97%E9%93%BE/17-eth%20%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6/Screenshot%202025-02-03%20at%209.00.12%E2%80%AFPM.png">
+<meta property="og:image" content="http://example.com/2025/02/03/%E5%8C%BA%E5%9D%97%E9%93%BE/17-eth%20%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6/Screenshot%202025-02-03%20at%209.06.14%E2%80%AFPM.png">
+<meta property="og:image" content="http://example.com/2025/02/03/%E5%8C%BA%E5%9D%97%E9%93%BE/17-eth%20%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6/Screenshot%202025-02-03%20at%209.10.27%E2%80%AFPM.png">
+<meta property="og:image" content="http://example.com/2025/02/03/%E5%8C%BA%E5%9D%97%E9%93%BE/17-eth%20%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6/Screenshot%202025-02-03%20at%209.14.06%E2%80%AFPM.png">
+<meta property="og:image" content="http://example.com/2025/02/03/%E5%8C%BA%E5%9D%97%E9%93%BE/17-eth%20%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6/Screenshot%202025-02-03%20at%209.19.51%E2%80%AFPM.png">
+<meta property="og:image" content="http://example.com/2025/02/03/%E5%8C%BA%E5%9D%97%E9%93%BE/17-eth%20%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6/Screenshot%202025-02-03%20at%209.22.59%E2%80%AFPM.png">
+<meta property="og:image" content="http://example.com/2025/02/03/%E5%8C%BA%E5%9D%97%E9%93%BE/17-eth%20%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6/Screenshot%202025-02-03%20at%209.23.13%E2%80%AFPM.png">
+<meta property="og:image" content="http://example.com/2025/02/03/%E5%8C%BA%E5%9D%97%E9%93%BE/17-eth%20%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6/Screenshot%202025-02-03%20at%209.40.05%E2%80%AFPM.png">
+<meta property="og:image" content="http://example.com/2025/02/03/%E5%8C%BA%E5%9D%97%E9%93%BE/17-eth%20%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6/Screenshot%202025-02-03%20at%209.47.52%E2%80%AFPM.png">
+<meta property="og:image" content="http://example.com/2025/02/03/%E5%8C%BA%E5%9D%97%E9%93%BE/17-eth%20%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6/Screenshot%202025-02-03%20at%2010.05.06%E2%80%AFPM.png">
+<meta property="og:image" content="http://example.com/2025/02/03/%E5%8C%BA%E5%9D%97%E9%93%BE/17-eth%20%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6/Screenshot%202025-02-03%20at%2010.13.30%E2%80%AFPM.png">
+<meta property="og:image" content="http://example.com/2025/02/03/%E5%8C%BA%E5%9D%97%E9%93%BE/17-eth%20%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6/Screenshot%202025-02-03%20at%2010.31.47%E2%80%AFPM.png">
+<meta property="article:published_time" content="2025-02-03T14:16:12.000Z">
+<meta property="article:modified_time" content="2025-03-14T01:58:23.787Z">
+<meta property="article:author" content="陈宇韶chenyushao">
+<meta property="article:tag" content="eth">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2025/02/03/%E5%8C%BA%E5%9D%97%E9%93%BE/17-eth%20%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6/%E6%88%AA%E5%B1%8F2025-01-08%2020.33.03.png">
+
+
+<link rel="canonical" href="http://example.com/2025/02/03/%E5%8C%BA%E5%9D%97%E9%93%BE/17-eth%20%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2025/02/03/%E5%8C%BA%E5%9D%97%E9%93%BE/17-eth%20%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6/","path":"2025/02/03/区块链/17-eth 智能合约/","title":"17-eth 智能合约"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>17-eth 智能合约 | Tiger_pop's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="Tiger_pop's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Tiger_pop's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">tiger_pop 的博客</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%80%E4%B8%AA%E6%8B%8D%E5%8D%96%E6%A1%88%E4%BE%8B"><span class="nav-number">1.</span> <span class="nav-text">一个拍卖案例</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%B0%83%E7%94%A8%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6"><span class="nav-number">2.</span> <span class="nav-text">调用智能合约</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%96%E9%83%A8%E8%B4%A6%E6%88%B7%E8%B0%83%E7%94%A8%E5%90%88%E7%BA%A6%E5%87%BD%E6%95%B0"><span class="nav-number">2.1.</span> <span class="nav-text">外部账户调用合约函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%90%88%E7%BA%A6%E8%B0%83%E7%94%A8%E5%8F%A6%E4%B8%80%E4%B8%AA%E5%90%88%E7%BA%A6%E4%B8%AD%E7%9A%84%E5%87%BD%E6%95%B0"><span class="nav-number">2.2.</span> <span class="nav-text">合约调用另一个合约中的函数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%9B%B4%E6%8E%A5%E8%B0%83%E7%94%A8"><span class="nav-number">2.2.1.</span> <span class="nav-text">直接调用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#addr%E7%9A%84call%E8%B0%83%E7%94%A8"><span class="nav-number">2.2.2.</span> <span class="nav-text">addr的call调用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%A3%E7%90%86%E8%B0%83%E7%94%A8"><span class="nav-number">2.2.3.</span> <span class="nav-text">代理调用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8A%E4%BE%8B%E7%9A%84%E5%88%86%E6%9E%90"><span class="nav-number">2.2.4.</span> <span class="nav-text">上例的分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fallback%E5%87%BD%E6%95%B0"><span class="nav-number">2.2.5.</span> <span class="nav-text">fallback函数</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6%E7%9A%84%E5%88%9B%E5%BB%BA%E5%92%8C%E8%BF%90%E8%A1%8C"><span class="nav-number">3.</span> <span class="nav-text">智能合约的创建和运行</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8B%8D%E5%8D%96%E4%BE%8B%E5%AD%90%E8%AE%B2%E8%A7%A3"><span class="nav-number">4.</span> <span class="nav-text">拍卖例子讲解</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%94%B9%E8%89%AF"><span class="nav-number">4.1.</span> <span class="nav-text">改良</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="陈宇韶chenyushao"
+      src="/images/my.jpg">
+  <p class="site-author-name" itemprop="name">陈宇韶chenyushao</p>
+  <div class="site-description" itemprop="description">爱学习、爱工作、爱生活;         微信号: Tiger_and_master;         手机号码:18515678348 </div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">427</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">201</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2025/02/03/%E5%8C%BA%E5%9D%97%E9%93%BE/17-eth%20%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/my.jpg">
+      <meta itemprop="name" content="陈宇韶chenyushao">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tiger_pop's Blog">
+      <meta itemprop="description" content="爱学习、爱工作、爱生活;         微信号: Tiger_and_master;         手机号码:18515678348 ">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="17-eth 智能合约 | Tiger_pop's Blog">
+      <meta itemprop="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          17-eth 智能合约
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2025-02-03 22:16:12" itemprop="dateCreated datePublished" datetime="2025-02-03T22:16:12+08:00">2025-02-03</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-03-14 09:58:23" itemprop="dateModified" datetime="2025-03-14T09:58:23+08:00">2025-03-14</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%8C%BA%E5%9D%97%E9%93%BE/" itemprop="url" rel="index"><span itemprop="name">区块链</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+            <div class="post-description">这是文章开头，显示在主页面，详情请点击此处。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>简介 <span id="more"></span></p>
+<p>eth 的智能合约是用 solidity 编写的，很像 Java  Script。</p>
+<blockquote>
+<p>外部账户没有代码只有 合约账户才有代码</p>
+</blockquote>
+<h1 id="一个拍卖案例"><a href="#一个拍卖案例" class="headerlink" title="一个拍卖案例"></a>一个拍卖案例</h1><p>一个拍卖案例，一个类吧。</p>
+<p><img src="/2025/02/03/%E5%8C%BA%E5%9D%97%E9%93%BE/17-eth%20%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6/%E6%88%AA%E5%B1%8F2025-01-08%2020.33.03.png" alt="截屏2025-01-08 20.33.03"></p>
+<p><img src="/2025/02/03/%E5%8C%BA%E5%9D%97%E9%93%BE/17-eth%20%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6/%E6%88%AA%E5%B1%8F2025-01-08%2020.40.12.png" alt="截屏2025-01-08 20.40.12"></p>
+<blockquote>
+<p>上面的 mapping 是一个 address 到 uint 的映射， 名叫 bids（其实是个 hash 表），但是solidity中的 hash表不支持遍历，如果想要遍历，需要用别的东西来记录。上面的例子中用的是 数组 bidders 来记录。</p>
+</blockquote>
+<h1 id="调用智能合约"><a href="#调用智能合约" class="headerlink" title="调用智能合约"></a>调用智能合约</h1><p><strong>外部账户没有代码，只有合约账户有代码！</strong></p>
+<h2 id="外部账户调用合约函数"><a href="#外部账户调用合约函数" class="headerlink" title="外部账户调用合约函数"></a>外部账户调用合约函数</h2><p>如果A B都是普通账户，A —&gt; B 就是一个普通的转账交易；</p>
+<p>但是如果A B是合约账户 ，A —&gt; B  就是一个对B合约的调用。</p>
+<p><img src="/2025/02/03/%E5%8C%BA%E5%9D%97%E9%93%BE/17-eth%20%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6/%E6%88%AA%E5%B1%8F2025-01-08%2021.06.35.png" alt="截屏2025-01-08 21.06.35"></p>
+<p>sender address 是发起的地址，to contract address 是被调用的合约的地址，Tx DATA 是被调用的函数。</p>
+<h2 id="合约调用另一个合约中的函数"><a href="#合约调用另一个合约中的函数" class="headerlink" title="合约调用另一个合约中的函数"></a>合约调用另一个合约中的函数</h2><h3 id="直接调用"><a href="#直接调用" class="headerlink" title="直接调用"></a>直接调用</h3><p><img src="/2025/02/03/%E5%8C%BA%E5%9D%97%E9%93%BE/17-eth%20%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6/%E6%88%AA%E5%B1%8F2025-01-08%2021.13.04.png" alt="截屏2025-01-08 21.13.04"></p>
+<p>A 合约中 有一个 事件作记录用的，在方法中 用 emit 调用这个事件作log。</p>
+<p>B 合约中，方法的参数是一个地址，方法中传入地址构建了一个A的对象的实例a，然后调用a对象的方法foo。</p>
+<blockquote>
+<p>eth 中规定，一次交易只能由外部账户发起，不能由合约账户主动发起。<br>按照上面的例子，只能由 一个外部账户对象调了 B 合约账户的方法callAFooDirectly，通过这个方法调用A合约账户中的 foo 方法，而不是是直接由B账户来直接发起。</p>
+</blockquote>
+<h3 id="addr的call调用"><a href="#addr的call调用" class="headerlink" title="addr的call调用"></a>addr的call调用</h3><p><img src="/2025/02/03/%E5%8C%BA%E5%9D%97%E9%93%BE/17-eth%20%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6/%E6%88%AA%E5%B1%8F2025-01-08%2021.25.42.png" alt="截屏2025-01-08 21.25.42"></p>
+<p>这种写法好在可以避免被调用的合约异常导致 调用者的合约也报异常。</p>
+<h3 id="代理调用"><a href="#代理调用" class="headerlink" title="代理调用"></a>代理调用</h3><p><img src="/2025/02/03/%E5%8C%BA%E5%9D%97%E9%93%BE/17-eth%20%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6/%E6%88%AA%E5%B1%8F2025-01-08%2021.36.07.png" alt="截屏2025-01-08 21.36.07"></p>
+<p>这样可以在当前的合约中执行，避免进入被调用的合约环境。</p>
+<h3 id="上例的分析"><a href="#上例的分析" class="headerlink" title="上例的分析"></a>上例的分析</h3><p><img src="/2025/02/03/%E5%8C%BA%E5%9D%97%E9%93%BE/17-eth%20%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6/%E6%88%AA%E5%B1%8F2025-01-08%2020.33.03.png" alt="截屏2025-01-08 20.33.03"></p>
+<p>一个eth 方法要接受外部转账就要写 payable。</p>
+<p><strong>这个拍卖例子中，调用 bid() 方法时，出价人要把 出价的币 转到这个合约账户中，比如你叫100个eth 就要实质性的转100个eth 过去，锁定在合约内直到拍卖结束。</strong></p>
+<p>拍卖结束以后，没有竞拍到的人调用 withdraw 方法，把竞拍时锁定的币取回来，不需要接受外部转账所以不用写 payable。</p>
+<p><img src="/2025/02/03/%E5%8C%BA%E5%9D%97%E9%93%BE/17-eth%20%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6/%E6%88%AA%E5%B1%8F2025-01-08%2021.53.03.jpg" alt="截屏2025-01-08 21.53.03"></p>
+<p>以前面这个转账的例子看，value 转的是0 ，没有实质性的转入，所以转账的方法 也不需要 payable。</p>
+<h3 id="fallback函数"><a href="#fallback函数" class="headerlink" title="fallback函数"></a>fallback函数</h3><p><img src="/2025/02/03/%E5%8C%BA%E5%9D%97%E9%93%BE/17-eth%20%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6/%E6%88%AA%E5%B1%8F2025-01-08%2021.54.40.png" alt="截屏2025-01-08 21.54.40"></p>
+<p>正常：**A调用B这个合约，需要在转账交易的data 域中说明，A调用的是B合约中的哪一个函数。 **</p>
+<p>特例： A 转了一笔钱到B合约中，但是data 域内没有说明，要调用 fallback 函数，还要有payable标注。</p>
+<h1 id="智能合约的创建和运行"><a href="#智能合约的创建和运行" class="headerlink" title="智能合约的创建和运行"></a>智能合约的创建和运行</h1><p><img src="/2025/02/03/%E5%8C%BA%E5%9D%97%E9%93%BE/17-eth%20%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6/Screenshot%202025-02-03%20at%205.54.02%E2%80%AFPM.png" alt="Screenshot 2025-02-03 at 5.54.02 PM"></p>
+<p>这个基本的逻辑是 写一个协议 送到 链上了，以后别人要参与也是调用链上这个只能合约。</p>
+<p>运行都是 单线程，没有并发执行能力。</p>
+<p><img src="/2025/02/03/%E5%8C%BA%E5%9D%97%E9%93%BE/17-eth%20%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6/Screenshot%202025-02-03%20at%205.59.18%E2%80%AFPM.png" alt="Screenshot 2025-02-03 at 5.59.18 PM"></p>
+<p><img src="/2025/02/03/%E5%8C%BA%E5%9D%97%E9%93%BE/17-eth%20%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6/Screenshot%202025-02-03%20at%206.09.07%E2%80%AFPM.png" alt="Screenshot 2025-02-03 at 6.09.07 PM"></p>
+<blockquote>
+<p>如果烧完了gas 还没完成就不退了，直接回滚，如果烧了 一半gas 出错了，就退回 一半的gas 剩下的 gas 不退了，然后回滚。</p>
+</blockquote>
+<p><img src="/2025/02/03/%E5%8C%BA%E5%9D%97%E9%93%BE/17-eth%20%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6/Screenshot%202025-02-03%20at%206.12.20%E2%80%AFPM.png" alt="Screenshot 2025-02-03 at 6.12.20 PM"></p>
+<p>如果遇到嵌套调用时，如果是直接调用可能引发一连串的回滚，但是 是 call 这样的调用形式，就只会返回一个 true or false。</p>
+<p>一个转账，没有指定调用的函数，也可能因为fallback 匿名方法导致了嵌套调用。</p>
+<p><img src="/2025/02/03/%E5%8C%BA%E5%9D%97%E9%93%BE/17-eth%20%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6/Screenshot%202025-02-03%20at%206.17.51%E2%80%AFPM.png" alt="Screenshot 2025-02-03 at 6.17.51 PM"></p>
+<p>gaslimit 指的是这个区块中的 gas 上限，限制把太多的交易打包进这个区块中的一种措施。</p>
+<p>btc 是写死在协议中的，但是 eth 中的 gaslimit 是有一个浮动范围的。</p>
+<p>通过上面的 block header 中的内容，可以知道一定是先 执行了 智能合约 再 开始挖矿的，因为，挖矿要计算 block header 中的内容，但是 ，智能合约计算以后 才能 在本地中生成好 状态树、交易树、收据树的 root 值；</p>
+<p>由此可知，只要没有挖到的矿工，浪费了算力电力，在本地执行了 智能合约之后，只能帮助挖到矿的人验证一下 看看是否正确，没有得到 gas 费和挖矿奖励的补偿，其实非常吃亏。</p>
+<p><img src="/2025/02/03/%E5%8C%BA%E5%9D%97%E9%93%BE/17-eth%20%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6/Screenshot%202025-02-03%20at%209.00.12%E2%80%AFPM.png" alt="Screenshot 2025-02-03 at 9.00.12 PM"></p>
+<p><img src="/2025/02/03/%E5%8C%BA%E5%9D%97%E9%93%BE/17-eth%20%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6/Screenshot%202025-02-03%20at%209.06.14%E2%80%AFPM.png" alt="Screenshot 2025-02-03 at 9.06.14 PM"></p>
+<p><img src="/2025/02/03/%E5%8C%BA%E5%9D%97%E9%93%BE/17-eth%20%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6/Screenshot%202025-02-03%20at%209.10.27%E2%80%AFPM.png" alt="Screenshot 2025-02-03 at 9.10.27 PM"></p>
+<p><img src="/2025/02/03/%E5%8C%BA%E5%9D%97%E9%93%BE/17-eth%20%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6/Screenshot%202025-02-03%20at%209.14.06%E2%80%AFPM.png" alt="Screenshot 2025-02-03 at 9.14.06 PM"></p>
+<p>上面的意思是，在c 这个合约中 往addr 这个地址中 转了 12345 的eth，这个addr 指的是目标的addr 。</p>
+<h1 id="拍卖例子讲解"><a href="#拍卖例子讲解" class="headerlink" title="拍卖例子讲解"></a>拍卖例子讲解</h1><p><img src="/2025/02/03/%E5%8C%BA%E5%9D%97%E9%93%BE/17-eth%20%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6/Screenshot%202025-02-03%20at%209.19.51%E2%80%AFPM.png" alt="Screenshot 2025-02-03 at 9.19.51 PM"></p>
+<p><img src="/2025/02/03/%E5%8C%BA%E5%9D%97%E9%93%BE/17-eth%20%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6/Screenshot%202025-02-03%20at%209.22.59%E2%80%AFPM.png" alt="Screenshot 2025-02-03 at 9.22.59 PM"></p>
+<p><img src="/2025/02/03/%E5%8C%BA%E5%9D%97%E9%93%BE/17-eth%20%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6/Screenshot%202025-02-03%20at%209.23.13%E2%80%AFPM.png" alt="Screenshot 2025-02-03 at 9.23.13 PM"></p>
+<p><img src="/2025/02/03/%E5%8C%BA%E5%9D%97%E9%93%BE/17-eth%20%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6/Screenshot%202025-02-03%20at%209.40.05%E2%80%AFPM.png" alt="Screenshot 2025-02-03 at 9.40.05 PM"></p>
+<p>这个合约内写的就是 把 拍卖合约的地址addr 转为一个实例 sa，然后用这个实例 sa 调用bid方法参与拍卖，把钱用value方法 转进去。</p>
+<p>这是一个 合约账户，如果需要 调用，还需要一个外部账户 先调用 hackV1 这个合约账户，再间接参与到拍卖中。</p>
+<p><img src="/2025/02/03/%E5%8C%BA%E5%9D%97%E9%93%BE/17-eth%20%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6/Screenshot%202025-02-03%20at%209.47.52%E2%80%AFPM.png" alt="Screenshot 2025-02-03 at 9.47.52 PM"></p>
+<p>此时我们看见这个拍卖结束时候的函数，它使用了一个 转账函数，直接往 黑客的合约账户地址中转帐而没有调用方法，会默认调用了 fullback 方法，但是 黑客合约中 没有fullback 方法，会调用失败返回异常，transfer转帐方法会出现连锁式回滚。</p>
+<p><strong>但是需要注意：</strong></p>
+<p>这个报错回滚，发生在本地，并没有同步在整条区块链中，所有人 都拿不到钱！</p>
+<h2 id="改良"><a href="#改良" class="headerlink" title="改良"></a>改良</h2><p> <img src="/2025/02/03/%E5%8C%BA%E5%9D%97%E9%93%BE/17-eth%20%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6/Screenshot%202025-02-03%20at%2010.05.06%E2%80%AFPM.png" alt="Screenshot 2025-02-03 at 10.05.06 PM"></p>
+<p><img src="/2025/02/03/%E5%8C%BA%E5%9D%97%E9%93%BE/17-eth%20%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6/Screenshot%202025-02-03%20at%2010.13.30%E2%80%AFPM.png" alt="Screenshot 2025-02-03 at 10.13.30 PM"></p>
+<p>在黑客的 fallback 匿名函数中 又进行了一次 withdraw 操作，而withdraw 操作中要等 转帐完毕之后才会给bids 数组中对应的值 赋值为 0，构成了你调用我，我等你的情况，然后跳过 withdraw 中的 赋值 0 的操作，并且因为有一个 send 转帐会再次调用对应合约中的fallback方法，让黑客反反复复执行fallback中的转帐。</p>
+<p><img src="/2025/02/03/%E5%8C%BA%E5%9D%97%E9%93%BE/17-eth%20%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6/Screenshot%202025-02-03%20at%2010.31.47%E2%80%AFPM.png" alt="Screenshot 2025-02-03 at 10.31.47 PM"></p>
+<p>把赋值0的操作提前了，</p>
+<p>sender 和 transfer 的转帐都只转一个 很小的 够写log 的gas 费用而已，不足以让接收方用这个gas 再 发起一次交易。</p>
+<blockquote>
+<p>任何 你转帐或者调用某个合约的方法，都有可能被它反过来调用你当前的合约，或者修改你的状态。</p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/eth/" rel="tag"># eth</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/16-%E6%9D%83%E7%9B%8A%E8%AF%81%E6%98%8E/" rel="prev" title="16-权益证明">
+                  <i class="fa fa-chevron-left"></i> 16-权益证明
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2025/02/03/%E5%8C%BA%E5%9D%97%E9%93%BE/18-the-DAO%E5%A4%B1%E8%B4%A5%E6%A1%88%E4%BE%8B/" rel="next" title="18-the-DAO失败案例">
+                  18-the-DAO失败案例 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">陈宇韶chenyushao</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

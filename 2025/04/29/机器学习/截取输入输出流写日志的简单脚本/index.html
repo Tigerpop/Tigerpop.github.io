@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha256-AbA177XfpSnFEvgpYu1jMygiLabzPCJCRIBtR5jGc0k=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.13.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="截取输入输出流写日志的简单脚本">
+<meta property="og:url" content="http://example.com/2025/04/29/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E6%88%AA%E5%8F%96%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E6%B5%81%E5%86%99%E6%97%A5%E5%BF%97%E7%9A%84%E7%AE%80%E5%8D%95%E8%84%9A%E6%9C%AC/index.html">
+<meta property="og:site_name" content="Tiger_pop&#39;s Blog">
+<meta property="og:description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2025/04/29/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E6%88%AA%E5%8F%96%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E6%B5%81%E5%86%99%E6%97%A5%E5%BF%97%E7%9A%84%E7%AE%80%E5%8D%95%E8%84%9A%E6%9C%AC/%E6%88%AA%E5%B1%8F2025-04-26%2021.12.21.png">
+<meta property="article:published_time" content="2025-04-29T04:08:08.000Z">
+<meta property="article:modified_time" content="2025-04-30T02:59:53.979Z">
+<meta property="article:author" content="陈宇韶chenyushao">
+<meta property="article:tag" content="MCP">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2025/04/29/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E6%88%AA%E5%8F%96%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E6%B5%81%E5%86%99%E6%97%A5%E5%BF%97%E7%9A%84%E7%AE%80%E5%8D%95%E8%84%9A%E6%9C%AC/%E6%88%AA%E5%B1%8F2025-04-26%2021.12.21.png">
+
+
+<link rel="canonical" href="http://example.com/2025/04/29/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E6%88%AA%E5%8F%96%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E6%B5%81%E5%86%99%E6%97%A5%E5%BF%97%E7%9A%84%E7%AE%80%E5%8D%95%E8%84%9A%E6%9C%AC/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2025/04/29/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E6%88%AA%E5%8F%96%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E6%B5%81%E5%86%99%E6%97%A5%E5%BF%97%E7%9A%84%E7%AE%80%E5%8D%95%E8%84%9A%E6%9C%AC/","path":"2025/04/29/机器学习/截取输入输出流写日志的简单脚本/","title":"截取输入输出流写日志的简单脚本"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>截取输入输出流写日志的简单脚本 | Tiger_pop's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="Tiger_pop's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Tiger_pop's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">tiger_pop 的博客</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AE%80%E5%8D%95%E7%9A%84%E4%BE%8B%E5%AD%90A-gt-B"><span class="nav-number">1.</span> <span class="nav-text">简单的例子A -&gt; B</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0%E8%84%9A%E6%9C%AC"><span class="nav-number">2.</span> <span class="nav-text">实现脚本</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="陈宇韶chenyushao"
+      src="/images/my.jpg">
+  <p class="site-author-name" itemprop="name">陈宇韶chenyushao</p>
+  <div class="site-description" itemprop="description">爱学习、爱工作、爱生活;         微信号: Tiger_and_master;         手机号码:18515678348 </div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">427</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">201</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2025/04/29/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E6%88%AA%E5%8F%96%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E6%B5%81%E5%86%99%E6%97%A5%E5%BF%97%E7%9A%84%E7%AE%80%E5%8D%95%E8%84%9A%E6%9C%AC/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/my.jpg">
+      <meta itemprop="name" content="陈宇韶chenyushao">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tiger_pop's Blog">
+      <meta itemprop="description" content="爱学习、爱工作、爱生活;         微信号: Tiger_and_master;         手机号码:18515678348 ">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="截取输入输出流写日志的简单脚本 | Tiger_pop's Blog">
+      <meta itemprop="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          截取输入输出流写日志的简单脚本
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2025-04-29 12:08:08" itemprop="dateCreated datePublished" datetime="2025-04-29T12:08:08+08:00">2025-04-29</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-04-30 10:59:53" itemprop="dateModified" datetime="2025-04-30T10:59:53+08:00">2025-04-30</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+            <div class="post-description">这是文章开头，显示在主页面，详情请点击此处。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="简单的例子A-gt-B"><a href="#简单的例子A-gt-B" class="headerlink" title="简单的例子A -&gt; B"></a>简单的例子A -&gt; B</h1><p>A -&gt; B  </p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 创建管道：获取读端和写端的文件描述符</span></span><br><span class="line">read_fd, write_fd = os.pipe()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 启动进程A（生产者）</span></span><br><span class="line">process_a = Popen(</span><br><span class="line">    [<span class="string">&quot;python&quot;</span>, <span class="string">&quot;-c&quot;</span>, <span class="string">&quot;import sys; print(&#x27;Hello from A!&#x27;); sys.stdout.flush()&quot;</span>],</span><br><span class="line">    stdout=write_fd,  <span class="comment"># 将A的stdout重定向到管道的写端，理解成指针。</span></span><br><span class="line">    close_fds=<span class="literal">True</span>    <span class="comment"># 关闭其他无关文件描述符</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 启动进程B（消费者）</span></span><br><span class="line">process_b = Popen(</span><br><span class="line">    [<span class="string">&quot;python&quot;</span>, <span class="string">&quot;-c&quot;</span>, <span class="string">&quot;import sys; print(&#x27;B received:&#x27;, sys.stdin.readline().strip())&quot;</span>],</span><br><span class="line">    stdin=read_fd,    <span class="comment"># 将B的stdin重定向到管道的读端，理解成指针。</span></span><br><span class="line">    close_fds=<span class="literal">True</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<p>开 子进程 A 和 B。<br><strong>子进程</strong>里写的 <code>sys.stdout.flush()</code>、<code>sys.stdin.readline()</code>，都是<strong>对子进程自己来说</strong>的！默认 sys.stdout到屏幕，sys.stdin从键盘读，但是我们给它重定向到pipe管道的两端。</p>
+<p>read_fd, write_fd &#x3D; os.pipe()</p>
+<ul>
+<li>创建了一个<strong>匿名管道</strong>，得到两个文件描述符：<ul>
+<li><code>read_fd</code> 是<strong>读端</strong>，只能用来给别人读。</li>
+<li><code>write_fd</code> 是<strong>写端</strong>，只能给别人写入。</li>
+</ul>
+</li>
+</ul>
+<p><code>sys</code>模块是干什么的？</p>
+<ul>
+<li><code>sys</code>模块是Python里访问<strong>自己进程</strong>的<code>stdin</code>、<code>stdout</code>、<code>stderr</code>的一个接口。</li>
+</ul>
+<h1 id="实现脚本"><a href="#实现脚本" class="headerlink" title="实现脚本"></a>实现脚本</h1><p><img src="/2025/04/29/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E6%88%AA%E5%8F%96%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E6%B5%81%E5%86%99%E6%97%A5%E5%BF%97%E7%9A%84%E7%AE%80%E5%8D%95%E8%84%9A%E6%9C%AC/%E6%88%AA%E5%B1%8F2025-04-26%2021.12.21.png" alt="截屏2025-04-26 21.12.21"></p>
+<p><strong>脚本目的：实现对一个进程的输入输出流的截获</strong></p>
+<p>我们先理清一个逻辑：<br>        直接运行 一个 脚本A 如果能直接和 B 通信，那么我们只需要 用 C 包裹住 A ，确保 A 的所有输入 均 来自 C 的输出，确保 A 的所有输出均 运达 C 的 输入，就能让外人 以为 C 就是 A，来进行通信，这里是不需要管 C 输出到 B ，B 的输出运达 C 这一端的！！！<br>        至于 A 是怎么 和 B 建立起通信的，B 是怎么和 A 建立起 通信的，这个 我们不考虑。</p>
+<p>先理解上面的逻辑很有必要。<br>说说 设计思路：<br>1、 python 脚本.py uv XXX.py  XXX  XXX 中，【uv XXX.py  XXX  XXX】是被包裹的A ，我们在 【脚本.py】中开启一个 子进程 来实现它。<br>2、我们在 【脚本.py】中 开启三个 线程 来实现 对 A 正常输入、输出和错误输出的 拦截对接；</p>
+<p>3、python 脚本.py uv XXX.py  XXX  XXX 就是 前面逻辑的C。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br></pre></td><td class="code"><pre><span class="line">vim mcp_logger.py</span><br><span class="line">------------------------ mcp_logger.py -----------------------</span><br><span class="line"><span class="comment">#!/usr/bin/env python3</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="keyword">import</span> subprocess</span><br><span class="line"><span class="keyword">import</span> threading</span><br><span class="line"><span class="keyword">import</span> argparse</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"></span><br><span class="line"><span class="comment"># --- Configuration ---</span></span><br><span class="line">LOG_FILE = os.path.join(os.path.dirname(os.path.realpath(__file__)), <span class="string">&quot;mcp_io.log&quot;</span>)</span><br><span class="line"><span class="comment"># --- End Configuration ---</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># --- Argument Parsing ---</span></span><br><span class="line">parser = argparse.ArgumentParser(</span><br><span class="line">    description=<span class="string">&quot;Wrap a command, passing STDIN/STDOUT verbatim while logging them.&quot;</span>,</span><br><span class="line">    usage=<span class="string">&quot;%(prog)s &lt;command&gt; [args...]&quot;</span></span><br><span class="line">)</span><br><span class="line"><span class="comment"># Capture the command and all subsequent arguments</span></span><br><span class="line">parser.add_argument(<span class="string">&#x27;command&#x27;</span>, nargs=argparse.REMAINDER,</span><br><span class="line">                    <span class="built_in">help</span>=<span class="string">&#x27;The command and its arguments to execute.&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">open</span>(LOG_FILE, <span class="string">&#x27;w&#x27;</span>, encoding=<span class="string">&#x27;utf-8&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> <span class="built_in">len</span>(sys.argv) == <span class="number">1</span>:</span><br><span class="line">    parser.print_help(sys.stderr)</span><br><span class="line">    sys.exit(<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">args = parser.parse_args()</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> <span class="keyword">not</span> args.command:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Error: No command provided.&quot;</span>, file=sys.stderr)</span><br><span class="line">    parser.print_help(sys.stderr)</span><br><span class="line">    sys.exit(<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">target_command = args.command</span><br><span class="line"><span class="comment"># --- End Argument Parsing ---</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># --- I/O Forwarding Functions ---</span></span><br><span class="line"><span class="comment"># These will run in separate threads</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">forward_and_log_stdin</span>(<span class="params">proxy_stdin, target_stdin, log_file</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;Reads from proxy&#x27;s stdin, logs it, writes to target&#x27;s stdin.&quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">            <span class="comment"># Read line by line from the script&#x27;s actual stdin</span></span><br><span class="line">            line_bytes = proxy_stdin.readline()</span><br><span class="line">            <span class="keyword">if</span> <span class="keyword">not</span> line_bytes:  <span class="comment"># EOF reached</span></span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line"></span><br><span class="line">            <span class="comment"># Decode for logging (assuming UTF-8, adjust if needed)</span></span><br><span class="line">            <span class="keyword">try</span>:</span><br><span class="line">                 line_str = line_bytes.decode(<span class="string">&#x27;utf-8&#x27;</span>)</span><br><span class="line">            <span class="keyword">except</span> UnicodeDecodeError:</span><br><span class="line">                 line_str = <span class="string">f&quot;[Non-UTF8 data, <span class="subst">&#123;<span class="built_in">len</span>(line_bytes)&#125;</span> bytes]\n&quot;</span> <span class="comment"># Log representation</span></span><br><span class="line"></span><br><span class="line">            <span class="comment"># Log with prefix</span></span><br><span class="line">            log_file.write(<span class="string">f&quot;输入: <span class="subst">&#123;line_str&#125;</span>&quot;</span>)</span><br><span class="line">            log_file.flush() <span class="comment"># Ensure log is written promptly</span></span><br><span class="line"></span><br><span class="line">            <span class="comment"># Write the original bytes to the target process&#x27;s stdin</span></span><br><span class="line">            target_stdin.write(line_bytes)</span><br><span class="line">            target_stdin.flush() <span class="comment"># Ensure target receives it promptly</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">        <span class="comment"># Log errors happening during forwarding</span></span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            log_file.write(<span class="string">f&quot;!!! STDIN Forwarding Error: <span class="subst">&#123;e&#125;</span>\n&quot;</span>)</span><br><span class="line">            log_file.flush()</span><br><span class="line">        <span class="keyword">except</span>: <span class="keyword">pass</span> <span class="comment"># Avoid errors trying to log errors if log file is broken</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">finally</span>:</span><br><span class="line">        <span class="comment"># Important: Close the target&#x27;s stdin when proxy&#x27;s stdin closes</span></span><br><span class="line">        <span class="comment"># This signals EOF to the target process (like test.sh&#x27;s read loop)</span></span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            target_stdin.close()</span><br><span class="line">            log_file.write(<span class="string">&quot;--- STDIN stream closed to target ---\n&quot;</span>)</span><br><span class="line">            log_file.flush()</span><br><span class="line">        <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">             <span class="keyword">try</span>:</span><br><span class="line">                log_file.write(<span class="string">f&quot;!!! Error closing target STDIN: <span class="subst">&#123;e&#125;</span>\n&quot;</span>)</span><br><span class="line">                log_file.flush()</span><br><span class="line">             <span class="keyword">except</span>: <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">forward_and_log_stdout</span>(<span class="params">target_stdout, proxy_stdout, log_file</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;Reads from target&#x27;s stdout, logs it, writes to proxy&#x27;s stdout.&quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">            <span class="comment"># Read line by line from the target process&#x27;s stdout</span></span><br><span class="line">            line_bytes = target_stdout.readline()</span><br><span class="line">            <span class="keyword">if</span> <span class="keyword">not</span> line_bytes: <span class="comment"># EOF reached (process exited or closed stdout)</span></span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line"></span><br><span class="line">            <span class="comment"># Decode for logging</span></span><br><span class="line">            <span class="keyword">try</span>:</span><br><span class="line">                 line_str = line_bytes.decode(<span class="string">&#x27;utf-8&#x27;</span>)</span><br><span class="line">            <span class="keyword">except</span> UnicodeDecodeError:</span><br><span class="line">                 line_str = <span class="string">f&quot;[Non-UTF8 data, <span class="subst">&#123;<span class="built_in">len</span>(line_bytes)&#125;</span> bytes]\n&quot;</span></span><br><span class="line"></span><br><span class="line">            <span class="comment"># Log with prefix</span></span><br><span class="line">            log_file.write(<span class="string">f&quot;输出: <span class="subst">&#123;line_str&#125;</span>&quot;</span>)</span><br><span class="line">            log_file.flush()</span><br><span class="line"></span><br><span class="line">            <span class="comment"># Write the original bytes to the script&#x27;s actual stdout</span></span><br><span class="line">            proxy_stdout.write(line_bytes)</span><br><span class="line">            proxy_stdout.flush() <span class="comment"># Ensure output is seen promptly</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            log_file.write(<span class="string">f&quot;!!! STDOUT Forwarding Error: <span class="subst">&#123;e&#125;</span>\n&quot;</span>)</span><br><span class="line">            log_file.flush()</span><br><span class="line">        <span class="keyword">except</span>: <span class="keyword">pass</span></span><br><span class="line">    <span class="keyword">finally</span>:</span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            log_file.flush()</span><br><span class="line">        <span class="keyword">except</span>: <span class="keyword">pass</span></span><br><span class="line">        <span class="comment"># Don&#x27;t close proxy_stdout (sys.stdout) here</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># --- Main Execution ---</span></span><br><span class="line">process = <span class="literal">None</span></span><br><span class="line">log_f = <span class="literal">None</span></span><br><span class="line">exit_code = <span class="number">1</span> <span class="comment"># Default exit code in case of early failure</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    <span class="comment"># Open log file in append mode (&#x27;a&#x27;) for the threads</span></span><br><span class="line">    log_f = <span class="built_in">open</span>(LOG_FILE, <span class="string">&#x27;a&#x27;</span>, encoding=<span class="string">&#x27;utf-8&#x27;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># Start the target process</span></span><br><span class="line">    <span class="comment"># We use pipes for stdin/stdout</span></span><br><span class="line">    <span class="comment"># We work with bytes (bufsize=0 for unbuffered binary, readline() still works)</span></span><br><span class="line">    <span class="comment"># stderr=subprocess.PIPE could be added to capture stderr too if needed.</span></span><br><span class="line">    process = subprocess.Popen(</span><br><span class="line">        target_command,</span><br><span class="line">        stdin=subprocess.PIPE,</span><br><span class="line">        stdout=subprocess.PIPE,</span><br><span class="line">        stderr=subprocess.PIPE, <span class="comment"># Capture stderr too, good practice</span></span><br><span class="line">        bufsize=<span class="number">0</span> <span class="comment"># Use 0 for unbuffered binary I/O</span></span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line">    <span class="comment"># Pass binary streams to threads</span></span><br><span class="line">    stdin_thread = threading.Thread(</span><br><span class="line">        target=forward_and_log_stdin,</span><br><span class="line">        args=(sys.stdin.buffer, process.stdin, log_f),</span><br><span class="line">        daemon=<span class="literal">True</span> <span class="comment"># Allows main thread to exit even if this is stuck (e.g., waiting on stdin) - reconsider if explicit join is needed</span></span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line">    stdout_thread = threading.Thread(</span><br><span class="line">        target=forward_and_log_stdout,</span><br><span class="line">        args=(process.stdout, sys.stdout.buffer, log_f),</span><br><span class="line">        daemon=<span class="literal">True</span></span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line">    <span class="comment"># Optional: Handle stderr similarly (log and pass through)</span></span><br><span class="line">    stderr_thread = threading.Thread(</span><br><span class="line">        target=forward_and_log_stdout, <span class="comment"># Can reuse the function</span></span><br><span class="line">        args=(process.stderr, sys.stderr.buffer, log_f), <span class="comment"># Pass stderr streams</span></span><br><span class="line">        <span class="comment"># Add a different prefix in the function if needed, or modify function</span></span><br><span class="line">        <span class="comment"># For now, it will log with &quot;STDOUT:&quot; prefix - might want to change function</span></span><br><span class="line">        <span class="comment"># Let&#x27;s modify the function slightly for this</span></span><br><span class="line">        daemon=<span class="literal">True</span></span><br><span class="line">    )</span><br><span class="line">    <span class="comment"># A slightly modified version for stderr logging</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward_and_log_stderr</span>(<span class="params">target_stderr, proxy_stderr, log_file</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;Reads from target&#x27;s stderr, logs it, writes to proxy&#x27;s stderr.&quot;&quot;&quot;</span></span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">                line_bytes = target_stderr.readline()</span><br><span class="line">                <span class="keyword">if</span> <span class="keyword">not</span> line_bytes: <span class="keyword">break</span></span><br><span class="line">                <span class="keyword">try</span>: line_str = line_bytes.decode(<span class="string">&#x27;utf-8&#x27;</span>)</span><br><span class="line">                <span class="keyword">except</span> UnicodeDecodeError: line_str = <span class="string">f&quot;[Non-UTF8 data, <span class="subst">&#123;<span class="built_in">len</span>(line_bytes)&#125;</span> bytes]\n&quot;</span></span><br><span class="line">                log_file.write(<span class="string">f&quot;STDERR: <span class="subst">&#123;line_str&#125;</span>&quot;</span>) <span class="comment"># Use STDERR prefix</span></span><br><span class="line">                log_file.flush()</span><br><span class="line">                proxy_stderr.write(line_bytes)</span><br><span class="line">                proxy_stderr.flush()</span><br><span class="line">        <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">            <span class="keyword">try</span>:</span><br><span class="line">                log_file.write(<span class="string">f&quot;!!! STDERR Forwarding Error: <span class="subst">&#123;e&#125;</span>\n&quot;</span>)</span><br><span class="line">                log_file.flush()</span><br><span class="line">            <span class="keyword">except</span>: <span class="keyword">pass</span></span><br><span class="line">        <span class="keyword">finally</span>:</span><br><span class="line">            <span class="keyword">try</span>:</span><br><span class="line">                log_file.flush()</span><br><span class="line">            <span class="keyword">except</span>: <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line">    stderr_thread = threading.Thread(</span><br><span class="line">        target=forward_and_log_stderr,</span><br><span class="line">        args=(process.stderr, sys.stderr.buffer, log_f),</span><br><span class="line">        daemon=<span class="literal">True</span></span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment"># Start the forwarding threads</span></span><br><span class="line">    stdin_thread.start()</span><br><span class="line">    stdout_thread.start()</span><br><span class="line">    stderr_thread.start() <span class="comment"># Start stderr thread too</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># Wait for the target process to complete</span></span><br><span class="line">    process.wait()</span><br><span class="line">    exit_code = process.returncode</span><br><span class="line"></span><br><span class="line">    <span class="comment"># Wait briefly for I/O threads to finish flushing last messages</span></span><br><span class="line">    <span class="comment"># Since they are daemons, they might exit abruptly with the main thread.</span></span><br><span class="line">    <span class="comment"># Joining them ensures cleaner shutdown and logging.</span></span><br><span class="line">    <span class="comment"># We need to make sure the pipes are closed so the reads terminate.</span></span><br><span class="line">    <span class="comment"># process.wait() ensures target process is dead, pipes should close naturally.</span></span><br><span class="line">    stdin_thread.join(timeout=<span class="number">1.0</span>) <span class="comment"># Add timeout in case thread hangs</span></span><br><span class="line">    stdout_thread.join(timeout=<span class="number">1.0</span>)</span><br><span class="line">    stderr_thread.join(timeout=<span class="number">1.0</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;MCP Logger Error: <span class="subst">&#123;e&#125;</span>&quot;</span>, file=sys.stderr)</span><br><span class="line">    <span class="comment"># Try to log the error too</span></span><br><span class="line">    <span class="keyword">if</span> log_f <span class="keyword">and</span> <span class="keyword">not</span> log_f.closed:</span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            log_f.write(<span class="string">f&quot;!!! MCP Logger Main Error: <span class="subst">&#123;e&#125;</span>\n&quot;</span>)</span><br><span class="line">            log_f.flush()</span><br><span class="line">        <span class="keyword">except</span>: <span class="keyword">pass</span> <span class="comment"># Ignore errors during final logging attempt</span></span><br><span class="line">    exit_code = <span class="number">1</span> <span class="comment"># Indicate logger failure</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">finally</span>:</span><br><span class="line">    <span class="comment"># Ensure the process is terminated if it&#x27;s still running (e.g., if logger crashed)</span></span><br><span class="line">    <span class="keyword">if</span> process <span class="keyword">and</span> process.poll() <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            process.terminate()</span><br><span class="line">            process.wait(timeout=<span class="number">1.0</span>) <span class="comment"># Give it a moment to terminate</span></span><br><span class="line">        <span class="keyword">except</span>: <span class="keyword">pass</span> <span class="comment"># Ignore errors during cleanup</span></span><br><span class="line">        <span class="keyword">if</span> process.poll() <span class="keyword">is</span> <span class="literal">None</span>: <span class="comment"># Still running?</span></span><br><span class="line">             <span class="keyword">try</span>: process.kill() <span class="comment"># Force kill</span></span><br><span class="line">             <span class="keyword">except</span>: <span class="keyword">pass</span> <span class="comment"># Ignore kill errors</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># Final log message</span></span><br><span class="line">    <span class="keyword">if</span> log_f <span class="keyword">and</span> <span class="keyword">not</span> log_f.closed:</span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            log_f.close()</span><br><span class="line">        <span class="keyword">except</span>: <span class="keyword">pass</span> <span class="comment"># Ignore errors during final logging attempt</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># Exit with the target process&#x27;s exit code</span></span><br><span class="line">    sys.exit(exit_code)</span><br><span class="line">------------------------ mcp_logger.py -----------------------</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/MCP/" rel="tag"># MCP</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2025/04/27/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/MCP%E5%AD%A6%E4%B9%A0/" rel="prev" title="MCP学习">
+                  <i class="fa fa-chevron-left"></i> MCP学习
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2025/05/09/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/open%20webUI%E6%95%B0%E6%8D%AE%E5%BA%93%E9%94%81%E5%A4%84%E7%90%86%E4%BB%A5%E5%8F%8A%E6%95%B0%E6%8D%AE%E5%BA%93%E8%BF%81%E7%A7%BB/" rel="next" title="OpenwebUI数据库锁处理以及数据库迁移">
+                  OpenwebUI数据库锁处理以及数据库迁移 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">陈宇韶chenyushao</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

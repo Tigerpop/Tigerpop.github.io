@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha256-AbA177XfpSnFEvgpYu1jMygiLabzPCJCRIBtR5jGc0k=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.13.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="利用Dify+MCP开发定制功能Agent">
+<meta property="og:url" content="http://example.com/2025/06/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E5%88%A9%E7%94%A8Dify+MCP%E5%BC%80%E5%8F%91%E5%AE%9A%E5%88%B6%E5%8A%9F%E8%83%BDAgent/index.html">
+<meta property="og:site_name" content="Tiger_pop&#39;s Blog">
+<meta property="og:description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2025/06/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E5%88%A9%E7%94%A8Dify+MCP%E5%BC%80%E5%8F%91%E5%AE%9A%E5%88%B6%E5%8A%9F%E8%83%BDAgent/%E6%88%AA%E5%B1%8F2025-06-11%2009.44.21.jpg">
+<meta property="og:image" content="http://example.com/2025/06/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E5%88%A9%E7%94%A8Dify+MCP%E5%BC%80%E5%8F%91%E5%AE%9A%E5%88%B6%E5%8A%9F%E8%83%BDAgent/%E6%88%AA%E5%B1%8F2025-06-11%2009.48.57.jpg">
+<meta property="og:image" content="http://example.com/2025/06/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E5%88%A9%E7%94%A8Dify+MCP%E5%BC%80%E5%8F%91%E5%AE%9A%E5%88%B6%E5%8A%9F%E8%83%BDAgent/%E6%88%AA%E5%B1%8F2025-06-11%2010.01.51.jpg">
+<meta property="og:image" content="http://example.com/2025/06/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E5%88%A9%E7%94%A8Dify+MCP%E5%BC%80%E5%8F%91%E5%AE%9A%E5%88%B6%E5%8A%9F%E8%83%BDAgent/%E6%88%AA%E5%B1%8F2025-06-11%2010.08.10.jpg">
+<meta property="og:image" content="http://example.com/2025/06/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E5%88%A9%E7%94%A8Dify+MCP%E5%BC%80%E5%8F%91%E5%AE%9A%E5%88%B6%E5%8A%9F%E8%83%BDAgent/%E6%88%AA%E5%B1%8F2025-06-11%2010.50.14.jpg">
+<meta property="og:image" content="http://example.com/2025/06/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E5%88%A9%E7%94%A8Dify+MCP%E5%BC%80%E5%8F%91%E5%AE%9A%E5%88%B6%E5%8A%9F%E8%83%BDAgent/%E6%88%AA%E5%B1%8F2025-06-11%2010.21.04.jpg">
+<meta property="og:image" content="http://example.com/2025/06/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E5%88%A9%E7%94%A8Dify+MCP%E5%BC%80%E5%8F%91%E5%AE%9A%E5%88%B6%E5%8A%9F%E8%83%BDAgent/%E6%88%AA%E5%B1%8F2025-06-11%2010.24.34.jpg">
+<meta property="og:image" content="http://example.com/2025/06/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E5%88%A9%E7%94%A8Dify+MCP%E5%BC%80%E5%8F%91%E5%AE%9A%E5%88%B6%E5%8A%9F%E8%83%BDAgent/%E6%88%AA%E5%B1%8F2025-06-11%2010.27.35.jpg">
+<meta property="og:image" content="http://example.com/2025/06/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E5%88%A9%E7%94%A8Dify+MCP%E5%BC%80%E5%8F%91%E5%AE%9A%E5%88%B6%E5%8A%9F%E8%83%BDAgent/%E6%88%AA%E5%B1%8F2025-06-11%2010.37.12.jpg">
+<meta property="og:image" content="http://example.com/2025/06/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E5%88%A9%E7%94%A8Dify+MCP%E5%BC%80%E5%8F%91%E5%AE%9A%E5%88%B6%E5%8A%9F%E8%83%BDAgent/%E6%88%AA%E5%B1%8F2025-06-11%2010.46.48.jpg">
+<meta property="og:image" content="http://example.com/2025/06/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E5%88%A9%E7%94%A8Dify+MCP%E5%BC%80%E5%8F%91%E5%AE%9A%E5%88%B6%E5%8A%9F%E8%83%BDAgent/%E6%88%AA%E5%B1%8F2025-06-11%2015.17.30.jpg">
+<meta property="og:image" content="http://example.com/2025/06/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E5%88%A9%E7%94%A8Dify+MCP%E5%BC%80%E5%8F%91%E5%AE%9A%E5%88%B6%E5%8A%9F%E8%83%BDAgent/%E6%88%AA%E5%B1%8F2025-06-11%2016.05.45.jpg">
+<meta property="og:image" content="http://example.com/2025/06/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E5%88%A9%E7%94%A8Dify+MCP%E5%BC%80%E5%8F%91%E5%AE%9A%E5%88%B6%E5%8A%9F%E8%83%BDAgent/%E6%88%AA%E5%B1%8F2025-06-13%2011.11.59.jpg">
+<meta property="og:image" content="http://example.com/2025/06/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E5%88%A9%E7%94%A8Dify+MCP%E5%BC%80%E5%8F%91%E5%AE%9A%E5%88%B6%E5%8A%9F%E8%83%BDAgent/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20250613111943_1837.png">
+<meta property="og:image" content="http://example.com/2025/06/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E5%88%A9%E7%94%A8Dify+MCP%E5%BC%80%E5%8F%91%E5%AE%9A%E5%88%B6%E5%8A%9F%E8%83%BDAgent/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20250613203730_1914.png">
+<meta property="og:image" content="http://example.com/2025/06/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E5%88%A9%E7%94%A8Dify+MCP%E5%BC%80%E5%8F%91%E5%AE%9A%E5%88%B6%E5%8A%9F%E8%83%BDAgent/c8f2b1f5-c3e7-4015-8b5a-0a6239c7e482.png">
+<meta property="og:image" content="http://example.com/2025/06/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E5%88%A9%E7%94%A8Dify+MCP%E5%BC%80%E5%8F%91%E5%AE%9A%E5%88%B6%E5%8A%9F%E8%83%BDAgent/%E6%88%AA%E5%B1%8F2025-06-11%2022.32.36.jpg">
+<meta property="og:image" content="http://example.com/2025/06/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E5%88%A9%E7%94%A8Dify+MCP%E5%BC%80%E5%8F%91%E5%AE%9A%E5%88%B6%E5%8A%9F%E8%83%BDAgent/%E6%88%AA%E5%B1%8F2025-06-11%2022.36.24.jpg">
+<meta property="og:image" content="http://example.com/2025/06/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E5%88%A9%E7%94%A8Dify+MCP%E5%BC%80%E5%8F%91%E5%AE%9A%E5%88%B6%E5%8A%9F%E8%83%BDAgent/%E6%88%AA%E5%B1%8F2025-06-11%2015.58.14.jpg">
+<meta property="og:image" content="http://example.com/2025/06/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E5%88%A9%E7%94%A8Dify+MCP%E5%BC%80%E5%8F%91%E5%AE%9A%E5%88%B6%E5%8A%9F%E8%83%BDAgent/%E6%88%AA%E5%B1%8F2025-06-11%2016.00.58.jpg">
+<meta property="og:image" content="http://example.com/2025/06/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E5%88%A9%E7%94%A8Dify+MCP%E5%BC%80%E5%8F%91%E5%AE%9A%E5%88%B6%E5%8A%9F%E8%83%BDAgent/%E6%88%AA%E5%B1%8F2025-06-11%2016.02.44.jpg">
+<meta property="article:published_time" content="2025-06-13T12:27:21.000Z">
+<meta property="article:modified_time" content="2025-08-25T02:26:52.991Z">
+<meta property="article:author" content="陈宇韶chenyushao">
+<meta property="article:tag" content="dify">
+<meta property="article:tag" content="MCP">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2025/06/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E5%88%A9%E7%94%A8Dify+MCP%E5%BC%80%E5%8F%91%E5%AE%9A%E5%88%B6%E5%8A%9F%E8%83%BDAgent/%E6%88%AA%E5%B1%8F2025-06-11%2009.44.21.jpg">
+
+
+<link rel="canonical" href="http://example.com/2025/06/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E5%88%A9%E7%94%A8Dify+MCP%E5%BC%80%E5%8F%91%E5%AE%9A%E5%88%B6%E5%8A%9F%E8%83%BDAgent/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2025/06/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E5%88%A9%E7%94%A8Dify+MCP%E5%BC%80%E5%8F%91%E5%AE%9A%E5%88%B6%E5%8A%9F%E8%83%BDAgent/","path":"2025/06/13/机器学习/利用Dify+MCP开发定制功能Agent/","title":"利用Dify+MCP开发定制功能Agent"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>利用Dify+MCP开发定制功能Agent | Tiger_pop's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="Tiger_pop's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Tiger_pop's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">tiger_pop 的博客</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E5%9B%BD%E5%86%85MCP%E5%B8%82%E5%9C%BA"><span class="nav-number">1.</span> <span class="nav-text">使用国内MCP市场</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%A5%E9%AB%98%E5%BE%B7%E5%9C%B0%E5%9B%BEMCP%E4%B8%BA%E4%BE%8B"><span class="nav-number">2.</span> <span class="nav-text">以高德地图MCP为例</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%8E%B7%E5%8F%96json%E9%85%8D%E7%BD%AE"><span class="nav-number">2.1.</span> <span class="nav-text">获取json配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8E%BBMCP%E8%AF%95%E9%AA%8C%E5%9C%BA%E6%B5%8B%E8%AF%95"><span class="nav-number">2.2.</span> <span class="nav-text">去MCP试验场测试</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9C%A8Dify%E4%B8%AD%E6%B7%BB%E5%8A%A0MCP"><span class="nav-number">2.3.</span> <span class="nav-text">在Dify中添加MCP</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%94%A8%E8%87%AA%E5%B7%B1%E7%9A%84MCP"><span class="nav-number">3.</span> <span class="nav-text">用自己的MCP</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%81%87%E5%88%B0%E7%9A%84%E8%8B%A5%E5%B9%B2%E9%97%AE%E9%A2%98"><span class="nav-number">4.</span> <span class="nav-text">遇到的若干问题</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1%E3%80%81Dify-%E4%B8%AD-%E4%B8%8D%E8%83%BD%E5%9C%A8%E5%BA%94%E7%94%A8%E5%B8%82%E5%9C%BA%E4%B8%AD%E4%B8%80%E9%94%AE%E5%AE%89%E8%A3%85%E6%8F%92%E4%BB%B6"><span class="nav-number">4.1.</span> <span class="nav-text">1、Dify 中 不能在应用市场中一键安装插件</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%80%E4%BA%9B%E6%A6%82%E5%BF%B5%E7%9A%84%E7%90%86%E8%A7%A3"><span class="nav-number">5.</span> <span class="nav-text">一些概念的理解</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1%E3%80%81uv-uvx-%E7%AD%89-%E6%9C%AC%E5%9C%B0%E9%83%A8%E7%BD%B2MCP-server"><span class="nav-number">5.1.</span> <span class="nav-text">1、uv uvx 等 本地部署MCP server</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2%E3%80%81sse-%E8%B0%83%E7%94%A8%E7%AC%AC%E4%B8%89%E6%96%B9%E5%9C%A8%E7%BA%BF%E6%9C%8D%E5%8A%A1-MCP-server"><span class="nav-number">5.2.</span> <span class="nav-text">2、sse 调用第三方在线服务 MCP server</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="陈宇韶chenyushao"
+      src="/images/my.jpg">
+  <p class="site-author-name" itemprop="name">陈宇韶chenyushao</p>
+  <div class="site-description" itemprop="description">爱学习、爱工作、爱生活;         微信号: Tiger_and_master;         手机号码:18515678348 </div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">427</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">201</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2025/06/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E5%88%A9%E7%94%A8Dify+MCP%E5%BC%80%E5%8F%91%E5%AE%9A%E5%88%B6%E5%8A%9F%E8%83%BDAgent/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/my.jpg">
+      <meta itemprop="name" content="陈宇韶chenyushao">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tiger_pop's Blog">
+      <meta itemprop="description" content="爱学习、爱工作、爱生活;         微信号: Tiger_and_master;         手机号码:18515678348 ">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="利用Dify+MCP开发定制功能Agent | Tiger_pop's Blog">
+      <meta itemprop="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          利用Dify+MCP开发定制功能Agent
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2025-06-13 20:27:21" itemprop="dateCreated datePublished" datetime="2025-06-13T20:27:21+08:00">2025-06-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-08-25 10:26:52" itemprop="dateModified" datetime="2025-08-25T10:26:52+08:00">2025-08-25</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+            <div class="post-description">这是文章开头，显示在主页面，详情请点击此处。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="使用国内MCP市场"><a href="#使用国内MCP市场" class="headerlink" title="使用国内MCP市场"></a>使用国内MCP市场</h1><p>Dify 和 MCP 我们之前 都学习过了，现在我们 来 搞一个 Dify 的chatflow ，其中用到 MCP。 </p>
+<p>MCP 市场 ，如 <a target="_blank" rel="noopener" href="https://mcp.so/">https://mcp.so/</a> 虽然很繁荣，但是都是 海外的，在大陆我们推荐还是使用 modelscope 社区的MCP广场 <a target="_blank" rel="noopener" href="https://www.modelscope.cn/mcp">https://www.modelscope.cn/mcp</a> 。</p>
+<p><img src="/2025/06/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E5%88%A9%E7%94%A8Dify+MCP%E5%BC%80%E5%8F%91%E5%AE%9A%E5%88%B6%E5%8A%9F%E8%83%BDAgent/%E6%88%AA%E5%B1%8F2025-06-11%2009.44.21.jpg" alt="截屏2025-06-11 09.44.21"></p>
+<h1 id="以高德地图MCP为例"><a href="#以高德地图MCP为例" class="headerlink" title="以高德地图MCP为例"></a>以高德地图MCP为例</h1><h2 id="获取json配置"><a href="#获取json配置" class="headerlink" title="获取json配置"></a>获取json配置</h2><p><img src="/2025/06/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E5%88%A9%E7%94%A8Dify+MCP%E5%BC%80%E5%8F%91%E5%AE%9A%E5%88%B6%E5%8A%9F%E8%83%BDAgent/%E6%88%AA%E5%B1%8F2025-06-11%2009.48.57.jpg" alt="截屏2025-06-11 09.48.57"></p>
+<p>点击 这个通用级 SSE 协议。</p>
+<p><img src="/2025/06/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E5%88%A9%E7%94%A8Dify+MCP%E5%BC%80%E5%8F%91%E5%AE%9A%E5%88%B6%E5%8A%9F%E8%83%BDAgent/%E6%88%AA%E5%B1%8F2025-06-11%2010.01.51.jpg" alt="截屏2025-06-11 10.01.51"></p>
+<p><img src="/2025/06/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E5%88%A9%E7%94%A8Dify+MCP%E5%BC%80%E5%8F%91%E5%AE%9A%E5%88%B6%E5%8A%9F%E8%83%BDAgent/%E6%88%AA%E5%B1%8F2025-06-11%2010.08.10.jpg" alt="截屏2025-06-11 10.08.10"></p>
+<p>在配置 APIkey 时可见高德的 这个MCP不仅仅是地图功能，还能使用 天气 行政区 等等功能。</p>
+<p><img src="/2025/06/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E5%88%A9%E7%94%A8Dify+MCP%E5%BC%80%E5%8F%91%E5%AE%9A%E5%88%B6%E5%8A%9F%E8%83%BDAgent/%E6%88%AA%E5%B1%8F2025-06-11%2010.50.14.jpg" alt="截屏2025-06-11 10.50.14"></p>
+<p>填写APIkey</p>
+<p><img src="/2025/06/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E5%88%A9%E7%94%A8Dify+MCP%E5%BC%80%E5%8F%91%E5%AE%9A%E5%88%B6%E5%8A%9F%E8%83%BDAgent/%E6%88%AA%E5%B1%8F2025-06-11%2010.21.04.jpg" alt="截屏2025-06-11 10.21.04"></p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;mcpServers&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;amap-maps&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;sse&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;url&quot;</span><span class="punctuation">:</span> <span class="string">&quot;https://mcp.api-inference.modelscope.net/ce3a4f094e6d48/sse&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/2025/06/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E5%88%A9%E7%94%A8Dify+MCP%E5%BC%80%E5%8F%91%E5%AE%9A%E5%88%B6%E5%8A%9F%E8%83%BDAgent/%E6%88%AA%E5%B1%8F2025-06-11%2010.24.34.jpg" alt="截屏2025-06-11 10.24.34"></p>
+<p><strong>注意：</strong><br>这个 mcpserver 的 URL地址是 <code>mcp.api-inference.modelscope.net</code>，这说明什么，说明这个URL是专门用来给modelscope的试验场用的，不要在后续自己正式的在MCP host 或者 Dify 中配置的时候，使用这个 mcp的json 配置！！！亲。</p>
+<h2 id="去MCP试验场测试"><a href="#去MCP试验场测试" class="headerlink" title="去MCP试验场测试"></a>去MCP试验场测试</h2><p>添加刚才的 json配置，点击保存。</p>
+<p><img src="/2025/06/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E5%88%A9%E7%94%A8Dify+MCP%E5%BC%80%E5%8F%91%E5%AE%9A%E5%88%B6%E5%8A%9F%E8%83%BDAgent/%E6%88%AA%E5%B1%8F2025-06-11%2010.27.35.jpg" alt="截屏2025-06-11 10.27.35"></p>
+<p>点击试验场的小扳手🔧图标，确保默认的 高德地图插件处于关闭状态，而我们刚刚保存的MCP server处于开启。</p>
+<p><img src="/2025/06/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E5%88%A9%E7%94%A8Dify+MCP%E5%BC%80%E5%8F%91%E5%AE%9A%E5%88%B6%E5%8A%9F%E8%83%BDAgent/%E6%88%AA%E5%B1%8F2025-06-11%2010.37.12.jpg" alt="截屏2025-06-11 10.37.12"></p>
+<p><img src="/2025/06/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E5%88%A9%E7%94%A8Dify+MCP%E5%BC%80%E5%8F%91%E5%AE%9A%E5%88%B6%E5%8A%9F%E8%83%BDAgent/%E6%88%AA%E5%B1%8F2025-06-11%2010.46.48.jpg" alt="截屏2025-06-11 10.46.48"></p>
+<p>它先查看了两地的天气，然后又规划了路线，由于我只在问题中说了潮汕，不是一个具体城市导致了 潮汕天气搜索失败，但是不影响大模型 思考了一下 用别的路线规划。</p>
+<h2 id="在Dify中添加MCP"><a href="#在Dify中添加MCP" class="headerlink" title="在Dify中添加MCP"></a>在Dify中添加MCP</h2><p>搜索安装Agent策略（支持MCP工具）。</p>
+<p><img src="/2025/06/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E5%88%A9%E7%94%A8Dify+MCP%E5%BC%80%E5%8F%91%E5%AE%9A%E5%88%B6%E5%8A%9F%E8%83%BDAgent/%E6%88%AA%E5%B1%8F2025-06-11%2015.17.30.jpg" alt="截屏2025-06-11 15.17.30"></p>
+<p><img src="/2025/06/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E5%88%A9%E7%94%A8Dify+MCP%E5%BC%80%E5%8F%91%E5%AE%9A%E5%88%B6%E5%8A%9F%E8%83%BDAgent/%E6%88%AA%E5%B1%8F2025-06-11%2016.05.45.jpg" alt="截屏2025-06-11 16.05.45"></p>
+<p>我这里新建了一个对话任务流，先对问题分类，然后接上了一个 agent，这个agent策略用的是 ReAct，模型还是本地的 70b的deepseek，工具添加了一个时间戳。</p>
+<p>MCP服务配置中不能填写前面的 json配置文件”mcpServers”: 包裹住的部分</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">   <span class="attr">&quot;amap-maps&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;sse&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;url&quot;</span><span class="punctuation">:</span> <span class="string">&quot;https://mcp.api-inference.modelscope.net/ce3a4f094e6d48/sse&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>而是要从高德MCP的文档中找到 快速使用的介绍</p>
+<p><img src="/2025/06/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E5%88%A9%E7%94%A8Dify+MCP%E5%BC%80%E5%8F%91%E5%AE%9A%E5%88%B6%E5%8A%9F%E8%83%BDAgent/%E6%88%AA%E5%B1%8F2025-06-13%2011.11.59.jpg" alt="截屏2025-06-13 11.11.59"></p>
+<p>用这个json配置</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;amap-amap-sse&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;url&quot;</span><span class="punctuation">:</span> <span class="string">&quot;https://mcp.amap.com/sse?key=您在高德官网上申请的key&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>可见<code>https://mcp.amap.com/sse</code> 这个就是 高德开放的mcp访问地址。 </p>
+<p>指令 写的是 <code>根据用户的问题选择 配置的MCP 工具amap-maps 查询结果来回答</code></p>
+<p><img src="/2025/06/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E5%88%A9%E7%94%A8Dify+MCP%E5%BC%80%E5%8F%91%E5%AE%9A%E5%88%B6%E5%8A%9F%E8%83%BDAgent/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20250613111943_1837.png" alt="微信图片_20250613111943_1837"></p>
+<p>迭代次数推荐 多一点。</p>
+<p>我用一个 问题 来测试      <code>请帮我规划一下长春的旅游规划，注意查看未来三天天气情况，下不下雨温度等等情况，根据这个情况来规划旅游。</code></p>
+<p>我们来分析一下 agent 的思考过程</p>
+<p><img src="/2025/06/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E5%88%A9%E7%94%A8Dify+MCP%E5%BC%80%E5%8F%91%E5%AE%9A%E5%88%B6%E5%8A%9F%E8%83%BDAgent/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20250613203730_1914.png" alt="微信图片_20250613203730_1914"></p>
+<p>round1 中有2个log ,<code>deepseek-r1-70b-AWQ Thought</code>  、<code>deepseek-r1-70b-AWQ Thought</code>。</p>
+<p><code>deepseek-r1-70b-AWQ Thought</code>  内容是</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;action&quot;</span><span class="punctuation">:</span> <span class="string">&quot;maps_weather&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;action_input&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;city&quot;</span><span class="punctuation">:</span> <span class="string">&quot;长春&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;thought&quot;</span><span class="punctuation">:</span> <span class="string">&quot;&lt;think&gt;\n好，用户希望规划长春的旅游，并关心未来三天的天气情况。首先，我需要查询长春接下来的三天天气，包括天气情况和温度。\n\n使用maps_weather工具，传入城市名称“长春”获取天气数据。假设接下来的三天分别是晴天、多云和小雨天，温度在20°C左右。\n\n根据天气情况，制定适合的旅游计划。晴天适合户外活动，像伪满皇宫和净月潭公园都是不错的选择。多云适合文化景点，如长影世纪城。预计到第三天有小雨，应选择带有室内展区的景点，如长春电影博物馆。\n\n参考高德地图的信息，规划景点之间的路线和交通方式，建议合理安排时间，避免因天气原因造成的不便。\n\n因此，建议用户按天气情况分别安排光顾的景点，确保旅途顺利且乐趣多样。\n&lt;/think&gt;&quot;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p><code>deepseek-r1-70b-AWQ Thought</code> 内容是</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;output&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Tool execution result: [&#123;&#x27;type&#x27;: &#x27;text&#x27;, &#x27;text&#x27;: &#x27;&#123;\&quot;city\&quot;:\&quot;长春市\&quot;,\&quot;forecasts\&quot;:[&#123;\&quot;date\&quot;:\&quot;2025-06-13\&quot;,\&quot;week\&quot;:\&quot;5\&quot;,\&quot;dayweather\&quot;:\&quot;多云\&quot;,\&quot;nightweather\&quot;:\&quot;阴\&quot;,\&quot;daytemp\&quot;:\&quot;29\&quot;,\&quot;nighttemp\&quot;:\&quot;18\&quot;,\&quot;daywind\&quot;:\&quot;西南\&quot;,\&quot;nightwind\&quot;:\&quot;西南\&quot;,\&quot;daypower\&quot;:\&quot;1-3\&quot;,\&quot;nightpower\&quot;:\&quot;1-3\&quot;,\&quot;daytemp_float\&quot;:\&quot;29.0\&quot;,\&quot;nighttemp_float\&quot;:\&quot;18.0\&quot;&#125;,&#123;\&quot;date\&quot;:\&quot;2025-06-14\&quot;,\&quot;week\&quot;:\&quot;6\&quot;,\&quot;dayweather\&quot;:\&quot;多云\&quot;,\&quot;nightweather\&quot;:\&quot;阴\&quot;,\&quot;daytemp\&quot;:\&quot;28\&quot;,\&quot;nighttemp\&quot;:\&quot;19\&quot;,\&quot;daywind\&quot;:\&quot;西南\&quot;,\&quot;nightwind\&quot;:\&quot;西南\&quot;,\&quot;daypower\&quot;:\&quot;1-3\&quot;,\&quot;nightpower\&quot;:\&quot;1-3\&quot;,\&quot;daytemp_float\&quot;:\&quot;28.0\&quot;,\&quot;nighttemp_float\&quot;:\&quot;19.0\&quot;&#125;,&#123;\&quot;date\&quot;:\&quot;2025-06-15\&quot;,\&quot;week\&quot;:\&quot;7\&quot;,\&quot;dayweather\&quot;:\&quot;雷阵雨\&quot;,\&quot;nightweather\&quot;:\&quot;雷阵雨\&quot;,\&quot;daytemp\&quot;:\&quot;25\&quot;,\&quot;nighttemp\&quot;:\&quot;19\&quot;,\&quot;daywind\&quot;:\&quot;东\&quot;,\&quot;nightwind\&quot;:\&quot;东\&quot;,\&quot;daypower\&quot;:\&quot;1-3\&quot;,\&quot;nightpower\&quot;:\&quot;1-3\&quot;,\&quot;daytemp_float\&quot;:\&quot;25.0\&quot;,\&quot;nighttemp_float\&quot;:\&quot;19.0\&quot;&#125;,&#123;\&quot;date\&quot;:\&quot;2025-06-16\&quot;,\&quot;week\&quot;:\&quot;1\&quot;,\&quot;dayweather\&quot;:\&quot;阴\&quot;,\&quot;nightweather\&quot;:\&quot;多云\&quot;,\&quot;daytemp\&quot;:\&quot;26\&quot;,\&quot;nighttemp\&quot;:\&quot;15\&quot;,\&quot;daywind\&quot;:\&quot;东南\&quot;,\&quot;nightwind\&quot;:\&quot;东南\&quot;,\&quot;daypower\&quot;:\&quot;1-3\&quot;,\&quot;nightpower\&quot;:\&quot;1-3\&quot;,\&quot;daytemp_float\&quot;:\&quot;26.0\&quot;,\&quot;nighttemp_float\&quot;:\&quot;15.0\&quot;&#125;]&#125;&#x27;&#125;]&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;tool_call_args&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;city&quot;</span><span class="punctuation">:</span> <span class="string">&quot;长春&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;tool_name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;maps_weather&quot;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>round2 中有1个log ,<code>deepseek-r1-70b-AWQ Thought</code>  内容是</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;action&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Final Answer&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;action_input&quot;</span><span class="punctuation">:</span> <span class="string">&quot;根据长春未来三天的天气情况，天气主要以多云和雷阵雨为主，温度在15°C到29°C之间。建议您做好雨具准备，以下是为您规划的旅游行程：\n  第 1 天：游览净月潭公园和长影世纪城，适合户外活动。\n  第 2 天：探访伪满皇宫和长春世界雕塑公园。\n  第 3 天：（雷阵雨）建议安排室内活动，如长春电影城市和博物馆。\n  第 4 天：（阴天）适合步行游览南湖公园和致远市场。\n  希望这能帮助您顺利进行旅游!&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;thought&quot;</span><span class="punctuation">:</span> <span class="string">&quot;&lt;think&gt;\n好，我先看看用户的需求。用户想要规划长春的旅游，特别关注未来三天的天气情况，包括是否下雨和温度，这样可以根据这些信息来安排行程。\n\n首先，我需要调用高德地图的天气API，查询长春市接下来的三天的天气情况。确保获取的信息准确，包括每天的天气状况、温度和风力等。\n\n接下来，分析天气数据。第一个两天是多云，气温适中，适合外出游览。第三天有雷阵雨，最好避免在户外活动。第四天则是阴天，仍然适合游览。\n\n然后，考虑长春的主要景点，如净月潭公园、长影世纪城、伪满皇宫等，确保在晴天安排户外活动，在可能有雨的天气安排室内景点。\n\n最后，综合天气情况，制定一个详细的每日行程，确保游客能合理安排时间，享受旅游行程而不受到天气影响。\n&lt;/think&gt;&quot;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>我在预览中运行一下，发现 和 前面 agent 试运行的时候是不一样的回答，说明 deepseek 思考过程每一次都有不一样。这次就没有 调用温度查询的 内容。</p>
+<p><img src="/2025/06/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E5%88%A9%E7%94%A8Dify+MCP%E5%BC%80%E5%8F%91%E5%AE%9A%E5%88%B6%E5%8A%9F%E8%83%BDAgent/c8f2b1f5-c3e7-4015-8b5a-0a6239c7e482.png" alt="c8f2b1f5-c3e7-4015-8b5a-0a6239c7e482"></p>
+<h1 id="用自己的MCP"><a href="#用自己的MCP" class="headerlink" title="用自己的MCP"></a>用自己的MCP</h1><p>下载插件 MCP SSE</p>
+<p><img src="/2025/06/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E5%88%A9%E7%94%A8Dify+MCP%E5%BC%80%E5%8F%91%E5%AE%9A%E5%88%B6%E5%8A%9F%E8%83%BDAgent/%E6%88%AA%E5%B1%8F2025-06-11%2022.32.36.jpg" alt="截屏2025-06-11 22.32.36"></p>
+<p>在MCP SSE 插件的授权中，写上 我们自己写的 MCP server的 服务器名和 开放连接的IP:port 。<br>这里是可以添加多个 自己写的 MCP server。</p>
+<p><img src="/2025/06/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E5%88%A9%E7%94%A8Dify+MCP%E5%BC%80%E5%8F%91%E5%AE%9A%E5%88%B6%E5%8A%9F%E8%83%BDAgent/%E6%88%AA%E5%B1%8F2025-06-11%2022.36.24.jpg" alt="截屏2025-06-11 22.36.24"></p>
+<p>注意一下 这个 json配置 中最好不要有空格。</p>
+<h1 id="遇到的若干问题"><a href="#遇到的若干问题" class="headerlink" title="遇到的若干问题"></a>遇到的若干问题</h1><h2 id="1、Dify-中-不能在应用市场中一键安装插件"><a href="#1、Dify-中-不能在应用市场中一键安装插件" class="headerlink" title="1、Dify 中 不能在应用市场中一键安装插件"></a>1、Dify 中 不能在应用市场中一键安装插件</h2><p>解决办法：先下载，再手动安装。</p>
+<p><img src="/2025/06/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E5%88%A9%E7%94%A8Dify+MCP%E5%BC%80%E5%8F%91%E5%AE%9A%E5%88%B6%E5%8A%9F%E8%83%BDAgent/%E6%88%AA%E5%B1%8F2025-06-11%2015.58.14.jpg" alt="截屏2025-06-11 15.58.14"></p>
+<p><img src="/2025/06/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E5%88%A9%E7%94%A8Dify+MCP%E5%BC%80%E5%8F%91%E5%AE%9A%E5%88%B6%E5%8A%9F%E8%83%BDAgent/%E6%88%AA%E5%B1%8F2025-06-11%2016.00.58.jpg" alt="截屏2025-06-11 16.00.58"></p>
+<p>可见在我的插件中已经有了 这个新下载的插件。</p>
+<p><img src="/2025/06/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E5%88%A9%E7%94%A8Dify+MCP%E5%BC%80%E5%8F%91%E5%AE%9A%E5%88%B6%E5%8A%9F%E8%83%BDAgent/%E6%88%AA%E5%B1%8F2025-06-11%2016.02.44.jpg" alt="截屏2025-06-11 16.02.44"></p>
+<h1 id="一些概念的理解"><a href="#一些概念的理解" class="headerlink" title="一些概念的理解"></a>一些概念的理解</h1><h2 id="1、uv-uvx-等-本地部署MCP-server"><a href="#1、uv-uvx-等-本地部署MCP-server" class="headerlink" title="1、uv uvx 等 本地部署MCP server"></a>1、uv uvx 等 本地部署MCP server</h2><p>uv 和 uvx 都是全局的，uvx 带运行的意思，uv 有点 pip 的意思，但是以文件夹为单位进行了隔离，每个 运行的文件夹会生成一个 .venv 文件夹，里面存各种下载的包。<br><strong>本地部署MCP server</strong></p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">&quot;fetch&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;command&quot;</span><span class="punctuation">:</span> <span class="string">&quot;/Users/chenyushao/.local/bin/uvx&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;args&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;mcp-server-fetch&quot;</span><span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>在配置文件中如果没有写具体在哪个文件夹中运行 ，那 <code>.venv</code> 会在哪里？</p>
+<blockquote>
+<p>答案是：取决于 <strong>运行这个命令时的“当前工作目录”</strong>（working directory）。</p>
+</blockquote>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">&quot;weather&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;command&quot;</span><span class="punctuation">:</span> <span class="string">&quot;/Users/chenyushao/.local/bin/uv&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;args&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">     <span class="string">&quot;--directory&quot;</span><span class="punctuation">,</span></span><br><span class="line">     <span class="string">&quot;/Users/chenyushao/mcp_server/weather-mcp&quot;</span><span class="punctuation">,</span></span><br><span class="line">     <span class="string">&quot;run&quot;</span><span class="punctuation">,</span></span><br><span class="line">     <span class="string">&quot;-m&quot;</span><span class="punctuation">,</span></span><br><span class="line">     <span class="string">&quot;weather_mcp_server.main&quot;</span><span class="punctuation">,</span></span><br><span class="line">     <span class="string">&quot;--api-key&quot;</span><span class="punctuation">,</span></span><br><span class="line">     <span class="string">&quot;xxx&quot;</span></span><br><span class="line">  <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>而配置文件 写明了 –directory，.venv 自然会在 这个 指定的文件夹中。</p>
+<h2 id="2、sse-调用第三方在线服务-MCP-server"><a href="#2、sse-调用第三方在线服务-MCP-server" class="headerlink" title="2、sse 调用第三方在线服务 MCP server"></a>2、sse 调用第三方在线服务 MCP server</h2><p><strong>调用第三方在线服务 MCP server</strong></p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">&quot;amap-amap-sse&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;url&quot;</span><span class="punctuation">:</span> <span class="string">&quot;https://mcp.amap.com/sse?key=您在高德官网上申请的key&quot;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>SSE 全称是 <strong>Server-Sent Events</strong>，意思是：</p>
+<blockquote>
+<p><strong>服务器主动向客户端持续推送数据</strong>的一种 Web 通信方式。</p>
+</blockquote>
+<p>客户端只发一次请求，服务器就可以不断发送更新（比如天气、消息、进度），常用于实时数据流。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/dify/" rel="tag"># dify</a>
+              <a href="/tags/MCP/" rel="tag"># MCP</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2025/06/12/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/A2A%E5%AD%A6%E4%B9%A0/" rel="prev" title="A2A学习">
+                  <i class="fa fa-chevron-left"></i> A2A学习
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2025/08/08/%E7%A7%91%E5%AD%A6%E9%82%A3%E4%B8%AA%E4%B8%8A%E7%BD%91/%E8%8E%B7%E5%8F%96DigitalPlat%E5%85%8D%E8%B4%B9%E5%9F%9F%E5%90%8D/" rel="next" title="获取DigitalPlat免费域名">
+                  获取DigitalPlat免费域名 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">陈宇韶chenyushao</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha256-AbA177XfpSnFEvgpYu1jMygiLabzPCJCRIBtR5jGc0k=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.13.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="spark_dataFrame列的合并与拆分">
+<meta property="og:url" content="http://example.com/2022/10/29/spark%E5%AD%A6%E4%B9%A0/spark-dataFrame%E5%88%97%E7%9A%84%E5%90%88%E5%B9%B6%E4%B8%8E%E6%8B%86%E5%88%86/index.html">
+<meta property="og:site_name" content="Tiger_pop&#39;s Blog">
+<meta property="og:description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-10-29T14:40:29.000Z">
+<meta property="article:modified_time" content="2022-10-29T14:50:54.546Z">
+<meta property="article:author" content="陈宇韶chenyushao">
+<meta property="article:tag" content="dataFrame">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://example.com/2022/10/29/spark%E5%AD%A6%E4%B9%A0/spark-dataFrame%E5%88%97%E7%9A%84%E5%90%88%E5%B9%B6%E4%B8%8E%E6%8B%86%E5%88%86/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2022/10/29/spark%E5%AD%A6%E4%B9%A0/spark-dataFrame%E5%88%97%E7%9A%84%E5%90%88%E5%B9%B6%E4%B8%8E%E6%8B%86%E5%88%86/","path":"2022/10/29/spark学习/spark-dataFrame列的合并与拆分/","title":"spark_dataFrame列的合并与拆分"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>spark_dataFrame列的合并与拆分 | Tiger_pop's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="Tiger_pop's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Tiger_pop's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">tiger_pop 的博客</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%B3%A8%E6%84%8F%E7%82%B9%EF%BC%9A"><span class="nav-number">1.</span> <span class="nav-text">注意点：</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%88%B6%E4%BD%9C%E6%95%B0%E6%8D%AE"><span class="nav-number">2.</span> <span class="nav-text">制作数据</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0"><span class="nav-number">3.</span> <span class="nav-text">代码实现</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="陈宇韶chenyushao"
+      src="/images/my.jpg">
+  <p class="site-author-name" itemprop="name">陈宇韶chenyushao</p>
+  <div class="site-description" itemprop="description">爱学习、爱工作、爱生活;         微信号: Tiger_and_master;         手机号码:18515678348 </div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">427</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">201</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/10/29/spark%E5%AD%A6%E4%B9%A0/spark-dataFrame%E5%88%97%E7%9A%84%E5%90%88%E5%B9%B6%E4%B8%8E%E6%8B%86%E5%88%86/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/my.jpg">
+      <meta itemprop="name" content="陈宇韶chenyushao">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tiger_pop's Blog">
+      <meta itemprop="description" content="爱学习、爱工作、爱生活;         微信号: Tiger_and_master;         手机号码:18515678348 ">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="spark_dataFrame列的合并与拆分 | Tiger_pop's Blog">
+      <meta itemprop="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          spark_dataFrame列的合并与拆分
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2022-10-29 22:40:29 / 修改时间：22:50:54" itemprop="dateCreated datePublished" datetime="2022-10-29T22:40:29+08:00">2022-10-29</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/spark/" itemprop="url" rel="index"><span itemprop="name">spark</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+            <div class="post-description">这是文章开头，显示在主页面，详情请点击此处。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>简介 <span id="more"></span></p>
+<h1 id="注意点："><a href="#注意点：" class="headerlink" title="注意点："></a>注意点：</h1><p>一、</p>
+<p>​		foreach 的传入参数只能是序列中的一个元素，</p>
+<p><code>Seq((1,a), (2,b), (3,c)).foreach( x =&gt; println(x) )</code></p>
+<p>​		如果是想把传入的参数拆解开，需要用到偏函数，</p>
+<p><code>Seq((1,a), (2,b), (3,c)).foreach(&#123;case(x,y) =&gt; println(x,y)&#125;)</code></p>
+<p>​		最外层的括号省略，成为如下形式：</p>
+<p><code>Seq((1,a), (2,b), (3,c)).foreach &#123;case(x,y) =&gt; println(x,y) &#125;</code></p>
+<p>​		其实不仅仅是在foreach中，在map等其他的方法中，这些方法的参数要求是一个函数，这个函数的参数仅仅是序列中的一个元素，这样的情况，要拆解元素，都可以用到  <code>&#123;case ... =&gt; ...&#125;</code>    偏函数这样的形式。 		</p>
+<p>​		一句话就是 —-&gt; <strong>用偏函数 的形式来 拆开元素使用</strong>。</p>
+<p>二、</p>
+<p>​		zipWithIndex或者zip方法来自动地创建一个计数器，假设你有一个有序集合days，那么你可以使用zipWithIndex和counter来打印带有计数器的集合元素：	</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">scala&gt; <span class="keyword">val</span> days = <span class="type">Array</span>(<span class="string">&quot;Sunday&quot;</span>, <span class="string">&quot;Monday&quot;</span>, <span class="string">&quot;Tuesday&quot;</span>, <span class="string">&quot;Wednesday&quot;</span>,<span class="string">&quot;Thursday&quot;</span>, <span class="string">&quot;Friday&quot;</span>, <span class="string">&quot;Saturday&quot;</span>)</span><br><span class="line">days: <span class="type">Array</span>[<span class="type">String</span>] = <span class="type">Array</span>(<span class="type">Sunday</span>, <span class="type">Monday</span>, <span class="type">Tuesday</span>, <span class="type">Wednesday</span>, <span class="type">Thursday</span>, <span class="type">Friday</span>, <span class="type">Saturday</span>)</span><br><span class="line"> </span><br><span class="line">scala&gt; days.zipWithIndex.foreach&#123;<span class="keyword">case</span>(day,count) =&gt; println(<span class="string">s&quot;<span class="subst">$count</span> is <span class="subst">$day</span>&quot;</span>)&#125;</span><br><span class="line"><span class="number">0</span> is <span class="type">Sunday</span></span><br><span class="line"><span class="number">1</span> is <span class="type">Monday</span></span><br><span class="line"><span class="number">2</span> is <span class="type">Tuesday</span></span><br><span class="line"><span class="number">3</span> is <span class="type">Wednesday</span></span><br><span class="line"><span class="number">4</span> is <span class="type">Thursday</span></span><br><span class="line"><span class="number">5</span> is <span class="type">Friday</span></span><br><span class="line"><span class="number">6</span> is <span class="type">Saturday</span></span><br></pre></td></tr></table></figure>
+
+<p>三、	</p>
+<p>​		tabulate()()</p>
+<p>第一个参数接收一个或多个值，代表一维或多维列表</p>
+<p>第二个参数相当于一个或多个for循环，（）内的参数就是这些for循环最中间对每个for循环的值的计算公式</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">List</span>.tabulate(<span class="number">2</span>,<span class="number">3</span>)()  <span class="comment">// 代表生成一个二维的列表，两行三列</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 假设第二个参数是b</span></span><br><span class="line"><span class="type">List</span>.tabulate(<span class="number">2</span>,<span class="number">3</span>)(b)</span><br><span class="line"><span class="comment">// 这个b是什么呢</span></span><br><span class="line"><span class="keyword">for</span> (x1 &lt;- <span class="number">0</span> until <span class="number">2</span>)&#123;</span><br><span class="line">	<span class="keyword">for</span> (x2 &lt;- <span class="number">0</span> until <span class="number">3</span>)&#123;</span><br><span class="line">		b;  <span class="comment">// x1与x2的计算公式</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 在第二个列表直接输入b的计算公式, 每个x用“_”代表</span></span><br><span class="line"><span class="type">List</span>.tabulate(<span class="number">2</span>,<span class="number">3</span>)(_*_)  <span class="comment">// 代表x1 * x2</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 上面得到的列表</span></span><br><span class="line"><span class="type">List</span>[<span class="type">List</span>[<span class="type">Int</span>]] = <span class="type">List</span>(<span class="type">List</span>(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>), <span class="type">List</span>(<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>))</span><br><span class="line"></span><br><span class="line"><span class="comment">// 写成详细的计算过程</span></span><br><span class="line"><span class="type">List</span>[<span class="type">List</span>[<span class="type">Int</span>]] = <span class="type">List</span>(<span class="type">List</span>(<span class="number">0</span> * <span class="number">0</span>, <span class="number">0</span> * <span class="number">1</span>, <span class="number">0</span> * <span class="number">2</span>), </span><br><span class="line">					   <span class="type">List</span>(<span class="number">1</span> * <span class="number">0</span>, <span class="number">1</span> * <span class="number">1</span>, <span class="number">1</span> * <span class="number">2</span>))</span><br></pre></td></tr></table></figure>
+
+
+
+<hr>
+<h1 id="制作数据"><a href="#制作数据" class="headerlink" title="制作数据"></a>制作数据</h1><p>merging_split_testdata</p>
+<figure class="highlight tex"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">name,age,phone</span><br><span class="line">Ming,20,13170340012</span><br><span class="line">zhansan,22,15953576688</span><br><span class="line">lisi,28,18545784857</span><br></pre></td></tr></table></figure>
+
+<h1 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h1><p>spark 的dataframe 合并 、 切分代码，concat_split_test</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> <span class="type">Spark_DataFrame_column_merging_and_splitting</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.apache.spark.sql.expressions.<span class="type">UserDefinedFunction</span></span><br><span class="line"><span class="keyword">import</span> org.apache.spark.sql.types.<span class="type">StringType</span></span><br><span class="line"><span class="keyword">import</span> org.apache.spark.sql.&#123;<span class="type">DataFrame</span>, <span class="type">Row</span>, <span class="type">SparkSession</span>&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> scala.reflect.internal.util.<span class="type">TriState</span>.<span class="type">False</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">concat_split_test</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">main</span></span>(args: <span class="type">Array</span>[<span class="type">String</span>]):<span class="type">Unit</span>=&#123;</span><br><span class="line">    <span class="keyword">val</span> spark: <span class="type">SparkSession</span> = <span class="type">SparkSession</span></span><br><span class="line">      .builder()</span><br><span class="line">      .master(<span class="string">&quot;local[*]&quot;</span>)</span><br><span class="line">      .appName(<span class="string">&quot;merging_and_splitting_tets&quot;</span>)</span><br><span class="line">      .getOrCreate()</span><br><span class="line">    spark.sparkContext.setLogLevel(<span class="string">&quot;WARN&quot;</span>)</span><br><span class="line">    <span class="keyword">import</span> spark.implicits._</span><br><span class="line"></span><br><span class="line">    <span class="keyword">val</span> path = <span class="string">&quot;file:///opt/data/maven_scala_test/data/merging_split_testdata&quot;</span></span><br><span class="line">    <span class="keyword">val</span> df: <span class="type">DataFrame</span> = spark.read.option(<span class="string">&quot;header&quot;</span>,<span class="string">&quot;true&quot;</span>).csv(path)</span><br><span class="line">    df.cache()</span><br><span class="line">    df.show()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">val</span> separator = <span class="string">&quot;,&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// merging </span></span><br><span class="line">    <span class="keyword">import</span> org.apache.spark.sql.functions._</span><br><span class="line">    <span class="keyword">val</span> df_merging_1: <span class="type">DataFrame</span> = df.select(concat_ws(separator, $<span class="string">&quot;name&quot;</span>, $<span class="string">&quot;age&quot;</span>, $<span class="string">&quot;phone&quot;</span>).cast(<span class="type">StringType</span>).alias(<span class="string">&quot;value&quot;</span>))</span><br><span class="line">    println(<span class="string">&quot;df_merging_1 is :&quot;</span>)</span><br><span class="line">    df_merging_1.show(truncate=<span class="literal">false</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">val</span> df_merging_2 = df.map(_.toSeq.foldLeft(<span class="string">&quot;&quot;</span>)(_+separator+_).substring(<span class="number">1</span>))</span><br><span class="line">        <span class="comment">//一定要有substring() 来截取出子串，不然为空。因为我们人为加了一个“” 在最左边，所以从1号位置取。</span></span><br><span class="line">    println(<span class="string">&quot;df_merging_2 is :&quot;</span>)</span><br><span class="line">    df_merging_2.show(truncate=<span class="literal">false</span>)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">mergeCols</span></span>(row:<span class="type">Row</span>):<span class="type">String</span>=&#123;</span><br><span class="line">      row.toSeq.foldLeft(<span class="string">&quot;&quot;</span>)(_+separator+_).substring(<span class="number">1</span>)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">val</span> mergeColsUDF: <span class="type">UserDefinedFunction</span> = udf(mergeCols _)  <span class="comment">// 注册udf。</span></span><br><span class="line">    <span class="keyword">val</span> df_merging_3: <span class="type">DataFrame</span> = df.select(mergeColsUDF(struct($<span class="string">&quot;name&quot;</span>, $<span class="string">&quot;age&quot;</span>, $<span class="string">&quot;phone&quot;</span>)).as(<span class="string">&quot;value&quot;</span>))</span><br><span class="line">    println(<span class="string">&quot;df_merging_3 is :&quot;</span>)</span><br><span class="line">    df_merging_3.show(truncate=<span class="literal">false</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">// split</span></span><br><span class="line">    <span class="keyword">val</span> first_row: <span class="type">Row</span> = df_merging_3.first()</span><br><span class="line">    <span class="keyword">val</span> numAttrs: <span class="type">Int</span> = first_row.toString().split(separator).length</span><br><span class="line">    <span class="keyword">val</span> attrs: <span class="type">Array</span>[<span class="type">String</span>] = <span class="type">Array</span>.tabulate(numAttrs)(num =&gt; &#123;</span><br><span class="line">      <span class="string">&quot;col_&quot;</span> + num</span><br><span class="line">    &#125;)</span><br><span class="line">    <span class="keyword">var</span> newDF: <span class="type">DataFrame</span> = df_merging_3.withColumn(<span class="string">&quot;splitCols&quot;</span>, split($<span class="string">&quot;value&quot;</span>, separator))</span><br><span class="line">    attrs.zipWithIndex.foreach( &#123;<span class="keyword">case</span>(col,index)=&gt;println(col,index)&#125; )  <span class="comment">//用偏函数 的形式来 拆开元素使用,这里只是验证一下.</span></span><br><span class="line">    attrs.zipWithIndex.foreach&#123; <span class="keyword">case</span>(col,index)=&gt;&#123;</span><br><span class="line">      newDF = newDF.withColumn(col,$<span class="string">&quot;splitCols&quot;</span>.getItem(index))</span><br><span class="line">    &#125;&#125;</span><br><span class="line">    newDF.show()</span><br><span class="line"></span><br><span class="line">    df.unpersist()</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>​		输出如下：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line">+-------+---+-----------+</span><br><span class="line">|   name|age|      phone|</span><br><span class="line">+-------+---+-----------+</span><br><span class="line">|   <span class="type">Ming</span>| <span class="number">20</span>|<span class="number">13170340012</span>|</span><br><span class="line">|zhansan| <span class="number">22</span>|<span class="number">15953576688</span>|</span><br><span class="line">|   lisi| <span class="number">28</span>|<span class="number">18545784857</span>|</span><br><span class="line">+-------+---+-----------+</span><br><span class="line"></span><br><span class="line">df_merging_1 is :</span><br><span class="line">+----------------------+</span><br><span class="line">|value                 |</span><br><span class="line">+----------------------+</span><br><span class="line">|<span class="type">Ming</span>,<span class="number">20</span>,<span class="number">13170340012</span>   |</span><br><span class="line">|zhansan,<span class="number">22</span>,<span class="number">15953576688</span>|</span><br><span class="line">|lisi,<span class="number">28</span>,<span class="number">18545784857</span>   |</span><br><span class="line">+----------------------+</span><br><span class="line"></span><br><span class="line">df_merging_2 is :</span><br><span class="line">+----------------------+</span><br><span class="line">|value                 |</span><br><span class="line">+----------------------+</span><br><span class="line">|<span class="type">Ming</span>,<span class="number">20</span>,<span class="number">13170340012</span>   |</span><br><span class="line">|zhansan,<span class="number">22</span>,<span class="number">15953576688</span>|</span><br><span class="line">|lisi,<span class="number">28</span>,<span class="number">18545784857</span>   |</span><br><span class="line">+----------------------+</span><br><span class="line"></span><br><span class="line">df_merging_3 is :</span><br><span class="line">+----------------------+</span><br><span class="line">|value                 |</span><br><span class="line">+----------------------+</span><br><span class="line">|<span class="type">Ming</span>,<span class="number">20</span>,<span class="number">13170340012</span>   |</span><br><span class="line">|zhansan,<span class="number">22</span>,<span class="number">15953576688</span>|</span><br><span class="line">|lisi,<span class="number">28</span>,<span class="number">18545784857</span>   |</span><br><span class="line">+----------------------+</span><br><span class="line"></span><br><span class="line">(col_0,<span class="number">0</span>)</span><br><span class="line">(col_1,<span class="number">1</span>)</span><br><span class="line">(col_2,<span class="number">2</span>)</span><br><span class="line">+--------------------+--------------------+-------+-----+-----------+</span><br><span class="line">|               value|           splitCols|  col_0|col_1|      col_2|</span><br><span class="line">+--------------------+--------------------+-------+-----+-----------+</span><br><span class="line">| <span class="type">Ming</span>,<span class="number">20</span>,<span class="number">13170340012</span>|[<span class="type">Ming</span>, <span class="number">20</span>, <span class="number">131703.</span>..|   <span class="type">Ming</span>|   <span class="number">20</span>|<span class="number">13170340012</span>|</span><br><span class="line">|zhansan,<span class="number">22</span>,<span class="number">159535.</span>..|[zhansan, <span class="number">22</span>, <span class="number">159.</span>..|zhansan|   <span class="number">22</span>|<span class="number">15953576688</span>|</span><br><span class="line">| lisi,<span class="number">28</span>,<span class="number">18545784857</span>|[lisi, <span class="number">28</span>, <span class="number">185457.</span>..|   lisi|   <span class="number">28</span>|<span class="number">18545784857</span>|</span><br><span class="line">+--------------------+--------------------+-------+-----+-----------+</span><br><span class="line"></span><br><span class="line"><span class="type">Process</span> finished <span class="keyword">with</span> exit code <span class="number">0</span></span><br></pre></td></tr></table></figure>
+
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/dataFrame/" rel="tag"># dataFrame</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/10/29/spark%E5%AD%A6%E4%B9%A0/spark-maven%E5%AD%A6%E4%B9%A0/" rel="prev" title="spark_maven学习">
+                  <i class="fa fa-chevron-left"></i> spark_maven学习
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2022/10/29/spark%E5%AD%A6%E4%B9%A0/spark-core/" rel="next" title="spark_core">
+                  spark_core <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">陈宇韶chenyushao</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

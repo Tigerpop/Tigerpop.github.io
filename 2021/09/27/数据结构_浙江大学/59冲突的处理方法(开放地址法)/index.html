@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha256-AbA177XfpSnFEvgpYu1jMygiLabzPCJCRIBtR5jGc0k=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.13.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="59冲突的处理方法(开放地址法)">
+<meta property="og:url" content="http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/59%E5%86%B2%E7%AA%81%E7%9A%84%E5%A4%84%E7%90%86%E6%96%B9%E6%B3%95(%E5%BC%80%E6%94%BE%E5%9C%B0%E5%9D%80%E6%B3%95)/index.html">
+<meta property="og:site_name" content="Tiger_pop&#39;s Blog">
+<meta property="og:description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-09-27T12:00:36.000Z">
+<meta property="article:modified_time" content="2022-10-28T16:05:58.672Z">
+<meta property="article:author" content="陈宇韶chenyushao">
+<meta property="article:tag" content="哈希">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/59%E5%86%B2%E7%AA%81%E7%9A%84%E5%A4%84%E7%90%86%E6%96%B9%E6%B3%95(%E5%BC%80%E6%94%BE%E5%9C%B0%E5%9D%80%E6%B3%95)/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/59%E5%86%B2%E7%AA%81%E7%9A%84%E5%A4%84%E7%90%86%E6%96%B9%E6%B3%95(%E5%BC%80%E6%94%BE%E5%9C%B0%E5%9D%80%E6%B3%95)/","path":"2021/09/27/数据结构_浙江大学/59冲突的处理方法(开放地址法)/","title":"59冲突的处理方法(开放地址法)"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>59冲突的处理方法(开放地址法) | Tiger_pop's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="Tiger_pop's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Tiger_pop's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">tiger_pop 的博客</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-overview-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="陈宇韶chenyushao"
+      src="/images/my.jpg">
+  <p class="site-author-name" itemprop="name">陈宇韶chenyushao</p>
+  <div class="site-description" itemprop="description">爱学习、爱工作、爱生活;         微信号: Tiger_and_master;         手机号码:18515678348 </div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">427</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">201</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/59%E5%86%B2%E7%AA%81%E7%9A%84%E5%A4%84%E7%90%86%E6%96%B9%E6%B3%95(%E5%BC%80%E6%94%BE%E5%9C%B0%E5%9D%80%E6%B3%95)/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/my.jpg">
+      <meta itemprop="name" content="陈宇韶chenyushao">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tiger_pop's Blog">
+      <meta itemprop="description" content="爱学习、爱工作、爱生活;         微信号: Tiger_and_master;         手机号码:18515678348 ">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="59冲突的处理方法(开放地址法) | Tiger_pop's Blog">
+      <meta itemprop="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          59冲突的处理方法(开放地址法)
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2021-09-27 20:00:36" itemprop="dateCreated datePublished" datetime="2021-09-27T20:00:36+08:00">2021-09-27</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2022-10-29 00:05:58" itemprop="dateModified" datetime="2022-10-29T00:05:58+08:00">2022-10-29</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%B5%99%E5%A4%A7%E7%AE%97%E6%B3%95%E4%B8%8E%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B-python%E5%AE%9E%E7%8E%B0/" itemprop="url" rel="index"><span itemprop="name">浙大算法与数据结构课程(python实现)</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+            <div class="post-description">这是文章开头，显示在主页面，详情请点击此处。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">冲突的处理方法</span></span><br><span class="line"><span class="string">    一、换个位置：开放地址法</span></span><br><span class="line"><span class="string">    二、同一位置的冲突对象组织在一起：链地址法</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">开放地址法 Open Addressing：</span></span><br><span class="line"><span class="string">    一旦冲突，按照某种规则取寻找另一空地址。</span></span><br><span class="line"><span class="string">    若发生第i次冲突，试探的下一个地址将增加di，</span></span><br><span class="line"><span class="string">    hi(key) = (h(key) + di) mod TableSize      i 属于 [1,TableSize]</span></span><br><span class="line"><span class="string">    di 决定来不同的解决冲突方案：</span></span><br><span class="line"><span class="string">        线性探测：di = i</span></span><br><span class="line"><span class="string">        平方探测：di = + - i^2</span></span><br><span class="line"><span class="string">        双散列：  di = i*h2(key)            # 引入另一个散列函数</span></span><br><span class="line"><span class="string">                 经验证明 以下形式比较好：</span></span><br><span class="line"><span class="string">                 h2(key) = p - (key mod p)  p为质数</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">线性探测法：</span></span><br><span class="line"><span class="string">    关键词序列&#123;47,7,29,11,9,84,54,20,30&#125;    </span></span><br><span class="line"><span class="string">    散列表表长度tablesize13，装填因子9/13，</span></span><br><span class="line"><span class="string">    散列函数 h(key) = key mod 11     # 注意取11是小于13的，之后的线性探测是%13取余！</span></span><br><span class="line"><span class="string">    用线性探测法处理冲突，列出一次插入后的散列表，估算查找性能。</span></span><br><span class="line"><span class="string">    答：</span></span><br><span class="line"><span class="string">    h(47) = 3 ,   h(7) = 7,   h(29) = 7 遇到冲突，</span></span><br><span class="line"><span class="string">    试一试 d1 = 1，h1(29) = (7+1) mod 11 = 8 可以存放。</span></span><br><span class="line"><span class="string">    h(11) = 0,   h(9) = 9,  </span></span><br><span class="line"><span class="string">    h(84) = 7 遇到冲突，</span></span><br><span class="line"><span class="string">    试一试 d1 = 1, h1(84) = 8,8位置已经有存放了，还是冲突，</span></span><br><span class="line"><span class="string">    试一试 d2 = 2，h2(84) = 9, 9位置已经有存放了，还是冲突，</span></span><br><span class="line"><span class="string">    试一试 d3 = 3, h3(84) = 10，可以存放。</span></span><br><span class="line"><span class="string">    dn 可以很大，在散列表中循环到前面的位置。</span></span><br><span class="line"><span class="string">    ...</span></span><br><span class="line"><span class="string">    从老师的图中可以看出，当散列出现集中冲突的时候，</span></span><br><span class="line"><span class="string">    存放会在一个区域形成聚集。</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">散列查找性能分析</span></span><br><span class="line"><span class="string">    一、成功&quot;平均&quot;查找长度ASLs</span></span><br><span class="line"><span class="string">    二、不成功&quot;平均&quot;查找长度ASLu</span></span><br><span class="line"><span class="string">    ----------------------------------------------------</span></span><br><span class="line"><span class="string">    H       0，1，2，3，4，5，6，7，8，9，10，11，12</span></span><br><span class="line"><span class="string">    key     11,30，  47,        7,29,9, 84, 54, 20</span></span><br><span class="line"><span class="string">    冲突次数 0，6，   0          0，1，0，3， 1， 3</span></span><br><span class="line"><span class="string">    ----------------------------------------------------</span></span><br><span class="line"><span class="string">    </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    如何确定元素在散列表中？</span></span><br><span class="line"><span class="string">    冲突0次，找一次就找到了，冲突1次，要找2次才能找到。</span></span><br><span class="line"><span class="string">    成功平均查找次数 = （1+7+1+1+2+1+4+2+4）/9 = 23/9 = 2.56</span></span><br><span class="line"><span class="string">    </span></span><br><span class="line"><span class="string">    如何确定元素不在散列表中？</span></span><br><span class="line"><span class="string">    以 h = 0 为例，如果h =0处没有该元素也不能断定散列表中一定没有该元素，</span></span><br><span class="line"><span class="string">    因为可能由于线性探测的位移移动到了前面或者后面的位置，</span></span><br><span class="line"><span class="string">    一直要循环移动，直到遇到空位置，才能断定该元素一定不在散列表中。</span></span><br><span class="line"><span class="string">    h = 0 不在散列表中，h =1 时该元素也不在散列表中，h = 2 发现是空位，</span></span><br><span class="line"><span class="string">    所以，要3次 才能断定 h = 0 的元素确实不在散列表中。</span></span><br><span class="line"><span class="string">    不成功平均查找长度 = (3+2+1+2+1+1+1+9+8+7+6）/11 = 41/11 = 3.73</span></span><br><span class="line"><span class="string">    注意：</span></span><br><span class="line"><span class="string">        h(key) = key mod 11 计划就是存放11个数，之不过散列表有13个空间。</span></span><br><span class="line"><span class="string">        不成功的查找只会考虑0～10的位置。就是按计划找那几个位置。</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">例子</span></span><br><span class="line"><span class="string">    将acos\define\float\exp\char\atan\ceil\floor</span></span><br><span class="line"><span class="string">    8个元素顺次存入一张大小为26的散列表中。</span></span><br><span class="line"><span class="string">    h(key) = key[0] - &#x27;a&#x27;  采用线性探测 di = i，</span></span><br><span class="line"><span class="string">    ---------------------------------------------------------</span></span><br><span class="line"><span class="string">    0,      1,      2,      3,      4,      5,      6,      7,      8,  ...</span></span><br><span class="line"><span class="string">    acos            char    define  exp     float</span></span><br><span class="line"><span class="string">    ---------------------------------------------------------</span></span><br><span class="line"><span class="string">    atan 遇到第一个冲突</span></span><br><span class="line"><span class="string">    ---------------------------------------------------------</span></span><br><span class="line"><span class="string">    0,      1,      2,      3,      4,      5,      6,      7,      8,  ...</span></span><br><span class="line"><span class="string">    acos    atan    char    define  exp     float</span></span><br><span class="line"><span class="string">    ---------------------------------------------------------</span></span><br><span class="line"><span class="string">    最终</span></span><br><span class="line"><span class="string">    ---------------------------------------------------------</span></span><br><span class="line"><span class="string">    0,      1,      2,      3,      4,      5,      6,      7,      8,  ...</span></span><br><span class="line"><span class="string">    acos    atan    char    define  exp     float   ceil    floor</span></span><br><span class="line"><span class="string">    ---------------------------------------------------------</span></span><br><span class="line"><span class="string">    成功平均查找比较次数</span></span><br><span class="line"><span class="string">    ASLs = (1*5 + 2 + 5 + 3)/8 = 15/8 = 1.87</span></span><br><span class="line"><span class="string">    不成功平均查找次数</span></span><br><span class="line"><span class="string">    h(key)计划分为26种情况计划存放26个数。</span></span><br><span class="line"><span class="string">    ASLu = (9+8+7+6+5+4+3+2+ 1*18)/26 = 62/26 = 2.38</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">平方探测法：</span></span><br><span class="line"><span class="string">    以增量序列 1^2、-1^2、2^2 -2^2 ... q^2 -q^2。</span></span><br><span class="line"><span class="string">    注意：第1次冲突 1^2， 第2次冲突 -1^2，第3次冲突 2^2 ...</span></span><br><span class="line"><span class="string">    还是以上上个案例看：</span></span><br><span class="line"><span class="string">    ----------------------------------------------------</span></span><br><span class="line"><span class="string">    H       0，1， 2，3，4，5，6，7，8，9，10，11，12</span></span><br><span class="line"><span class="string">    key     11,30,20,47,      84,7,29,9, 54</span></span><br><span class="line"><span class="string">    冲突次数    3   3          2     1     </span></span><br><span class="line"><span class="string">    ----------------------------------------------------</span></span><br><span class="line"><span class="string">    ASLs = (1*5 + 2 + 3 + 4 + 4)/9 = 2</span></span><br><span class="line"><span class="string">    </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    线性探测 时，只要元素在散列表中，一个一个位移找总能找着正确的位置，</span></span><br><span class="line"><span class="string">    而 平方探测（二次探测）可能一直跳来跳去，找不到真正的位置。</span></span><br><span class="line"><span class="string">    跳着找不到位置的案例：</span></span><br><span class="line"><span class="string">    h(key) = key mod 5</span></span><br><span class="line"><span class="string">    -----------------</span></span><br><span class="line"><span class="string">    H     0，1，2，3，4</span></span><br><span class="line"><span class="string">    key   5  6  7      </span></span><br><span class="line"><span class="string">    -----------------</span></span><br><span class="line"><span class="string">    一直循环。</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">​    </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    二次探测（平方探测）也有聚集现象，但是没有线性探测的聚集严重。</span></span><br><span class="line"><span class="string">    有结论：</span></span><br><span class="line"><span class="string">        散列表 TableSize 是 4k+3 形式的质数时，平方探测法可以查到整个散列空间。</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 开放地址法、平方探测的实现。</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">HashTable</span>():</span><br><span class="line">    <span class="keyword">class</span> <span class="title class_">Data</span>():                           <span class="comment"># 用一个内部类增加可读性,其调用和类内调用方法属性一样用self即可。</span></span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self,element=<span class="literal">None</span>,inf=<span class="literal">None</span></span>):</span><br><span class="line">            self.element = element</span><br><span class="line">            self.inf = inf</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self,tablesize,thecells=[]</span>):</span><br><span class="line">        MinTableSize = <span class="number">10</span></span><br><span class="line">        <span class="keyword">if</span> tablesize &lt; MinTableSize:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&#x27;散列表太小，直接用数组即可。&#x27;</span>)</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">None</span></span><br><span class="line">        self.tablesize = tablesize</span><br><span class="line">        self.TableSize = self.NextProme(tablesize)</span><br><span class="line">        self.TheCells = [self.Data(<span class="literal">None</span>,<span class="literal">None</span>) <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(self.TableSize)]</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">NextProme</span>(<span class="params">self,tablesize</span>):    <span class="comment"># 比如原本要建立一个12个空间的散列表，但是12不是质数，取余有很多重复值，所以我们取13为大小建立散列表，方便取余。</span></span><br><span class="line">        <span class="keyword">return</span> <span class="number">13</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">Hash</span>(<span class="params">self,key</span>):               <span class="comment"># 除留取余</span></span><br><span class="line">        <span class="keyword">return</span> key%self.tablesize</span><br><span class="line">    <span class="comment"># 注意：&quot;删除后的空位置&quot; 和 &quot;原本就空的位置&quot; 是不一样的。</span></span><br><span class="line">    <span class="comment">#       &quot;懒惰删除&quot;即 只需要增加一个&quot;删除标记&quot;，而不需要真正的删除，来保证查找时不&quot;断链&quot;。</span></span><br><span class="line">    <span class="comment">#       以免影响其它元素的查找和添加。这里就用inf 来完成目标。</span></span><br><span class="line">    <span class="comment">#       inf 表示是否存放元素，删除操作就是把inf变成None即可，element不动。</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">Insert</span>(<span class="params">self,item</span>):</span><br><span class="line">        Pos = self.Find(item)</span><br><span class="line">        <span class="keyword">if</span> self.TheCells[Pos].inf == <span class="literal">None</span>:</span><br><span class="line">            self.TheCells[Pos].inf = <span class="string">&#x27;占用&#x27;</span></span><br><span class="line">            self.TheCells[Pos].element = item</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">Find</span>(<span class="params">self,key</span>):   <span class="comment"># 平方探测法,来修正hash返回的位置。每一个key都注定有一个对应的位置。</span></span><br><span class="line">        cNum = <span class="number">0</span>          <span class="comment"># 记录冲突次数</span></span><br><span class="line">        CurrentPos = self.Hash(key)</span><br><span class="line">        NewPos = CurrentPos</span><br><span class="line">        <span class="keyword">while</span> self.TheCells[NewPos].inf != <span class="literal">None</span> <span class="keyword">and</span> \</span><br><span class="line">            self.TheCells[NewPos].element != key:       <span class="comment"># 这个位置有存放 而且 存放值不是要找的值。</span></span><br><span class="line">            <span class="keyword">if</span> cNum%<span class="number">2</span>:       <span class="comment"># 奇数情况，注意奇数对h（）的修正是变大。</span></span><br><span class="line">                NewPos = CurrentPos + (cNum//<span class="number">2</span> + <span class="number">1</span>)**<span class="number">2</span></span><br><span class="line">                <span class="keyword">while</span> NewPos &gt;= self.TableSize:    <span class="comment"># 变大的方向循环找位置，相当于取余，换一种写法而已</span></span><br><span class="line">                    NewPos -= self.TableSize</span><br><span class="line">            <span class="keyword">else</span>:            <span class="comment"># 偶数情况，偶数的修正是变小。</span></span><br><span class="line">                NewPos = CurrentPos - (cNum//<span class="number">2</span>)**<span class="number">2</span></span><br><span class="line">                <span class="keyword">while</span> NewPos &lt; <span class="number">0</span>:                  <span class="comment"># 变小的方向找位置。</span></span><br><span class="line">                    NewPos += self.TableSize</span><br><span class="line">            cNum += <span class="number">1</span></span><br><span class="line">        <span class="comment"># print(NewPos)</span></span><br><span class="line">        <span class="keyword">return</span> NewPos</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">Delete</span>(<span class="params">self,positon</span>):</span><br><span class="line">        self.TheCells[positon].inf = <span class="literal">None</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&#x27;已经删除了散列表%d位置的元素&#x27;</span>%positon)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    h = HashTable(<span class="number">10</span>)</span><br><span class="line">    h.Insert(<span class="number">5</span>)</span><br><span class="line">    h.Insert(<span class="number">4</span>)</span><br><span class="line">    h.Insert(<span class="number">14</span>)</span><br><span class="line">    h.Insert(<span class="number">26</span>)</span><br><span class="line">    h.Insert(<span class="number">34</span>)</span><br><span class="line">    h.Insert(<span class="number">9</span>)</span><br><span class="line">    h.Insert(<span class="number">19</span>)</span><br><span class="line">    h.Insert(<span class="number">29</span>)</span><br><span class="line">    h.Insert(<span class="number">39</span>)</span><br><span class="line">    h.Delete(<span class="number">10</span>)</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> h.TheCells:</span><br><span class="line">        <span class="built_in">print</span>(i.inf,i.element)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;用49 填补 已经被删除的原本19所在的位置。\n&#x27;</span>)</span><br><span class="line">    h.Insert(<span class="number">49</span>)      <span class="comment"># 用49 填补 已经被删除的原本19所在的位置。</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> h.TheCells:</span><br><span class="line">        <span class="built_in">print</span>(i.inf,i.element)</span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">再散列 Rehashing</span></span><br><span class="line"><span class="string">    当散列表中元素太多时，装填因子a太大，查找效率会下降，</span></span><br><span class="line"><span class="string">    理想a 属于（0.5～0.85）</span></span><br><span class="line"><span class="string">    解决办法是rehash，把散列表变大。</span></span><br><span class="line"><span class="string">    </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    比如 原来11个空的hash表，装了9个元素后，a值太大了，我们rehash扩大散列表，</span></span><br><span class="line"><span class="string">    用一个23个空的hash表来存数据，不能把之前的元素原位置copy过来，</span></span><br><span class="line"><span class="string">    而应该9个元素全部重算一遍，根据新的位置放入hash表。</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%93%88%E5%B8%8C/" rel="tag"># 哈希</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/61%E6%95%A3%E5%88%97%E8%A1%A8%E7%9A%84%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/" rel="prev" title="61散列表的性能分析">
+                  <i class="fa fa-chevron-left"></i> 61散列表的性能分析
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/58%E6%95%A3%E5%88%97%E5%87%BD%E6%95%B0%E7%9A%84%E6%9E%84%E9%80%A0%E6%96%B9%E6%B3%95/" rel="next" title="58散列函数的构造方法">
+                  58散列函数的构造方法 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">陈宇韶chenyushao</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

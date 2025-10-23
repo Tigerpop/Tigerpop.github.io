@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha256-AbA177XfpSnFEvgpYu1jMygiLabzPCJCRIBtR5jGc0k=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.13.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="3-BTC实现">
+<meta property="og:url" content="http://example.com/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/3-BTC%E5%AE%9E%E7%8E%B0/index.html">
+<meta property="og:site_name" content="Tiger_pop&#39;s Blog">
+<meta property="og:description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/3-BTC%E5%AE%9E%E7%8E%B0/%E6%88%AA%E5%B1%8F2024-11-13%2021.41.15.png">
+<meta property="og:image" content="http://example.com/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/3-BTC%E5%AE%9E%E7%8E%B0/%E6%88%AA%E5%B1%8F2024-11-13%2021.47.57.png">
+<meta property="og:image" content="http://example.com/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/3-BTC%E5%AE%9E%E7%8E%B0/%E6%88%AA%E5%B1%8F2024-11-13%2021.53.10.png">
+<meta property="og:image" content="http://example.com/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/3-BTC%E5%AE%9E%E7%8E%B0/%E6%88%AA%E5%B1%8F2024-11-13%2022.08.40.png">
+<meta property="og:image" content="http://example.com/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/3-BTC%E5%AE%9E%E7%8E%B0/%E6%88%AA%E5%B1%8F2024-11-13%2022.11.58.png">
+<meta property="og:image" content="http://example.com/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/3-BTC%E5%AE%9E%E7%8E%B0/%E6%88%AA%E5%B1%8F2024-11-17%2021.54.50.png">
+<meta property="og:image" content="http://example.com/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/3-BTC%E5%AE%9E%E7%8E%B0/%E6%88%AA%E5%B1%8F2024-11-17%2022.01.10.png">
+<meta property="og:image" content="http://example.com/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/3-BTC%E5%AE%9E%E7%8E%B0/%E6%88%AA%E5%B1%8F2024-11-17%2022.15.54.png">
+<meta property="og:image" content="http://example.com/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/3-BTC%E5%AE%9E%E7%8E%B0/%E6%88%AA%E5%B1%8F2024-11-17%2022.21.23.png">
+<meta property="og:image" content="http://example.com/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/3-BTC%E5%AE%9E%E7%8E%B0/%E6%88%AA%E5%B1%8F2024-11-17%2022.30.56.png">
+<meta property="og:image" content="http://example.com/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/3-BTC%E5%AE%9E%E7%8E%B0/%E6%88%AA%E5%B1%8F2024-11-17%2022.40.08.png">
+<meta property="og:image" content="http://example.com/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/3-BTC%E5%AE%9E%E7%8E%B0/%E6%88%AA%E5%B1%8F2024-11-17%2023.04.17.png">
+<meta property="og:image" content="http://example.com/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/3-BTC%E5%AE%9E%E7%8E%B0/%E6%88%AA%E5%B1%8F2024-11-17%2023.21.07.png">
+<meta property="article:published_time" content="2025-01-10T13:06:10.000Z">
+<meta property="article:modified_time" content="2025-01-10T13:24:35.654Z">
+<meta property="article:author" content="陈宇韶chenyushao">
+<meta property="article:tag" content="btc">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/3-BTC%E5%AE%9E%E7%8E%B0/%E6%88%AA%E5%B1%8F2024-11-13%2021.41.15.png">
+
+
+<link rel="canonical" href="http://example.com/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/3-BTC%E5%AE%9E%E7%8E%B0/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/3-BTC%E5%AE%9E%E7%8E%B0/","path":"2025/01/10/区块链/3-BTC实现/","title":"3-BTC实现"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>3-BTC实现 | Tiger_pop's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="Tiger_pop's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Tiger_pop's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">tiger_pop 的博客</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#transaction-based-ledger-%E5%9F%BA%E4%BA%8E%E4%BA%A4%E6%98%93%E7%9A%84%E8%B4%A6%E7%B0%BF%E3%80%82"><span class="nav-number">1.</span> <span class="nav-text">transaction- based  ledger 基于交易的账簿。</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#UTXO-%EF%BC%9A"><span class="nav-number">1.1.</span> <span class="nav-text">UTXO ：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#transaction-free"><span class="nav-number">1.2.</span> <span class="nav-text">transaction free</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%AF%8F%E9%9A%9421%E4%B8%87%E4%B8%AA%E5%8C%BA%E5%9D%97%E5%87%8F%E5%8D%8A"><span class="nav-number">1.3.</span> <span class="nav-text">每隔21万个区块减半</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#account-based-ledger-%E5%9F%BA%E4%BA%8E%E8%B4%A6%E6%88%B7%E7%9A%84%E8%B4%A6%E7%B0%BF"><span class="nav-number">1.4.</span> <span class="nav-text">account-based ledger 基于账户的账簿</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#block%E4%BB%8B%E7%BB%8D"><span class="nav-number">2.</span> <span class="nav-text">block介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#block-header"><span class="nav-number">2.1.</span> <span class="nav-text">block header</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#coinbase-transaction%EF%BC%88%E9%93%B8%E5%B8%81%E4%BA%A4%E6%98%93%EF%BC%89"><span class="nav-number">2.2.</span> <span class="nav-text">coinbase transaction（铸币交易）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#transaction"><span class="nav-number">2.3.</span> <span class="nav-text">transaction</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#hash-puzzles%EF%BC%88%E6%B1%82%E8%A7%A3%EF%BC%89"><span class="nav-number">2.4.</span> <span class="nav-text">hash puzzles（求解）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%87%BA%E5%9D%97"><span class="nav-number">2.5.</span> <span class="nav-text">出块</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%93%BE%E4%B8%8A%E4%BF%A1%E6%81%AF%E7%A1%AE%E8%AE%A4"><span class="nav-number">2.6.</span> <span class="nav-text">链上信息确认</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#selfish-mining"><span class="nav-number">2.7.</span> <span class="nav-text">selfish mining</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="陈宇韶chenyushao"
+      src="/images/my.jpg">
+  <p class="site-author-name" itemprop="name">陈宇韶chenyushao</p>
+  <div class="site-description" itemprop="description">爱学习、爱工作、爱生活;         微信号: Tiger_and_master;         手机号码:18515678348 </div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">427</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">201</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/3-BTC%E5%AE%9E%E7%8E%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/my.jpg">
+      <meta itemprop="name" content="陈宇韶chenyushao">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tiger_pop's Blog">
+      <meta itemprop="description" content="爱学习、爱工作、爱生活;         微信号: Tiger_and_master;         手机号码:18515678348 ">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="3-BTC实现 | Tiger_pop's Blog">
+      <meta itemprop="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          3-BTC实现
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2025-01-10 21:06:10 / 修改时间：21:24:35" itemprop="dateCreated datePublished" datetime="2025-01-10T21:06:10+08:00">2025-01-10</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%8C%BA%E5%9D%97%E9%93%BE/" itemprop="url" rel="index"><span itemprop="name">区块链</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+            <div class="post-description">这是文章开头，显示在主页面，详情请点击此处。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>简介 <span id="more"></span></p>
+<h1 id="transaction-based-ledger-基于交易的账簿。"><a href="#transaction-based-ledger-基于交易的账簿。" class="headerlink" title="transaction- based  ledger 基于交易的账簿。"></a><strong>transaction- based  ledger</strong> 基于交易的账簿。</h1><h2 id="UTXO-："><a href="#UTXO-：" class="headerlink" title="UTXO ："></a><strong>UTXO</strong> ：</h2><p>Unspent Transaction Output。 还没有花掉的交易的 输出 的集合。</p>
+<p>同一笔交易可能有的输出在 UTXO里面有的不在里面（花掉了），UTXO中的每一个元素要给出 产生这个元素的hash 值，以及它在这个交易里 是第几个输出，就可以定位到这个UTXO中的输出。</p>
+<p>UTXO 用于交易前检测 这个钱是不是没有被花掉，每一个 full block 都要维护 UTXO。</p>
+<h2 id="transaction-free"><a href="#transaction-free" class="headerlink" title="transaction free"></a>transaction free</h2><p>我们之前说过抢到了记账权 会有一个 block reward，但是 他凭什么给你记账呢？而不去选自己喜欢的人加入 这个区块的账簿中呢？这里就涉及到我们说的交易费用。</p>
+<p><img src="/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/3-BTC%E5%AE%9E%E7%8E%B0/%E6%88%AA%E5%B1%8F2024-11-13%2021.41.15.png" alt="截屏2024-11-13 21.41.15"></p>
+<h2 id="每隔21万个区块减半"><a href="#每隔21万个区块减半" class="headerlink" title="每隔21万个区块减半"></a>每隔21万个区块减半</h2><p>btc 设计的每隔10分钟会有一个新的区块产生。</p>
+<p>设计了 <strong>每隔21万个区块，就要减半一次。所以大约4年一次减半</strong>。</p>
+<p><img src="/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/3-BTC%E5%AE%9E%E7%8E%B0/%E6%88%AA%E5%B1%8F2024-11-13%2021.47.57.png" alt="截屏2024-11-13 21.47.57"></p>
+<h2 id="account-based-ledger-基于账户的账簿"><a href="#account-based-ledger-基于账户的账簿" class="headerlink" title="account-based ledger 基于账户的账簿"></a>account-based ledger 基于账户的账簿</h2><h1 id="block介绍"><a href="#block介绍" class="headerlink" title="block介绍"></a>block介绍</h1><p><img src="/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/3-BTC%E5%AE%9E%E7%8E%B0/%E6%88%AA%E5%B1%8F2024-11-13%2021.53.10.png" alt="截屏2024-11-13 21.53.10"></p>
+<blockquote>
+<p>上面的例子解释一下：</p>
+<p>（左）</p>
+<p>这个区块中包括 686 个交易</p>
+<p>总输出 XXX 个btc</p>
+<p>总交易费</p>
+<p>height 是区块的高度也就是 区块的序号；</p>
+<p>时间戳</p>
+<p>挖矿难度（每隔2016个block调整一次难度，为了保证出块时间在 10分钟左右。）</p>
+<p>nonce 随机数，这个是最后找到的符合难度要求的 nonce；</p>
+<p>出块奖励</p>
+<p>（右）</p>
+<p>区块的头的 hash 值； 调整 nonce 让 H(block header) &lt;&#x3D; target ，成立的这个hash值。</p>
+<p>前一个区块的头的 hash 值；</p>
+<p>merkle root ，前面说过的，它来验证 交易是否在 block body 中。</p>
+</blockquote>
+<h2 id="block-header"><a href="#block-header" class="headerlink" title="block header"></a>block header</h2><p><img src="/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/3-BTC%E5%AE%9E%E7%8E%B0/%E6%88%AA%E5%B1%8F2024-11-13%2022.08.40.png" alt="截屏2024-11-13 22.08.40"></p>
+<p>这个随机数，是一个32位的无符号整数。</p>
+<p>由于 miner 太多，32位的无符号整数即便是遍历完 也无法满足 提高target难度的要求，要给出更多的空间去给miner 去算，我们看看 block header 的内容。</p>
+<p><img src="/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/3-BTC%E5%AE%9E%E7%8E%B0/%E6%88%AA%E5%B1%8F2024-11-13%2022.11.58.png" alt="截屏2024-11-13 22.11.58"></p>
+<p>看看还有哪些内容是可以变的。</p>
+<p> 其中 merkle根hash 值 改的比较多。</p>
+<h2 id="coinbase-transaction（铸币交易）"><a href="#coinbase-transaction（铸币交易）" class="headerlink" title="coinbase transaction（铸币交易）"></a>coinbase transaction（铸币交易）</h2><p>每一个 发布的 block 中 有一个 <strong>铸币交易（coinbase transaction）</strong>，btc 产生新的币的唯一方式；<img src="/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/3-BTC%E5%AE%9E%E7%8E%B0/%E6%88%AA%E5%B1%8F2024-11-17%2021.54.50.png" alt="截屏2024-11-17 21.54.50"></p>
+<p>我们可以看见 coinbase transaction 是没有输入的，属于 凭空创造；CoinBase 内写入任何内容是没有人管的，我们改变其中的值，逐层做hash 最终会影响到 root 的hash 值；如下图所示：</p>
+<p><img src="/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/3-BTC%E5%AE%9E%E7%8E%B0/%E6%88%AA%E5%B1%8F2024-11-17%2022.01.10.png" alt="截屏2024-11-17 22.01.10"></p>
+<p>由此可知 我们可以把 coinbase transaction的域 单做 随机数 nonce ，来弥补block header 中 nonce 只有4字节也就是32位的缺点，例如将 其前8个字节 当 nonce随机数用；</p>
+<p>正式的挖矿中一般就是两层循环，一层循环nonce 一层循环coinbase 域 的随机数位 ；</p>
+<h2 id="transaction"><a href="#transaction" class="headerlink" title="transaction"></a>transaction</h2><p><img src="/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/3-BTC%E5%AE%9E%E7%8E%B0/%E6%88%AA%E5%B1%8F2024-11-17%2022.15.54.png" alt="截屏2024-11-17 22.15.54"></p>
+<p>一个普通的交易，output 是之前的哪个交易的output 不是这个交易的output，下方有输入脚本和输出脚本，</p>
+<p><img src="/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/3-BTC%E5%AE%9E%E7%8E%B0/%E6%88%AA%E5%B1%8F2024-11-17%2022.21.23.png" alt="截屏2024-11-17 22.21.23"></p>
+<p><strong>将这个交易中的  Input Scripts 和 前一个提供币的来源的交易的 Output Scripts 配对，如果这两个脚本拼接在一起能够顺利的执行，那这个交易就是合法的。</strong></p>
+<h2 id="hash-puzzles（求解）"><a href="#hash-puzzles（求解）" class="headerlink" title="hash puzzles（求解）"></a>hash puzzles（求解）</h2><p><img src="/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/3-BTC%E5%AE%9E%E7%8E%B0/%E6%88%AA%E5%B1%8F2024-11-17%2022.30.56.png" alt="截屏2024-11-17 22.30.56"></p>
+<p>上面 H hash 仅仅是对 block header 求hash ，tx 内容并不直接 hash 而是间接汇总到 merkle root hash 值里，在 block header 中 影响到 hash 过程。</p>
+<h2 id="出块"><a href="#出块" class="headerlink" title="出块"></a>出块</h2><p><img src="/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/3-BTC%E5%AE%9E%E7%8E%B0/%E6%88%AA%E5%B1%8F2024-11-17%2022.40.08.png" alt="截屏2024-11-17 22.40.08"></p>
+<p>伯努利二项分布 独立随机，实验的次数很多成功的概率很低，可以用柏松分布 。<strong>概率密度随着出块时间降低，服从指数分布</strong>；</p>
+<p><strong>已经挖了十分钟如果还没哟挖到，将来还要挖多久才能 挖到的概率不会变化。progress free\memoryless<img src="/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/3-BTC%E5%AE%9E%E7%8E%B0/%E6%88%AA%E5%B1%8F2024-11-17%2023.04.17.png" alt="截屏2024-11-17 23.04.17"></strong></p>
+<blockquote>
+<p>总共约 2100万个btc</p>
+</blockquote>
+<h2 id="链上信息确认"><a href="#链上信息确认" class="headerlink" title="链上信息确认"></a>链上信息确认</h2><p><img src="/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/3-BTC%E5%AE%9E%E7%8E%B0/%E6%88%AA%E5%B1%8F2024-11-17%2023.21.07.png" alt="截屏2024-11-17 23.21.07"></p>
+<p>上图说的是 获得记账权的 M结点恶意，想要把给A的币 又转一份一样的给自己，最后，让自己 M&gt;M&#96; 的链变成长链，从而让 M&gt;A 的链被回滚掉，因为 M&gt;A 的交易中可能伴随着 实物或者其他不可撤回的交易已经到手，所以M就能白嫖到 这个 M&gt;A 的交易中伴随着的不可撤回交易物；</p>
+<p>上图是一个失败的 M 恶意结点操作， 6个区块（约一小时）后会认定6个区块前的链为不可篡改链。</p>
+<p>当然 ，M&gt;A 后 再 M&gt;M&#96; 伴随着非法的 双花交易，UTXO中无记录，别的诚实结点不会承认这笔交易；</p>
+<h2 id="selfish-mining"><a href="#selfish-mining" class="headerlink" title="selfish mining"></a>selfish mining</h2><p>挖到了记账权以后 偷偷藏起来，等于自己偷偷藏了好多个区块，藏了一条链，上图中的 M&gt;A 和M&gt;M&#96; 竞争的时候，突然打出一串链，抢到主链，实现 前面说的  赚到 不可撤回物品的目的；</p>
+<p>或者干脆就是 抢主链 赚交易费；</p>
+<blockquote>
+<p>以上的做法有个前提条件，就是你的算力在 这里面要有非常大的比重，最好51%以上，即便这样也是按照概率看的，也可能selfish mining 失败。</p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/btc/" rel="tag"># btc</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/1-bct%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="prev" title="1-bct数据结构">
+                  <i class="fa fa-chevron-left"></i> 1-bct数据结构
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/3.1-btc%E7%BD%91%E7%BB%9C/" rel="next" title="3.1-btc网络">
+                  3.1-btc网络 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">陈宇韶chenyushao</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

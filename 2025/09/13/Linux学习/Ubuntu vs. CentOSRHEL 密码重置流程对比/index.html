@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha256-AbA177XfpSnFEvgpYu1jMygiLabzPCJCRIBtR5jGc0k=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.13.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Ubuntu vs. CentOS\RHEL 密码重置流程对比">
+<meta property="og:url" content="http://example.com/2025/09/13/Linux%E5%AD%A6%E4%B9%A0/Ubuntu%20vs.%20CentOSRHEL%20%E5%AF%86%E7%A0%81%E9%87%8D%E7%BD%AE%E6%B5%81%E7%A8%8B%E5%AF%B9%E6%AF%94/index.html">
+<meta property="og:site_name" content="Tiger_pop&#39;s Blog">
+<meta property="og:description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-09-13T15:28:18.000Z">
+<meta property="article:modified_time" content="2025-09-28T10:33:08.518Z">
+<meta property="article:author" content="陈宇韶chenyushao">
+<meta property="article:tag" content="centos">
+<meta property="article:tag" content="ubuntu">
+<meta property="article:tag" content="密码">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://example.com/2025/09/13/Linux%E5%AD%A6%E4%B9%A0/Ubuntu%20vs.%20CentOSRHEL%20%E5%AF%86%E7%A0%81%E9%87%8D%E7%BD%AE%E6%B5%81%E7%A8%8B%E5%AF%B9%E6%AF%94/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2025/09/13/Linux%E5%AD%A6%E4%B9%A0/Ubuntu%20vs.%20CentOSRHEL%20%E5%AF%86%E7%A0%81%E9%87%8D%E7%BD%AE%E6%B5%81%E7%A8%8B%E5%AF%B9%E6%AF%94/","path":"2025/09/13/Linux学习/Ubuntu vs. CentOSRHEL 密码重置流程对比/","title":"Ubuntu vs. CentOS\\RHEL 密码重置流程对比"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Ubuntu vs. CentOS\RHEL 密码重置流程对比 | Tiger_pop's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="Tiger_pop's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Tiger_pop's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">tiger_pop 的博客</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Ubuntu-vs-CentOS-x2F-RHEL-%E5%AF%86%E7%A0%81%E9%87%8D%E7%BD%AE"><span class="nav-number">1.</span> <span class="nav-text">Ubuntu vs. CentOS&#x2F;RHEL 密码重置</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="陈宇韶chenyushao"
+      src="/images/my.jpg">
+  <p class="site-author-name" itemprop="name">陈宇韶chenyushao</p>
+  <div class="site-description" itemprop="description">爱学习、爱工作、爱生活;         微信号: Tiger_and_master;         手机号码:18515678348 </div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">427</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">201</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2025/09/13/Linux%E5%AD%A6%E4%B9%A0/Ubuntu%20vs.%20CentOSRHEL%20%E5%AF%86%E7%A0%81%E9%87%8D%E7%BD%AE%E6%B5%81%E7%A8%8B%E5%AF%B9%E6%AF%94/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/my.jpg">
+      <meta itemprop="name" content="陈宇韶chenyushao">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tiger_pop's Blog">
+      <meta itemprop="description" content="爱学习、爱工作、爱生活;         微信号: Tiger_and_master;         手机号码:18515678348 ">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Ubuntu vs. CentOS\RHEL 密码重置流程对比 | Tiger_pop's Blog">
+      <meta itemprop="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Ubuntu vs. CentOS\RHEL 密码重置流程对比
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2025-09-13 23:28:18" itemprop="dateCreated datePublished" datetime="2025-09-13T23:28:18+08:00">2025-09-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-09-28 18:33:08" itemprop="dateModified" datetime="2025-09-28T18:33:08+08:00">2025-09-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+            <div class="post-description">这是文章开头，显示在主页面，详情请点击此处。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h3 id="Ubuntu-vs-CentOS-x2F-RHEL-密码重置"><a href="#Ubuntu-vs-CentOS-x2F-RHEL-密码重置" class="headerlink" title="Ubuntu vs. CentOS&#x2F;RHEL 密码重置"></a>Ubuntu vs. CentOS&#x2F;RHEL 密码重置</h3><p>流程对比</p>
+<table>
+<thead>
+<tr>
+<th>步骤</th>
+<th>CentOS &#x2F; RHEL</th>
+<th>Ubuntu（推荐方法）</th>
+<th>作用说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>1. 进入 GRUB</strong></td>
+<td>Esc 按 <strong>e</strong> 编辑启动参数</td>
+<td>Esc 按 <strong>e</strong> 编辑启动参数</td>
+<td>打开启动菜单，进入内核参数编辑模式</td>
+</tr>
+<tr>
+<td><strong>2. 修改参数</strong></td>
+<td>在 <code>linux16</code> 行尾加 <code>rw init=/bin/bash</code></td>
+<td>在 <code>linux</code> 行尾替换 <code>quiet splash</code> 为 <code>rw init=/bin/bash</code></td>
+<td>让系统以 <strong>单用户模式 + 可写根目录</strong> 启动，进入 bash</td>
+</tr>
+<tr>
+<td><strong>3. 挂载根目录</strong></td>
+<td><code>mount -o remount,rw /</code></td>
+<td><code>mount -o remount,rw /</code>（通常已可写，但最好执行）</td>
+<td>确保根目录有写权限，否则不能改密码</td>
+</tr>
+<tr>
+<td><strong>4. 核心操作</strong></td>
+<td><code>passwd</code>（直接改 root 密码）</td>
+<td><code>passwd 用户名</code>（修改普通用户密码）</td>
+<td>修改目标账户的密码（CentOS 默认 root 可用；Ubuntu 默认 root 禁用）</td>
+</tr>
+<tr>
+<td><strong>5. SELinux</strong></td>
+<td><code>touch /.autorelabel</code>（必须）</td>
+<td>不需要（Ubuntu 默认无 SELinux）</td>
+<td>触发系统重新标记文件安全上下文，避免登录失败</td>
+</tr>
+<tr>
+<td><strong>6. 重启</strong></td>
+<td><code>exec /sbin/init</code> 或 <code>reboot -f</code></td>
+<td><code>exec /sbin/init</code> 或 <code>reboot -f</code></td>
+<td>退出恢复模式，重新正常启动系统</td>
+</tr>
+</tbody></table>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/centos/" rel="tag"># centos</a>
+              <a href="/tags/ubuntu/" rel="tag"># ubuntu</a>
+              <a href="/tags/%E5%AF%86%E7%A0%81/" rel="tag"># 密码</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2025/09/12/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E5%85%9A%E5%BB%BAagent%E7%BC%96%E5%86%99/" rel="prev" title="党建agent编写">
+                  <i class="fa fa-chevron-left"></i> 党建agent编写
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2025/09/23/Mac/Mac%E8%B0%83%E6%95%B4%E7%9B%92%E7%9B%96%E5%90%8E%E6%B7%B1%E5%BA%A6%E7%9D%A1%E7%9C%A0%E6%A8%A1%E5%BC%8F/" rel="next" title="Mac调整盒盖后深度睡眠模式">
+                  Mac调整盒盖后深度睡眠模式 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">陈宇韶chenyushao</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

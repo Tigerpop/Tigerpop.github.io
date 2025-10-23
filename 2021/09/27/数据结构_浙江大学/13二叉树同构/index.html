@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha256-AbA177XfpSnFEvgpYu1jMygiLabzPCJCRIBtR5jGc0k=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.13.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="13二叉树同构">
+<meta property="og:url" content="http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/13%E4%BA%8C%E5%8F%89%E6%A0%91%E5%90%8C%E6%9E%84/index.html">
+<meta property="og:site_name" content="Tiger_pop&#39;s Blog">
+<meta property="og:description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-09-27T12:00:36.000Z">
+<meta property="article:modified_time" content="2022-10-28T15:39:36.522Z">
+<meta property="article:author" content="陈宇韶chenyushao">
+<meta property="article:tag" content="二叉树">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/13%E4%BA%8C%E5%8F%89%E6%A0%91%E5%90%8C%E6%9E%84/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/13%E4%BA%8C%E5%8F%89%E6%A0%91%E5%90%8C%E6%9E%84/","path":"2021/09/27/数据结构_浙江大学/13二叉树同构/","title":"13二叉树同构"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>13二叉树同构 | Tiger_pop's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="Tiger_pop's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Tiger_pop's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">tiger_pop 的博客</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-overview-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="陈宇韶chenyushao"
+      src="/images/my.jpg">
+  <p class="site-author-name" itemprop="name">陈宇韶chenyushao</p>
+  <div class="site-description" itemprop="description">爱学习、爱工作、爱生活;         微信号: Tiger_and_master;         手机号码:18515678348 </div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">427</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">201</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/13%E4%BA%8C%E5%8F%89%E6%A0%91%E5%90%8C%E6%9E%84/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/my.jpg">
+      <meta itemprop="name" content="陈宇韶chenyushao">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tiger_pop's Blog">
+      <meta itemprop="description" content="爱学习、爱工作、爱生活;         微信号: Tiger_and_master;         手机号码:18515678348 ">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="13二叉树同构 | Tiger_pop's Blog">
+      <meta itemprop="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          13二叉树同构
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2021-09-27 20:00:36" itemprop="dateCreated datePublished" datetime="2021-09-27T20:00:36+08:00">2021-09-27</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2022-10-28 23:39:36" itemprop="dateModified" datetime="2022-10-28T23:39:36+08:00">2022-10-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%B5%99%E5%A4%A7%E7%AE%97%E6%B3%95%E4%B8%8E%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B-python%E5%AE%9E%E7%8E%B0/" itemprop="url" rel="index"><span itemprop="name">浙大算法与数据结构课程(python实现)</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+            <div class="post-description">这是文章开头，显示在主页面，详情请点击此处。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">给定两颗树，t1、t2，如果t1可以通过若干次左右孩子交换变成t2， 两颗树就是&quot;同构&quot;的。</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">这里是二叉树的新的表示方式，不一定从根结点开始，</span></span><br><span class="line"><span class="string">只表示左右孩子的结点编号，</span></span><br><span class="line"><span class="string">而结点编号不一定是按照根结点开始层序遍历排的。</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">之前我们都是用链表表示二叉树，这里我们用顺序结构list 表示二叉树。</span></span><br><span class="line"><span class="string">结构数组表示二叉树：(静态链表)。-1表示为None</span></span><br><span class="line"><span class="string">       A| B | C | D</span></span><br><span class="line"><span class="string">left  -1| 2 | -1| -1</span></span><br><span class="line"><span class="string">right  1| 3 | -1| -1</span></span><br><span class="line"><span class="string">编号： 0   1   2   3</span></span><br><span class="line"><span class="string">等价于：</span></span><br><span class="line"><span class="string">       B| A |   | D | C</span></span><br><span class="line"><span class="string">left   4| -1|   | -1| -1</span></span><br><span class="line"><span class="string">right  3| 0 |   | -1| -1</span></span><br><span class="line"><span class="string">编号： 0   1   2   3  4</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">&quot; left 和 right 中没有出现的编号，就是根结点的编号 。 &quot;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">（静态链表）有链表的灵活性，又存放在顺序存储结构的数组中。并非指针指向下一个结点。</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">思路：</span></span><br><span class="line"><span class="string">1、二叉树的表示。</span></span><br><span class="line"><span class="string">2、建立二叉树。(静态链表构建二叉树就是找出根结点。)</span></span><br><span class="line"><span class="string">3、同构判别。</span></span><br><span class="line"><span class="string">     </span></span><br><span class="line"><span class="string">程序框架搭建：</span></span><br><span class="line"><span class="string">main:</span></span><br><span class="line"><span class="string">    r1 = buildtree(t1)</span></span><br><span class="line"><span class="string">    r2 = buildtree(t2)</span></span><br><span class="line"><span class="string">    if isomorphic(r1,r2):</span></span><br><span class="line"><span class="string">        print(&#x27;true&#x27;)</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Node</span>():</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self,element,left=<span class="literal">None</span>,right=<span class="literal">None</span></span>):</span><br><span class="line">        self.element = element</span><br><span class="line">        self.left = left</span><br><span class="line">        self.right = right</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">buildtree</span>(<span class="params">BTlist</span>):  <span class="comment"># 找根。</span></span><br><span class="line">    check = [<span class="literal">None</span>] * <span class="built_in">len</span>(BTlist)</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(BTlist)):</span><br><span class="line">        check[i] = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(BTlist)):</span><br><span class="line">        <span class="keyword">if</span> BTlist[i] == <span class="literal">None</span>:</span><br><span class="line">            check[i] = <span class="number">1</span></span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&#x27;这里是： 空&#x27;</span>,i)</span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line">        element = BTlist[i].element</span><br><span class="line">        left = BTlist[i].left</span><br><span class="line">        <span class="built_in">print</span>(left,<span class="string">&#x27;第多少次&#x27;</span>,i)</span><br><span class="line">        right = BTlist[i].right</span><br><span class="line">        <span class="keyword">if</span> left[<span class="number">0</span>]!=<span class="string">&#x27;-&#x27;</span>:</span><br><span class="line">            BTlist[i].left = <span class="built_in">int</span>(left)</span><br><span class="line">            check[BTlist[i].left] = <span class="number">1</span>     <span class="comment"># 有被当成左孩子，就给这个位置打标记1。</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            BTlist[i].left = <span class="literal">None</span></span><br><span class="line">        <span class="keyword">if</span> right[<span class="number">0</span>]!=<span class="string">&#x27;-&#x27;</span>:</span><br><span class="line">            BTlist[i].right = <span class="built_in">int</span>(right)</span><br><span class="line">            check[BTlist[i].right] = <span class="number">1</span>    <span class="comment">#有被当成右孩子，就给这个位置打标记1。</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            BTlist[i].right = <span class="literal">None</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(BTlist)): <span class="comment"># 根结点不会被当作孩子，所以标记还是0。</span></span><br><span class="line">        <span class="keyword">if</span> check[i] == <span class="number">0</span>:</span><br><span class="line">            root = i</span><br><span class="line">    <span class="keyword">return</span> root</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">isomorphic</span>(<span class="params">t1,t2,r1,r2</span>):</span><br><span class="line">    <span class="keyword">if</span> r1==<span class="literal">None</span> <span class="keyword">and</span> r2 == <span class="literal">None</span>:  <span class="comment">#both empty</span></span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span></span><br><span class="line">    <span class="keyword">if</span> ((r1==<span class="literal">None</span> <span class="keyword">and</span> r2!=<span class="literal">None</span>) <span class="keyword">or</span> (r1!=<span class="literal">None</span> <span class="keyword">and</span> r2 ==<span class="literal">None</span>)):</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>    <span class="comment"># one of them is empty</span></span><br><span class="line">    <span class="keyword">if</span> t1[r1].element!=t2[r2].element:</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>    <span class="comment"># root are different</span></span><br><span class="line">    <span class="keyword">if</span> t1[r1].left == <span class="literal">None</span> <span class="keyword">and</span> t2[r2].left == <span class="literal">None</span>: <span class="comment"># both have no left subtree</span></span><br><span class="line">        <span class="keyword">return</span> isomorphic(t1,t2,t1[r1].right,t2[r2].right)</span><br><span class="line"></span><br><span class="line">    <span class="comment">#  no need to swap the left and the right</span></span><br><span class="line">    <span class="keyword">if</span> (t1[r1].left!=<span class="literal">None</span> <span class="keyword">and</span> t2[r2].left!=<span class="literal">None</span>) <span class="keyword">and</span> (t1[t1[r1].left].element == t2[t2[r2].left].element):</span><br><span class="line">        <span class="keyword">return</span> (isomorphic(t1,t2,t1[r1].left,t2[r2].left) <span class="keyword">and</span> isomorphic(t1,t2,t1[r1].right,t2[r2].right))</span><br><span class="line">    <span class="comment">#  need to swap the left and zhe right</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">return</span> isomorphic(t1,t2,t1[r1].left,t2[r2].right) <span class="keyword">and</span> isomorphic(t1,t2,t1[r1].right,t2[r2].left)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">bt_list = []</span><br><span class="line">bt_list.append(Node(<span class="string">&#x27;B&#x27;</span>,<span class="string">&#x27;4&#x27;</span>,<span class="string">&#x27;3&#x27;</span>))</span><br><span class="line">bt_list.append(Node(<span class="string">&#x27;A&#x27;</span>,<span class="string">&#x27;-1&#x27;</span>,<span class="string">&#x27;0&#x27;</span>))</span><br><span class="line">bt_list.append(<span class="literal">None</span>)</span><br><span class="line">bt_list.append(Node(<span class="string">&#x27;D&#x27;</span>,<span class="string">&#x27;-1&#x27;</span>,<span class="string">&#x27;-1&#x27;</span>))</span><br><span class="line">bt_list.append(Node(<span class="string">&#x27;C&#x27;</span>,<span class="string">&#x27;-1&#x27;</span>,<span class="string">&#x27;-1&#x27;</span>))</span><br><span class="line">bt_list_2 = []</span><br><span class="line">bt_list_2.append(Node(<span class="string">&#x27;B&#x27;</span>,<span class="string">&#x27;4&#x27;</span>,<span class="string">&#x27;3&#x27;</span>))</span><br><span class="line">bt_list_2.append(Node(<span class="string">&#x27;A&#x27;</span>,<span class="string">&#x27;-1&#x27;</span>,<span class="string">&#x27;0&#x27;</span>))</span><br><span class="line">bt_list_2.append(<span class="literal">None</span>)</span><br><span class="line">bt_list_2.append(Node(<span class="string">&#x27;D&#x27;</span>,<span class="string">&#x27;-1&#x27;</span>,<span class="string">&#x27;-1&#x27;</span>))</span><br><span class="line">bt_list_2.append(Node(<span class="string">&#x27;C&#x27;</span>,<span class="string">&#x27;-1&#x27;</span>,<span class="string">&#x27;-1&#x27;</span>))</span><br><span class="line"></span><br><span class="line">r1 = buildtree(bt_list)</span><br><span class="line">r2 = buildtree(bt_list_2)</span><br><span class="line"><span class="keyword">if</span> isomorphic(bt_list,bt_list_2,r1, r2):</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;两颗树为同构。&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E4%BA%8C%E5%8F%89%E6%A0%91/" rel="tag"># 二叉树</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/16%E5%8D%95%E9%93%BE%E8%A1%A8%E9%80%86%E8%BD%AC/" rel="prev" title="16单链表逆转">
+                  <i class="fa fa-chevron-left"></i> 16单链表逆转
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84_%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/10%E4%BA%8C%E5%8F%89%E6%A0%91%E9%9D%9E%E9%80%92%E5%BD%92%E9%81%8D%E5%8E%86/" rel="next" title="10二叉树非递归遍历">
+                  10二叉树非递归遍历 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">陈宇韶chenyushao</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

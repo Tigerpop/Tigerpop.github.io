@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha256-AbA177XfpSnFEvgpYu1jMygiLabzPCJCRIBtR5jGc0k=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.13.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Dify笔记">
+<meta property="og:url" content="http://example.com/2025/08/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/Dify%E7%AC%94%E8%AE%B0/index.html">
+<meta property="og:site_name" content="Tiger_pop&#39;s Blog">
+<meta property="og:description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2025/08/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/Dify%E7%AC%94%E8%AE%B0/%E6%88%AA%E5%B1%8F2025-05-01%2023.07.40.png">
+<meta property="og:image" content="http://example.com/2025/08/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/Dify%E7%AC%94%E8%AE%B0/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20250515100036_463.png">
+<meta property="og:image" content="http://example.com/2025/08/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/Dify%E7%AC%94%E8%AE%B0/%E6%88%AA%E5%B1%8F2025-05-07%2021.50.46.png">
+<meta property="og:image" content="http://example.com/2025/08/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/Dify%E7%AC%94%E8%AE%B0/%E6%88%AA%E5%B1%8F2025-05-08%2009.43.46.jpg">
+<meta property="og:image" content="http://example.com/2025/08/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/Dify%E7%AC%94%E8%AE%B0/%E6%88%AA%E5%B1%8F2025-05-08%2009.46.50.jpg">
+<meta property="og:image" content="http://example.com/2025/08/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/Dify%E7%AC%94%E8%AE%B0/%E6%88%AA%E5%B1%8F2025-05-14%2010.39.53.jpg">
+<meta property="og:image" content="http://example.com/2025/08/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/Dify%E7%AC%94%E8%AE%B0/%E6%88%AA%E5%B1%8F2025-05-14%2010.38.13.jpg">
+<meta property="og:image" content="http://example.com/2025/08/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/Dify%E7%AC%94%E8%AE%B0/%E6%88%AA%E5%B1%8F2025-05-15%2010.17.21.jpg">
+<meta property="og:image" content="http://example.com/2025/08/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/Dify%E7%AC%94%E8%AE%B0/%E6%88%AA%E5%B1%8F2025-05-15%2010.22.42.jpg">
+<meta property="og:image" content="http://example.com/2025/08/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/Dify%E7%AC%94%E8%AE%B0/%E6%88%AA%E5%B1%8F2025-05-15%2010.31.24.jpg">
+<meta property="og:image" content="http://example.com/2025/08/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/Dify%E7%AC%94%E8%AE%B0/%E6%88%AA%E5%B1%8F2025-05-15%2010.35.20.jpg">
+<meta property="og:image" content="http://example.com/2025/08/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/Dify%E7%AC%94%E8%AE%B0/%E6%88%AA%E5%B1%8F2025-05-14%2010.48.53.jpg">
+<meta property="og:image" content="http://example.com/2025/08/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/Dify%E7%AC%94%E8%AE%B0/%E6%88%AA%E5%B1%8F2025-05-14%2010.52.30.jpg">
+<meta property="og:image" content="http://example.com/2025/08/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/Dify%E7%AC%94%E8%AE%B0/%E6%88%AA%E5%B1%8F2025-05-14%2011.01.53.jpg">
+<meta property="og:image" content="http://example.com/2025/08/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/Dify%E7%AC%94%E8%AE%B0/%E6%88%AA%E5%B1%8F2025-05-15%2010.33.00.jpg">
+<meta property="og:image" content="http://example.com/2025/08/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/Dify%E7%AC%94%E8%AE%B0/%E6%88%AA%E5%B1%8F2025-05-15%2014.50.36.png">
+<meta property="og:image" content="http://example.com/2025/08/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/Dify%E7%AC%94%E8%AE%B0/%E6%88%AA%E5%B1%8F2025-05-15%2014.55.28.jpg">
+<meta property="og:image" content="http://example.com/2025/08/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/Dify%E7%AC%94%E8%AE%B0/%E6%88%AA%E5%B1%8F2025-05-15%2014.57.37.jpg">
+<meta property="og:image" content="http://example.com/2025/08/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/Dify%E7%AC%94%E8%AE%B0/%E6%88%AA%E5%B1%8F2025-05-15%2014.58.14.jpg">
+<meta property="og:image" content="http://example.com/2025/08/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/Dify%E7%AC%94%E8%AE%B0/%E6%88%AA%E5%B1%8F2025-05-15%2015.01.29.jpg">
+<meta property="og:image" content="http://example.com/2025/08/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/Dify%E7%AC%94%E8%AE%B0/%E6%88%AA%E5%B1%8F2025-05-15%2015.02.29.jpg">
+<meta property="og:image" content="http://example.com/2025/08/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/Dify%E7%AC%94%E8%AE%B0/%E6%88%AA%E5%B1%8F2025-05-15%2016.52.43.jpg">
+<meta property="og:image" content="http://example.com/2025/08/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/Dify%E7%AC%94%E8%AE%B0/%E6%88%AA%E5%B1%8F2025-05-15%2017.20.55.png">
+<meta property="og:image" content="http://example.com/2025/08/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/Dify%E7%AC%94%E8%AE%B0/%E6%88%AA%E5%B1%8F2025-05-15%2017.25.30.jpg">
+<meta property="og:image" content="http://example.com/2025/08/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/Dify%E7%AC%94%E8%AE%B0/%E6%88%AA%E5%B1%8F2025-05-15%2017.25.16.jpg">
+<meta property="og:image" content="http://example.com/2025/08/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/Dify%E7%AC%94%E8%AE%B0/%E6%88%AA%E5%B1%8F2025-05-15%2017.28.42.png">
+<meta property="og:image" content="http://example.com/2025/08/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/Dify%E7%AC%94%E8%AE%B0/%E6%88%AA%E5%B1%8F2025-05-15%2017.29.05.png">
+<meta property="og:image" content="http://example.com/2025/08/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E6%88%AA%E5%B1%8F2025-05-15%2017.29.39.png">
+<meta property="og:image" content="http://example.com/2025/08/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/Dify%E7%AC%94%E8%AE%B0/%E6%88%AA%E5%B1%8F2025-05-15%2017.30.26-7301625.png">
+<meta property="og:image" content="http://example.com/2025/08/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/Dify%E7%AC%94%E8%AE%B0/%E6%88%AA%E5%B1%8F2025-05-15%2021.16.09.png">
+<meta property="og:image" content="http://example.com/2025/08/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/Dify%E7%AC%94%E8%AE%B0/%E6%88%AA%E5%B1%8F2025-05-15%2021.17.23.png">
+<meta property="og:image" content="http://example.com/2025/08/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/Dify%E7%AC%94%E8%AE%B0/%E6%88%AA%E5%B1%8F2025-05-15%2021.33.37.png">
+<meta property="og:image" content="http://example.com/2025/08/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/Dify%E7%AC%94%E8%AE%B0/%E6%88%AA%E5%B1%8F2025-05-15%2021.34.52.png">
+<meta property="og:image" content="http://example.com/2025/08/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/Dify%E7%AC%94%E8%AE%B0/%E6%88%AA%E5%B1%8F2025-05-15%2021.38.21.png">
+<meta property="og:image" content="http://example.com/2025/08/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/Dify%E7%AC%94%E8%AE%B0/%E6%88%AA%E5%B1%8F2025-05-15%2021.46.07.jpg">
+<meta property="og:image" content="http://example.com/2025/08/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/Dify%E7%AC%94%E8%AE%B0/%E6%88%AA%E5%B1%8F2025-05-15%2021.47.14.jpg">
+<meta property="og:image" content="http://example.com/2025/08/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/Dify%E7%AC%94%E8%AE%B0/%E6%88%AA%E5%B1%8F2025-05-15%2021.55.06.jpg">
+<meta property="og:image" content="http://example.com/2025/08/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/Dify%E7%AC%94%E8%AE%B0/%E6%88%AA%E5%B1%8F2025-05-15%2021.56.45.jpg">
+<meta property="og:image" content="http://example.com/2025/08/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/Dify%E7%AC%94%E8%AE%B0/%E6%88%AA%E5%B1%8F2025-05-15%2022.18.22.jpg">
+<meta property="og:image" content="http://example.com/2025/08/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/Dify%E7%AC%94%E8%AE%B0/%E6%88%AA%E5%B1%8F2025-05-15%2022.20.24.jpg">
+<meta property="og:image" content="http://example.com/2025/08/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/Dify%E7%AC%94%E8%AE%B0/%E6%88%AA%E5%B1%8F2025-05-15%2022.30.19.png">
+<meta property="og:image" content="http://example.com/2025/08/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/Dify%E7%AC%94%E8%AE%B0/123.png">
+<meta property="og:image" content="http://example.com/2025/08/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/Dify%E7%AC%94%E8%AE%B0/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20250516101549_501.png">
+<meta property="og:image" content="http://example.com/2025/08/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/Dify%E7%AC%94%E8%AE%B0/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20250516101727_502.png">
+<meta property="og:image" content="http://example.com/2025/08/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/Dify%E7%AC%94%E8%AE%B0/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20250516101720_503.png">
+<meta property="og:image" content="http://example.com/2025/08/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/Dify%E7%AC%94%E8%AE%B0/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20250516103408_504.png">
+<meta property="og:image" content="http://example.com/2025/08/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/Dify%E7%AC%94%E8%AE%B0/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20250516110401_5.png">
+<meta property="og:image" content="http://example.com/2025/08/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/Dify%E7%AC%94%E8%AE%B0/564.png">
+<meta property="og:image" content="http://example.com/2025/08/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/Dify%E7%AC%94%E8%AE%B0/333.png">
+<meta property="og:image" content="http://example.com/2025/08/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/Dify%E7%AC%94%E8%AE%B0/%E6%88%AA%E5%B1%8F2025-08-12%2020.37.51.png">
+<meta property="og:image" content="http://example.com/2025/08/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/Dify%E7%AC%94%E8%AE%B0/%E6%88%AA%E5%B1%8F2025-08-12%2023.00.55.png">
+<meta property="og:image" content="http://example.com/2025/08/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/Dify%E7%AC%94%E8%AE%B0/%E6%88%AA%E5%B1%8F2025-08-13%2013.55.24.png">
+<meta property="og:image" content="http://example.com/2025/08/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/Dify%E7%AC%94%E8%AE%B0/%E6%88%AA%E5%B1%8F2025-08-13%2013.57.24.png">
+<meta property="og:image" content="http://example.com/2025/08/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/Dify%E7%AC%94%E8%AE%B0/%E6%88%AA%E5%B1%8F2025-08-13%2013.59.54.png">
+<meta property="article:published_time" content="2025-08-13T08:27:21.000Z">
+<meta property="article:modified_time" content="2025-08-25T02:26:52.979Z">
+<meta property="article:author" content="陈宇韶chenyushao">
+<meta property="article:tag" content="dify">
+<meta property="article:tag" content="workflow">
+<meta property="article:tag" content="chatflow">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2025/08/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/Dify%E7%AC%94%E8%AE%B0/%E6%88%AA%E5%B1%8F2025-05-01%2023.07.40.png">
+
+
+<link rel="canonical" href="http://example.com/2025/08/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/Dify%E7%AC%94%E8%AE%B0/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2025/08/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/Dify%E7%AC%94%E8%AE%B0/","path":"2025/08/13/机器学习/Dify笔记/","title":"Dify笔记"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Dify笔记 | Tiger_pop's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="Tiger_pop's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Tiger_pop's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">tiger_pop 的博客</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Dify-%E5%8F%AF%E4%BB%A5%E5%81%9A%E4%BB%80%E4%B9%88"><span class="nav-number">1.</span> <span class="nav-text">Dify 可以做什么</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%8B%E8%BD%BD%E5%AE%89%E8%A3%85"><span class="nav-number">2.</span> <span class="nav-text">下载安装</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9%E9%85%8D%E7%BD%AE"><span class="nav-number">3.</span> <span class="nav-text">修改配置</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AD%98%E5%82%A8%E4%BD%8D%E7%BD%AE"><span class="nav-number">3.1.</span> <span class="nav-text">存储位置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E6%9C%8D%E5%8A%A1%E5%88%97%E8%A1%A8"><span class="nav-number">3.2.</span> <span class="nav-text">核心服务列表</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9%E7%AB%AF%E5%8F%A3"><span class="nav-number">3.3.</span> <span class="nav-text">修改端口</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%9B%E5%85%A5web%E9%A1%B5%E9%9D%A2"><span class="nav-number">3.4.</span> <span class="nav-text">进入web页面</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#AI-%E5%BA%94%E7%94%A8%E7%9A%84%E5%88%9B%E5%BB%BA"><span class="nav-number">4.</span> <span class="nav-text">AI 应用的创建</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E8%81%8A%E5%A4%A9%E5%8A%A9%E6%89%8B"><span class="nav-number">4.1.</span> <span class="nav-text">创建聊天助手</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%9B%E5%BB%BAAgent"><span class="nav-number">4.2.</span> <span class="nav-text">创建Agent</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E6%96%87%E6%9C%AC%E7%94%9F%E6%88%90%E5%BA%94%E7%94%A8"><span class="nav-number">4.3.</span> <span class="nav-text">创建文本生成应用</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#AI%E5%BA%94%E7%94%A8%E5%B7%A5%E5%85%B7%E7%AE%B1"><span class="nav-number">5.</span> <span class="nav-text">AI应用工具箱</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%B7%A5%E4%BD%9C%E6%B5%81%EF%BC%88%E5%85%B3%E9%94%AE%EF%BC%89"><span class="nav-number">6.</span> <span class="nav-text">工作流（关键）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%98%E9%87%8F"><span class="nav-number">6.1.</span> <span class="nav-text">变量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%8A%82%E7%82%B9"><span class="nav-number">6.2.</span> <span class="nav-text">节点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#chatflow%E5%B7%A5%E4%BD%9C%E6%B5%81"><span class="nav-number">6.3.</span> <span class="nav-text">chatflow工作流</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#workflow%E5%B7%A5%E4%BD%9C%E6%B5%81"><span class="nav-number">6.4.</span> <span class="nav-text">workflow工作流</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%9F%A5%E8%AF%86%E5%BA%93"><span class="nav-number">7.</span> <span class="nav-text">知识库</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%91%E5%B8%83AI%E5%BA%94%E7%94%A8"><span class="nav-number">8.</span> <span class="nav-text">发布AI应用</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8A%A8%E6%80%81%E6%9B%B4%E6%96%B0"><span class="nav-number">9.</span> <span class="nav-text">动态更新</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98%E4%BB%A5%E5%8F%8A%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95"><span class="nav-number">10.</span> <span class="nav-text">遇到的问题以及解决方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1%E3%80%81%E5%8F%91%E5%B8%83%E7%9A%84%E6%97%B6%E5%80%99%EF%BC%8C%E4%BC%9A%E5%87%BA%E7%8E%B0404%E5%88%86%E4%B8%8D%E5%88%B0%EF%BC%8C%E5%9C%A8%E2%80%9C%E6%8E%A2%E7%B4%A2%E2%80%9D%E4%B8%AD%E6%89%93%E5%BC%80%E5%8D%B4%E8%83%BD%E6%AD%A3%E5%B8%B8%E8%AE%BF%E9%97%AE%E3%80%82"><span class="nav-number">10.0.1.</span> <span class="nav-text">1、发布的时候，会出现404分不到，在“探索”中打开却能正常访问。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2%E3%80%81Failed-to-parse-response-from-plugin-daemon-to-PluginDaemonBasicResponse"><span class="nav-number">10.0.2.</span> <span class="nav-text">2、Failed to parse response from plugin daemon to PluginDaemonBasicResponse</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%82%E8%80%83%EF%BC%9A"><span class="nav-number">11.</span> <span class="nav-text">参考：</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="陈宇韶chenyushao"
+      src="/images/my.jpg">
+  <p class="site-author-name" itemprop="name">陈宇韶chenyushao</p>
+  <div class="site-description" itemprop="description">爱学习、爱工作、爱生活;         微信号: Tiger_and_master;         手机号码:18515678348 </div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">427</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">201</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2025/08/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/Dify%E7%AC%94%E8%AE%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/my.jpg">
+      <meta itemprop="name" content="陈宇韶chenyushao">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tiger_pop's Blog">
+      <meta itemprop="description" content="爱学习、爱工作、爱生活;         微信号: Tiger_and_master;         手机号码:18515678348 ">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Dify笔记 | Tiger_pop's Blog">
+      <meta itemprop="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Dify笔记
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2025-08-13 16:27:21" itemprop="dateCreated datePublished" datetime="2025-08-13T16:27:21+08:00">2025-08-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-08-25 10:26:52" itemprop="dateModified" datetime="2025-08-25T10:26:52+08:00">2025-08-25</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+            <div class="post-description">这是文章开头，显示在主页面，详情请点击此处。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="Dify-可以做什么"><a href="#Dify-可以做什么" class="headerlink" title="Dify 可以做什么"></a>Dify 可以做什么</h1><ul>
+<li>聊天助手</li>
+<li>文本生成应用</li>
+<li>Agent</li>
+<li>Chatflow 对话流：复杂流程的多轮对话场景，支持记忆，动态应用编排；</li>
+<li>workflow 工作流：自动化、批处理等单轮生成类型任务的应用编排方式，单向生成结果；</li>
+</ul>
+<h1 id="下载安装"><a href="#下载安装" class="headerlink" title="下载安装"></a>下载安装</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /home/cys/data/docker-data</span><br><span class="line"></span><br><span class="line">git https://github.com/langgenius/dify.git</span><br><span class="line"></span><br><span class="line"><span class="built_in">cd</span> /home/cys/data/docker-data/dify/docker</span><br><span class="line"></span><br><span class="line">docker compose up -d </span><br></pre></td></tr></table></figure>
+
+<p><img src="/2025/08/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/Dify%E7%AC%94%E8%AE%B0/%E6%88%AA%E5%B1%8F2025-05-01%2023.07.40.png" alt="截屏2025-05-01 23.07.40"></p>
+<h1 id="修改配置"><a href="#修改配置" class="headerlink" title="修改配置"></a>修改配置</h1><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /home/cys/data/docker-data/dify/docker</span><br><span class="line"></span><br><span class="line"><span class="comment"># 这里的 docker-compose.yaml 文件我就不全部展开了，服务很多，写了灵活的配置，会从 .env 文件中 调用，我们对 几个关键的位置 就行修改。</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 我们 需要 先明白几个点，在 yaml 文件中的那个服务 如果没有明确宿主机和容器的映射关系，那就是只在这个容器中内部使用，然后通过yaml 中写的 docker network 连接 其他几个容器，没有和宿主机扯上关系；一个宿主机下有几个这样不端口映射的容器，那么几个（如radis） 的容器运行是不会相互影响的。</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="存储位置"><a href="#存储位置" class="headerlink" title="存储位置"></a>存储位置</h2><p>从你的 <code>docker-compose.yml</code> 文件可以看出，当前数据存储主要通过以下服务挂载到容器中：</p>
+<ol>
+<li><strong>PostgreSQL（db服务）</strong>：<code>./volumes/db/data</code></li>
+<li><strong>Redis</strong>：<code>./volumes/redis/data</code></li>
+<li><strong>Weaviate&#x2F;Qdrant&#x2F;Chroma等向量库</strong>：<code>./volumes/weaviate</code>、<code>./volumes/qdrant</code></li>
+<li><strong>插件和存储目录</strong>：<code>./volumes/app/storage</code></li>
+<li><strong>其他辅助服务</strong>：如 <code>sandbox</code>、<code>plugin_daemon</code> 等</li>
+</ol>
+<p>而我的dify 下载的位置本身就在 <code>/home/cys/data/docker-data/dify</code>，<code>/home/cys/data</code> 下挂了52T的raid 磁盘空间是足够的。所以就不需要再修改了。</p>
+<p><img src="/2025/08/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/Dify%E7%AC%94%E8%AE%B0/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20250515100036_463.png" alt="微信图片_20250515100036_463"></p>
+<p>可以看见 数据其实都在 <code>/home/cys/data/docker-data/dify/docker/volumes</code> 中。</p>
+<h2 id="核心服务列表"><a href="#核心服务列表" class="headerlink" title="核心服务列表"></a><strong>核心服务列表</strong></h2><table>
+<thead>
+<tr>
+<th align="center">服务名称</th>
+<th align="center">功能说明</th>
+<th align="center">端口映射&#x2F;内部端口</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><strong>nginx</strong></td>
+<td align="center">反向代理，对外暴露 Web 和 API 服务</td>
+<td align="center"><code>80:80</code>、<code>443:443</code></td>
+</tr>
+<tr>
+<td align="center"><strong>web</strong></td>
+<td align="center">Dify 前端界面</td>
+<td align="center">通过 nginx 代理（默认 80）</td>
+</tr>
+<tr>
+<td align="center"><strong>api</strong></td>
+<td align="center">Dify 后端 API</td>
+<td align="center">通过 nginx 代理（默认 80）</td>
+</tr>
+<tr>
+<td align="center"><strong>worker</strong></td>
+<td align="center">异步任务处理服务（如数据集处理、模型调用）</td>
+<td align="center">无直接暴露</td>
+</tr>
+<tr>
+<td align="center"><strong>db</strong></td>
+<td align="center">PostgreSQL 数据库</td>
+<td align="center">内部 5432</td>
+</tr>
+<tr>
+<td align="center"><strong>redis</strong></td>
+<td align="center">Redis 缓存</td>
+<td align="center">内部 6379</td>
+</tr>
+<tr>
+<td align="center"><strong>sandbox</strong></td>
+<td align="center">代码沙箱环境（用于插件安全执行）</td>
+<td align="center">内部 8194</td>
+</tr>
+<tr>
+<td align="center"><strong>ssrf_proxy</strong></td>
+<td align="center">安全代理服务（防止 SSRF 攻击）</td>
+<td align="center">内部 3128</td>
+</tr>
+<tr>
+<td align="center"><strong>plugin_daemon</strong></td>
+<td align="center">插件守护进程（用于插件管理）</td>
+<td align="center">外部 <code>5003:5003</code></td>
+</tr>
+<tr>
+<td align="center"><strong>weaviate</strong></td>
+<td align="center">向量数据库（需手动启用）</td>
+<td align="center">内部 8080</td>
+</tr>
+<tr>
+<td align="center"><strong>qdrant</strong></td>
+<td align="center">向量数据库（需手动启用）</td>
+<td align="center">内部 6333</td>
+</tr>
+<tr>
+<td align="center"><strong>elasticsearch</strong></td>
+<td align="center">全文搜索服务（需手动启用）</td>
+<td align="center">外部 <code>9200:9200</code></td>
+</tr>
+</tbody></table>
+<h2 id="修改端口"><a href="#修改端口" class="headerlink" title="修改端口"></a>修改端口</h2><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 我想把 默认的Dify前端后端的port改成 8003 和 8004；</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 确保宿主机的 8003 和 8004 端口未被占用：# 若无输出，则表示端口可用</span></span><br><span class="line">sudo netstat -tuln | grep -E <span class="string">&#x27;8003|8004&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 由于Dify的访问是通过 nginx 代理（默认 80），所以我们实际上是对yaml中 nginx 相关内容修改。</span></span><br></pre></td></tr></table></figure>
+
+<p>Docker-compose.yaml 的services:中，修改nginx服务的映射端口：</p>
+<p><code>$&#123;EXPOSE_NGINX_PORT:-8003&#125;:$&#123;NGINX_PORT:-8003&#125;</code></p>
+<p><code>&#39;$&#123;EXPOSE_NGINX_SSL_PORT:-8004&#125;:$&#123;NGINX_SSL_PORT:-8004&#125;&#39;</code></p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">------------------------------------------------------------------------</span></span><br><span class="line"> <span class="attr">nginx:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">nginx:latest</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">always</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">./nginx/nginx.conf.template:/etc/nginx/nginx.conf.template</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">./nginx/proxy.conf.template:/etc/nginx/proxy.conf.template</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">./nginx/https.conf.template:/etc/nginx/https.conf.template</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">./nginx/conf.d:/etc/nginx/conf.d</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">./nginx/docker-entrypoint.sh:/docker-entrypoint-mount.sh</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">./nginx/ssl:/etc/ssl</span> <span class="comment"># cert dir (legacy)</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">./volumes/certbot/conf/live:/etc/letsencrypt/live</span> <span class="comment"># cert dir (with certbot container)</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">./volumes/certbot/conf:/etc/letsencrypt</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">./volumes/certbot/www:/var/www/html</span></span><br><span class="line">    <span class="attr">entrypoint:</span> [ <span class="string">&#x27;sh&#x27;</span>, <span class="string">&#x27;-c&#x27;</span>, <span class="string">&quot;cp /docker-entrypoint-mount.sh /docker-entrypoint.sh &amp;&amp; sed -i &#x27;s/\r$$//&#x27; /docker-entrypoint.sh &amp;&amp; chmod +x /docker-entrypoint.sh &amp;&amp; /docker-entrypoint.sh&quot;</span> ]</span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="attr">NGINX_SERVER_NAME:</span> <span class="string">$&#123;NGINX_SERVER_NAME:-_&#125;</span></span><br><span class="line">      <span class="attr">NGINX_HTTPS_ENABLED:</span> <span class="string">$&#123;NGINX_HTTPS_ENABLED:-false&#125;</span></span><br><span class="line">      <span class="attr">NGINX_SSL_PORT:</span> <span class="string">$&#123;NGINX_SSL_PORT:-8004&#125;</span>  <span class="comment">#$&#123;NGINX_SSL_PORT:-443&#125;</span></span><br><span class="line">      <span class="attr">NGINX_PORT:</span> <span class="string">$&#123;NGINX_PORT:-8003&#125;</span> <span class="comment">#$&#123;NGINX_PORT:-80&#125;</span></span><br><span class="line">      <span class="comment"># You&#x27;re required to add your own SSL certificates/keys to the `./nginx/ssl` directory</span></span><br><span class="line">      <span class="comment"># and modify the env vars below in .env if HTTPS_ENABLED is true.</span></span><br><span class="line">      <span class="attr">NGINX_SSL_CERT_FILENAME:</span> <span class="string">$&#123;NGINX_SSL_CERT_FILENAME:-dify.crt&#125;</span></span><br><span class="line">      <span class="attr">NGINX_SSL_CERT_KEY_FILENAME:</span> <span class="string">$&#123;NGINX_SSL_CERT_KEY_FILENAME:-dify.key&#125;</span></span><br><span class="line">      <span class="attr">NGINX_SSL_PROTOCOLS:</span> <span class="string">$&#123;NGINX_SSL_PROTOCOLS:-TLSv1.1</span> <span class="string">TLSv1.2</span> <span class="string">TLSv1.3&#125;</span></span><br><span class="line">      <span class="attr">NGINX_WORKER_PROCESSES:</span> <span class="string">$&#123;NGINX_WORKER_PROCESSES:-auto&#125;</span></span><br><span class="line">      <span class="attr">NGINX_CLIENT_MAX_BODY_SIZE:</span> <span class="string">$&#123;NGINX_CLIENT_MAX_BODY_SIZE:-15M&#125;</span></span><br><span class="line">      <span class="attr">NGINX_KEEPALIVE_TIMEOUT:</span> <span class="string">$&#123;NGINX_KEEPALIVE_TIMEOUT:-65&#125;</span></span><br><span class="line">      <span class="attr">NGINX_PROXY_READ_TIMEOUT:</span> <span class="string">$&#123;NGINX_PROXY_READ_TIMEOUT:-3600s&#125;</span></span><br><span class="line">      <span class="attr">NGINX_PROXY_SEND_TIMEOUT:</span> <span class="string">$&#123;NGINX_PROXY_SEND_TIMEOUT:-3600s&#125;</span></span><br><span class="line">      <span class="attr">NGINX_ENABLE_CERTBOT_CHALLENGE:</span> <span class="string">$&#123;NGINX_ENABLE_CERTBOT_CHALLENGE:-false&#125;</span></span><br><span class="line">      <span class="attr">CERTBOT_DOMAIN:</span> <span class="string">$&#123;CERTBOT_DOMAIN:-&#125;</span></span><br><span class="line">    <span class="attr">depends_on:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">api</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">web</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&#x27;$&#123;EXPOSE_NGINX_PORT:-8003&#125;:$&#123;NGINX_PORT:-8003&#125;&#x27;</span>  <span class="comment">#&#x27;$&#123;EXPOSE_NGINX_PORT:-80&#125;:$&#123;NGINX_PORT:-80&#125;&#x27;</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&#x27;$&#123;EXPOSE_NGINX_SSL_PORT:-8004&#125;:$&#123;NGINX_SSL_PORT:-8004&#125;&#x27;</span>  <span class="comment">#&#x27;$&#123;EXPOSE_NGINX_SSL_PORT:-443&#125;:$&#123;NGINX_SSL_PORT:-443&#125;&#x27;</span></span><br><span class="line"><span class="string">------------------------------------------------------------------------</span></span><br></pre></td></tr></table></figure>
+
+<p>.env</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 找到 nginx 的外部端口 和容器内端口 一共四个地方，修改即可，这里用 https的 走8004，http走8003 ；</span></span><br><span class="line"><span class="string">EXPOSE_NGINX_PORT=8003</span></span><br><span class="line"><span class="string">EXPOSE_NGINX_SSL_PORT=8004</span></span><br><span class="line"><span class="string">NGINX_PORT=8003</span></span><br><span class="line"><span class="string">NGINX_SSL_PORT=8004</span></span><br></pre></td></tr></table></figure>
+
+<p>防火墙给端口开一下；</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo ufw allow 8003/tcp</span><br><span class="line">sudo ufw allow 8004/tcp</span><br></pre></td></tr></table></figure>
+
+<p>重启开启一下 </p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker compose down</span><br><span class="line">docker compose up -d</span><br></pre></td></tr></table></figure>
+
+<p>如果没有 成功开启 可以 <code>docker compose logs nginx</code> 检查一下 容器日志。</p>
+<p><code>./nginx/docker-entrypoint.sh </code>这个脚本会决定最终生成的  <code>default.conf</code></p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">cys@cysserver:~/data/docker-data/dify/docker/nginx$ <span class="built_in">ls</span></span><br><span class="line">conf.d  docker-entrypoint.sh  https.conf.template  nginx.conf.template  proxy.conf.template  ssl</span><br><span class="line"></span><br><span class="line">cys@cysserver:~/data/docker-data/dify/docker/nginx/conf.d$ <span class="built_in">ls</span></span><br><span class="line">default.conf  default.conf.template  default.conf~</span><br></pre></td></tr></table></figure>
+
+<p>我们可以看到 这个 <code>default.conf</code> 文件 中 监听的端口已经是8003了。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">    listen 8003;</span><br><span class="line">    server_name _;</span><br><span class="line"></span><br><span class="line">    location /console/api &#123;</span><br><span class="line">      proxy_pass http://api:5001;</span><br><span class="line">      include proxy.conf;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    location /api &#123;</span><br><span class="line">      proxy_pass http://api:5001;</span><br><span class="line">      include proxy.conf;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    location /v1 &#123;</span><br><span class="line">      proxy_pass http://api:5001;</span><br><span class="line">      include proxy.conf;</span><br><span class="line">    &#125;</span><br><span class="line">    ...</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="进入web页面"><a href="#进入web页面" class="headerlink" title="进入web页面"></a>进入web页面</h2><p>访问：   <a target="_blank" rel="noopener" href="http://10.5.9.252:8003/">http://10.5.9.252:8003/</a></p>
+<p>注册一下Dify。</p>
+<p><img src="/2025/08/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/Dify%E7%AC%94%E8%AE%B0/%E6%88%AA%E5%B1%8F2025-05-07%2021.50.46.png" alt="截屏2025-05-07 21.50.46"></p>
+<p>在设置中安装模型供应商的插件，我们之前在本地部署了 vllm集群的 Deepseek，也可以换大模型，但是换了模型就要在这里换一下对应的插件。</p>
+<p><img src="/2025/08/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/Dify%E7%AC%94%E8%AE%B0/%E6%88%AA%E5%B1%8F2025-05-08%2009.43.46.jpg" alt="截屏2025-05-08 09.43.46"></p>
+<p><img src="/2025/08/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/Dify%E7%AC%94%E8%AE%B0/%E6%88%AA%E5%B1%8F2025-05-08%2009.46.50.jpg" alt="截屏2025-05-08 09.46.50"></p>
+<p><img src="/2025/08/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/Dify%E7%AC%94%E8%AE%B0/%E6%88%AA%E5%B1%8F2025-05-14%2010.39.53.jpg" alt="截屏2025-05-14 10.39.53"></p>
+<p>在这里可以 把我们之前本地部署的大模型和嵌入模型等等 都配置进去；</p>
+<p><img src="/2025/08/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/Dify%E7%AC%94%E8%AE%B0/%E6%88%AA%E5%B1%8F2025-05-14%2010.38.13.jpg" alt="截屏2025-05-14 10.38.13"></p>
+<p>同样的道理，我之前在本地部署的 嵌入模型 也可以用同样的方法添加进来，在模型供应商中找啊到 我用的Text Embedding Inference。</p>
+<p><img src="/2025/08/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/Dify%E7%AC%94%E8%AE%B0/%E6%88%AA%E5%B1%8F2025-05-15%2010.17.21.jpg" alt="截屏2025-05-15 10.17.21"></p>
+<p><img src="/2025/08/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/Dify%E7%AC%94%E8%AE%B0/%E6%88%AA%E5%B1%8F2025-05-15%2010.22.42.jpg" alt="截屏2025-05-15 10.22.42"></p>
+<p>我这里的 URL 是 <code>http://10.5.9.252:8002</code> 没有 带 &#x2F;v1 。</p>
+<p><img src="/2025/08/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/Dify%E7%AC%94%E8%AE%B0/%E6%88%AA%E5%B1%8F2025-05-15%2010.31.24.jpg" alt="截屏2025-05-15 10.31.24"></p>
+<p>插件中可见 已经有了 嵌入模型了。</p>
+<p><img src="/2025/08/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/Dify%E7%AC%94%E8%AE%B0/%E6%88%AA%E5%B1%8F2025-05-15%2010.35.20.jpg" alt="截屏2025-05-15 10.35.20"></p>
+<h1 id="AI-应用的创建"><a href="#AI-应用的创建" class="headerlink" title="AI 应用的创建"></a>AI 应用的创建</h1><p>点击“工作室” 创建空白应用。</p>
+<h2 id="创建聊天助手"><a href="#创建聊天助手" class="headerlink" title="创建聊天助手"></a>创建聊天助手</h2><p><img src="/2025/08/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/Dify%E7%AC%94%E8%AE%B0/%E6%88%AA%E5%B1%8F2025-05-14%2010.48.53.jpg" alt="截屏2025-05-14 10.48.53"></p>
+<p>填写提示词</p>
+<p><img src="/2025/08/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/Dify%E7%AC%94%E8%AE%B0/%E6%88%AA%E5%B1%8F2025-05-14%2010.52.30.jpg" alt="截屏2025-05-14 10.52.30"></p>
+<p>推荐用 大语言模型生成提示词，等个几十秒吧。<img src="/2025/08/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/Dify%E7%AC%94%E8%AE%B0/%E6%88%AA%E5%B1%8F2025-05-14%2011.01.53.jpg" alt="截屏2025-05-14 11.01.53"></p>
+<p>生成以后再应用一下就好。</p>
+<p>在调试和预览、对话、知识库什么的都可以用，右上角可以换大模型。</p>
+<p><img src="/2025/08/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/Dify%E7%AC%94%E8%AE%B0/%E6%88%AA%E5%B1%8F2025-05-15%2010.33.00.jpg" alt="截屏2025-05-15 10.33.00"></p>
+<h2 id="创建Agent"><a href="#创建Agent" class="headerlink" title="创建Agent"></a>创建Agent</h2><p>打个比方 是 生成 图片的 Agent ，可以先本地运行一个 多模态的模型，然后 在插件中 下载一个 stability，在 工作室 Agent 界面下方 工具中添加 stability 插件。</p>
+<p><img src="/2025/08/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/Dify%E7%AC%94%E8%AE%B0/%E6%88%AA%E5%B1%8F2025-05-15%2014.50.36.png" alt="截屏2025-05-15 14.50.36"></p>
+<h2 id="创建文本生成应用"><a href="#创建文本生成应用" class="headerlink" title="创建文本生成应用"></a>创建文本生成应用</h2><p><img src="/2025/08/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/Dify%E7%AC%94%E8%AE%B0/%E6%88%AA%E5%B1%8F2025-05-15%2014.55.28.jpg" alt="截屏2025-05-15 14.55.28"></p>
+<p>打一个 <code>&#123;</code> 就会让你选择是否新建变量。</p>
+<p><img src="/2025/08/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/Dify%E7%AC%94%E8%AE%B0/%E6%88%AA%E5%B1%8F2025-05-15%2014.57.37.jpg" alt="截屏2025-05-15 14.57.37"></p>
+<p><img src="/2025/08/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/Dify%E7%AC%94%E8%AE%B0/%E6%88%AA%E5%B1%8F2025-05-15%2014.58.14.jpg" alt="截屏2025-05-15 14.58.14"></p>
+<p><img src="/2025/08/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/Dify%E7%AC%94%E8%AE%B0/%E6%88%AA%E5%B1%8F2025-05-15%2015.01.29.jpg" alt="截屏2025-05-15 15.01.29"></p>
+<p><img src="/2025/08/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/Dify%E7%AC%94%E8%AE%B0/%E6%88%AA%E5%B1%8F2025-05-15%2015.02.29.jpg" alt="截屏2025-05-15 15.02.29"></p>
+<p>可见 右边 “调试与预览” 中 出现了左边 提示词的 内容；</p>
+<p>点击运行</p>
+<p><img src="/2025/08/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/Dify%E7%AC%94%E8%AE%B0/%E6%88%AA%E5%B1%8F2025-05-15%2016.52.43.jpg" alt="截屏2025-05-15 16.52.43"></p>
+<h1 id="AI应用工具箱"><a href="#AI应用工具箱" class="headerlink" title="AI应用工具箱"></a>AI应用工具箱</h1><p><img src="/2025/08/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/Dify%E7%AC%94%E8%AE%B0/%E6%88%AA%E5%B1%8F2025-05-15%2017.20.55.png" alt="截屏2025-05-15 17.20.55"></p>
+<p>以聊天助手为例</p>
+<p><img src="/2025/08/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/Dify%E7%AC%94%E8%AE%B0/%E6%88%AA%E5%B1%8F2025-05-15%2017.25.30.jpg" alt="截屏2025-05-15 17.25.30"></p>
+<p><img src="/2025/08/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/Dify%E7%AC%94%E8%AE%B0/%E6%88%AA%E5%B1%8F2025-05-15%2017.25.16.jpg" alt="截屏2025-05-15 17.25.16"></p>
+<p>对话开场白 可以手动给用户选择，下一步问题的建议、 实现内容审查等等。<img src="/2025/08/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/Dify%E7%AC%94%E8%AE%B0/%E6%88%AA%E5%B1%8F2025-05-15%2017.28.42.png" alt="截屏2025-05-15 17.28.42"><img src="/2025/08/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/Dify%E7%AC%94%E8%AE%B0/%E6%88%AA%E5%B1%8F2025-05-15%2017.29.05.png" alt="截屏2025-05-15 17.29.05"></p>
+<p><img src="/2025/08/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/Dify%E7%AC%94%E8%AE%B0/../%E6%88%AA%E5%B1%8F2025-05-15%2017.29.39.png" alt="截屏2025-05-15 17.30.26"></p>
+<p><img src="/2025/08/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/Dify%E7%AC%94%E8%AE%B0/%E6%88%AA%E5%B1%8F2025-05-15%2017.30.26-7301625.png" alt="截屏2025-05-15 17.30.26"></p>
+<h1 id="工作流（关键）"><a href="#工作流（关键）" class="headerlink" title="工作流（关键）"></a>工作流（关键）</h1><p><img src="/2025/08/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/Dify%E7%AC%94%E8%AE%B0/%E6%88%AA%E5%B1%8F2025-05-15%2021.16.09.png" alt="截屏2025-05-15 21.16.09"></p>
+<h2 id="变量"><a href="#变量" class="headerlink" title="变量"></a>变量</h2><p><img src="/2025/08/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/Dify%E7%AC%94%E8%AE%B0/%E6%88%AA%E5%B1%8F2025-05-15%2021.17.23.png" alt="截屏2025-05-15 21.17.23"></p>
+<p>系统变量（sys.xxx）、环境变量、会话变量 其实都是和编程语言类似的逻辑。</p>
+<p><img src="/2025/08/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/Dify%E7%AC%94%E8%AE%B0/%E6%88%AA%E5%B1%8F2025-05-15%2021.33.37.png" alt="截屏2025-05-15 21.33.37"></p>
+<p><img src="/2025/08/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/Dify%E7%AC%94%E8%AE%B0/%E6%88%AA%E5%B1%8F2025-05-15%2021.34.52.png" alt="截屏2025-05-15 21.34.52"></p>
+<h2 id="节点"><a href="#节点" class="headerlink" title="节点"></a>节点</h2><p><img src="/2025/08/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/Dify%E7%AC%94%E8%AE%B0/%E6%88%AA%E5%B1%8F2025-05-15%2021.38.21.png" alt="截屏2025-05-15 21.38.21"></p>
+<h2 id="chatflow工作流"><a href="#chatflow工作流" class="headerlink" title="chatflow工作流"></a>chatflow工作流</h2><p>我新建了一个 chatflow工作流（和workflow区别就是chatflow是对话形式）</p>
+<p><img src="/2025/08/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/Dify%E7%AC%94%E8%AE%B0/%E6%88%AA%E5%B1%8F2025-05-15%2021.46.07.jpg" alt="截屏2025-05-15 21.46.07"></p>
+<p><img src="/2025/08/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/Dify%E7%AC%94%E8%AE%B0/%E6%88%AA%E5%B1%8F2025-05-15%2021.47.14.jpg" alt="截屏2025-05-15 21.47.14"></p>
+<p><img src="/2025/08/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/Dify%E7%AC%94%E8%AE%B0/%E6%88%AA%E5%B1%8F2025-05-15%2021.55.06.jpg" alt="截屏2025-05-15 21.55.06"></p>
+<p>选择直接回复大模型的text。</p>
+<p><img src="/2025/08/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/Dify%E7%AC%94%E8%AE%B0/%E6%88%AA%E5%B1%8F2025-05-15%2021.56.45.jpg" alt="截屏2025-05-15 21.56.45"></p>
+<p>一个节点的输出喂下一个节点。</p>
+<p><img src="/2025/08/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/Dify%E7%AC%94%E8%AE%B0/%E6%88%AA%E5%B1%8F2025-05-15%2022.18.22.jpg" alt="截屏2025-05-15 22.18.22"></p>
+<p><img src="/2025/08/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/Dify%E7%AC%94%E8%AE%B0/%E6%88%AA%E5%B1%8F2025-05-15%2022.20.24.jpg" alt="截屏2025-05-15 22.20.24"></p>
+<p><img src="/2025/08/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/Dify%E7%AC%94%E8%AE%B0/%E6%88%AA%E5%B1%8F2025-05-15%2022.30.19.png" alt="截屏2025-05-15 22.30.19"></p>
+<h2 id="workflow工作流"><a href="#workflow工作流" class="headerlink" title="workflow工作流"></a>workflow工作流</h2><p>workflow类似我原来开发的自动化处理流程，而chatflow类似于对话的形式；</p>
+<p>一个是工作软件一个对对话助手。</p>
+<h1 id="知识库"><a href="#知识库" class="headerlink" title="知识库"></a>知识库</h1><p>RAG 可视化界面操作。</p>
+<p>一个文件大小上限15M，<img src="/2025/08/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/Dify%E7%AC%94%E8%AE%B0/123.png" alt="123"></p>
+<p><img src="/2025/08/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/Dify%E7%AC%94%E8%AE%B0/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20250516101549_501.png" alt="微信图片_20250516101549_501">这里来设置如何切文档或者表格、文件的嵌入模型和检索设置；向量、全文还是混合搜索，之前的文档中我有过介绍。这样直接可视化的切分确实比open webUI看起来直观很多。</p>
+<p><img src="/2025/08/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/Dify%E7%AC%94%E8%AE%B0/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20250516101727_502.png" alt="微信图片_20250516101727_502"><img src="/2025/08/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/Dify%E7%AC%94%E8%AE%B0/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20250516101720_503.png" alt="微信图片_20250516101720_503"></p>
+<p>这样就添加好了一个 文件。</p>
+<p>关联上知识库以后，就可以用了。</p>
+<p><img src="/2025/08/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/Dify%E7%AC%94%E8%AE%B0/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20250516103408_504.png" alt="微信图片_20250516103408_504"></p>
+<h1 id="发布AI应用"><a href="#发布AI应用" class="headerlink" title="发布AI应用"></a>发布AI应用</h1><p>由于我们是内网使用，所以直接运行在服务器上就可以了。</p>
+<p><img src="/2025/08/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/Dify%E7%AC%94%E8%AE%B0/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20250516110401_5.png" alt="微信图片_20250516110401_5"></p>
+<ul>
+<li><p>点击运行，会直接出现一个网址，别的机器访问这个url就可以实现访问dify。</p>
+</li>
+<li><p>或者点击下方的嵌入到网页，把一段它给出的 代码 粘贴进 html 的前端页面中即可。</p>
+</li>
+<li><p>或者 直接用 APIs ，不关注后端情况，直接用接口。</p>
+<p><img src="/2025/08/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/Dify%E7%AC%94%E8%AE%B0/564.png" alt="564"></p>
+</li>
+</ul>
+<p>这样的做法可以让应用更加定制化一些，相比于open webUI。</p>
+<h1 id="动态更新"><a href="#动态更新" class="headerlink" title="动态更新"></a>动态更新</h1><p>对于 docker compose 的 yaml 部署的 dify ，仅仅需要更新这三个容器就可以实现版本更新，但是注意好备份。注意步骤：</p>
+<p>1、备份 PostgreSQL</p>
+<p>2、备份你的挂载目录</p>
+<p>3、备份配置文件.env 和yaml</p>
+<p>4、修改docker-compose.yaml文件</p>
+<p>5、拉取镜像，并重新启动</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 根据你实际的容器名和用户名修改命令。在 .env 和 docker ps 中可以看见。</span></span><br><span class="line"><span class="comment"># postgres 表示使用用户名；dify 是要备份的数据库名；docker-db-1 是容器名； </span></span><br><span class="line">docker <span class="built_in">exec</span> -t docker-db-1 pg_dump -U postgres dify &gt; ./backup/dify_backup_$(<span class="built_in">date</span> +%F).sql</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 至少打包 Dify 主体部分 + PostgreSQL + Redis：</span></span><br><span class="line">tar czf backup_volumes_$(<span class="built_in">date</span> +%F).tar.gz ./volumes/app ./volumes/db ./volumes/redis</span><br><span class="line"></span><br><span class="line"><span class="built_in">cp</span> .<span class="built_in">env</span> backup/.env.bak_$(<span class="built_in">date</span> +%F)</span><br><span class="line"><span class="built_in">cp</span> docker-compose.yml backup/docker-compose.yml.bak_$(<span class="built_in">date</span> +%F)</span><br><span class="line"></span><br><span class="line"><span class="comment"># yaml 文件中对以下三个容器修改。</span></span><br><span class="line">services:</span><br><span class="line">  api:</span><br><span class="line">    image: langgenius/dify-api:latest</span><br><span class="line">  web:</span><br><span class="line">    image: langgenius/dify-web:latest</span><br><span class="line">  worker:</span><br><span class="line">    image: langgenius/dify-api:latest</span><br><span class="line">    </span><br><span class="line">docker-compose pull</span><br><span class="line">docker-compose up -d</span><br></pre></td></tr></table></figure>
+
+<p>在docker ps 中可以看见 dify 版本。</p>
+<h1 id="遇到的问题以及解决方法"><a href="#遇到的问题以及解决方法" class="headerlink" title="遇到的问题以及解决方法"></a>遇到的问题以及解决方法</h1><h3 id="1、发布的时候，会出现404分不到，在“探索”中打开却能正常访问。"><a href="#1、发布的时候，会出现404分不到，在“探索”中打开却能正常访问。" class="headerlink" title="1、发布的时候，会出现404分不到，在“探索”中打开却能正常访问。"></a><strong>1、发布的时候，会出现404分不到，在“探索”中打开却能正常访问。</strong></h3><p>这是因为我前面yaml配置中env配置中修改过端口号。手动在生成的URL中的IP后添加端口即可。</p>
+<p><img src="/2025/08/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/Dify%E7%AC%94%E8%AE%B0/333.png" alt="333"></p>
+<p>同样的道理，在 **嵌入到前端页面 **中的时候也要加上端口号。</p>
+<p>例如：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"> <span class="variable language_">window</span>.<span class="property">difyChatbotConfig</span> = &#123;</span></span><br><span class="line"><span class="language-javascript">  <span class="attr">token</span>: <span class="string">&#x27;RtixHB3eI1lQvUsR&#x27;</span>,</span></span><br><span class="line"><span class="language-javascript">  <span class="attr">baseUrl</span>: <span class="string">&#x27;http://10.5.9.252&#x27;</span>,</span></span><br><span class="line"><span class="language-javascript">  <span class="attr">systemVariables</span>: &#123;</span></span><br><span class="line"><span class="language-javascript">    <span class="comment">// user_id: &#x27;YOU CAN DEFINE USER ID HERE&#x27;,</span></span></span><br><span class="line"><span class="language-javascript">    <span class="comment">// conversation_id: &#x27;YOU CAN DEFINE CONVERSATION ID HERE, IT MUST BE A VALID UUID&#x27;,</span></span></span><br><span class="line"><span class="language-javascript">  &#125;,</span></span><br><span class="line"><span class="language-javascript"> &#125;</span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span></span></span><br><span class="line"><span class="tag"> <span class="attr">src</span>=<span class="string">&quot;http://10.5.9.252/embed.min.js&quot;</span></span></span><br><span class="line"><span class="tag"> <span class="attr">id</span>=<span class="string">&quot;RtixHB3eI1lQvUsR&quot;</span></span></span><br><span class="line"><span class="tag"> <span class="attr">defer</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">style</span>&gt;</span><span class="language-css"></span></span><br><span class="line"><span class="language-css">  <span class="selector-id">#dify-chatbot-bubble-button</span> &#123;</span></span><br><span class="line"><span class="language-css">    <span class="attribute">background-color</span>: <span class="number">#1C64F2</span> <span class="meta">!important</span>;</span></span><br><span class="line"><span class="language-css">  &#125;</span></span><br><span class="line"><span class="language-css">  <span class="selector-id">#dify-chatbot-bubble-window</span> &#123;</span></span><br><span class="line"><span class="language-css">    <span class="attribute">width</span>: <span class="number">24rem</span> <span class="meta">!important</span>;</span></span><br><span class="line"><span class="language-css">    <span class="attribute">height</span>: <span class="number">40rem</span> <span class="meta">!important</span>;</span></span><br><span class="line"><span class="language-css">  &#125;</span></span><br><span class="line"><span class="language-css"></span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>上方统一需要在252后加 8003 我前面改的端口号。</p>
+<h3 id="2、Failed-to-parse-response-from-plugin-daemon-to-PluginDaemonBasicResponse"><a href="#2、Failed-to-parse-response-from-plugin-daemon-to-PluginDaemonBasicResponse" class="headerlink" title="2、Failed to parse response from plugin daemon to PluginDaemonBasicResponse"></a>2、Failed to parse response from plugin daemon to PluginDaemonBasicResponse</h3><p>遇到报错：</p>
+<blockquote>
+<p>Failed to parse response from plugin daemon to PluginDaemonBasicResponse [PluginListResponse], url: plugin&#x2F;a7060300-e4d0-426c-8690-5036fef955e7&#x2F;management&#x2F;list</p>
+</blockquote>
+<p>分析问题，是一个守护进程不停的访问，然后返回的格式又不匹配导致的。以下是分析过程：<br>我们先通过 日志确定问题 <code>docker logs -f docker-plugin_daemon-1</code>,发现 </p>
+<blockquote>
+<p>2025&#x2F;08&#x2F;12 13:02:09 stdio.go:160: [INFO]plugin langgenius&#x2F;huggingface_tei:0.0.3: Installed model: huggingface_tei 2025&#x2F;08&#x2F;12 13:02:09 stdio.go:160: [INFO]plugin langgenius&#x2F;azure_openai:0.0.17: Installed model: azure_openai [GIN] 2025&#x2F;08&#x2F;12 - 13:02:23 | 200 |   19.930974ms |      172.20.0.8 | GET      “&#x2F;plugin&#x2F;a7060300-e4d0-426c-8690-5036fef955e7&#x2F;management&#x2F;list?page&#x3D;1&amp;page_size&#x3D;100”</p>
+</blockquote>
+<p>而我通过 <code>docker network ls</code> 找到 <code>3efdfbe91ed7 docker_default</code>；</p>
+<p><code> docker network inspect dify_default</code> 发现 前面日志中的 172.20.0.8 就是 docker-api-1。我们进一步看它的日志。</p>
+<p><code>docker logs -f docker-api-1</code> 提示说 返回的格式不匹配:</p>
+<blockquote>
+<p> File “&#x2F;app&#x2F;api&#x2F;.venv&#x2F;lib&#x2F;python3.12&#x2F;site-packages&#x2F;pydantic&#x2F;main.py”, line 253, in <strong>init</strong>    validated_self &#x3D; self.<strong>pydantic_validator</strong>.validate_python(data, self_instance&#x3D;self)                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ pydantic_core._pydantic_core.ValidationError: 1 validation error for PluginDaemonBasicResponse[PluginListResponse] data  Input should be a valid dictionary or instance of PluginListResponse [type&#x3D;model_type, input_value&#x3D;[{‘id’: ‘f45acc46-9e4d-4f…5c71c2231’, ‘meta’: {}}], input_type&#x3D;list]    For further information visit <a target="_blank" rel="noopener" href="https://errors.pydantic.dev/2.11/v/model_type">https://errors.pydantic.dev/2.11/v/model_type</a></p>
+</blockquote>
+<p>我确定了是之前的 插件或者插件容器相关的内容导致的问题，</p>
+<p>解决思路如下：</p>
+<p>1、清理 PostgreSQL + Redis 中的内容；</p>
+<p>2、清理 本地残留插件文件；</p>
+<p>3、进入 docker-compose.yaml 文件查看是否版本有明显偏差；</p>
+<p>步骤：</p>
+<p>1、清理 PostgreSQL + Redis 中的内容：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 查看有哪些表</span></span><br><span class="line">docker <span class="built_in">exec</span> -it docker-db-1 psql -U postgres -l</span><br><span class="line"></span><br><span class="line">docker <span class="built_in">exec</span> -it docker-db-1 psql -U postgres -d dify_plugin</span><br><span class="line">\dt</span><br><span class="line"><span class="comment"># 以 dify_plugin 为例，逐个检查，发现 a7060300-e4d0-426c-8690-5036fef955e7 相关的就删除。</span></span><br><span class="line">select * from tool_installations;</span><br><span class="line">delete from tool_installations <span class="built_in">where</span> tenant_id=<span class="string">&#x27;a7060300-e4d0-426c-8690-5036fef955e7&#x27;</span> ;</span><br><span class="line"><span class="built_in">exit</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 清理 redis</span></span><br><span class="line">docker <span class="built_in">exec</span> -it docker-redis-1 redis-cli</span><br><span class="line">FLUSHALL</span><br><span class="line"><span class="built_in">exit</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/2025/08/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/Dify%E7%AC%94%E8%AE%B0/%E6%88%AA%E5%B1%8F2025-08-12%2020.37.51.png" alt="截屏2025-08-12 20.37.51"></p>
+<p><img src="/2025/08/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/Dify%E7%AC%94%E8%AE%B0/%E6%88%AA%E5%B1%8F2025-08-12%2023.00.55.png" alt="截屏2025-08-12 23.00.55"></p>
+<p>但是一个一个删除很慢，用下面的脚本 模糊搜索 删除也行；</p>
+<p><code>vim  clean_plugin.sh</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"><span class="built_in">set</span> -e</span><br><span class="line"></span><br><span class="line">PLUGIN_ID=<span class="string">&quot;<span class="variable">$1</span>&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> [ -z <span class="string">&quot;<span class="variable">$PLUGIN_ID</span>&quot;</span> ]; <span class="keyword">then</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;❌ 用法: <span class="variable">$0</span> &lt;插件ID或关键字&gt;&quot;</span></span><br><span class="line">    <span class="built_in">exit</span> 1</span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 容器名（改成你的）</span></span><br><span class="line">PG_CONTAINER=<span class="string">&quot;docker-db-1&quot;</span></span><br><span class="line">REDIS_CONTAINER=<span class="string">&quot;docker-redis-1&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;🔍 开始在 PostgreSQL 中搜索包含 [<span class="variable">$PLUGIN_ID</span>] 的记录...&quot;</span></span><br><span class="line">PG_MATCHES=$(docker <span class="built_in">exec</span> -i <span class="string">&quot;<span class="variable">$PG_CONTAINER</span>&quot;</span> psql -U postgres -d dify -t -A -c <span class="string">&quot;</span></span><br><span class="line"><span class="string">SELECT table_name, column_name</span></span><br><span class="line"><span class="string">FROM information_schema.columns</span></span><br><span class="line"><span class="string">WHERE table_schema=&#x27;public&#x27;;</span></span><br><span class="line"><span class="string">&quot;</span> | <span class="keyword">while</span> IFS=<span class="string">&quot;|&quot;</span> <span class="built_in">read</span> -r table column; <span class="keyword">do</span></span><br><span class="line">    docker <span class="built_in">exec</span> -i <span class="string">&quot;<span class="variable">$PG_CONTAINER</span>&quot;</span> psql -U postgres -d dify -t -A -c \</span><br><span class="line">    <span class="string">&quot;SELECT &#x27;<span class="variable">$table</span>&#x27;, &#x27;<span class="variable">$column</span>&#x27;, <span class="variable">$column</span> FROM \&quot;<span class="variable">$table</span>\&quot; WHERE CAST(<span class="variable">$column</span> AS TEXT) LIKE &#x27;%<span class="variable">$PLUGIN_ID</span>%&#x27;&quot;</span> \</span><br><span class="line">    2&gt;/dev/null</span><br><span class="line"><span class="keyword">done</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> [ -n <span class="string">&quot;<span class="variable">$PG_MATCHES</span>&quot;</span> ]; <span class="keyword">then</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;找到以下匹配记录：&quot;</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;<span class="variable">$PG_MATCHES</span>&quot;</span></span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;✅ PostgreSQL 未找到匹配记录。&quot;</span></span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">read</span> -p <span class="string">&quot;⚠️ 是否删除这些 PostgreSQL 记录？(y/n) &quot;</span> confirm</span><br><span class="line"><span class="keyword">if</span> [[ <span class="string">&quot;<span class="variable">$confirm</span>&quot;</span> == <span class="string">&quot;y&quot;</span> ]]; <span class="keyword">then</span></span><br><span class="line">    docker <span class="built_in">exec</span> -i <span class="string">&quot;<span class="variable">$PG_CONTAINER</span>&quot;</span> psql -U postgres -d dify -t -A -c <span class="string">&quot;</span></span><br><span class="line"><span class="string">    SELECT table_name, column_name</span></span><br><span class="line"><span class="string">    FROM information_schema.columns</span></span><br><span class="line"><span class="string">    WHERE table_schema=&#x27;public&#x27;;</span></span><br><span class="line"><span class="string">    &quot;</span> | <span class="keyword">while</span> IFS=<span class="string">&quot;|&quot;</span> <span class="built_in">read</span> -r table column; <span class="keyword">do</span></span><br><span class="line">        docker <span class="built_in">exec</span> -i <span class="string">&quot;<span class="variable">$PG_CONTAINER</span>&quot;</span> psql -U postgres -d dify -c \</span><br><span class="line">        <span class="string">&quot;DELETE FROM \&quot;<span class="variable">$table</span>\&quot; WHERE CAST(<span class="variable">$column</span> AS TEXT) LIKE &#x27;%<span class="variable">$PLUGIN_ID</span>%&#x27;&quot;</span> \</span><br><span class="line">        2&gt;/dev/null || <span class="literal">true</span></span><br><span class="line">    <span class="keyword">done</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;🗑 PostgreSQL 相关记录已删除。&quot;</span></span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;🔍 开始在 Redis 中搜索包含 [<span class="variable">$PLUGIN_ID</span>] 的键和值...&quot;</span></span><br><span class="line">REDIS_KEYS=$(docker <span class="built_in">exec</span> -i <span class="string">&quot;<span class="variable">$REDIS_CONTAINER</span>&quot;</span> redis-cli --scan | grep <span class="string">&quot;<span class="variable">$PLUGIN_ID</span>&quot;</span> || <span class="literal">true</span>)</span><br><span class="line">REDIS_VAL_KEYS=$(docker <span class="built_in">exec</span> -i <span class="string">&quot;<span class="variable">$REDIS_CONTAINER</span>&quot;</span> redis-cli --scan | <span class="keyword">while</span> <span class="built_in">read</span> -r key; <span class="keyword">do</span></span><br><span class="line">    <span class="keyword">if</span> docker <span class="built_in">exec</span> -i <span class="string">&quot;<span class="variable">$REDIS_CONTAINER</span>&quot;</span> redis-cli GET <span class="string">&quot;<span class="variable">$key</span>&quot;</span> 2&gt;/dev/null | grep -q <span class="string">&quot;<span class="variable">$PLUGIN_ID</span>&quot;</span>; <span class="keyword">then</span></span><br><span class="line">        <span class="built_in">echo</span> <span class="string">&quot;<span class="variable">$key</span>&quot;</span></span><br><span class="line">    <span class="keyword">fi</span></span><br><span class="line"><span class="keyword">done</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> [ -n <span class="string">&quot;$REDIS_KEYS<span class="variable">$REDIS_VAL_KEYS</span>&quot;</span> ]; <span class="keyword">then</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;找到以下 Redis 相关键：&quot;</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;<span class="variable">$REDIS_KEYS</span>&quot;</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;<span class="variable">$REDIS_VAL_KEYS</span>&quot;</span></span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;✅ Redis 未找到匹配记录。&quot;</span></span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">read</span> -p <span class="string">&quot;⚠️ 是否删除这些 Redis 键？(y/n) &quot;</span> confirm</span><br><span class="line"><span class="keyword">if</span> [[ <span class="string">&quot;<span class="variable">$confirm</span>&quot;</span> == <span class="string">&quot;y&quot;</span> ]]; <span class="keyword">then</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;<span class="variable">$REDIS_KEYS</span>&quot;</span> <span class="string">&quot;<span class="variable">$REDIS_VAL_KEYS</span>&quot;</span> | <span class="built_in">tr</span> <span class="string">&#x27; &#x27;</span> <span class="string">&#x27;\n&#x27;</span> | <span class="built_in">sort</span> -u | <span class="keyword">while</span> <span class="built_in">read</span> -r key; <span class="keyword">do</span></span><br><span class="line">        docker <span class="built_in">exec</span> -i <span class="string">&quot;<span class="variable">$REDIS_CONTAINER</span>&quot;</span> redis-cli DEL <span class="string">&quot;<span class="variable">$key</span>&quot;</span> &gt;/dev/null</span><br><span class="line">    <span class="keyword">done</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;🗑 Redis 相关键已删除。&quot;</span></span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;🎯 清理完成。&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>运行上面脚本</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">chmod</span> +x clean_plugin.sh</span><br><span class="line">./clean_plugin.sh a7060300-e4d0-426c-8690-5036fef955e7 </span><br><span class="line"><span class="comment"># a7060300-e4d0-426c-8690-5036fef955e7 是我的插件报错的提示内容。</span></span><br></pre></td></tr></table></figure>
+
+<p>2、清理 本地残留插件文件：</p>
+<p><code>/home/cys/data/docker-data/dify/docker/volumes</code> 是我的本地位置，如果你的目录结构不同，请替换路径。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 分别进入下面两个文件夹中，然后删除和报错相关的内容。</span></span><br><span class="line"><span class="built_in">cd</span> /home/cys/data/docker-data/dify/docker/volumes/plugin_daemon/plugin</span><br><span class="line"><span class="comment"># 逐个检查，发现就 a7060300-e4d0-426c-8690-5036fef955e7 相关的就删除 rm 。</span></span><br><span class="line"><span class="built_in">cd</span> /home/cys/data/docker-data/dify/docker/volumes/plugin_daemon/plugin_packages</span><br><span class="line"><span class="comment"># 逐个检查，发现就 a7060300-e4d0-426c-8690-5036fef955e7 相关的就删除 rm 。</span></span><br></pre></td></tr></table></figure>
+
+<p>3、进入 docker-compose.yaml 文件修改；</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">docker-compose stop plugin_daemon</span><br><span class="line">docker-compose <span class="built_in">rm</span> -f plugin_daemon</span><br><span class="line"></span><br><span class="line">docker rmi &lt;plugin_daemon_image_name&gt;</span><br></pre></td></tr></table></figure>
+
+<p>查看 GitHub中 项目的 <code>docker-compose.yaml </code>中的 <code>plugin_daemon</code>:</p>
+<p><img src="/2025/08/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/Dify%E7%AC%94%E8%AE%B0/%E6%88%AA%E5%B1%8F2025-08-13%2013.55.24.png" alt="截屏2025-08-13 13.55.24"></p>
+<p>进入我们的  <code>docker-compose.yaml </code>中修改  <code>plugin_daemon</code>:，然后重新拉取，我这里是把  <code>langgenius/dify-plugin-daemon:latest:0.0.9-local</code> 改成 <code>langgenius/dify-plugin-daemon:0.2.0-local </code>。</p>
+<p><img src="/2025/08/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/Dify%E7%AC%94%E8%AE%B0/%E6%88%AA%E5%B1%8F2025-08-13%2013.57.24.png" alt="截屏2025-08-13 13.57.24"></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 把yaml修改与Dify官方GitHub一致</span></span><br><span class="line">vim docker-compose.yaml </span><br><span class="line"></span><br><span class="line"><span class="comment"># 拉取</span></span><br><span class="line">docker-compose up -d plugin_daemon</span><br><span class="line"></span><br><span class="line"><span class="comment"># 检查</span></span><br><span class="line">docker images | grep langgenius/dify-plugin-daemon</span><br></pre></td></tr></table></figure>
+
+
+
+<p><img src="/2025/08/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/Dify%E7%AC%94%E8%AE%B0/%E6%88%AA%E5%B1%8F2025-08-13%2013.59.54.png" alt="截屏2025-08-13 13.59.54">问题解决了。</p>
+<h1 id="参考："><a href="#参考：" class="headerlink" title="参考："></a>参考：</h1><p><a target="_blank" rel="noopener" href="https://docs.dify.ai/zh-hans/guides/workflow/node/doc-extractor">https://docs.dify.ai/zh-hans/guides/workflow/node/doc-extractor</a></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/dify/" rel="tag"># dify</a>
+              <a href="/tags/workflow/" rel="tag"># workflow</a>
+              <a href="/tags/chatflow/" rel="tag"># chatflow</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2025/08/08/%E7%A7%91%E5%AD%A6%E9%82%A3%E4%B8%AA%E4%B8%8A%E7%BD%91/Cloudflare%E5%85%8D%E8%B4%B9%E4%BB%A3%E7%90%86%E8%8A%82%E7%82%B9%EF%BC%88%E5%8F%AF%E7%94%A8chatgpt%E3%80%81X%E7%AD%89%EF%BC%89%E6%95%99%E7%A8%8B/" rel="prev" title="Cloudflare免费代理节点（可用chatgpt、X等）教程">
+                  <i class="fa fa-chevron-left"></i> Cloudflare免费代理节点（可用chatgpt、X等）教程
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2025/08/24/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E6%89%8B%E5%86%99MCPserver/" rel="next" title="手写MCPserver">
+                  手写MCPserver <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">陈宇韶chenyushao</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

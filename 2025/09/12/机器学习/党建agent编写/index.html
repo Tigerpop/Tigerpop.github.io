@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha256-AbA177XfpSnFEvgpYu1jMygiLabzPCJCRIBtR5jGc0k=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.13.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="党建agent编写">
+<meta property="og:url" content="http://example.com/2025/09/12/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E5%85%9A%E5%BB%BAagent%E7%BC%96%E5%86%99/index.html">
+<meta property="og:site_name" content="Tiger_pop&#39;s Blog">
+<meta property="og:description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2025/09/12/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E5%85%9A%E5%BB%BAagent%E7%BC%96%E5%86%99/623e55bc-5073-45fc-ad53-620d3b705e84.png">
+<meta property="og:image" content="http://example.com/2025/09/12/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E5%85%9A%E5%BB%BAagent%E7%BC%96%E5%86%99/29f783f9-4fc7-4571-880e-a1941f0a854e.png">
+<meta property="og:image" content="http://example.com/2025/09/12/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E5%85%9A%E5%BB%BAagent%E7%BC%96%E5%86%99/e11f12c2-66c0-47ce-b1c6-3eddf6ffc9d0.png">
+<meta property="og:image" content="http://example.com/2025/09/12/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E5%85%9A%E5%BB%BAagent%E7%BC%96%E5%86%99/80fb41af-50ab-43ca-af1e-b8d8a858beef.png">
+<meta property="og:image" content="http://example.com/2025/09/12/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E5%85%9A%E5%BB%BAagent%E7%BC%96%E5%86%99/a5de9e06-e4de-4d27-8dba-f530de553314.png">
+<meta property="og:image" content="http://example.com/2025/09/12/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E5%85%9A%E5%BB%BAagent%E7%BC%96%E5%86%99/4165685d-3ec3-4ea4-a35a-b45efa0d0098.png">
+<meta property="og:image" content="http://example.com/2025/09/12/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E5%85%9A%E5%BB%BAagent%E7%BC%96%E5%86%99/3503456e-bed8-430c-b1c6-cf1c91843ca4.png">
+<meta property="og:image" content="http://example.com/2025/09/12/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E5%85%9A%E5%BB%BAagent%E7%BC%96%E5%86%99/1a14791e-62a9-4f02-bf8b-e2cfc9ab0dd7.png">
+<meta property="og:image" content="http://example.com/2025/09/12/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E5%85%9A%E5%BB%BAagent%E7%BC%96%E5%86%99/c18eb1fa-61a2-4b59-adfd-af67669ec09b.png">
+<meta property="og:image" content="http://example.com/2025/09/12/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E5%85%9A%E5%BB%BAagent%E7%BC%96%E5%86%99/0032cfef-ad43-488d-9bf8-ab73043fce3e.png">
+<meta property="og:image" content="http://example.com/2025/09/12/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E5%85%9A%E5%BB%BAagent%E7%BC%96%E5%86%99/57a68497-c4d8-4a8c-9133-c122c4413fb8.png">
+<meta property="og:image" content="http://example.com/2025/09/12/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E5%85%9A%E5%BB%BAagent%E7%BC%96%E5%86%99/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20250912092621_3561_17.png">
+<meta property="og:image" content="http://example.com/2025/09/12/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E5%85%9A%E5%BB%BAagent%E7%BC%96%E5%86%99/fa7a1c16-0bd8-4967-a233-a0cc6bf05663.png">
+<meta property="og:image" content="http://example.com/2025/09/12/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E5%85%9A%E5%BB%BAagent%E7%BC%96%E5%86%99/4b32adc9-3b2b-4048-944b-0ec95d36d6c7.png">
+<meta property="og:image" content="http://example.com/2025/09/12/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E5%85%9A%E5%BB%BAagent%E7%BC%96%E5%86%99/8dff9d8e-f1ac-4de1-bb4f-dc423caf40b6.png">
+<meta property="og:image" content="http://example.com/2025/09/12/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E5%85%9A%E5%BB%BAagent%E7%BC%96%E5%86%99/83443527-1217-49d3-b7fa-22f4f1fd10de.png">
+<meta property="og:image" content="http://example.com/2025/09/12/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E5%85%9A%E5%BB%BAagent%E7%BC%96%E5%86%99/291536d2-dfe6-4af1-a30c-50928b34da67.png">
+<meta property="og:image" content="http://example.com/2025/09/12/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E5%85%9A%E5%BB%BAagent%E7%BC%96%E5%86%99/a8a8c8ae-2e87-47f4-b133-cf3c7290a55f.png">
+<meta property="article:published_time" content="2025-09-12T04:02:12.000Z">
+<meta property="article:modified_time" content="2025-09-12T01:48:49.626Z">
+<meta property="article:author" content="陈宇韶chenyushao">
+<meta property="article:tag" content="agent">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2025/09/12/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E5%85%9A%E5%BB%BAagent%E7%BC%96%E5%86%99/623e55bc-5073-45fc-ad53-620d3b705e84.png">
+
+
+<link rel="canonical" href="http://example.com/2025/09/12/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E5%85%9A%E5%BB%BAagent%E7%BC%96%E5%86%99/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2025/09/12/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E5%85%9A%E5%BB%BAagent%E7%BC%96%E5%86%99/","path":"2025/09/12/机器学习/党建agent编写/","title":"党建agent编写"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>党建agent编写 | Tiger_pop's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="Tiger_pop's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Tiger_pop's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">tiger_pop 的博客</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9B%BA%E5%AE%9A%E6%8F%90%E7%A4%BA%E8%AF%8D%E5%86%99%E6%B3%95%EF%BC%88%E7%A8%B3%E4%B8%94%E5%91%86%EF%BC%89"><span class="nav-number">1.</span> <span class="nav-text">固定提示词写法（稳且呆）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A8%A1%E7%89%88%E6%8F%90%E5%8F%96"><span class="nav-number">1.1.</span> <span class="nav-text">模版提取</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%9D%E7%A8%BF%E6%92%B0%E5%86%99"><span class="nav-number">1.2.</span> <span class="nav-text">初稿撰写</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%92%88%E5%AF%B9%E6%80%A7%E4%BC%98%E5%8C%96"><span class="nav-number">1.3.</span> <span class="nav-text">针对性优化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%80%E7%BB%88%E6%95%B4%E5%90%88"><span class="nav-number">1.4.</span> <span class="nav-text">最终整合</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%94%9F%E6%88%90%E5%BC%8F%E6%8F%90%E7%A4%BA%E8%AF%8D%E5%86%99%E6%B3%95"><span class="nav-number">2.</span> <span class="nav-text">生成式提示词写法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B7%A5%E4%BD%9C%E6%B5%81%E6%AD%A5%E9%AA%A4%E8%AF%A6%E8%A7%A3"><span class="nav-number">2.1.</span> <span class="nav-text">工作流步骤详解</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%8E%B7%E5%8F%96%E6%A1%88%E4%BE%8B%E6%96%87%E4%BB%B6%E5%92%8C%E4%B8%AA%E4%BA%BA%E5%B7%A5%E4%BD%9C%E5%86%85%E5%AE%B9%E3%80%82"><span class="nav-number">2.1.1.</span> <span class="nav-text">获取案例文件和个人工作内容。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8F%90%E5%8F%96%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6%E6%96%87%E5%AD%97%E5%86%85%E5%AE%B9"><span class="nav-number">2.1.2.</span> <span class="nav-text">提取上传文件文字内容</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8F%90%E7%A4%BA%E8%AF%8D%E7%94%9F%E6%88%90%E5%99%A8%EF%BC%88%E9%92%88%E5%AF%B9%E5%88%9D%E7%A8%BF%E6%92%B0%E5%86%99%EF%BC%89"><span class="nav-number">2.1.3.</span> <span class="nav-text">提示词生成器（针对初稿撰写）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8E%BB%E9%99%A4think%E9%83%A8%E5%88%86"><span class="nav-number">2.1.4.</span> <span class="nav-text">去除think部分</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9D%E7%A8%BF%E6%92%B0%E5%86%99-1"><span class="nav-number">2.1.5.</span> <span class="nav-text">初稿撰写</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8E%BB%E9%99%A4think%E9%83%A8%E5%88%86%E5%B9%B6%E8%B0%83%E6%95%B4%E6%B3%A8%E9%87%8A%E6%A0%BC%E5%BC%8F"><span class="nav-number">2.1.6.</span> <span class="nav-text">去除think部分并调整注释格式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%84%E8%8C%83%E5%8C%96%E8%BE%93%E5%87%BA%E6%A0%B7%E5%BC%8F"><span class="nav-number">2.1.7.</span> <span class="nav-text">规范化输出样式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9F%A5%E7%9C%8B%E6%98%AF%E5%90%A6%E9%9C%80%E8%A6%81-%E9%92%88%E5%AF%B9%E6%80%A7%E4%BC%98%E5%8C%96%E7%AB%A0%E8%8A%82"><span class="nav-number">2.1.8.</span> <span class="nav-text">查看是否需要 针对性优化章节</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BE%93%E5%87%BA-%E6%8F%90%E7%A4%BA%E8%AF%8D%E5%92%8C%E5%88%9D%E7%A8%BF"><span class="nav-number">2.1.9.</span> <span class="nav-text">输出 提示词和初稿</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8F%90%E7%A4%BA%E8%AF%8D%E7%94%9F%E6%88%90%E5%99%A8%EF%BC%88%E9%92%88%E5%AF%B9%E6%80%A7%E5%BC%BA%E5%8C%96%E7%AB%A0%E8%8A%82%EF%BC%89"><span class="nav-number">2.1.10.</span> <span class="nav-text">提示词生成器（针对性强化章节）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8E%BB%E9%99%A4think%E9%83%A8%E5%88%86-1"><span class="nav-number">2.1.11.</span> <span class="nav-text">去除think部分</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%92%88%E5%AF%B9%E6%80%A7%E5%BC%BA%E5%8C%96%E7%AB%A0%E8%8A%82%E6%92%B0%E5%86%99"><span class="nav-number">2.1.12.</span> <span class="nav-text">针对性强化章节撰写</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8E%BB%E9%99%A4think%E9%83%A8%E5%88%86%E5%B9%B6%E8%B0%83%E6%95%B4%E6%B3%A8%E9%87%8A%E6%A0%BC%E5%BC%8F-1"><span class="nav-number">2.1.13.</span> <span class="nav-text">去除think部分并调整注释格式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%84%E8%8C%83%E5%8C%96%E8%BE%93%E5%87%BA%E6%A0%B7%E5%BC%8F-1"><span class="nav-number">2.1.14.</span> <span class="nav-text">规范化输出样式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%9F%E6%88%90%E7%BB%88%E7%A8%BF"><span class="nav-number">2.1.15.</span> <span class="nav-text">生成终稿</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8E%BB%E9%99%A4think%E9%83%A8%E5%88%86-2"><span class="nav-number">2.1.16.</span> <span class="nav-text">去除think部分</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%84%E8%8C%83%E5%8C%96%E8%BE%93%E5%87%BA%E6%A0%B7%E5%BC%8F-2"><span class="nav-number">2.1.17.</span> <span class="nav-text">规范化输出样式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%80%E7%BB%88%E5%91%88%E7%8E%B0"><span class="nav-number">2.1.18.</span> <span class="nav-text">最终呈现</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="陈宇韶chenyushao"
+      src="/images/my.jpg">
+  <p class="site-author-name" itemprop="name">陈宇韶chenyushao</p>
+  <div class="site-description" itemprop="description">爱学习、爱工作、爱生活;         微信号: Tiger_and_master;         手机号码:18515678348 </div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">427</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">201</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2025/09/12/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E5%85%9A%E5%BB%BAagent%E7%BC%96%E5%86%99/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/my.jpg">
+      <meta itemprop="name" content="陈宇韶chenyushao">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tiger_pop's Blog">
+      <meta itemprop="description" content="爱学习、爱工作、爱生活;         微信号: Tiger_and_master;         手机号码:18515678348 ">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="党建agent编写 | Tiger_pop's Blog">
+      <meta itemprop="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          党建agent编写
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2025-09-12 12:02:12 / 修改时间：09:48:49" itemprop="dateCreated datePublished" datetime="2025-09-12T12:02:12+08:00">2025-09-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+            <div class="post-description">这是文章开头，显示在主页面，详情请点击此处。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="固定提示词写法（稳且呆）"><a href="#固定提示词写法（稳且呆）" class="headerlink" title="固定提示词写法（稳且呆）"></a>固定提示词写法（稳且呆）</h1><p>工作流里有 <strong>4 个 LLM 节点</strong></p>
+<p><strong>（模版提取 → 初稿撰写 → 针对性优化 → 最终整合）</strong></p>
+<p>传入文件有 三个：</p>
+<p>1、模版文件</p>
+<p>2、案例文件</p>
+<p>3、我的工作内容文件</p>
+<h2 id="模版提取"><a href="#模版提取" class="headerlink" title="模版提取"></a>模版提取</h2><figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="section"># Instruction</span></span><br><span class="line">从给定的&#123;&#123;#1756694873908.template<span class="emphasis">_file#&#125;&#125;编写格式中准确提取各信息字段，并依照原结构转换为 Markdown 模版。</span></span><br><span class="line"><span class="emphasis"></span></span><br><span class="line"><span class="emphasis">## Role：党建文件格式分析专家</span></span><br><span class="line"><span class="emphasis">你是一位党建学习领域的专家，特别擅长分析文件与总结规范格式。</span></span><br><span class="line"><span class="emphasis"></span></span><br><span class="line"><span class="emphasis">## Attention</span></span><br><span class="line"><span class="emphasis">- 1. 要确保对模板中的所有信息字段都仔细甄别，防止遗漏重要字段。</span></span><br><span class="line"><span class="emphasis">- 2. 严格按照原模板&#123;&#123;#1756694873908.template_</span>file#&#125;&#125;的层级结构来组织输出信息。</span><br><span class="line"><span class="bullet">-</span> 3. 只需要输出信息字段，不要具体内容，切记！！！</span><br><span class="line"></span><br><span class="line"><span class="section">## OutputFormat</span></span><br><span class="line"><span class="section">## 读后感</span></span><br><span class="line"><span class="section">## 问题查摆</span></span><br><span class="line"><span class="bullet">-</span> 带头严守政治纪律和政治规矩，维护党的团结统一</span><br><span class="line"><span class="bullet">-</span> 带头增强党性、严守纪律、砥砺作风</span><br><span class="line"><span class="bullet">-</span> 带头在遵守纪律、清正廉洁前提下勇于担责、敢于创新</span><br><span class="line"><span class="bullet">-</span> 带头履行全面从严治党政治责任</span><br><span class="line"><span class="section">## 原因分析</span></span><br><span class="line"><span class="bullet">-</span> 理论学习深度不足</span><br><span class="line"><span class="bullet">-</span> 自我约束和自我监督能力欠缺</span><br><span class="line"><span class="bullet">-</span> 工作态度不够端正</span><br><span class="line"><span class="bullet">-</span> 责任意识淡薄</span><br><span class="line"><span class="section">## 案例分析</span></span><br><span class="line"><span class="section">## 整改措施</span></span><br><span class="line"><span class="bullet">-</span> 严守政治纪律和政治规矩，维护党的团结统一</span><br><span class="line"><span class="bullet">-</span> 增强党性、严守纪律、砥砺作风</span><br><span class="line"><span class="bullet">-</span> 在遵规守纪、清正廉洁前提下勇于担责、敢于创新</span><br><span class="line"><span class="bullet">-</span> 履行全面从严治党政治责任</span><br></pre></td></tr></table></figure>
+
+<h2 id="初稿撰写"><a href="#初稿撰写" class="headerlink" title="初稿撰写"></a>初稿撰写</h2><figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="section"># Instruction</span></span><br><span class="line">根据党建文件&#123;&#123;#1756694873908.case<span class="emphasis">_file#&#125;&#125;案例内容，结合读后感模版，撰写一篇规范的读后感。</span></span><br><span class="line"><span class="emphasis"></span></span><br><span class="line"><span class="emphasis">## Role：优秀党建学习示范者</span></span><br><span class="line"><span class="emphasis">你是一位认真学习党建文件的模范党员，能够结合自身工作与思想实际写出深刻的感悟。</span></span><br><span class="line"><span class="emphasis"></span></span><br><span class="line"><span class="emphasis">## Attention</span></span><br><span class="line"><span class="emphasis">1. 内容必须紧扣党建文件与警示案例，不能空泛。</span></span><br><span class="line"><span class="emphasis">2. 每个段落严格按照模版要求展开。</span></span><br><span class="line"><span class="emphasis">3. 不得出现“&lt;!-- --&gt;”注释符号。</span></span><br><span class="line"><span class="emphasis"></span></span><br><span class="line"><span class="emphasis">## OutputFormat</span></span><br><span class="line"><span class="emphasis">## 读后感</span></span><br><span class="line"><span class="emphasis">## 问题查摆</span></span><br><span class="line"><span class="emphasis">- 带头严守政治纪律和政治规矩，维护党的团结统一 &lt;!-- 写出在政治立场、执行上级指令、信息传播管理等方面存在的问题，要体现具体事例或工作场景 --&gt;</span></span><br><span class="line"><span class="emphasis">- 带头增强党性、严守纪律、砥砺作风 &lt;!-- 结合日常学习和工作表现，指出党性修养不够坚定、纪律执行不严格、工作作风不扎实的地方 --&gt;</span></span><br><span class="line"><span class="emphasis">- 带头在遵守纪律、清正廉洁前提下勇于担责、敢于创新 &lt;!-- 说明在面对新任务或新挑战时，存在回避责任、缺乏创新精神的情况，要举实际例子 --&gt;</span></span><br><span class="line"><span class="emphasis">- 带头履行全面从严治党政治责任 &lt;!-- 说明在监督管理、落实责任、发现问题整改等方面存在的薄弱环节或形式主义现象 --&gt;</span></span><br><span class="line"><span class="emphasis"></span></span><br><span class="line"><span class="emphasis">## 原因分析</span></span><br><span class="line"><span class="emphasis">- 理论学习深度不足 &lt;!-- 写出学习停留在表面、缺乏系统性与深度，导致思想认识不足，联系实际不紧密 --&gt;</span></span><br><span class="line"><span class="emphasis">- 自我约束和自我监督能力欠缺 &lt;!-- 说明缺乏自律精神，无人监督时容易松懈，执行制度不到位 --&gt;</span></span><br><span class="line"><span class="emphasis">- 工作态度不够端正 &lt;!-- 结合工作场景，写出存在应付差事、拖延、侥幸心理的具体表现 --&gt;</span></span><br><span class="line"><span class="emphasis">- 责任意识淡薄 &lt;!-- 写出在履行岗位职责、落实党建责任时存在被动应付、缺乏主动作为的情况 --&gt;</span></span><br><span class="line"><span class="emphasis"></span></span><br><span class="line"><span class="emphasis">## 案例分析</span></span><br><span class="line"><span class="emphasis">&lt;!-- 结合文件提供的警示案例文件&#123;&#123;#1756694873908.case_</span>file#&#125;&#125;，分析案例人物违纪违法的根源和危害，并联系自身岗位风险点，写出警示教育作用 --&gt;</span><br><span class="line"></span><br><span class="line"><span class="section">## 整改措施</span></span><br><span class="line"><span class="bullet">-</span> 严守政治纪律和政治规矩，维护党的团结统一 &lt;!-- 提出具体措施，如加强理论学习、严格执行信息发布审核、提高政治敏锐性 --&gt;</span><br><span class="line"><span class="bullet">-</span> 增强党性、严守纪律、砥砺作风 &lt;!-- 提出改进计划，如开展党性教育、加强自我约束、提高工作作风的严谨性 --&gt;</span><br><span class="line"><span class="bullet">-</span> 在遵规守纪、清正廉洁前提下勇于担责、敢于创新 &lt;!-- 写出克服畏难情绪、主动承担责任、探索新方法新技术的举措 --&gt;</span><br><span class="line"><span class="bullet">-</span> 履行全面从严治党政治责任 &lt;!-- 提出建立监督机制、健全防范措施、开展廉政教育等具体做法 --&gt;</span><br></pre></td></tr></table></figure>
+
+<h2 id="针对性优化"><a href="#针对性优化" class="headerlink" title="针对性优化"></a>针对性优化</h2><figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="section"># Instruction</span></span><br><span class="line">对前期生成的读后感中不够详实的部分，结合案例&#123;&#123;#1756694873908.case<span class="emphasis">_file#&#125;&#125;与个人工作内容&#123;&#123;#1756694873908.my_</span>work#&#125;&#125;，对案例分析和整改措施进行扩展与优化。</span><br><span class="line"></span><br><span class="line"><span class="section">## Role：党员个人信息档案提供者</span></span><br><span class="line">你是一位基层党员，能够全面提供个人的背景与工作经历，以帮助撰写更有针对性的读后感。</span><br><span class="line"></span><br><span class="line"><span class="section">## Attention</span></span><br><span class="line"><span class="bullet">1.</span> 必须紧密结合党建案例文件和个人工作内容。</span><br><span class="line"><span class="bullet">2.</span> 扩展部分要具体，避免空洞表述。</span><br><span class="line"><span class="bullet">3.</span> 输出为补充优化段落，不是完整读后感。</span><br><span class="line"></span><br><span class="line"><span class="section">## OutputFormat</span></span><br><span class="line"><span class="section">## 案例分析</span></span><br><span class="line">&lt;!-- 请结合所提供的警示案例材料&#123;&#123;#1756694873908.case<span class="emphasis">_file#&#125;&#125;，剖析案例人物在思想、作风、纪律等方面滑坡的原因，总结其造成的严重后果，并对照自身岗位职责，提炼出可警示和借鉴的启示 --&gt;</span></span><br><span class="line"><span class="emphasis"></span></span><br><span class="line"><span class="emphasis">## 整改措施&lt;!-- 围绕文件&#123;&#123;#1756694873908.my_</span>work#&#125;&#125;的个人工作内容展开 --&gt;</span><br><span class="line"><span class="bullet">-</span> 严守政治纪律和政治规矩，维护党的团结统一 &lt;!-- 从制度落实、责任传导、日常警觉性等角度，提出防止松懈和违规的改进办法，不得自己瞎编内容，不得出现具体数据，不得涉及高校工作外的内容。 --&gt;</span><br><span class="line"><span class="bullet">-</span> 增强党性、严守纪律、砥砺作风 &lt;!-- 强调长期坚持党性修炼，规范日常行为，强化执行力，杜绝形式主义和松散作风，不得自己瞎编内容，不得出现具体数据，不得涉及高校工作外的内容。 --&gt;</span><br><span class="line"><span class="bullet">-</span> 在遵规守纪、清正廉洁前提下勇于担责、敢于创新 &lt;!-- 结合实际工作挑战，说明如何提升担当意识，主动迎接困难，并探索创新突破的路径，不得自己瞎编内容，不得出现具体数据，不得涉及高校工作外的内容。 --&gt;</span><br><span class="line"><span class="bullet">-</span> 履行全面从严治党政治责任 &lt;!-- 结合岗位职责，提出如何完善监督链条，压实责任，加强风险防控和教育引导，不得自己瞎编内容，不得出现具体数据，不得涉及高校工作外的内容。 --&gt;</span><br></pre></td></tr></table></figure>
+
+<h2 id="最终整合"><a href="#最终整合" class="headerlink" title="最终整合"></a>最终整合</h2><figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="section"># Instruction</span></span><br><span class="line">将初次撰写的读后感&#123;&#123;#1756724253021.text#&#125;&#125;与优化补充部分&#123;&#123;#1756726350157.text#&#125;&#125;整合，形成一篇完整、深入的最终版读后感。</span><br><span class="line"></span><br><span class="line"><span class="section">## Role：党建读后感整合专家</span></span><br><span class="line">你是一位党建写作专家，擅长对不同版本进行整合优化，确保逻辑连贯、思想深刻。</span><br><span class="line"></span><br><span class="line"><span class="section">## Attention</span></span><br><span class="line"><span class="bullet">1.</span> 整合时要保证结构统一，避免重复。</span><br><span class="line"><span class="bullet">2.</span> 将相同章节的内容补充部分自然融入初稿。</span><br><span class="line"><span class="bullet">3.</span> 最终文本必须完整、流畅、可直接使用。</span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="生成式提示词写法"><a href="#生成式提示词写法" class="headerlink" title="生成式提示词写法"></a>生成式提示词写法</h1><p>工作流里有 <strong>5 个 LLM 节点</strong></p>
+<p><strong>（用户输入markdown模版格式 → 提示词生成器（针对初稿撰写）→ 初稿撰写 →提示词生成器（针对性优化） → 针对性优化 → 提示词生成器（针对最终整合）→ 最终整合）</strong></p>
+<p>传入文件有 四个：</p>
+<p>1、案例文件 （必填）</p>
+<p>2、我的工作内容文件 （必填）</p>
+<p>3、模版格式 （必填）</p>
+<p>4、强化章节 （选填）</p>
+<h2 id="工作流步骤详解"><a href="#工作流步骤详解" class="headerlink" title="工作流步骤详解"></a>工作流步骤详解</h2><blockquote>
+<p>先提示一下，dify 这样的工作流 通过html 的一些渲染，会导致 注释词 &lt;!- XXXXXXX –&gt; 在输出给用户看的时候是看不见的，但是实际上是存在的。而我们了 让用户看见 这些注释词，在代码块中用正则表达式处理了一下，不过实际上我保留了两个版本，用的还是原版的注释词 &lt;!- XXXXXXX –&gt; 输出，呈现给用户看单独搞了一个版本</p>
+</blockquote>
+<h3 id="获取案例文件和个人工作内容。"><a href="#获取案例文件和个人工作内容。" class="headerlink" title="获取案例文件和个人工作内容。"></a>获取案例文件和个人工作内容。</h3><p><img src="/2025/09/12/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E5%85%9A%E5%BB%BAagent%E7%BC%96%E5%86%99/623e55bc-5073-45fc-ad53-620d3b705e84.png" alt="623e55bc-5073-45fc-ad53-620d3b705e84"></p>
+<h3 id="提取上传文件文字内容"><a href="#提取上传文件文字内容" class="headerlink" title="提取上传文件文字内容"></a>提取上传文件文字内容</h3><p><img src="/2025/09/12/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E5%85%9A%E5%BB%BAagent%E7%BC%96%E5%86%99/29f783f9-4fc7-4571-880e-a1941f0a854e.png" alt="29f783f9-4fc7-4571-880e-a1941f0a854e"></p>
+<h3 id="提示词生成器（针对初稿撰写）"><a href="#提示词生成器（针对初稿撰写）" class="headerlink" title="提示词生成器（针对初稿撰写）"></a>提示词生成器（针对初稿撰写）</h3><p><img src="/2025/09/12/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E5%85%9A%E5%BB%BAagent%E7%BC%96%E5%86%99/e11f12c2-66c0-47ce-b1c6-3eddf6ffc9d0.png" alt="e11f12c2-66c0-47ce-b1c6-3eddf6ffc9d0"></p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="section"># Instruction</span></span><br><span class="line">你将收到一份用户输入的 Markdown 大纲。  </span><br><span class="line">你的任务是：<span class="strong">**在保持大纲结构和文字完全不变的前提下**</span>，在每个标题或小标题后补充一个 <span class="code">`&lt;!-- --&gt;`</span> 注释。  </span><br><span class="line"></span><br><span class="line"><span class="section">## 要求</span></span><br><span class="line"><span class="bullet">-</span> 不得改动用户输入的任何标题文字、层级、顺序。  </span><br><span class="line"><span class="bullet">-</span> 每一条标题或小标题都必须有对应的 <span class="code">`&lt;!-- --&gt;`</span> 注释。   </span><br><span class="line"><span class="bullet">-</span> 注释内容要简洁、指令化，指导后续写作。  </span><br><span class="line"><span class="bullet">-</span> 注释内容必须与党建写作相关（如政治纪律、党性修养、责任担当、整改措施等）与案例&#123;&#123;#1756819593861.text#&#125;&#125;相关，与工作内容&#123;&#123;#1756819649172.text#&#125;&#125;尽可能关联上，并结合高校教职工的实际工作语境。  </span><br><span class="line"><span class="bullet">-</span> 输出仍然是 Markdown 格式。  </span><br><span class="line"></span><br><span class="line"><span class="section">## Input</span></span><br><span class="line">&#123;&#123;#1756805697432.template#&#125;&#125;</span><br><span class="line"></span><br><span class="line"><span class="section">## OutputFormat</span></span><br><span class="line">在用户输入的大纲基础上，逐条补充注释，示例如下：</span><br><span class="line">带头严守政治纪律和政治规矩，维护党的团结统一</span><br><span class="line">改为：带头严守政治纪律和政治规矩，维护党的团结统一&lt;!-- 写出在政治纪律执行和信息传播管理方面存在的不足，结合高校岗位场景 --&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="去除think部分"><a href="#去除think部分" class="headerlink" title="去除think部分"></a>去除think部分</h3><p><img src="/2025/09/12/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E5%85%9A%E5%BB%BAagent%E7%BC%96%E5%86%99/80fb41af-50ab-43ca-af1e-b8d8a858beef.png" alt="80fb41af-50ab-43ca-af1e-b8d8a858beef"></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> re</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">main</span>(<span class="params">prompt: <span class="built_in">str</span> = <span class="string">&quot;&quot;</span></span>) -&gt; <span class="built_in">dict</span>:</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">remove_think</span>(<span class="params">text: <span class="built_in">str</span></span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">            <span class="keyword">if</span> <span class="keyword">not</span> text:</span><br><span class="line">                <span class="keyword">return</span> <span class="string">&quot;&quot;</span></span><br><span class="line">            <span class="keyword">return</span> re.sub(<span class="string">r&quot;&lt;think&gt;.*?&lt;/think&gt;&quot;</span>, <span class="string">&quot;&quot;</span>, text, flags=re.DOTALL)</span><br><span class="line"></span><br><span class="line">        prompt_clean_think = remove_think(prompt)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> &#123;</span><br><span class="line">            <span class="string">&quot;result&quot;</span>: <span class="string">&quot;处理成功&quot;</span>,</span><br><span class="line">            <span class="string">&quot;prompt_clean_think&quot;</span>: prompt_clean_think.strip(),</span><br><span class="line">            <span class="string">&quot;error&quot;</span>: <span class="string">&quot;&quot;</span></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">        <span class="comment"># 出错时不要 raise，直接返回</span></span><br><span class="line">        <span class="keyword">return</span> &#123;</span><br><span class="line">            <span class="string">&quot;result&quot;</span>: <span class="string">&quot;error&quot;</span>,   <span class="comment"># � 保证有输出字段</span></span><br><span class="line">            <span class="string">&quot;prompt_clean_think&quot;</span>: <span class="string">&quot;&quot;</span>,</span><br><span class="line">            <span class="string">&quot;error&quot;</span>: <span class="string">f&quot;处理出错：<span class="subst">&#123;<span class="built_in">str</span>(e)&#125;</span>，请重新输入&quot;</span></span><br><span class="line">        &#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="初稿撰写-1"><a href="#初稿撰写-1" class="headerlink" title="初稿撰写"></a>初稿撰写</h3><p><img src="/2025/09/12/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E5%85%9A%E5%BB%BAagent%E7%BC%96%E5%86%99/a5de9e06-e4de-4d27-8dba-f530de553314.png" alt="a5de9e06-e4de-4d27-8dba-f530de553314"></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Instruction</span></span><br><span class="line">你将接收到一个已经补充了 `&lt;!-- --&gt;` 注释的 Markdown 大纲&#123;&#123;<span class="comment">#1757401610434.prompt_clean_think#&#125;&#125;。  </span></span><br><span class="line">请严格按照大纲的层级和顺序，展开撰写一篇规范的党建读后感文章。  </span><br><span class="line"></span><br><span class="line"><span class="comment">## Role：优秀党建学习示范者</span></span><br><span class="line">你是一位认真学习党建文件的模范党员，能够结合自身工作与思想实际写出深刻的感悟。</span><br><span class="line"></span><br><span class="line"><span class="comment">## Attention</span></span><br><span class="line">- 每个 `&lt;!-- --&gt;` 注释代表对应部分的写作指令，你必须完全吸收并落实其中的要求。  </span><br><span class="line">- 最终输出中 **不能出现 `&lt;!-- --&gt;` 注释**，而是要将其转化为具体的内容。  </span><br><span class="line">- 内容必须紧扣党建文件案例和高校教职工的实际工作语境，避免空泛套话。  </span><br><span class="line">- 文章要有层次感，每个部分展开 <span class="number">2</span>-<span class="number">4</span> 段，既有思想剖析，也有具体措施。  </span><br><span class="line">- 内容必须紧扣党建案例文件内容&#123;&#123;<span class="comment">#1756819593861.text#&#125;&#125;，不能空泛。  </span></span><br><span class="line">- 要结合本人高校教职工岗位特点&#123;&#123;<span class="comment">#1756819649172.text#&#125;&#125;。 </span></span><br><span class="line">- 章节标题与大纲中一模一样，一个字不改。</span><br><span class="line"></span><br><span class="line"><span class="comment">## OutputFormat</span></span><br><span class="line">直接输出 Markdown 格式文章，结构必须与输入大纲&#123;&#123;<span class="comment">#1757401610434.prompt_clean_think#&#125;&#125;完全保持一致，但正文内容要根据注释展开。  </span></span><br></pre></td></tr></table></figure>
+
+<h3 id="去除think部分并调整注释格式"><a href="#去除think部分并调整注释格式" class="headerlink" title="去除think部分并调整注释格式"></a>去除think部分并调整注释格式</h3><p><img src="/2025/09/12/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E5%85%9A%E5%BB%BAagent%E7%BC%96%E5%86%99/4165685d-3ec3-4ea4-a35a-b45efa0d0098.png" alt="4165685d-3ec3-4ea4-a35a-b45efa0d0098"></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> re</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">main</span>(<span class="params">arg1: <span class="built_in">str</span> = <span class="string">&quot;&quot;</span>, arg2: <span class="built_in">str</span> = <span class="string">&quot;&quot;</span></span>) -&gt; <span class="built_in">dict</span>:</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">remove_think</span>(<span class="params">text: <span class="built_in">str</span></span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">            <span class="keyword">if</span> <span class="keyword">not</span> text:</span><br><span class="line">                <span class="keyword">return</span> <span class="string">&quot;&quot;</span></span><br><span class="line">            <span class="keyword">return</span> re.sub(<span class="string">r&quot;&lt;think&gt;.*?&lt;/think&gt;&quot;</span>, <span class="string">&quot;&quot;</span>, text, flags=re.DOTALL)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">unhide_comment</span>(<span class="params">text: <span class="built_in">str</span></span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">            <span class="keyword">if</span> <span class="keyword">not</span> text:</span><br><span class="line">                <span class="keyword">return</span> <span class="string">&quot;&quot;</span></span><br><span class="line">            <span class="comment"># 用正则匹配 &lt;!-- 任意内容 --&gt; 并替换成 【内容】</span></span><br><span class="line">            <span class="keyword">return</span> re.sub(<span class="string">r&#x27;&lt;!--\s*(.*?)\s*--&gt;&#x27;</span>, <span class="string">r&#x27; 【注释：\1】&#x27;</span>, text)</span><br><span class="line"></span><br><span class="line">        prompt_clean = unhide_comment(remove_think(arg1))</span><br><span class="line">        <span class="comment"># arg2_clean = unhide_comment(remove_think(arg2))</span></span><br><span class="line">        <span class="comment"># arg1_clean = remove_think(arg1)</span></span><br><span class="line">        draft_clean = remove_think(arg2)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># � 必须有至少一个 result 或自定义 key</span></span><br><span class="line">        <span class="keyword">return</span> &#123;</span><br><span class="line">            <span class="string">&quot;result&quot;</span>: <span class="string">&quot;处理成功&quot;</span>,</span><br><span class="line">            <span class="string">&quot;prompt_clean&quot;</span>: prompt_clean.strip(),</span><br><span class="line">            <span class="string">&quot;draft_clean&quot;</span>: draft_clean.strip(),</span><br><span class="line">            <span class="string">&quot;error&quot;</span>: <span class="string">&quot;&quot;</span></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">        <span class="comment"># 出错时不要 raise，直接返回</span></span><br><span class="line">        <span class="keyword">return</span> &#123;</span><br><span class="line">            <span class="string">&quot;result&quot;</span>: <span class="string">&quot;error&quot;</span>,   <span class="comment"># � 保证有输出字段</span></span><br><span class="line">            <span class="string">&quot;prompt_clean&quot;</span>: <span class="string">&quot;&quot;</span>,</span><br><span class="line">            <span class="string">&quot;draft_clean&quot;</span>: <span class="string">&quot;&quot;</span>,</span><br><span class="line">            <span class="string">&quot;error&quot;</span>: <span class="string">f&quot;处理出错：<span class="subst">&#123;<span class="built_in">str</span>(e)&#125;</span>，请重新输入&quot;</span></span><br><span class="line">        &#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="规范化输出样式"><a href="#规范化输出样式" class="headerlink" title="规范化输出样式"></a>规范化输出样式</h3><p><img src="/2025/09/12/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E5%85%9A%E5%BB%BAagent%E7%BC%96%E5%86%99/3503456e-bed8-430c-b1c6-cf1c91843ca4.png" alt="3503456e-bed8-430c-b1c6-cf1c91843ca4"></p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&gt;# 生成的提示词</span><br><span class="line">&#123;&#123; prompt<span class="emphasis">_clean &#125;&#125;</span></span><br><span class="line"><span class="emphasis"></span></span><br><span class="line"><span class="emphasis"># ---------------------------</span></span><br><span class="line"><span class="emphasis"></span></span><br><span class="line"><span class="emphasis">&gt;# 生成的初稿</span></span><br><span class="line"><span class="emphasis">&#123;&#123; draft_</span>clean &#125;&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="查看是否需要-针对性优化章节"><a href="#查看是否需要-针对性优化章节" class="headerlink" title="查看是否需要 针对性优化章节"></a>查看是否需要 针对性优化章节</h3><p><img src="/2025/09/12/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E5%85%9A%E5%BB%BAagent%E7%BC%96%E5%86%99/1a14791e-62a9-4f02-bf8b-e2cfc9ab0dd7.png" alt="1a14791e-62a9-4f02-bf8b-e2cfc9ab0dd7"></p>
+<h3 id="输出-提示词和初稿"><a href="#输出-提示词和初稿" class="headerlink" title="输出 提示词和初稿"></a>输出 提示词和初稿</h3><p><img src="/2025/09/12/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E5%85%9A%E5%BB%BAagent%E7%BC%96%E5%86%99/c18eb1fa-61a2-4b59-adfd-af67669ec09b.png" alt="c18eb1fa-61a2-4b59-adfd-af67669ec09b"></p>
+<h3 id="提示词生成器（针对性强化章节）"><a href="#提示词生成器（针对性强化章节）" class="headerlink" title="提示词生成器（针对性强化章节）"></a>提示词生成器（针对性强化章节）</h3><p><img src="/2025/09/12/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E5%85%9A%E5%BB%BAagent%E7%BC%96%E5%86%99/0032cfef-ad43-488d-9bf8-ab73043fce3e.png" alt="0032cfef-ad43-488d-9bf8-ab73043fce3e"></p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="section"># Instruction</span></span><br><span class="line">你将收到一份用户输入的 Markdown 大纲。  </span><br><span class="line">你的任务是：<span class="strong">**在保持大纲结构和文字完全不变的前提下**</span>，在每个标题或小标题后补充一个 <span class="code">`&lt;!-- --&gt;`</span> 注释。  </span><br><span class="line"></span><br><span class="line"><span class="section">## 要求</span></span><br><span class="line"><span class="bullet">-</span> 不得改动用户输入的任何标题文字、层级、顺序。  </span><br><span class="line"><span class="bullet">-</span> 每一条标题或小标题都必须有对应的 <span class="code">`&lt;!-- --&gt;`</span> 注释。   </span><br><span class="line"><span class="bullet">-</span> 注释内容要简洁、指令化，指导后续写作。  </span><br><span class="line"><span class="bullet">-</span> 注释内容必须与党建写作相关（如政治纪律、党性修养、责任担当、整改措施等）与案例&#123;&#123;#1756819593861.text#&#125;&#125;相关，与工作内容&#123;&#123;#1756819649172.text#&#125;&#125;尽可能关联上，并结合高校教职工的实际工作语境。  </span><br><span class="line"><span class="bullet">-</span> 输出仍然是 Markdown 格式。  </span><br><span class="line"></span><br><span class="line"><span class="section">## Input</span></span><br><span class="line">&#123;&#123;#1756805697432.fortify<span class="emphasis">_chapter#&#125;&#125;</span></span><br><span class="line"><span class="emphasis"></span></span><br><span class="line"><span class="emphasis">## OutputFormat</span></span><br><span class="line"><span class="emphasis">在用户输入的大纲基础上，逐条补充注释，示例如下：</span></span><br><span class="line"><span class="emphasis">带头严守政治纪律和政治规矩，维护党的团结统一</span></span><br><span class="line"><span class="emphasis">改为：带头严守政治纪律和政治规矩，维护党的团结统一&lt;!-- 写出在政治纪律执行和信息传播管理方面存在的不足，结合高校岗位场景 --&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="去除think部分-1"><a href="#去除think部分-1" class="headerlink" title="去除think部分"></a>去除think部分</h3><p><img src="/2025/09/12/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E5%85%9A%E5%BB%BAagent%E7%BC%96%E5%86%99/57a68497-c4d8-4a8c-9133-c122c4413fb8.png" alt="57a68497-c4d8-4a8c-9133-c122c4413fb8"></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> re</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">main</span>(<span class="params">prompt2: <span class="built_in">str</span> = <span class="string">&quot;&quot;</span></span>) -&gt; <span class="built_in">dict</span>:</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">remove_think</span>(<span class="params">text: <span class="built_in">str</span></span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">            <span class="keyword">if</span> <span class="keyword">not</span> text:</span><br><span class="line">                <span class="keyword">return</span> <span class="string">&quot;&quot;</span></span><br><span class="line">            <span class="keyword">return</span> re.sub(<span class="string">r&quot;&lt;think&gt;.*?&lt;/think&gt;&quot;</span>, <span class="string">&quot;&quot;</span>, text, flags=re.DOTALL)</span><br><span class="line"></span><br><span class="line">        prompt_clean_think2 = remove_think(prompt2)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> &#123;</span><br><span class="line">            <span class="string">&quot;result&quot;</span>: <span class="string">&quot;处理成功&quot;</span>,</span><br><span class="line">            <span class="string">&quot;prompt_clean_think2&quot;</span>: prompt_clean_think2.strip(),</span><br><span class="line">            <span class="string">&quot;error&quot;</span>: <span class="string">&quot;&quot;</span></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">        <span class="comment"># 出错时不要 raise，直接返回</span></span><br><span class="line">        <span class="keyword">return</span> &#123;</span><br><span class="line">            <span class="string">&quot;result&quot;</span>: <span class="string">&quot;error&quot;</span>,   <span class="comment"># � 保证有输出字段</span></span><br><span class="line">            <span class="string">&quot;prompt_clean_think2&quot;</span>: <span class="string">&quot;&quot;</span>,</span><br><span class="line">            <span class="string">&quot;error&quot;</span>: <span class="string">f&quot;处理出错：<span class="subst">&#123;<span class="built_in">str</span>(e)&#125;</span>，请重新输入&quot;</span></span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="针对性强化章节撰写"><a href="#针对性强化章节撰写" class="headerlink" title="针对性强化章节撰写"></a>针对性强化章节撰写</h3><p><img src="/2025/09/12/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E5%85%9A%E5%BB%BAagent%E7%BC%96%E5%86%99/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20250912092621_3561_17.png" alt="微信图片_20250912092621_3561_17"></p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="section"># Instruction</span></span><br><span class="line">你将接收到一个已经补充了 <span class="code">`&lt;!-- --&gt;`</span> 注释的 Markdown 大纲&#123;&#123;#17574056032950.prompt<span class="emphasis">_clean_</span>think2#&#125;&#125;。  </span><br><span class="line">请严格按照大纲的层级和顺序，展开撰写一篇规范的党建读后感文章。  </span><br><span class="line"></span><br><span class="line"><span class="section">## Role：优秀党建学习示范者</span></span><br><span class="line">你是一位认真学习党建文件的模范党员，能够结合自身工作与思想实际写出深刻的感悟。</span><br><span class="line"></span><br><span class="line"><span class="section">## Attention</span></span><br><span class="line"><span class="bullet">-</span> 每个 <span class="code">`&lt;!-- --&gt;`</span> 注释代表对应部分的写作指令，你必须完全吸收并落实其中的要求。  </span><br><span class="line"><span class="bullet">-</span> 最终输出中 <span class="strong">**不能出现 `&lt;!-- --&gt;` 注释**</span>，而是要将其转化为具体的内容。  </span><br><span class="line"><span class="bullet">-</span> 内容必须紧扣党建文件案例和高校教职工的实际工作语境，避免空泛套话。  </span><br><span class="line"><span class="bullet">-</span> 文章要有层次感，每个部分展开 2-4 段，既有思想剖析，也有具体措施。  </span><br><span class="line"><span class="bullet">-</span> 内容必须紧扣党建案例文件内容&#123;&#123;#1756819593861.text#&#125;&#125;，不能空泛。  </span><br><span class="line"><span class="bullet">-</span> 要结合本人高校教职工岗位特点&#123;&#123;#1756819649172.text#&#125;&#125;。 </span><br><span class="line"><span class="bullet">-</span> 章节标题与大纲中一模一样，一个字不改。</span><br><span class="line"></span><br><span class="line"><span class="section">## OutputFormat</span></span><br><span class="line">直接输出 Markdown 格式文章，结构必须与输入大纲&#123;&#123;#17574056032950.prompt<span class="emphasis">_clean_</span>think2#&#125;&#125;完全保持一致，但正文内容要根据注释展开。  </span><br></pre></td></tr></table></figure>
+
+<h3 id="去除think部分并调整注释格式-1"><a href="#去除think部分并调整注释格式-1" class="headerlink" title="去除think部分并调整注释格式"></a>去除think部分并调整注释格式</h3><p><img src="/2025/09/12/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E5%85%9A%E5%BB%BAagent%E7%BC%96%E5%86%99/fa7a1c16-0bd8-4967-a233-a0cc6bf05663.png" alt="fa7a1c16-0bd8-4967-a233-a0cc6bf05663"></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> re</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">main</span>(<span class="params">arg1: <span class="built_in">str</span> = <span class="string">&quot;&quot;</span>, arg2: <span class="built_in">str</span> = <span class="string">&quot;&quot;</span></span>) -&gt; <span class="built_in">dict</span>:</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">remove_think</span>(<span class="params">text: <span class="built_in">str</span></span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">            <span class="keyword">if</span> <span class="keyword">not</span> text:</span><br><span class="line">                <span class="keyword">return</span> <span class="string">&quot;&quot;</span></span><br><span class="line">            <span class="keyword">return</span> re.sub(<span class="string">r&quot;&lt;think&gt;.*?&lt;/think&gt;&quot;</span>, <span class="string">&quot;&quot;</span>, text, flags=re.DOTALL)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">unhide_comment</span>(<span class="params">text: <span class="built_in">str</span></span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">            <span class="keyword">if</span> <span class="keyword">not</span> text:</span><br><span class="line">                <span class="keyword">return</span> <span class="string">&quot;&quot;</span></span><br><span class="line">            <span class="comment"># 用正则匹配 &lt;!-- 任意内容 --&gt; 并替换成 【内容】</span></span><br><span class="line">            <span class="keyword">return</span> re.sub(<span class="string">r&#x27;&lt;!--\s*(.*?)\s*--&gt;&#x27;</span>, <span class="string">r&#x27; 【注释：\1】&#x27;</span>, text)</span><br><span class="line"></span><br><span class="line">        prompt_clean2 = unhide_comment(remove_think(arg1))</span><br><span class="line">        <span class="comment"># arg2_clean2 = unhide_comment(remove_think(arg2))</span></span><br><span class="line">        <span class="comment"># arg1_clean2 = remove_think(arg1)</span></span><br><span class="line">        draft_clean2 = remove_think(arg2)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># � 必须有至少一个 result 或自定义 key</span></span><br><span class="line">        <span class="keyword">return</span> &#123;</span><br><span class="line">            <span class="string">&quot;result&quot;</span>: <span class="string">&quot;处理成功&quot;</span>,</span><br><span class="line">            <span class="string">&quot;prompt_clean2&quot;</span>: prompt_clean2.strip(),</span><br><span class="line">            <span class="string">&quot;draft_clean2&quot;</span>: draft_clean2.strip(),</span><br><span class="line">            <span class="string">&quot;error&quot;</span>: <span class="string">&quot;&quot;</span></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">        <span class="comment"># 出错时不要 raise，直接返回</span></span><br><span class="line">        <span class="keyword">return</span> &#123;</span><br><span class="line">            <span class="string">&quot;result&quot;</span>: <span class="string">&quot;error&quot;</span>,   <span class="comment"># � 保证有输出字段</span></span><br><span class="line">            <span class="string">&quot;prompt_clean2&quot;</span>: <span class="string">&quot;&quot;</span>,</span><br><span class="line">            <span class="string">&quot;draft_clean2&quot;</span>: <span class="string">&quot;&quot;</span>,</span><br><span class="line">            <span class="string">&quot;error&quot;</span>: <span class="string">f&quot;处理出错：<span class="subst">&#123;<span class="built_in">str</span>(e)&#125;</span>，请重新输入&quot;</span></span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="规范化输出样式-1"><a href="#规范化输出样式-1" class="headerlink" title="规范化输出样式"></a>规范化输出样式</h3><p><img src="/2025/09/12/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E5%85%9A%E5%BB%BAagent%E7%BC%96%E5%86%99/4b32adc9-3b2b-4048-944b-0ec95d36d6c7.png" alt="4b32adc9-3b2b-4048-944b-0ec95d36d6c7"></p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&gt;# 生成的提示词</span><br><span class="line">&#123;&#123; prompt<span class="emphasis">_clean2 &#125;&#125;</span></span><br><span class="line"><span class="emphasis"></span></span><br><span class="line"><span class="emphasis"># ---------------------------</span></span><br><span class="line"><span class="emphasis"># ---------------------------</span></span><br><span class="line"><span class="emphasis"></span></span><br><span class="line"><span class="emphasis">&gt;# 生成的初稿</span></span><br><span class="line"><span class="emphasis">&#123;&#123; draft_</span>clean2 &#125;&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="生成终稿"><a href="#生成终稿" class="headerlink" title="生成终稿"></a>生成终稿</h3><p><img src="/2025/09/12/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E5%85%9A%E5%BB%BAagent%E7%BC%96%E5%86%99/8dff9d8e-f1ac-4de1-bb4f-dc423caf40b6.png" alt="8dff9d8e-f1ac-4de1-bb4f-dc423caf40b6"></p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="section"># Instruction</span></span><br><span class="line">将初次撰写的读后感&#123;&#123;#1757382286747.draft<span class="emphasis">_clean#&#125;&#125;与优化补充部分&#123;&#123;#17574057721870.draft_</span>clean2#&#125;&#125;整合，形成一篇完整、内容更加丰富的最终版读后感。</span><br><span class="line"></span><br><span class="line"><span class="section">## Role：党建读后感整合专家</span></span><br><span class="line">你是一位党建写作专家，擅长对不同版本进行整合优化，确保逻辑连贯、思想深刻。</span><br><span class="line"></span><br><span class="line"><span class="section">## Attention</span></span><br><span class="line"><span class="bullet">-</span> 整合时要保证结构统一，避免重复。</span><br><span class="line"><span class="bullet">-</span> 将相同章节的内容补充部分自然融入初稿。</span><br><span class="line"><span class="bullet">-</span> 最终文本必须完整、流畅、可直接使用。</span><br><span class="line"><span class="bullet">-</span> 初次撰写的读后感&#123;&#123;#1757382286747.draft<span class="emphasis">_clean#&#125;&#125;中不涉及&#123;&#123;#1756805697432.fortify_</span>chapter#&#125;&#125;的章节内容和结构都不做修改。</span><br><span class="line"><span class="bullet">-</span> 将&#123;&#123;#17574057721870.draft<span class="emphasis">_clean2#&#125;&#125;新生成的内容黏贴到初次撰写的读后感&#123;&#123;#1757382286747.draft_</span>clean#&#125;&#125;对应章节下。</span><br><span class="line"></span><br><span class="line"><span class="section">## OutputFormat</span></span><br><span class="line">保持与&#123;&#123;#1756805697432.template#&#125;&#125;完全相同的结构，不用新增其他章节。</span><br></pre></td></tr></table></figure>
+
+<h3 id="去除think部分-2"><a href="#去除think部分-2" class="headerlink" title="去除think部分"></a>去除think部分</h3><p><img src="/2025/09/12/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E5%85%9A%E5%BB%BAagent%E7%BC%96%E5%86%99/83443527-1217-49d3-b7fa-22f4f1fd10de.png" alt="83443527-1217-49d3-b7fa-22f4f1fd10de"></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> re</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">main</span>(<span class="params">arg1: <span class="built_in">str</span> = <span class="string">&quot;&quot;</span></span>) -&gt; <span class="built_in">dict</span>:</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">remove_think</span>(<span class="params">text: <span class="built_in">str</span></span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">            <span class="keyword">if</span> <span class="keyword">not</span> text:</span><br><span class="line">                <span class="keyword">return</span> <span class="string">&quot;&quot;</span></span><br><span class="line">            <span class="keyword">return</span> re.sub(<span class="string">r&quot;&lt;think&gt;.*?&lt;/think&gt;&quot;</span>, <span class="string">&quot;&quot;</span>, text, flags=re.DOTALL)</span><br><span class="line"></span><br><span class="line">        final_version_clean = remove_think(arg1)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># � 必须有至少一个 result 或自定义 key</span></span><br><span class="line">        <span class="keyword">return</span> &#123;</span><br><span class="line">            <span class="string">&quot;result&quot;</span>: <span class="string">&quot;处理成功&quot;</span>,</span><br><span class="line">            <span class="string">&quot;final_version_clean&quot;</span>: final_version_clean.strip(),</span><br><span class="line">            <span class="string">&quot;error&quot;</span>: <span class="string">&quot;&quot;</span></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">        <span class="comment"># 出错时不要 raise，直接返回</span></span><br><span class="line">        <span class="keyword">return</span> &#123;</span><br><span class="line">            <span class="string">&quot;result&quot;</span>: <span class="string">&quot;error&quot;</span>,   <span class="comment"># � 保证有输出字段</span></span><br><span class="line">            <span class="string">&quot;final_version_clean&quot;</span>: <span class="string">&quot;&quot;</span>,</span><br><span class="line">            <span class="string">&quot;error&quot;</span>: <span class="string">f&quot;处理出错：<span class="subst">&#123;<span class="built_in">str</span>(e)&#125;</span>，请重新输入&quot;</span></span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="规范化输出样式-2"><a href="#规范化输出样式-2" class="headerlink" title="规范化输出样式"></a>规范化输出样式</h3><p><img src="/2025/09/12/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E5%85%9A%E5%BB%BAagent%E7%BC%96%E5%86%99/291536d2-dfe6-4af1-a30c-50928b34da67.png" alt="291536d2-dfe6-4af1-a30c-50928b34da67"></p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">&gt;# 生成的初始提示词</span><br><span class="line">&#123;&#123; prompt<span class="emphasis">_clean &#125;&#125;</span></span><br><span class="line"><span class="emphasis"></span></span><br><span class="line"><span class="emphasis"># ---------------------------</span></span><br><span class="line"><span class="emphasis"># ---------------------------</span></span><br><span class="line"><span class="emphasis"></span></span><br><span class="line"><span class="emphasis">&gt;# 生成的初稿</span></span><br><span class="line"><span class="emphasis">&#123;&#123; draft_</span>clean &#125;&#125;</span><br><span class="line"></span><br><span class="line"><span class="section"># ---------------------------</span></span><br><span class="line"><span class="section"># ---------------------------</span></span><br><span class="line"></span><br><span class="line">&gt;# 生成的补强章节提示词</span><br><span class="line">&#123;&#123; prompt<span class="emphasis">_clean2 &#125;&#125;</span></span><br><span class="line"><span class="emphasis"></span></span><br><span class="line"><span class="emphasis"># ---------------------------</span></span><br><span class="line"><span class="emphasis"># ---------------------------</span></span><br><span class="line"><span class="emphasis"></span></span><br><span class="line"><span class="emphasis">&gt;# 生成的补强章节内容</span></span><br><span class="line"><span class="emphasis">&#123;&#123; draft_</span>clean2 &#125;&#125;</span><br><span class="line"></span><br><span class="line"><span class="section"># ---------------------------</span></span><br><span class="line"><span class="section"># ---------------------------</span></span><br><span class="line"></span><br><span class="line">&gt;# 生成的终稿</span><br><span class="line">&#123;&#123; final<span class="emphasis">_version_</span>clean &#125;&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="最终呈现"><a href="#最终呈现" class="headerlink" title="最终呈现"></a>最终呈现</h3><p>将 生成的初始提示词、生成的初稿、补强章节提示词、补强章节内容、终稿  呈现给用户。</p>
+<p><img src="/2025/09/12/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E5%85%9A%E5%BB%BAagent%E7%BC%96%E5%86%99/a8a8c8ae-2e87-47f4-b133-cf3c7290a55f.png" alt="a8a8c8ae-2e87-47f4-b133-cf3c7290a55f"></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/agent/" rel="tag"># agent</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2025/09/07/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E5%8C%B9%E9%85%8D%E5%A4%A7%E6%A8%A1%E5%9E%8B%E7%89%88%E6%9C%AC%E4%B8%8E%E6%9C%AC%E5%9C%B0%E6%98%BE%E5%AD%98%E6%96%B9%E6%B3%95/" rel="prev" title="匹配大模型版本与本地显存方法">
+                  <i class="fa fa-chevron-left"></i> 匹配大模型版本与本地显存方法
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2025/09/13/Linux%E5%AD%A6%E4%B9%A0/Ubuntu%20vs.%20CentOSRHEL%20%E5%AF%86%E7%A0%81%E9%87%8D%E7%BD%AE%E6%B5%81%E7%A8%8B%E5%AF%B9%E6%AF%94/" rel="next" title="Ubuntu vs. CentOS\RHEL 密码重置流程对比">
+                  Ubuntu vs. CentOS\RHEL 密码重置流程对比 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">陈宇韶chenyushao</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha256-AbA177XfpSnFEvgpYu1jMygiLabzPCJCRIBtR5jGc0k=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.13.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="1-bct数据结构">
+<meta property="og:url" content="http://example.com/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/1-bct%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/index.html">
+<meta property="og:site_name" content="Tiger_pop&#39;s Blog">
+<meta property="og:description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/1-bct%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/%E6%88%AA%E5%B1%8F2024-11-12%2007.25.03.png">
+<meta property="og:image" content="http://example.com/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/1-bct%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/%E6%88%AA%E5%B1%8F2024-11-12%2007.37.05.png">
+<meta property="og:image" content="http://example.com/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/1-bct%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/%E6%88%AA%E5%B1%8F2024-11-12%2008.15.03.png">
+<meta property="article:published_time" content="2025-01-10T13:05:10.000Z">
+<meta property="article:modified_time" content="2025-01-10T13:24:03.020Z">
+<meta property="article:author" content="陈宇韶chenyushao">
+<meta property="article:tag" content="btc">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/1-bct%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/%E6%88%AA%E5%B1%8F2024-11-12%2007.25.03.png">
+
+
+<link rel="canonical" href="http://example.com/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/1-bct%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/1-bct%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/","path":"2025/01/10/区块链/1-bct数据结构/","title":"1-bct数据结构"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>1-bct数据结构 | Tiger_pop's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="Tiger_pop's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Tiger_pop's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">tiger_pop 的博客</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#hash%E6%8C%87%E9%92%88"><span class="nav-number">1.</span> <span class="nav-text">hash指针</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#full-node%E3%80%81light-node"><span class="nav-number">2.</span> <span class="nav-text">full node、light node</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#merkle-tree"><span class="nav-number">3.</span> <span class="nav-text">merkle tree</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#merkle-proof-%EF%BC%9A"><span class="nav-number">4.</span> <span class="nav-text">**merkle proof ** ：</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#proof-of-membership"><span class="nav-number">4.1.</span> <span class="nav-text">proof of membership</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#proof-of-non-membership"><span class="nav-number">4.2.</span> <span class="nav-text">proof of non-membership</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="陈宇韶chenyushao"
+      src="/images/my.jpg">
+  <p class="site-author-name" itemprop="name">陈宇韶chenyushao</p>
+  <div class="site-description" itemprop="description">爱学习、爱工作、爱生活;         微信号: Tiger_and_master;         手机号码:18515678348 </div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">427</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">201</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/1-bct%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/my.jpg">
+      <meta itemprop="name" content="陈宇韶chenyushao">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tiger_pop's Blog">
+      <meta itemprop="description" content="爱学习、爱工作、爱生活;         微信号: Tiger_and_master;         手机号码:18515678348 ">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="1-bct数据结构 | Tiger_pop's Blog">
+      <meta itemprop="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          1-bct数据结构
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2025-01-10 21:05:10 / 修改时间：21:24:03" itemprop="dateCreated datePublished" datetime="2025-01-10T21:05:10+08:00">2025-01-10</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%8C%BA%E5%9D%97%E9%93%BE/" itemprop="url" rel="index"><span itemprop="name">区块链</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+            <div class="post-description">这是文章开头，显示在主页面，详情请点击此处。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>简介 <span id="more"></span></p>
+<h1 id="hash指针"><a href="#hash指针" class="headerlink" title="hash指针"></a>hash指针</h1><p><strong>一般的指针</strong>：存放的是 结构体在 内存中的起始位置；</p>
+<p><strong>hash 指针</strong>：除了存放结构体在 内存中的起始位置，还需要 存结构体的hash 值，以保证不被篡改。</p>
+<p><strong>Genesis block</strong> ：起源块</p>
+<p>每一个区块都包括了指向前一个区块的指针。</p>
+<p><img src="/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/1-bct%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/%E6%88%AA%E5%B1%8F2024-11-12%2007.25.03.png" alt="截屏2024-11-12 07.25.03"></p>
+<p>最后一个 H() 哈希值 在系统中，这样结构。</p>
+<p>每一个 H() 都是由前一个 区块的全部内容 算出来的 哈希值，包括 前一个区块中存放的前前一个区块的 H 哈希值。因此 我一个区块的改动就会导致 后面每一个 H 值发生改变，因此，我只需要保存最后一个 H 值，就能保证前面的值 都是没有被改变的。</p>
+<p>很多时候，我们只保留最近几个区块，如果要用到前面的区块的内容的话，就找前面的人要，给我们以后去算一算，确认一下有没有被篡改。</p>
+<h1 id="full-node、light-node"><a href="#full-node、light-node" class="headerlink" title="full node、light node"></a>full node、light node</h1><p>btc链 中的结点 分 <strong>轻结点</strong>（仅仅保存 block header） <strong>全结点</strong>（保留block header和block body）；</p>
+<p>钱包大部分都是轻结点。</p>
+<h1 id="merkle-tree"><a href="#merkle-tree" class="headerlink" title="merkle tree"></a>merkle tree</h1><p><img src="/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/1-bct%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/%E6%88%AA%E5%B1%8F2024-11-12%2007.37.05.png" alt="截屏2024-11-12 07.37.05"></p>
+<p>叶子结点保存 data数据，上面的结点 都是 保存 H 值用的。</p>
+<blockquote>
+<p>每一个 data 其实是一个交易。</p>
+</blockquote>
+<p>hash树是一个区块的组成部分。区块分头和体。</p>
+<p>block header：  root hash 存这里面</p>
+<p>block body： 包括交易列表</p>
+<p>merkle tree 用来提供 merkle proof </p>
+<p>一个转钱的例子，你说已经把前转给我了，我只有手机上的 轻结点，我如何知道 你的操作是不是已经写入了链中？这就是  merkle proof  的过程。</p>
+<h1 id="merkle-proof-："><a href="#merkle-proof-：" class="headerlink" title="**merkle proof ** ："></a>**merkle proof ** ：</h1><p><strong>proof of membership、proof of inclusion</strong></p>
+<p>最上面蓝色的表示一个 简单的区块链。这里展开了体现了一个 区块中的一个 merkle tree。</p>
+<p>我们的轻结点要 检验 标黄的 tx 这一笔交易是不是包含在了这个merkle tree 中。</p>
+<p>轻结点是没有保存 merkle tree 的具体内容的，只保存了这个 root hash 值。</p>
+<p>轻结点向某个全结点发出请求，全结点就发出 几个红色的 H 给 轻结点，有了这几个红色的H以后，轻结点就能在本地计算出 绿色的几个H值，我们可以看出来，有一红一绿两个H，就又能把上一级的H算出来，拿着上一级的绿色的H，配合上一级的红色 又能算出上上级的 绿色H… 把最后算出的 红绿H 和轻结点手中的 红绿H对比，就可以验证 黄色tx 这笔交易了。 </p>
+<p><img src="/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/1-bct%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/%E6%88%AA%E5%B1%8F2024-11-12%2008.15.03.png" alt="截屏2024-11-12 08.15.03"></p>
+<blockquote>
+<p>如想要 通过 篡改 红色H ，来 实现 被篡改的黄色 tx 的配平，来让上上级的绿色H保持正确，是不可行的，因为认为调整 红色H来达到某一个值，属于认为制造 hash 碰撞，和我们在 区块链的密码学原理中说到的 collision resistance 与 hiding 性质相矛盾，所以无法实现。</p>
+</blockquote>
+<h2 id="proof-of-membership"><a href="#proof-of-membership" class="headerlink" title="proof of membership"></a>proof of membership</h2><p>因为是二叉树，所以，证明 tx 在里面 ，从下往上算 hash，一步一步对比，和二分法从上往下的算位置的路径是一样的。所以时间复杂度就是 二方法的 O(logN)。</p>
+<h2 id="proof-of-non-membership"><a href="#proof-of-non-membership" class="headerlink" title="proof of non-membership"></a>proof of non-membership</h2><p>为了证明 tx 不在 tree 中，只能一步一步算每一个tx看看在不在里面。时间复杂度 O(N)，当然了，如果 tx 是排序好的，那时间复杂度自然可以低很多达到 O(logN)。</p>
+<blockquote>
+<p>btc 不要求做这样的不存在证明，所以tx实际上是没哟排序的。</p>
+</blockquote>
+<p>只要是无环的数据结构，都可以用hash指针来代替 普通指针。</p>
+<p>每一个指针依赖前一个区块定下来，有环的话，会出现循环依赖。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/btc/" rel="tag"># btc</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/2-BTC%E5%8D%8F%E8%AE%AE/" rel="prev" title="2-BTC协议">
+                  <i class="fa fa-chevron-left"></i> 2-BTC协议
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2025/01/10/%E5%8C%BA%E5%9D%97%E9%93%BE/3-BTC%E5%AE%9E%E7%8E%B0/" rel="next" title="3-BTC实现">
+                  3-BTC实现 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">陈宇韶chenyushao</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

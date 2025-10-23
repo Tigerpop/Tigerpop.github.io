@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha256-AbA177XfpSnFEvgpYu1jMygiLabzPCJCRIBtR5jGc0k=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.13.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="蒙特卡洛方法">
+<meta property="og:url" content="http://example.com/2025/10/22/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E8%92%99%E7%89%B9%E5%8D%A1%E6%B4%9B%E6%96%B9%E6%B3%95/index.html">
+<meta property="og:site_name" content="Tiger_pop&#39;s Blog">
+<meta property="og:description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2025/10/22/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E8%92%99%E7%89%B9%E5%8D%A1%E6%B4%9B%E6%96%B9%E6%B3%95/%E6%88%AA%E5%B1%8F2025-10-21%2010.40.45.png">
+<meta property="og:image" content="http://example.com/2025/10/22/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E8%92%99%E7%89%B9%E5%8D%A1%E6%B4%9B%E6%96%B9%E6%B3%95/%E6%88%AA%E5%B1%8F2025-10-21%2010.55.56.png">
+<meta property="og:image" content="http://example.com/2025/10/22/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E8%92%99%E7%89%B9%E5%8D%A1%E6%B4%9B%E6%96%B9%E6%B3%95/%E6%88%AA%E5%B1%8F2025-10-21%2010.57.28.png">
+<meta property="og:image" content="http://example.com/2025/10/22/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E8%92%99%E7%89%B9%E5%8D%A1%E6%B4%9B%E6%96%B9%E6%B3%95/%E6%88%AA%E5%B1%8F2025-10-21%2011.00.21.png">
+<meta property="og:image" content="http://example.com/2025/10/22/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E8%92%99%E7%89%B9%E5%8D%A1%E6%B4%9B%E6%96%B9%E6%B3%95/%E6%88%AA%E5%B1%8F2025-10-21%2011.05.04.png">
+<meta property="og:image" content="http://example.com/2025/10/22/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E8%92%99%E7%89%B9%E5%8D%A1%E6%B4%9B%E6%96%B9%E6%B3%95/%E6%88%AA%E5%B1%8F2025-10-21%2011.18.51.png">
+<meta property="og:image" content="http://example.com/2025/10/22/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E8%92%99%E7%89%B9%E5%8D%A1%E6%B4%9B%E6%96%B9%E6%B3%95/%E6%88%AA%E5%B1%8F2025-10-21%2011.27.04.png">
+<meta property="og:image" content="http://example.com/2025/10/22/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E8%92%99%E7%89%B9%E5%8D%A1%E6%B4%9B%E6%96%B9%E6%B3%95/%E6%88%AA%E5%B1%8F2025-10-21%2013.51.51.png">
+<meta property="og:image" content="http://example.com/2025/10/22/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E8%92%99%E7%89%B9%E5%8D%A1%E6%B4%9B%E6%96%B9%E6%B3%95/%E6%88%AA%E5%B1%8F2025-10-21%2014.09.34.png">
+<meta property="og:image" content="http://example.com/2025/10/22/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E8%92%99%E7%89%B9%E5%8D%A1%E6%B4%9B%E6%96%B9%E6%B3%95/%E6%88%AA%E5%B1%8F2025-10-21%2014.17.44.png">
+<meta property="og:image" content="http://example.com/2025/10/22/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E8%92%99%E7%89%B9%E5%8D%A1%E6%B4%9B%E6%96%B9%E6%B3%95/%E6%88%AA%E5%B1%8F2025-10-21%2014.30.08.png">
+<meta property="og:image" content="http://example.com/2025/10/22/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E8%92%99%E7%89%B9%E5%8D%A1%E6%B4%9B%E6%96%B9%E6%B3%95/%E6%88%AA%E5%B1%8F2025-10-21%2014.31.53.png">
+<meta property="og:image" content="http://example.com/2025/10/22/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E8%92%99%E7%89%B9%E5%8D%A1%E6%B4%9B%E6%96%B9%E6%B3%95/%E6%88%AA%E5%B1%8F2025-10-21%2014.41.17.png">
+<meta property="og:image" content="http://example.com/2025/10/22/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E8%92%99%E7%89%B9%E5%8D%A1%E6%B4%9B%E6%96%B9%E6%B3%95/%E6%88%AA%E5%B1%8F2025-10-21%2014.45.37.png">
+<meta property="article:published_time" content="2025-10-22T10:58:23.000Z">
+<meta property="article:modified_time" content="2025-10-22T10:58:52.776Z">
+<meta property="article:author" content="陈宇韶chenyushao">
+<meta property="article:tag" content="蒙特卡洛">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2025/10/22/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E8%92%99%E7%89%B9%E5%8D%A1%E6%B4%9B%E6%96%B9%E6%B3%95/%E6%88%AA%E5%B1%8F2025-10-21%2010.40.45.png">
+
+
+<link rel="canonical" href="http://example.com/2025/10/22/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E8%92%99%E7%89%B9%E5%8D%A1%E6%B4%9B%E6%96%B9%E6%B3%95/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2025/10/22/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E8%92%99%E7%89%B9%E5%8D%A1%E6%B4%9B%E6%96%B9%E6%B3%95/","path":"2025/10/22/机器学习/蒙特卡洛方法/","title":"蒙特卡洛方法"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>蒙特卡洛方法 | Tiger_pop's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="Tiger_pop's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Tiger_pop's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">tiger_pop 的博客</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E6%80%9D%E6%83%B3"><span class="nav-number">1.</span> <span class="nav-text">核心思想</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%92%99%E7%89%B9%E5%8D%A1%E6%B4%9B%E6%B1%82-%CF%80"><span class="nav-number">2.</span> <span class="nav-text">蒙特卡洛求 π</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%92%99%E7%89%B9%E5%8D%A1%E6%B4%9B%E6%A0%91%E6%90%9C%E7%B4%A2"><span class="nav-number">3.</span> <span class="nav-text">蒙特卡洛树搜索</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81selection"><span class="nav-number">3.1.</span> <span class="nav-text">一、selection</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81node-expansion"><span class="nav-number">3.2.</span> <span class="nav-text">二、node expansion</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81simulation%EF%BC%88%E4%BB%BF%E7%9C%9F%EF%BC%89rollout-%EF%BC%88%E5%87%BA%E5%93%81%EF%BC%89"><span class="nav-number">3.3.</span> <span class="nav-text">三、simulation（仿真）rollout （出品）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B3%A8%E6%84%8F%EF%BC%8C%E4%B8%80%E4%B8%AA%E9%9D%9E%E5%B8%B8%E5%AE%B9%E6%98%93%E8%AE%A9%E4%BA%BA%E8%AF%AF%E8%A7%A3%E7%9A%84%E7%82%B9%EF%BC%81%EF%BC%9A"><span class="nav-number">3.3.1.</span> <span class="nav-text">注意，一个非常容易让人误解的点！：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%81back-propagation%EF%BC%88%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%AD%EF%BC%89"><span class="nav-number">3.4.</span> <span class="nav-text">四、back propagation（反向传播）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AE%97%E6%B3%95%E7%BB%88%E7%BB%93"><span class="nav-number">3.5.</span> <span class="nav-text">算法终结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BE%8B%E5%AD%90"><span class="nav-number">3.6.</span> <span class="nav-text">例子</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">3.7.</span> <span class="nav-text">总结</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="陈宇韶chenyushao"
+      src="/images/my.jpg">
+  <p class="site-author-name" itemprop="name">陈宇韶chenyushao</p>
+  <div class="site-description" itemprop="description">爱学习、爱工作、爱生活;         微信号: Tiger_and_master;         手机号码:18515678348 </div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">427</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">201</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2025/10/22/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E8%92%99%E7%89%B9%E5%8D%A1%E6%B4%9B%E6%96%B9%E6%B3%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/my.jpg">
+      <meta itemprop="name" content="陈宇韶chenyushao">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tiger_pop's Blog">
+      <meta itemprop="description" content="爱学习、爱工作、爱生活;         微信号: Tiger_and_master;         手机号码:18515678348 ">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="蒙特卡洛方法 | Tiger_pop's Blog">
+      <meta itemprop="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          蒙特卡洛方法
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2025-10-22 18:58:23 / 修改时间：18:58:52" itemprop="dateCreated datePublished" datetime="2025-10-22T18:58:23+08:00">2025-10-22</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+            <div class="post-description">这是文章开头，显示在主页面，详情请点击此处。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="核心思想"><a href="#核心思想" class="headerlink" title="核心思想"></a>核心思想</h1><p>用<strong>随机样本的统计结果</strong>去<strong>近似一个数学问题的真实答案</strong>。</p>
+<h1 id="蒙特卡洛求-π"><a href="#蒙特卡洛求-π" class="headerlink" title="蒙特卡洛求 π"></a>蒙特卡洛求 π</h1><p>蒙特卡洛求 π 这个例子大学的时候已经学过了，这里就不再讲解。</p>
+<h1 id="蒙特卡洛树搜索"><a href="#蒙特卡洛树搜索" class="headerlink" title="蒙特卡洛树搜索"></a>蒙特卡洛树搜索</h1><p>Monte Carlo Tree Search</p>
+<p>一共4步，如下。</p>
+<p><img src="/2025/10/22/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E8%92%99%E7%89%B9%E5%8D%A1%E6%B4%9B%E6%96%B9%E6%B3%95/%E6%88%AA%E5%B1%8F2025-10-21%2010.40.45.png" alt="截屏2025-10-21 10.40.45"></p>
+<p><img src="/2025/10/22/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E8%92%99%E7%89%B9%E5%8D%A1%E6%B4%9B%E6%96%B9%E6%B3%95/%E6%88%AA%E5%B1%8F2025-10-21%2010.55.56.png" alt="截屏2025-10-21 10.55.56"></p>
+<h2 id="一、selection"><a href="#一、selection" class="headerlink" title="一、selection"></a>一、selection</h2><p>用下面公式给每个子节点打分。</p>
+<p><img src="/2025/10/22/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E8%92%99%E7%89%B9%E5%8D%A1%E6%B4%9B%E6%96%B9%E6%B3%95/%E6%88%AA%E5%B1%8F2025-10-21%2010.57.28.png" alt="截屏2025-10-21 10.57.28"></p>
+<h2 id="二、node-expansion"><a href="#二、node-expansion" class="headerlink" title="二、node expansion"></a>二、node expansion</h2><p>如果是叶子节点，扩展出新的节点。</p>
+<p><img src="/2025/10/22/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E8%92%99%E7%89%B9%E5%8D%A1%E6%B4%9B%E6%96%B9%E6%B3%95/%E6%88%AA%E5%B1%8F2025-10-21%2011.00.21.png" alt="截屏2025-10-21 11.00.21"></p>
+<h2 id="三、simulation（仿真）rollout-（出品）"><a href="#三、simulation（仿真）rollout-（出品）" class="headerlink" title="三、simulation（仿真）rollout （出品）"></a>三、simulation（仿真）rollout （出品）</h2><p><img src="/2025/10/22/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E8%92%99%E7%89%B9%E5%8D%A1%E6%B4%9B%E6%96%B9%E6%B3%95/%E6%88%AA%E5%B1%8F2025-10-21%2011.05.04.png" alt="截屏2025-10-21 11.05.04"></p>
+<p>从这个新节点开始，用随机（或启发式）方法“玩”到游戏结束。叶子节点就算是一个游戏结束的状态。<br> 👉 这一步就是应用“蒙特卡洛方法” —– 用<strong>随机样本的统计结果</strong>去<strong>近似一个数学问题的真实答案</strong>。</p>
+<h3 id="注意，一个非常容易让人误解的点！："><a href="#注意，一个非常容易让人误解的点！：" class="headerlink" title="注意，一个非常容易让人误解的点！："></a><strong>注意，一个非常容易让人误解的点！</strong>：</h3><p>​		这里的 整个rollout计算过程中，涉及到的行为路径选择 和 terminal state，都是和前文中这个蒙特卡洛树没有关系的，相当于在现在这个状态中又开一局游戏，通过不断的随机操作，来模拟出游戏直到游戏结束，给出我们一个 value 打分！和之前我们建立的蒙特卡洛树是没有关系的！如果说有关系，那就是rollout的初始状态是基于蒙特卡洛树的那个节点的状态。</p>
+<blockquote>
+<p>rollout（模拟）阶段的所有状态变化、随机选择、直到 terminal state 的过程，<br> <strong>都不是蒙特卡洛搜索树（MCTS）中的节点</strong>。</p>
+<p>它们只是一场“基于当前叶节点状态的随机游戏”。</p>
+<p>唯一的联系是：<br> rollout 的起点（初始状态）&#x3D; 树中刚刚扩展出来的那个叶节点的状态。</p>
+<p>模拟的结果（value）会反向传播回树里，<br> 更新叶节点及其祖先节点的价值估计。</p>
+</blockquote>
+<p>可以这样理解：</p>
+<ul>
+<li>MCTS 树的作用：保存已经探索过的、较有价值的状态空间（“地图”）。</li>
+<li>rollout 的作用：从“地图边缘”往外随机看看未来会发生什么（“探路”）。</li>
+</ul>
+<h2 id="四、back-propagation（反向传播）"><a href="#四、back-propagation（反向传播）" class="headerlink" title="四、back propagation（反向传播）"></a>四、back propagation（反向传播）</h2><p>从 rollout 中找到适合的值，放到树中适合的位置中去。</p>
+<p>就是把 value 的值从路径的节点中加一遍。</p>
+<h2 id="算法终结"><a href="#算法终结" class="headerlink" title="算法终结"></a>算法终结</h2><p>1、限制时间</p>
+<p>2、固定迭代次数</p>
+<p>结束时选择一个 value 更大的节点完成决策。</p>
+<h2 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h2><p>这里的 T 就是 selection 章节中介绍的 value。 N是总探索次数，n是这个节点的探索次数。</p>
+<p>初始状态如下，根节点是叶子节点；</p>
+<p><img src="/2025/10/22/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E8%92%99%E7%89%B9%E5%8D%A1%E6%B4%9B%E6%96%B9%E6%B3%95/%E6%88%AA%E5%B1%8F2025-10-21%2011.18.51.png" alt="截屏2025-10-21 11.18.51"></p>
+<p>在expansion出两个节点后，发现ni都为0，导致UCB1两个拓展的节点都是∞。所以UCB1是相等的，理论上选谁都一样。</p>
+<p>是叶子节点同时又没有被探索过，根据前面的流程图，直接就行 rollout计算。</p>
+<p><img src="/2025/10/22/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E8%92%99%E7%89%B9%E5%8D%A1%E6%B4%9B%E6%96%B9%E6%B3%95/%E6%88%AA%E5%B1%8F2025-10-21%2011.27.04.png" alt="截屏2025-10-21 11.27.04"></p>
+<p>计算出了一个value值，为20 。</p>
+<p><img src="/2025/10/22/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E8%92%99%E7%89%B9%E5%8D%A1%E6%B4%9B%E6%96%B9%E6%B3%95/%E6%88%AA%E5%B1%8F2025-10-21%2013.51.51.png" alt="截屏2025-10-21 13.51.51"></p>
+<p>反向传播，把路径上的节点的价值都改成20；N_0 &#x3D; 1 了，因为被探索过一次了。</p>
+<p>此时重新 从根节点出发，再 执行上面的一轮操作，发现 S_1 的UCB1已经是一个固定值了，而 S_2 由于 没有被访问过，这个值还是一个∞，导致了我们一定会选择 S_2 节点。</p>
+<p>给 S_2 节点来一轮以后，假如 它的值是 10，则根节点总访问次数会由于反向传播累加，变成2，value累加成20+10&#x3D;30；</p>
+<p><img src="/2025/10/22/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E8%92%99%E7%89%B9%E5%8D%A1%E6%B4%9B%E6%96%B9%E6%B3%95/%E6%88%AA%E5%B1%8F2025-10-21%2014.09.34.png" alt="截屏2025-10-21 14.09.34"></p>
+<p>现在开始重新从S_0节点开始第二轮。</p>
+<p>算出 UCB 值，给 S_0 的所有子节点打分。</p>
+<p><img src="/2025/10/22/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E8%92%99%E7%89%B9%E5%8D%A1%E6%B4%9B%E6%96%B9%E6%B3%95/%E6%88%AA%E5%B1%8F2025-10-21%2014.17.44.png" alt="截屏2025-10-21 14.17.44"></p>
+<p>发现 S_1 节点大，所以选择 S_1 ，发现 S_1 是叶子节点，但是已经被访问过了，按照流程给它 枚举所有可能的动作，并添加到树中，然后 当前节点 &#x3D; 第一个新节点，用这个节点去做 rollout 计算。</p>
+<p><img src="/2025/10/22/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E8%92%99%E7%89%B9%E5%8D%A1%E6%B4%9B%E6%96%B9%E6%B3%95/%E6%88%AA%E5%B1%8F2025-10-21%2014.30.08.png" alt="截屏2025-10-21 14.30.08"></p>
+<p>再back propagation；</p>
+<p><img src="/2025/10/22/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E8%92%99%E7%89%B9%E5%8D%A1%E6%B4%9B%E6%96%B9%E6%B3%95/%E6%88%AA%E5%B1%8F2025-10-21%2014.31.53.png" alt="截屏2025-10-21 14.31.53"></p>
+<p> 这一轮执行完毕之后又回到了 S_0 , 此时又重新开始一轮 selection，计算 UCB ，但是需要注意，这个 Vi 是平均值，Vi 的值需要除他的探索次数。</p>
+<p><img src="/2025/10/22/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E8%92%99%E7%89%B9%E5%8D%A1%E6%B4%9B%E6%96%B9%E6%B3%95/%E6%88%AA%E5%B1%8F2025-10-21%2014.41.17.png" alt="截屏2025-10-21 14.41.17"></p>
+<p>此时 S_2 的值更大一些，所以，我们现在选择的是 S_2 节点；</p>
+<p>我们可以发现 S_2 是叶子节点，又被探索过，按照流程，先对它 枚举所有动作加入树中，然后选第一个动作，做rollout计算，再back propagation。</p>
+<p><img src="/2025/10/22/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E8%92%99%E7%89%B9%E5%8D%A1%E6%B4%9B%E6%96%B9%E6%B3%95/%E6%88%AA%E5%B1%8F2025-10-21%2014.45.37.png" alt="截屏2025-10-21 14.45.37"></p>
+<p>假如我们的程序在此时就停下来了，我们来看看会怎么执行？</p>
+<p>由于此时计算 S_1 和 S_2 的 UCB ，会发现 S_2 的更大，所以会选 右边那条路径。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>MCTS像一个带反向传播和路径赋值功能的二叉树，但是需要明确的一点是，但它不是固定的「普通二叉树」，而是根据策略动态扩展的「非固定分支搜索树」。</p>
+<p>在simulation仿真中，用随机（或启发式）方法“玩”到游戏结束。<br> 👉 这一步就是应用“蒙特卡洛方法” —– 用<strong>随机样本的统计结果</strong>去<strong>近似一个数学问题的真实答案</strong>。</p>
+<p> MCTS 的思路：</p>
+<blockquote>
+<p>“随机尝试多次，统计哪条路径胜率高，然后优先探索它。”</p>
+</blockquote>
+<p>可以这样理解：</p>
+<ul>
+<li>MCTS 树的作用：保存已经探索过的、较有价值的状态空间（“地图”）。</li>
+<li>rollout 的作用：从“地图边缘”往外随机看看未来会发生什么（“探路”）。</li>
+</ul>
+<p>再通过“探路结果”反向传播 回去修正来MCTS树。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E8%92%99%E7%89%B9%E5%8D%A1%E6%B4%9B/" rel="tag"># 蒙特卡洛</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2025/10/12/%E8%A3%85%E6%9C%BA/clonezilla%E4%BD%BF%E7%94%A8%E6%A1%88%E4%BE%8B/" rel="prev" title="clonezilla使用案例">
+                  <i class="fa fa-chevron-left"></i> clonezilla使用案例
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2025/10/22/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/transform%E6%A8%A1%E5%9E%8B/" rel="next" title="transform模型">
+                  transform模型 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">陈宇韶chenyushao</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

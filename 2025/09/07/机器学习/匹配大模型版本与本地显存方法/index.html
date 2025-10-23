@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha256-AbA177XfpSnFEvgpYu1jMygiLabzPCJCRIBtR5jGc0k=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.13.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="匹配大模型版本与本地显存方法">
+<meta property="og:url" content="http://example.com/2025/09/07/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E5%8C%B9%E9%85%8D%E5%A4%A7%E6%A8%A1%E5%9E%8B%E7%89%88%E6%9C%AC%E4%B8%8E%E6%9C%AC%E5%9C%B0%E6%98%BE%E5%AD%98%E6%96%B9%E6%B3%95/index.html">
+<meta property="og:site_name" content="Tiger_pop&#39;s Blog">
+<meta property="og:description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-09-07T14:05:02.000Z">
+<meta property="article:modified_time" content="2025-09-07T13:57:15.927Z">
+<meta property="article:author" content="陈宇韶chenyushao">
+<meta property="article:tag" content="显存">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://example.com/2025/09/07/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E5%8C%B9%E9%85%8D%E5%A4%A7%E6%A8%A1%E5%9E%8B%E7%89%88%E6%9C%AC%E4%B8%8E%E6%9C%AC%E5%9C%B0%E6%98%BE%E5%AD%98%E6%96%B9%E6%B3%95/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2025/09/07/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E5%8C%B9%E9%85%8D%E5%A4%A7%E6%A8%A1%E5%9E%8B%E7%89%88%E6%9C%AC%E4%B8%8E%E6%9C%AC%E5%9C%B0%E6%98%BE%E5%AD%98%E6%96%B9%E6%B3%95/","path":"2025/09/07/机器学习/匹配大模型版本与本地显存方法/","title":"匹配大模型版本与本地显存方法"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>匹配大模型版本与本地显存方法 | Tiger_pop's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="Tiger_pop's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Tiger_pop's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">tiger_pop 的博客</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%9C%8B%E6%A8%A1%E5%9E%8B%E6%98%BE%E5%AD%98%E9%9C%80%E6%B1%82"><span class="nav-number">1.</span> <span class="nav-text">看模型显存需求</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%AE%A1%E7%AE%97%E4%BB%BB%E5%8A%A1%E6%8B%86%E5%88%86"><span class="nav-number">2.</span> <span class="nav-text">计算任务拆分</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#GPU%E5%8D%95%E5%8D%A1%E6%98%BE%E5%AD%98%E8%AE%A1%E7%AE%97%E5%85%AC%E5%BC%8F"><span class="nav-number">3.</span> <span class="nav-text">GPU单卡显存计算公式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E9%9C%80%E6%B1%82"><span class="nav-number">3.1.</span> <span class="nav-text">总需求</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E5%88%86%E7%89%87"><span class="nav-number">3.2.</span> <span class="nav-text">模型分片</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#KV-Cache"><span class="nav-number">3.3.</span> <span class="nav-text">KV_Cache</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%80%E9%94%80"><span class="nav-number">3.4.</span> <span class="nav-text">开销</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%90%AF%E5%8A%A8%E5%B3%B0%E5%80%BC%E6%98%BE%E5%AD%98"><span class="nav-number">3.5.</span> <span class="nav-text">启动峰值显存</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9F%A5%E7%9C%8BGPU%E5%8D%95%E5%8D%A1%E6%98%BE%E5%AD%98%E5%8E%8B%E5%8A%9B"><span class="nav-number">4.</span> <span class="nav-text">查看GPU单卡显存压力</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9F%A5%E7%9C%8BGPU%E6%80%BB%E6%98%BE%E5%AD%98%E5%8E%8B%E5%8A%9B"><span class="nav-number">5.</span> <span class="nav-text">查看GPU总显存压力</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="陈宇韶chenyushao"
+      src="/images/my.jpg">
+  <p class="site-author-name" itemprop="name">陈宇韶chenyushao</p>
+  <div class="site-description" itemprop="description">爱学习、爱工作、爱生活;         微信号: Tiger_and_master;         手机号码:18515678348 </div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">427</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">201</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2025/09/07/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E5%8C%B9%E9%85%8D%E5%A4%A7%E6%A8%A1%E5%9E%8B%E7%89%88%E6%9C%AC%E4%B8%8E%E6%9C%AC%E5%9C%B0%E6%98%BE%E5%AD%98%E6%96%B9%E6%B3%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/my.jpg">
+      <meta itemprop="name" content="陈宇韶chenyushao">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tiger_pop's Blog">
+      <meta itemprop="description" content="爱学习、爱工作、爱生活;         微信号: Tiger_and_master;         手机号码:18515678348 ">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="匹配大模型版本与本地显存方法 | Tiger_pop's Blog">
+      <meta itemprop="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          匹配大模型版本与本地显存方法
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2025-09-07 22:05:02 / 修改时间：21:57:15" itemprop="dateCreated datePublished" datetime="2025-09-07T22:05:02+08:00">2025-09-07</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+            <div class="post-description">这是文章开头，显示在主页面，详情请点击此处。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>我们看见大量的大语言模型在 modelscope 这类平台上，如何确定我们本地的GPU显存能否匹配上这个模型的基本要求？</p>
+<p>这次我们搞这个。 </p>
+<h1 id="看模型显存需求"><a href="#看模型显存需求" class="headerlink" title="看模型显存需求"></a>看模型显存需求</h1><p>大模型的计算单位都是2字节，也就是8*2&#x3D;16bit ；而 我们看见 标着 AWQ 或者 4int 等就是量化压缩到4bit 的意思，最终显存需求会是原来的1&#x2F;4。</p>
+<p>Qwen-32B-AWQ </p>
+<p>指的是32B个计算单位，原本FP16单位是32*2&#x3D;64G的显存需求，但是AWQ的压缩，导致只需要64&#x2F;4&#x3D; 16G显存。</p>
+<p>Qwen2.5-72B-AWQ</p>
+<p>指的是72B个计算单位，原本FP16 是72*2&#x3D;144G的显存需求，但是AWQ的压缩，导致只需要144&#x2F;4&#x3D; 36G显存。</p>
+<p>通义千问 QwQ-32B</p>
+<p>指的是32B个计算单位，FP16 大小就是 16bit的单位，也就是32*2&#x3D;64G的显存需求。</p>
+<h1 id="计算任务拆分"><a href="#计算任务拆分" class="headerlink" title="计算任务拆分"></a>计算任务拆分</h1><p>ray 搞一个2个机器的集群，然后vllm 来平分GPU显存去计算。核心是vllm对计算的拆分。 </p>
+<p>例如：</p>
+<p><code>tensor_parallel_size=4</code> ，我们把计算任务用vllm 分4份给到GPU集群。 </p>
+<p>我们的算力集群是由4张24G显存的GPU组成。 </p>
+<h1 id="GPU单卡显存计算公式"><a href="#GPU单卡显存计算公式" class="headerlink" title="GPU单卡显存计算公式"></a>GPU单卡显存计算公式</h1><h2 id="总需求"><a href="#总需求" class="headerlink" title="总需求"></a>总需求</h2><p><code>单卡需求(GB) = (量化模型大小 ÷ tensor_parallel_size) + KV_Cache + 开销</code></p>
+<h2 id="模型分片"><a href="#模型分片" class="headerlink" title="模型分片"></a>模型分片</h2><p>模型分片 &#x3D; (量化模型大小 ÷ tensor_parallel_size)</p>
+<h2 id="KV-Cache"><a href="#KV-Cache" class="headerlink" title="KV_Cache"></a>KV_Cache</h2><p><code>KV_Cache ≈ 2 × batch_size × seq_len × 层数 × hidden_size × dtype_size × 0.6</code></p>
+<p>大约<code>KV_Cache(GB) ≈ batch_size × seq_len × 0.0001</code></p>
+<p>下方为 KV_Cache(GB) 例表：</p>
+<table>
+<thead>
+<tr>
+<th>batch&#x3D;4, seq&#x3D;2048</th>
+<th>~0.8 GB</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>batch&#x3D;8, seq&#x3D;4096</td>
+<td>~3.2 GB</td>
+</tr>
+<tr>
+<td>batch&#x3D;16, seq&#x3D;8192</td>
+<td>~12.8 GB</td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th><strong>vLLM</strong></th>
+<th><code>--max-num-seqs</code></th>
+<th>最大并发请求数（直接影响 batch_size）</th>
+</tr>
+</thead>
+<tbody><tr>
+<td></td>
+<td><code>--max-num-batched-tokens</code></td>
+<td>批处理的最大 token 数</td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th><strong>vLLM</strong></th>
+<th><code>--max-model-len</code></th>
+<th>模型支持的最大序列长度（直接影响  seq_len）</th>
+</tr>
+</thead>
+<tbody><tr>
+<td></td>
+<td><code>--max-num-batched-tokens</code></td>
+<td>间接限制 seq_len</td>
+</tr>
+</tbody></table>
+<h2 id="开销"><a href="#开销" class="headerlink" title="开销"></a>开销</h2><p>开销（固定值）</p>
+<ul>
+<li><p>中间激活值：1-2 GB</p>
+</li>
+<li><p>框架开销：1-2 GB</p>
+</li>
+<li><p><strong>总计</strong>：2-4 GB</p>
+</li>
+</ul>
+<h2 id="启动峰值显存"><a href="#启动峰值显存" class="headerlink" title="启动峰值显存"></a>启动峰值显存</h2><p>启动峰值显存比稳态高 15-30%</p>
+<h1 id="查看GPU单卡显存压力"><a href="#查看GPU单卡显存压力" class="headerlink" title="查看GPU单卡显存压力"></a>查看GPU单卡显存压力</h1><p>例如：</p>
+<p>Qwen&#x2F;Qwen-32B-Chat</p>
+<p><strong>FP16 大小</strong>：32B × 2 &#x3D; 64 GB</p>
+<p>KV_Cache(GB) ≈ batch_size × seq_len × 0.0001 &#x3D;  8 × 8192 × 0.0001 &#x3D; 6.5536 GB ≈ 6.4 GB </p>
+<table>
+<thead>
+<tr>
+<th><code>batch_size</code></th>
+<th>8</th>
+<th>并发请求数</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>seq_len</code></td>
+<td>8192</td>
+<td>上下文长度</td>
+</tr>
+</tbody></table>
+<p><strong>单卡需求</strong>：</p>
+<ul>
+<li>模型分片：64GB ÷ 4 &#x3D; 16 GB</li>
+<li>KV Cache：6.4 GB</li>
+<li>开销：3.0 GB</li>
+</ul>
+<p>单卡需求 &#x3D;  25.4 &gt; 我单一GPU 24G显存</p>
+<p>所以我无法部署此大模型。 </p>
+<p>同时，由于启动峰值显存比稳态高 15-25%，上面的vllm配置中，即便是batch_size&#x3D;1,seq_len&#x3D;512, 在峰值依然超过了 显存余量，所以我无法部署此大模型。 </p>
+<p>例如：</p>
+<p>通义千问2.5-72B-Instruct-AWQ量化</p>
+<p><strong>单卡需求</strong>：</p>
+<ul>
+<li>模型分片：36GB ÷ 4 &#x3D; 9 GB</li>
+<li>KV Cache：6.4 GB</li>
+<li>开销：3.0 GB</li>
+</ul>
+<p>单卡需求 &#x3D;  18.4 &gt; 我单一GPU 24G显存</p>
+<p>启动峰值显存 ≈  18.4 * 1.25 &#x3D; 23 &lt; 我单一GPU 24G显存, 所以可以部署。</p>
+<h1 id="查看GPU总显存压力"><a href="#查看GPU总显存压力" class="headerlink" title="查看GPU总显存压力"></a>查看GPU总显存压力</h1><p>满足一下即可：</p>
+<p>模型需要显存大小 &lt; vllm总显存 </p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%98%BE%E5%AD%98/" rel="tag"># 显存</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2025/08/30/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E6%9E%84%E5%BB%BA%E4%B8%80%E4%B8%AA%E5%86%99%E6%95%99%E6%A1%88%E7%9A%84%E6%99%BA%E8%83%BD%E4%BD%93/" rel="prev" title="构建一个写教案的智能体">
+                  <i class="fa fa-chevron-left"></i> 构建一个写教案的智能体
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2025/09/12/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E5%85%9A%E5%BB%BAagent%E7%BC%96%E5%86%99/" rel="next" title="党建agent编写">
+                  党建agent编写 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">陈宇韶chenyushao</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

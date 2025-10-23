@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha256-AbA177XfpSnFEvgpYu1jMygiLabzPCJCRIBtR5jGc0k=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.13.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="随机森林">
+<meta property="og:url" content="http://example.com/2022/10/28/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97/index.html">
+<meta property="og:site_name" content="Tiger_pop&#39;s Blog">
+<meta property="og:description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2022/10/28/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97/info.png">
+<meta property="article:published_time" content="2022-10-28T13:07:36.000Z">
+<meta property="article:modified_time" content="2022-10-28T13:23:29.776Z">
+<meta property="article:author" content="陈宇韶chenyushao">
+<meta property="article:tag" content="监督学习(supervised learning)">
+<meta property="article:tag" content="随机森林（Random Forest）">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2022/10/28/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97/info.png">
+
+
+<link rel="canonical" href="http://example.com/2022/10/28/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2022/10/28/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97/","path":"2022/10/28/机器学习/随机森林/","title":"随机森林"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>随机森林 | Tiger_pop's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="Tiger_pop's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Tiger_pop's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">tiger_pop 的博客</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8E%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97%E7%9A%84%E4%B8%AA%E4%BA%BA%E5%B9%B4%E6%94%B6%E5%85%A5%E6%95%B0%E6%8D%AE%E5%88%86%E7%B1%BB"><span class="nav-number">1.</span> <span class="nav-text">基于随机森林的个人年收入数据分类</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E5%AE%9E%E9%AA%8C%E7%AE%80%E4%BB%8B"><span class="nav-number">1.1.</span> <span class="nav-text">一、实验简介</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%EF%BC%88%E4%B8%80%EF%BC%89%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0"><span class="nav-number">1.1.1.</span> <span class="nav-text">（一）问题描述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%EF%BC%88%E4%BA%8C%EF%BC%89%E9%97%AE%E9%A2%98%E9%9C%80%E6%B1%82"><span class="nav-number">1.1.2.</span> <span class="nav-text">（二）问题需求</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E5%AE%9E%E9%AA%8C%E4%BB%BB%E5%8A%A1%E4%B8%8E%E8%A6%81%E6%B1%82"><span class="nav-number">1.2.</span> <span class="nav-text">二、实验任务与要求</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%81%E5%AE%9E%E9%AA%8C%E6%AD%A5%E9%AA%A4"><span class="nav-number">1.3.</span> <span class="nav-text">四、实验步骤</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%EF%BC%88%E4%B8%80%EF%BC%89%E5%8A%A0%E8%BD%BD%E7%9B%B8%E5%85%B3%E7%9A%84%E5%8C%85"><span class="nav-number">1.3.1.</span> <span class="nav-text">（一）加载相关的包</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%EF%BC%88%E4%BA%8C%EF%BC%89%E6%95%B0%E6%8D%AE%E5%8A%A0%E8%BD%BD"><span class="nav-number">1.3.2.</span> <span class="nav-text">（二）数据加载</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%EF%BC%88%E4%B8%89%EF%BC%89%E6%95%B0%E6%8D%AE%E8%A7%82%E5%AF%9F"><span class="nav-number">1.3.3.</span> <span class="nav-text">（三）数据观察</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%EF%BC%88%E5%9B%9B%EF%BC%89%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96"><span class="nav-number">1.3.4.</span> <span class="nav-text">（四）数据可视化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%EF%BC%88%E4%BA%94%EF%BC%89%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86"><span class="nav-number">1.3.5.</span> <span class="nav-text">（五）数据处理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%EF%BC%88%E5%85%AD%EF%BC%89%E6%A8%A1%E5%9E%8B%E7%9A%84%E8%AE%AD%E7%BB%83%E3%80%81%E5%BA%94%E7%94%A8%E5%92%8C%E8%AF%84%E4%BC%B0"><span class="nav-number">1.3.6.</span> <span class="nav-text">（六）模型的训练、应用和评估</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E3%80%81%E7%BB%93%E6%9E%9C%E5%88%86%E6%9E%90"><span class="nav-number">1.4.</span> <span class="nav-text">五、结果分析</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="陈宇韶chenyushao"
+      src="/images/my.jpg">
+  <p class="site-author-name" itemprop="name">陈宇韶chenyushao</p>
+  <div class="site-description" itemprop="description">爱学习、爱工作、爱生活;         微信号: Tiger_and_master;         手机号码:18515678348 </div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">427</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">201</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/10/28/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/my.jpg">
+      <meta itemprop="name" content="陈宇韶chenyushao">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tiger_pop's Blog">
+      <meta itemprop="description" content="爱学习、爱工作、爱生活;         微信号: Tiger_and_master;         手机号码:18515678348 ">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="随机森林 | Tiger_pop's Blog">
+      <meta itemprop="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          随机森林
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2022-10-28 21:07:36 / 修改时间：21:23:29" itemprop="dateCreated datePublished" datetime="2022-10-28T21:07:36+08:00">2022-10-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+            <div class="post-description">这是文章开头，显示在主页面，详情请点击此处。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>#%% md <span id="more"></span></p>
+<h1 id="基于随机森林的个人年收入数据分类"><a href="#基于随机森林的个人年收入数据分类" class="headerlink" title="基于随机森林的个人年收入数据分类"></a>基于随机森林的个人年收入数据分类</h1><h2 id="一、实验简介"><a href="#一、实验简介" class="headerlink" title="一、实验简介"></a>一、实验简介</h2><h3 id="（一）问题描述"><a href="#（一）问题描述" class="headerlink" title="（一）问题描述"></a>（一）问题描述</h3><p>个人年收入（Personal Income）指一个国家一年内个人得到的全部收入。个人年收入情况在某种程度上可以反应出一个国家的发展状况。</p>
+<p>个人年收入的高低受很多因素的影响，比如年龄、受教育程度、职业等等，但是它们之间的关系及其复杂。如果能用机器学习方法高效的对个人年收入情况进行预测，那么将可以促使政府更好的了解民生情况，并制定精准的政策方针。</p>
+<p>本实验利用机器学习中的随机森林算法实现个人年收入是否大于5万的预测。</p>
+<p>#%% md</p>
+<h3 id="（二）问题需求"><a href="#（二）问题需求" class="headerlink" title="（二）问题需求"></a>（二）问题需求</h3><p>本实验中的数据集来自1994年美国的人口普查数据库中的部分数据。数据集有两个数据文件，分别是训练集数据文件和测试集数据文件。其中训练集数据文件包含了32561个样本数据，测试集数据文件包含了16282个样本数据，每个样本包含14个属性(个人信息)和一个标签(个人年收入是否大于50k），这些样本数据中有缺失值、各属性数据类型不一等问题。注意数据集本身没有列名，需添加列名。数据介绍表格如下：</p>
+<p><img src="/2022/10/28/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97/info.png"><br>该表格介绍了15行信息，其中前面14行是样本的属性介绍，最后一行是样本的类别介绍，算法模型需要学习到这些属性是如何影响样本属于哪个类别（“&gt;50K”,“&lt;&#x3D;50K”）的，从而实现算法模型通过新样本的属性数据对样本进行分类。</p>
+<p>随机森林算法模型的训练和预测其样本数据必须是数值格式且无缺失值，所以本实验中对训练集和测试集样本数据的数据格式都转为了数值格式，并删除了有缺失值的样本数据，为了训练更好的模型还单独对训练集数据的属性’capital_loss’和属性’capital_gain’进行了对数变换。<br>数据文件所在位置：训练集，”data_file&#x2F;adult.data”；测试集，”data_file&#x2F;adult.test” 。  </p>
+<p>#%% md</p>
+<h2 id="二、实验任务与要求"><a href="#二、实验任务与要求" class="headerlink" title="二、实验任务与要求"></a>二、实验任务与要求</h2><p>本实验主要任务是应用Sklearn库中的随机森林算法模块对个人年收入进行分类。将训练集和测试集数据进行数据处理达到算法模型的输入要求，用处理过的训练集数据对算法模型进行训练，最终实现算法模型对测试集数据进行分类并对分类结果进行准确率和F1指数评分，最后使用算法的不同参数值进行对比。实验具体任务如下：</p>
+<p>1.数据加载：该数据集在加载时没有列名，需要添加列名（列名在上面的数据介绍表格中有提到）。</p>
+<p>2.数据观察：观察数据集的整体情况及训练集和测试集之间的数据差别，需要对数据有大概的了解。</p>
+<p>3.数据可视化：检测出数据缺失值情况，对’capital_loss’列和’capital_gain’列的数据分布通过柱状图进行可视化。</p>
+<p>4.数据预处理：运用标签编码、缺失值删除的方式实现数据的清洗，使数据全部转化成数值格式数据；对’capital_loss’列和’capital_gain’列的数据做对数变换。</p>
+<p>5.模型的训练、应用和评估：调用Sklearn库中的随机森林算法模块做分类任务，对比不同的参数（n_estimators&#x3D;2，10，50，100，200，500）下模型的分类效果，并将准确率、F1指数和算法训练所耗时长用折线图可视化。</p>
+<p>#%% md</p>
+<h2 id="四、实验步骤"><a href="#四、实验步骤" class="headerlink" title="四、实验步骤"></a>四、实验步骤</h2><p>#%% md</p>
+<h3 id="（一）加载相关的包"><a href="#（一）加载相关的包" class="headerlink" title="（一）加载相关的包"></a>（一）加载相关的包</h3><p>1.导入numpy、pandas等包做数据处理。</p>
+<p>2.导入matplotlib包做数据可视化。</p>
+<p>3.导入RandomForestClassifier算法类用于数据训练并对数据进行分类。</p>
+<p>4.从sklearn.preprocessing中导入LabelEncoder类对数据进行类别编码。</p>
+<p>5.导入accuracy_score，f1_score函数对分类结果分布进行准确率和F1指数评估。</p>
+<p>6.导入time类用于记录模型训练时间。</p>
+<p>#%%</p>
+<p>import pandas as pd   #数据处理包<br>import numpy as np    #矩阵运算包<br>from sklearn.ensemble import RandomForestClassifier  #随机森林分类模型<br>import matplotlib.pyplot as plt   #数据可视化包<br>from sklearn.preprocessing import LabelEncoder  #数据类别编码<br>from sklearn.metrics import f1_score,accuracy_score   #评估数据分类结果<br>import time      #用于记录模型的训练时间</p>
+<p>#%% md</p>
+<h3 id="（二）数据加载"><a href="#（二）数据加载" class="headerlink" title="（二）数据加载"></a>（二）数据加载</h3><p>调用pandas下的read_csv()函数来读取数据文件，函数所使用的参数解释：</p>
+<pre><code>filepath_or_buffer：文件路径；
+
+names：在数据读取后给每一列数据加上列名，注意该列名个数必须跟读取数据的列数相等。
+</code></pre>
+<p>#%%</p>
+<p>train_path &#x3D; “data_file&#x2F;adult.data”<br>test_path &#x3D; “data_file&#x2F;adult.test”<br>columns &#x3D; [‘age’,’workclass’,’fnlgwt’,’education’,’education_num’,’marital_status’,’occupation’,’relationship’<br>           ,’race’,’sex’,’capital_gain’,’capital_loss’,’hours_per_week’,’native_country’,’income’]<br>#加载数据文件。注意加载数据文件时添加列名。<br>df_train_set &#x3D; pd.read_csv(filepath_or_buffer&#x3D;train_path, names&#x3D;columns)   #读取训练集数据<br>df_test_set &#x3D; pd.read_csv(filepath_or_buffer&#x3D;test_path, names&#x3D;columns)</p>
+<p>#%% md</p>
+<h3 id="（三）数据观察"><a href="#（三）数据观察" class="headerlink" title="（三）数据观察"></a>（三）数据观察</h3><p>#%% md</p>
+<p>（1）调用head()函数观察训练集前15条数据和测试集前5条数据，了解训练集和测试集之间的数据差异以及初步观察是否有缺失值。</p>
+<p>#%%</p>
+<p>df_train_set.head(n &#x3D; 15)</p>
+<p>#%% md</p>
+<p>从上表可以看到大部分都是字符型数据，在第15行中有一个缺失值’?’，可能数据里还有很多这种缺失值，后面将详细处理该问题。</p>
+<p>#%%</p>
+<p>df_test_set.head()</p>
+<p>#%% md</p>
+<p>此处需要注意，测试集中标签’income’列的数据与训练集中的标签列数据不同（多了一个’.’)。</p>
+<p>#%% md</p>
+<p>（2）下面调用Pandas库中的info()函数对训练集数据和测试集数据的整体信息进行观察，这样可以知道训练集和测试集每列数据类型的差异性。</p>
+<p>#%%</p>
+<p>df_train_set.info()#观察数据的整体信息 ，注意数据的大小、行列规模、数据类型等，便于后续数据处理。</p>
+<p>#%%</p>
+<p>df_test_set.info()</p>
+<p>#%% md</p>
+<p>可以看出训练集数据类型和测试集数据类型不是每列都一样的，测试集中数据类型为float64的列在训练集数据中全是int64；’age’列在训练集中的数据类型是int64，而在测试集中却是object。现在不确定测试集中数据类型为float64的列数据是否保留了小数，因此需要采取保守手段即将训练集中数据类型为int64的列转换数据类型为float64，将测试集中’age’列的数据类型转为int64。</p>
+<p>#%% md</p>
+<p>（3）缺失值统计<br>对训练集和测试集数据的缺失值情况进行统计，保证可视化列数据不报错以及对后面缺失值处理起引导作用。<br>在观察数据时提到了缺失值是以’?’这种形式出现，此处将统计训练集和测试集每列数据中’?’的个数。</p>
+<p>#%%</p>
+<p>def deficiency(data):<br>    for i in data.columns:     #data.columns获取数据的所有列名<br>        print(‘{}：’.format(i),len(np.argwhere(data.loc[:,i]&#x3D;&#x3D;’ ?’)))  #找出每列中等于’?’的数据个数<br>print(“训练集每列缺失值个数：”)<br>deficiency(df_train_set)<br>print(“测试集每列缺失值个数：”)<br>deficiency(df_test_set)</p>
+<p>#%% md</p>
+<p>可以看到数据集中’capital_gain’列和’capital_loss’列没有缺失值，所以下面对这两列数据分布情况做可视化时无需处理；<br>从缺失值数量来看，缺失值样本个数相对于样本总数还是很小的，所以后面可以删除这些样本数据。</p>
+<p>#%% md</p>
+<h3 id="（四）数据可视化"><a href="#（四）数据可视化" class="headerlink" title="（四）数据可视化"></a>（四）数据可视化</h3><p>将数据可视化可以了解数据分布情况，判断数据分布是否异常。<br>对训练集中’capital_gain’列和’capital_loss’列的数据分布情况做直方图可视化，这样可以判断数据分布是否特别离散。在机器学习中，如果数据分布特别不均衡将会影响到算法模型的训练效果。<br>首先调用subplot()函数画子图，将两张图画到一幅图像上，再调用hist()函数对每段数值的数量进行统计并用柱状图的形式画出来，由于数据值为0的个数远远多其他数据值的个数，这将会导致其他数据值在图上可视化的效果不明显，所以需要对y轴限制最大值为3000。</p>
+<p>figure(figsize&#x3D;(20, 6))函数所使用的参数解释：</p>
+<pre><code>figsize:图像的长宽设置。
+</code></pre>
+<p>hist(x &#x3D; df_train_set.capital_gain, bins&#x3D;40,facecolor&#x3D;”blue”, edgecolor&#x3D;”black”, alpha&#x3D;0.7)函数所使用的参数解释：</p>
+<pre><code>x:传入要统计的数据；
+bins：将传入的数据分段的数量；
+facecolor：填充柱状图的颜色；
+edgecolor：对柱状图的每部分外框设置颜色；
+alpha: 柱状图的透明度。
+</code></pre>
+<p>xlabe(xlabel &#x3D; ‘capital_gain’,fontsize &#x3D;13)函数和ylabel(ylabel &#x3D; ‘number’,fontsize &#x3D;13)函数分别为x轴和y轴设置名称，所使用的参数解释:</p>
+<pre><code>xlabel、ylabel：名称；
+
+fontsize：字体大小。
+</code></pre>
+<p>#%%</p>
+<p>plt.figure(figsize&#x3D;(20, 6))#定义图的长度和宽度<br>plt.subplot(121)  #设置子图位置，121即可画1行2列的图，该子图是第一张图即位置为1行1列<br>plt.hist(x &#x3D; df_train_set.capital_gain, bins&#x3D;40,facecolor&#x3D;”blue”, edgecolor&#x3D;”black”, alpha&#x3D;0.7) #画分布直方图<br>plt.ylim(top &#x3D; 3000)#为y轴设置最大值<br>plt.xlabel(xlabel &#x3D; ‘capital_gain’,fontsize &#x3D;13)   #设置x轴名称<br>plt.ylabel(ylabel &#x3D; ‘number’,fontsize &#x3D;13)   #设置y轴名称</p>
+<p>plt.subplot(122)<br>plt.hist(x &#x3D; df_train_set.capital_loss, bins&#x3D;40, facecolor&#x3D;”blue”, edgecolor&#x3D;”black”, alpha&#x3D;0.7)<br>plt.ylim(top &#x3D; 3000)<br>plt.xlabel(xlabel &#x3D; ‘capital_loss’,fontsize &#x3D;13 )<br>plt.ylabel(ylabel &#x3D; ‘number’,fontsize&#x3D;13)</p>
+<p>#%% md</p>
+<p>可以看到训练集中列’capital_gain’和列’capital_loss’的数据分布非常不均衡，这将不利于算法模型的学习，后续需要对这两列数据的分布情况进行调整。</p>
+<p>#%% md</p>
+<h3 id="（五）数据处理"><a href="#（五）数据处理" class="headerlink" title="（五）数据处理"></a>（五）数据处理</h3><p>数据处理是机器学习中使数据符合算法模型的输入要求以及提高算法模型的预测性能的主要阶段。此阶段是为了规范数据、提升数据质量，从问题需求可以知道本实验的数据比较复杂且不符算法的输入要求。<br>通过上面观察数据和数据可视化阶段知道：数据集中有缺失值’?’和无意义的列数据；训练集和测试集部分列的数据类型不同；列’capital_gain’和列’capital_loss’的数据分布特别离散；数据类型不符算法模型的输入要求。<br>那么本阶段的主要工作如下：</p>
+<p>（1）删除数据：删除缺失值所在的行及无意义的列。</p>
+<p>（2）类型转换：对数据集的列数据进行类型转换。</p>
+<p>（3）数据分布变换：对列’capital_gain’和列’capital_loss’中的数据分别求对数变换。</p>
+<p>（4）数据编码：对数据类型为object数据进行类别编码。</p>
+<p>#%% md</p>
+<p>（1）删除数据<br>在数据的介绍中可以了解到列‘fnlgwt’的数据是无用的，还了解到列’education’和列’education_num’表达意思相同，所以只需保留一列。此处调用Pandas库中的drop(labels&#x3D;[‘fnlgwt’], axis&#x3D;1, inplace&#x3D;True)函数删除列数据。</p>
+<p>drop()函数所使用的参数解释：</p>
+<pre><code>labels：是需要删除的行或列的名字，一般用列表形式；
+axis：选择删除的是行还是列，0是行，1是列；
+inplace：是否就地操作，就是对调用该函数对象进行操作，返回值为None。
+</code></pre>
+<p>#%%</p>
+<p>df_train_set.drop(labels&#x3D;[‘fnlgwt’], axis&#x3D;1, inplace&#x3D;True)   #对训练集删除该列数据<br>df_test_set.drop(labels&#x3D;’fnlgwt’, axis&#x3D;1, inplace&#x3D;True)           #对测试集删除该列数据</p>
+<p>df_train_set.drop(labels&#x3D;[“education”], axis&#x3D;1, inplace&#x3D;True)<br>df_test_set.drop(labels&#x3D;[“education”], axis&#x3D;1, inplace&#x3D;True)</p>
+<p>#%% md</p>
+<p>根据前面可视化可知，需删除缺失值所在的行。首先调用了Pandas库中的replace(to_replace&#x3D;’ ?’, value&#x3D; np.nan)函数找到缺失值并用np.nan替换掉，再调用dropna()函数统一对np.nan数据所在的行进行删除。<br>replace()函数所使用的参数解释：</p>
+<pre><code>to_replace：需要替换的值；
+value：替换后的值。
+</code></pre>
+<p>#%%</p>
+<p>df_train_set &#x3D; df_train_set.replace(to_replace&#x3D;’ ?’, value&#x3D; np.nan).dropna()  #删除训练集数据的缺失值所在的行<br>df_test_set &#x3D; df_test_set.replace(to_replace&#x3D;’ ?’,  value&#x3D;np.nan).dropna()  #删除测试集数据的缺失值所在的行</p>
+<p>#%% md</p>
+<p>（2）类型转换<br>前面观察数据中所提到的训练集数据类型为int64的列需转为float64,测试集列’age’转换数据类型为int64，需要调用astype()函数进行转换。</p>
+<p>#%%</p>
+<p>change_list &#x3D; [‘education_num’,’capital_gain’,’capital_loss’,’hours_per_week’]<br>df_train_set[change_list] &#x3D; df_train_set[change_list].astype(np.float64)    #转int64为float64<br>df_test_set.age &#x3D; df_test_set.age.astype(np.int64)   #对测试集列’age’数据转数据类型为int64</p>
+<p>#%% md</p>
+<p>（3）数据分布变换<br>在可视化时提到了训练集中列’capital_loss’和列’capital_gain’的数据分布太离散，为了缓和这种离散分布将进行对数变换，对这两列数据通过apply()函数取出每一列，再通过lambda匿名函数遍历所取出列的每一个数值并求对数，该处加1是因为数据中有为0的值，而1相对于数据中的值来说是非常小的，基本不会对模型的训练有影响。<br>lambda匿名函数是无需定义函数名的函数，它允许快速定义单行函数，冒号前面就是该匿名函数的参数。</p>
+<p>#%%</p>
+<p>skewed &#x3D; [‘capital_loss’,’capital_gain’]<br>df_train_set[skewed] &#x3D; df_train_set[skewed].apply(lambda x: np.log(x + 1))   #对列’capital_loss’和列’capital_gain’求对数<br>plt.figure(figsize&#x3D;(20, 6))    #定义图的长度和宽度<br>plt.subplot(121)       #设置子图位置，121即可画1行2列的图，该子图是第一张图即位置为1行1列<br>plt.hist(df_train_set.capital_gain, bins&#x3D;40, normed&#x3D;0, facecolor&#x3D;”blue”, edgecolor&#x3D;”black”, alpha&#x3D;0.7)  #画分布直方图<br>plt.ylim(top &#x3D; 3000)   #为y轴设置最大值</p>
+<p>plt.subplot(122)<br>plt.hist(df_train_set.capital_loss, bins&#x3D;40, normed&#x3D;0, facecolor&#x3D;”blue”, edgecolor&#x3D;”black”, alpha&#x3D;0.7)<br>plt.ylim(top &#x3D; 3000)</p>
+<p>#%% md</p>
+<p>（4）数据编码<br>为了统一处理训练集和测试集调用concat()函数将训练集数据和测试集数据按行合并起来,在合并之前需要对训练集和测试集中的列’income’的数据值进行统一，将对测试集中列’income’的数据进行了改变，之后遍历合并后的数据的每一列，对数据类型为object的列进行类别编码。</p>
+<p>#%%</p>
+<p>df_test_set.income &#x3D; df_test_set.income.replace([‘ &gt;50K.’,’ &lt;&#x3D;50K.’], [‘ &gt;50K’,’ &lt;&#x3D;50K’])    #将训练集的列’income’的数据与训练集统一<br>combined_set &#x3D; pd.concat([df_train_set, df_test_set], axis&#x3D;0)       #按行连接训练集和测试集<br>for feature in combined_set.columns:      #遍历数据集的每一列<br>    if combined_set[feature].dtype &#x3D;&#x3D; ‘object’:    #如果列数据类型是否为object类型<br>        lab &#x3D; LabelEncoder()              #创建编码类对象<br>        combined_set[feature] &#x3D; lab.fit_transform(combined_set[feature])   #对数据类型为object的列数据进行类编码<br>#将训练集和测试集分开<br>df_train_set &#x3D; combined_set[:df_train_set.shape[0]]<br>df_test_set &#x3D; combined_set[df_train_set.shape[0]:]<br>#将数据集标签和特征分开<br>cols &#x3D; list(df_train_set.columns)<br>cols.remove(“income”)<br>x_train, y_train &#x3D; df_train_set[cols].values, df_train_set[“income”].values<br>#测试集的输入和输出结果分开，用来校验模型的准确率<br>x_test, y_test &#x3D; df_test_set[cols].values, df_test_set[“income”].values</p>
+<p>#%% md</p>
+<h3 id="（六）模型的训练、应用和评估"><a href="#（六）模型的训练、应用和评估" class="headerlink" title="（六）模型的训练、应用和评估"></a>（六）模型的训练、应用和评估</h3><p>决策树是一个非常典型树结构算法，其每个非叶节点表示一个特征属性的测试，每个分支代表这个特征属性在某个值域上的输出，每个叶节点存放一个类别。当一个样本数据输入到决策树中，通过非叶节点的对样本的特征的进行测试，最终可以到达该树的叶节点，那么该叶节点所存放的类别就是对该样本数据的预测结果。<br>随机森林算法采用多个决策树算法模型对样本数据进行分类，之后将每个决策树算法模型的分类结果输入到多数投票机制中对样本数据进行最终分类，其中随机的意思是在决策树特征属性选择时随机选择一部分特征属性。该算法既可以做分类任务也可以做回归任务，所以在适用场景上没有什么特别要求，主要是在算法选择上，由于它是一个集成学习算法，所以需要选择基学习器（算法)，但所选择的基学习器需要是弱学习器（学习器预测的准确率略高于50%）。</p>
+<p>随机森林算法应用到人口普查收入数据中来做分类任务，并使用该算法模型不同的n_estimators参数值进行对比，其主要工作如下：</p>
+<p>1.为了方便对不同参数（n_estimators）值的算法模型所预测的结果进行评估，需要编写一个包含模型调用、训练和预测功能的函数model_classify(number ,x_train ,y_train ,x_test ,y_test,f1_list,accu_list,time_list),实现对不同n_estimators参数值的算法模型进行的分类任务，并对分类结果进行准确率、F1指标评估，以及记录训练时长。该函数所使用的参数解释：</p>
+<pre><code>number：模型中决策树的个数；
+x_train ：训练集特征数据；
+y_train：训练集标签数据；
+x_test：测试集特征数据；
+y_test：测试集标签数据；
+f1_list：存储模型预测结果的F1指标值的列表；
+accu_list：存储模型预测结果的准确率的列表；
+time_list：存储模型训练所耗时长。
+</code></pre>
+<p>调用RandomForestRegressor(n_estimators&#x3D;number, criterion&#x3D;’gini’)算法类，创建随机森林算法类对象。该类所使用的参数解释：</p>
+<pre><code>n_estimators：模型中决策树的个数；
+criterion：决策树的划分条件。决策树的划分条件有很多种，但是主流的有三种，信息增益、信息增益率、基尼不纯度（gini)。
+</code></pre>
+<p>调用f1_score()、accuracy_score()函数对模型的预测结果进行F1指数和准确率评分。<br>准确率：对给到的要评估数据集的样本进行预测，求预测正确的样本数占所预测的总样本数的比例。该指标评估模型的预测结果更容易理解，更具有分析力。<br>精确率(P)：求预测的所有正例样本（更能引起关注的一类）中预测正确的样本所占比例。其意义为自己所认可的东西中有多少是大众所认可的。<br>召回率(R)：求数据集中所有正例样本被预测正确的个数占所有正例样本的比例，衡量模型对正例的识别能力。<br>F1指标：该指标是精确率和召回率加权调和平均，其公式为$F &#x3D; \frac{2PR}{P+R}$。指标越高模型预测结果越好，要想提高指标值，精确率和召回率两个值需相差不大而且都接近于1。从这点来说模型预测结果用F1指标来评估更有说服力。</p>
+<p>2.为了更直观的看出对于不同参数（n_estimators）值的模型所预测结果的评估指标以及模型的训练时间，需要编写一个函数draw_result(f1_list,accu_list,time_list,n_estimators)来可视化不同参数值的算法模型分类结果的准确率、F1指标以及模型的训练时长。其函数所使用的参数解释：</p>
+<pre><code>f1_list：模型预测结果的F1指标值的列表；
+accu_list：模型预测结果的准确率的列表；
+time_list：模型训练所耗时长；
+n_estimators：模型中决策树的个数。
+</code></pre>
+<p>#%%</p>
+<p>def model_classify(number ,x_train ,y_train ,x_test ,y_test,f1_list,accu_list,time_list):<br>    start_time &#x3D; time.time()<br>    treeClassifier &#x3D; RandomForestClassifier(n_estimators&#x3D;number, criterion&#x3D;’gini’)    #创建随机森林算法类对象<br>    treeClassifier.fit(x_train, y_train)     # 训练模型<br>    time_list.append(round(time.time()-start_time,3))   #将训练时间添加至time_list列表中<br>    y_pred &#x3D; treeClassifier.predict(x_test)       # 用测试集做预测<br>    f1_list.append(round(f1_score(y_test, y_pred),3))  #将模型预测结果的F1指标值添加至f1_list列表中<br>    accu_list.append(round(accuracy_score(y_test, y_pred),3))   #将模型预测结果的准确率添加至accu_list列表中</p>
+<p>#%% md</p>
+<p>调用Matplotlib库中的plot()函数进行绘图，其参数解释如下：</p>
+<pre><code>第一个参数：图像中的x坐标；
+第二个参数：图像中的y坐标；
+label：图像中线的标签；
+linewidth：图像中线的粗细程度；
+color：图像中线的颜色，其值一般是对应颜色英文首字母，比如&#39;g&#39;代表绿色(green)；
+marker：折点标记符号，&#39;.&#39;是用实心园标记；
+markerfacecolor：标记符号的颜色；
+markersize：标记符号的大小。
+</code></pre>
+<p>调用text()对每点标上数据，其参数解释如下：</p>
+<pre><code>x：图像中的x坐标；
+y：图像中的y坐标；
+s：标记点的数据；
+ha：标数据位置，其中&#39;center&#39;是在点的中部标数据；
+fontsize：数据的文字大小。
+</code></pre>
+<p>#%%</p>
+<p>def draw_result(f1_list,accu_list,time_list,n_estimators):<br>    plt.figure(figsize&#x3D;(18, 6))   #设置图像大小（包括两张子图）<br>    #画第一张子图，可视化不同n_estimators参数值的模型预测结果的准确率、F1指数评分。121表示子图以1行2列的形式显示，该子图是第1张。<br>    plt.subplot(121)<br>    plt.title(“Model_score”)  # 标题<br>    plt.plot(n_estimators, f1_list, label&#x3D;’F1_score’, linewidth&#x3D;1, color&#x3D;’r’, marker&#x3D;’.’,<br>             markerfacecolor&#x3D;’blue’, markersize&#x3D;10)   #在图上画出数据的折线线<br>    # 设置数字标签<br>    for a, b in zip(n_estimators, f1_list):   #这里对n_estimators, f1_list这两个列表进行打包，同时迭代<br>        plt.text(x&#x3D;a, y&#x3D;b, s&#x3D;b, ha&#x3D;’center’, fontsize&#x3D;10)   </p>
+<pre><code>plt.plot(n_estimators, accu_list, label=&#39;accuracy_score&#39;, linewidth=1, color=&#39;g&#39;, marker=&#39;.&#39;,
+         markerfacecolor=&#39;yellow&#39;, markersize=10)
+# 设置数字标签
+for a, b in zip(n_estimators, accu_list):
+    plt.text(x=a, y=b, s=b, ha=&#39;center&#39;, fontsize=10) 
+plt.xlabel(&#39;n_estimators&#39;)  # 横坐标描述
+plt.ylabel(&#39;score&#39;)  # 纵坐标描述
+plt.legend()        #显示线标记
+
+#画第二张子图，不同n_estimators参数值的模型训练时间
+plt.subplot(122)    
+plt.title(&quot;train_time&quot;)  #标题
+plt.plot(n_estimators, time_list, label=&#39;time&#39;, linewidth=1, color=&#39;r&#39;, marker=&#39;.&#39;,
+         markerfacecolor=&#39;blue&#39;, markersize=10)
+# 设置数字标签
+for a, b in zip(n_estimators, time_list):
+    plt.text(x=a, y=b, s=b, ha=&#39;center&#39;, fontsize=10) 
+plt.xlabel(&#39;n_estimators&#39;)  # 横坐标描述
+plt.ylabel(&#39;time(s)&#39;)  # 纵坐标描述
+plt.legend()
+plt.show()
+</code></pre>
+<p>#%%</p>
+<p>f1_list&#x3D;[]   #用于存储模型预测结果的F1指标值的列表<br>accu_list&#x3D;[]  #用于存储模型预测结果的准确率的列表<br>time_list &#x3D; []  #用于存储模型训练所耗时长<br>n_estimators &#x3D; [2,10,50,100,200,500]   #设置算法模型不同的参数值n_estimators<br>for num in n_estimators:<br>    model_classify(num ,x_train ,y_train ,x_test ,y_test,f1_list ,accu_list ,time_list)   #调用模型分类函数<br>draw_result(f1_list,accu_list,time_list,n_estimators)   #调用可视化函数</p>
+<p>#%% md</p>
+<h2 id="五、结果分析"><a href="#五、结果分析" class="headerlink" title="五、结果分析"></a>五、结果分析</h2><p>本次实验使用的是人口普查数据中的部分数据实现收入分类任务，通过调用Sklearn库中的随机森林算法模块对其进行学习并预测。由于数据中存在缺失值、冗余列、数据分布不均衡等问题，在实验过程中使用了缺失值删除、数据的类型转换、对数变换和数据类编码操作解决了上述问题。之后使用不同决策树数量的随机森林算法模型分别对训练集数据进行学习，再用这些模型对测试集数据进行分类，最后对分类结果进行多指标评估。  </p>
+<p>从预测结果可视化图可以看出，随着参数n_estimators的不断增大，随机森林算法模型预测结果的评估指标也不断提升，但提升的效果越来越不明显，在n_estimators&#x3D;500时模型预测结果的评估指标反而要低，这预示着模型过拟合了。综合准确率、F1指标和模型训练耗时三个因素进行考虑，在本实验参数n_estimators的取值中，取值为10时模型的预测性能最好。由于本实验的特征数据比较少，经数据处理后仅仅是12个，数据比较简单，所以参数n_estimators取值比较小时预测性能较好，过多将会产生过拟合现象。为了更精确的选择参数n_estimators的值可以用Sklearn库中的GridSearchCV参数优化器。现实生活中的数据会非常复杂(数据特征属性多)、数据的类型不一（既有连续型数据，也有离散型数据）、预测任务多样化（回归、分类）等等，因为该算法对于这些数据都能很好的处理，在实际应用中该算法相对于其他非集成学习算法有很大的优势。</p>
+<p>#%%</p>
+<p>from sklearn.ensemble import RandomForestClassifier#导入随机森林算法类<br>from sklearn.datasets import load_iris#导入鸢尾花数据集<br>from sklearn.model_selection import train_test_split#导入训练集和测试集分割函数</p>
+<p>#%%</p>
+<p>data &#x3D; load_iris()#加载数据集</p>
+<p>#%%</p>
+<p>X &#x3D; data.data<br>y &#x3D; data.target</p>
+<p>#%%</p>
+<p>x_train,x_test,y_train,y_test &#x3D; train_test_split(X, y, test_size&#x3D;0.2, random_state&#x3D;0)#分割训练集和测试集</p>
+<p>#%%</p>
+<p>model  &#x3D; RandomForestClassifier(n_estimators&#x3D;100, max_depth&#x3D;2, random_state&#x3D;0)#创建随机森林算法对象</p>
+<p>#%%</p>
+<p>model.fit(x_train, y_train)#训练模型得到模型参数W和b</p>
+<p>#%%</p>
+<p>model.score(x_test, y_test)#计算测试集的准确率</p>
+<p>#%%</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0-supervised-learning/" rel="tag"># 监督学习(supervised learning)</a>
+              <a href="/tags/%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97%EF%BC%88Random-Forest%EF%BC%89/" rel="tag"># 随机森林（Random Forest）</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/10/28/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E5%86%B3%E7%AD%96%E6%A0%91/" rel="prev" title="决策树">
+                  <i class="fa fa-chevron-left"></i> 决策树
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2022/10/28/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92/" rel="next" title="逻辑回归">
+                  逻辑回归 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">陈宇韶chenyushao</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

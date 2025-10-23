@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha256-AbA177XfpSnFEvgpYu1jMygiLabzPCJCRIBtR5jGc0k=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.13.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="anaconda安装在移动硬盘">
+<meta property="og:url" content="http://example.com/2022/12/03/%E7%94%9F%E7%89%A9%E4%BF%A1%E6%81%AF%E6%8A%80%E6%9C%AF%E5%85%A5%E9%97%A8/anaconda%E5%AE%89%E8%A3%85%E5%9C%A8%E7%A7%BB%E5%8A%A8%E7%A1%AC%E7%9B%98/index.html">
+<meta property="og:site_name" content="Tiger_pop&#39;s Blog">
+<meta property="og:description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2022/12/03/%E7%94%9F%E7%89%A9%E4%BF%A1%E6%81%AF%E6%8A%80%E6%9C%AF%E5%85%A5%E9%97%A8/anaconda%E5%AE%89%E8%A3%85%E5%9C%A8%E7%A7%BB%E5%8A%A8%E7%A1%AC%E7%9B%98/%E6%88%AA%E5%B1%8F2022-11-30%2000.06.25.jpg">
+<meta property="og:image" content="http://example.com/2022/12/03/%E7%94%9F%E7%89%A9%E4%BF%A1%E6%81%AF%E6%8A%80%E6%9C%AF%E5%85%A5%E9%97%A8/anaconda%E5%AE%89%E8%A3%85%E5%9C%A8%E7%A7%BB%E5%8A%A8%E7%A1%AC%E7%9B%98/%E6%88%AA%E5%B1%8F2022-11-30%2000.08.32.jpg">
+<meta property="article:published_time" content="2022-12-03T03:24:31.000Z">
+<meta property="article:modified_time" content="2022-12-03T03:27:32.240Z">
+<meta property="article:author" content="陈宇韶chenyushao">
+<meta property="article:tag" content="conda">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2022/12/03/%E7%94%9F%E7%89%A9%E4%BF%A1%E6%81%AF%E6%8A%80%E6%9C%AF%E5%85%A5%E9%97%A8/anaconda%E5%AE%89%E8%A3%85%E5%9C%A8%E7%A7%BB%E5%8A%A8%E7%A1%AC%E7%9B%98/%E6%88%AA%E5%B1%8F2022-11-30%2000.06.25.jpg">
+
+
+<link rel="canonical" href="http://example.com/2022/12/03/%E7%94%9F%E7%89%A9%E4%BF%A1%E6%81%AF%E6%8A%80%E6%9C%AF%E5%85%A5%E9%97%A8/anaconda%E5%AE%89%E8%A3%85%E5%9C%A8%E7%A7%BB%E5%8A%A8%E7%A1%AC%E7%9B%98/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2022/12/03/%E7%94%9F%E7%89%A9%E4%BF%A1%E6%81%AF%E6%8A%80%E6%9C%AF%E5%85%A5%E9%97%A8/anaconda%E5%AE%89%E8%A3%85%E5%9C%A8%E7%A7%BB%E5%8A%A8%E7%A1%AC%E7%9B%98/","path":"2022/12/03/生物信息技术入门/anaconda安装在移动硬盘/","title":"anaconda安装在移动硬盘"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>anaconda安装在移动硬盘 | Tiger_pop's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="Tiger_pop's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Tiger_pop's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">tiger_pop 的博客</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%9B%AE%E7%9A%84%EF%BC%9A%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E8%BF%99%E6%A0%B7%E5%81%9A"><span class="nav-number">1.</span> <span class="nav-text">目的：为什么要这样做</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%80%E3%80%81anaconda%E5%AE%89%E8%A3%85%E5%9C%A8%E7%A7%BB%E5%8A%A8%E7%A1%AC%E7%9B%98"><span class="nav-number">2.</span> <span class="nav-text">一、anaconda安装在移动硬盘</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#0%E3%80%81%E6%8A%8A%E7%A7%BB%E5%8A%A8%E7%A1%AC%E7%9B%98%E6%9D%83%E9%99%90%E6%89%93%E5%BC%80"><span class="nav-number">2.1.</span> <span class="nav-text">0、把移动硬盘权限打开</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1%E3%80%81%E5%AE%89%E8%A3%85"><span class="nav-number">2.2.</span> <span class="nav-text">1、安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2%E3%80%81%E4%BF%AE%E6%94%B9%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F"><span class="nav-number">2.3.</span> <span class="nav-text">2、修改环境变量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3%E3%80%81%E6%96%B0%E5%BB%BA%E4%B8%80%E4%B8%AApython2%E7%8E%AF%E5%A2%83%E7%94%A8%E6%9D%A5%E6%94%BE%E7%94%9F%E7%89%A9%E4%BF%A1%E6%81%AF%E5%B7%A5%E5%85%B7"><span class="nav-number">2.4.</span> <span class="nav-text">3、新建一个python2环境用来放生物信息工具</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4%E3%80%81%E6%BF%80%E6%B4%BB%E7%8E%AF%E5%A2%83"><span class="nav-number">2.5.</span> <span class="nav-text">4、激活环境</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83%E4%B8%8B%E5%AE%89%E8%A3%85python%E5%BA%93"><span class="nav-number">3.</span> <span class="nav-text">二、虚拟环境下安装python库</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#0%E3%80%81%E9%80%9A%E8%BF%87pip%E5%AE%89%E8%A3%85"><span class="nav-number">3.1.</span> <span class="nav-text">0、通过pip安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1%E3%80%81%E9%80%9A%E8%BF%87conda%E5%AE%89%E8%A3%85"><span class="nav-number">3.2.</span> <span class="nav-text">1、通过conda安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2%E3%80%81%E6%94%B9conda%E6%BA%90%E4%B8%BA%E6%B8%85%E5%8D%8E%E6%88%96%E8%80%85%E7%9B%B4%E6%8E%A5%E5%A4%8D%E5%8E%9F%EF%BC%8C%E6%89%93%E5%BC%80%E7%BB%88%E7%AB%AF%E7%9A%84%E7%A7%91%E5%AD%A6%E4%B8%8A%E7%BD%91%E3%80%82"><span class="nav-number">3.3.</span> <span class="nav-text">2、改conda源为清华或者直接复原，打开终端的科学上网。</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E8%A1%A5%E5%85%85%EF%BC%9A%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83%E4%B8%AD%E5%8F%AF%E8%83%BD%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98"><span class="nav-number">4.</span> <span class="nav-text">三、补充：虚拟环境中可能遇到的问题</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#0%E3%80%81conda-Collecting-package-metadata-repodata-json-%E5%8D%A1%E4%BD%8F%E6%88%96-failed%E9%97%AE%E9%A2%98"><span class="nav-number">4.1.</span> <span class="nav-text">0、conda Collecting package metadata (repodata.json)卡住或 failed问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1%E3%80%81shell%E7%89%88%E6%9C%AC%E7%9A%84%E9%97%AE%E9%A2%98"><span class="nav-number">4.2.</span> <span class="nav-text">1、shell版本的问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2%E3%80%81PackagesNotFoundError-The-following-packages-are-not-available-from-current-channels%E7%9A%84%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95"><span class="nav-number">4.3.</span> <span class="nav-text">2、PackagesNotFoundError: The following packages are not available from current channels的解决办法</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="陈宇韶chenyushao"
+      src="/images/my.jpg">
+  <p class="site-author-name" itemprop="name">陈宇韶chenyushao</p>
+  <div class="site-description" itemprop="description">爱学习、爱工作、爱生活;         微信号: Tiger_and_master;         手机号码:18515678348 </div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">427</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">201</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/12/03/%E7%94%9F%E7%89%A9%E4%BF%A1%E6%81%AF%E6%8A%80%E6%9C%AF%E5%85%A5%E9%97%A8/anaconda%E5%AE%89%E8%A3%85%E5%9C%A8%E7%A7%BB%E5%8A%A8%E7%A1%AC%E7%9B%98/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/my.jpg">
+      <meta itemprop="name" content="陈宇韶chenyushao">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tiger_pop's Blog">
+      <meta itemprop="description" content="爱学习、爱工作、爱生活;         微信号: Tiger_and_master;         手机号码:18515678348 ">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="anaconda安装在移动硬盘 | Tiger_pop's Blog">
+      <meta itemprop="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          anaconda安装在移动硬盘
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2022-12-03 11:24:31 / 修改时间：11:27:32" itemprop="dateCreated datePublished" datetime="2022-12-03T11:24:31+08:00">2022-12-03</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%94%9F%E7%89%A9%E4%BF%A1%E6%81%AF%E6%8A%80%E6%9C%AF%E5%85%A5%E9%97%A8/" itemprop="url" rel="index"><span itemprop="name">生物信息技术入门</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+            <div class="post-description">这是文章开头，显示在主页面，详情请点击此处。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="目的：为什么要这样做"><a href="#目的：为什么要这样做" class="headerlink" title="目的：为什么要这样做"></a>目的：为什么要这样做</h1><p>​		我的Mac只有256g，已经只剩下了60g，生物信息分析一个软件就是100多g，我把原来电脑里的anaconda文件夹删掉，在移动硬盘重新安装一遍anaconda，把默认的conda目录设置在移动硬盘里，然后改一下shell（bash_profile 或者 zshrc）的配置文件，以后什么虚拟环境啊依赖啊都用移动硬盘装，节约Mac硬盘空间。	</p>
+<h1 id="一、anaconda安装在移动硬盘"><a href="#一、anaconda安装在移动硬盘" class="headerlink" title="一、anaconda安装在移动硬盘"></a>一、anaconda安装在移动硬盘</h1><h2 id="0、把移动硬盘权限打开"><a href="#0、把移动硬盘权限打开" class="headerlink" title="0、把移动硬盘权限打开"></a>0、把移动硬盘权限打开</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">chmod 771 /Volumes</span><br><span class="line">chmod 771 /Volumes/newSpace # /Volumes是Mac内的文件夹，newSpace是硬盘的名称。</span><br></pre></td></tr></table></figure>
+
+<h2 id="1、安装"><a href="#1、安装" class="headerlink" title="1、安装"></a>1、安装</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">sh Anaconda3-5.3.1-MacOSX-x86_64.sh</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">我的Mac中，有python2.7 和python3.7 和python3.9 这个anaconda是python3 的；</span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">看到提示“Press Enter to confirm the location, Press CTRL-C to cancel the installation or specify an alternate installation directory.”（“按回车键确认安装路径，按<span class="string">&#x27;CTRL-C&#x27;</span>取消安装或者指定安装目录。”）如果接受默认安装路径，则会显示“PREFIX=/home//anaconda&lt;2 or 3&gt;”并且继续安装。安装过程大约需要几分钟的时间。这里建议直接使用木人安装路径就可以了。</span></span><br><span class="line"><span class="meta prompt_">&gt;</span><span class="language-bash">&gt;&gt; /Volumes/newSpace/anaconda3 <span class="comment"># 更改conda目录致移动硬盘</span></span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">然后你会看到提示“Do you wish the installer to prepend the Anaconda install location to PATH <span class="keyword">in</span> your /home//.bash_profile ?”（“你希望安装器添加Anaconda安装路径在/home/&lt;user&gt;/.bash_profile文件中吗？”），这里是说你希望自动添加环境变量到.bash_profile文件中，输入“<span class="built_in">yes</span><span class="string">&quot;，就会自己帮你添加，如果输入”no&quot;</span>，则需要你自己手动添加，这里直接“<span class="built_in">yes</span><span class="string">&quot;就好。</span></span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash"><span class="string">最后会问你要不要安装 vscode，选择 no 不安装就行了。</span></span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="2、修改环境变量"><a href="#2、修改环境变量" class="headerlink" title="2、修改环境变量"></a>2、修改环境变量</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">用bash的改 ~/.bash_profile;</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">用zsh的改 ~/.zshrc ,我经常两个切换着用，所以都改。</span></span><br><span class="line">vim ~/.bash_profile 或者 ~/.zshrc </span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">先注释掉旧的conda配置，然后添加如下内容：</span></span><br><span class="line">-------------------------------------------------</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">added by Anaconda3 5.3.1 installer</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">&gt;&gt;&gt; conda init &gt;&gt;&gt;</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">!! Contents within this block are managed by <span class="string">&#x27;conda init&#x27;</span> !!</span></span><br><span class="line">__conda_setup=&quot;$(CONDA_REPORT_ERRORS=false &#x27;/Volumes/newSpace/anaconda3/bin/conda&#x27; shell.bash hook 2&gt; /dev/null)&quot;</span><br><span class="line">if [ $? -eq 0 ]; then</span><br><span class="line">    \eval &quot;$__conda_setup&quot;</span><br><span class="line">else</span><br><span class="line">    if [ -f &quot;/Volumes/newSpace/anaconda3/etc/profile.d/conda.sh&quot; ]; then</span><br><span class="line">        . &quot;/Volumes/newSpace/anaconda3/etc/profile.d/conda.sh&quot;</span><br><span class="line">        CONDA_CHANGEPS1=false conda activate base</span><br><span class="line">    else</span><br><span class="line">        \export PATH=&quot;/Volumes/newSpace/anaconda3/bin:$PATH&quot;</span><br><span class="line">    fi</span><br><span class="line">fi</span><br><span class="line">unset __conda_setup</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">&lt;&lt;&lt; <span class="string">conda init &lt;&lt;&lt;</span></span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">配置文件生效</span></span><br><span class="line">source ~/.bash_profile</span><br><span class="line">source ~/.zshrc </span><br></pre></td></tr></table></figure>
+
+<h2 id="3、新建一个python2环境用来放生物信息工具"><a href="#3、新建一个python2环境用来放生物信息工具" class="headerlink" title="3、新建一个python2环境用来放生物信息工具"></a>3、新建一个python2环境用来放生物信息工具</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">conda create -n biology_tools_py2 python=2</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">由于我的conda是python3版本的，实际上用到的这个python2.7是我的Mac中的，虚拟环境在 /Volumes/newSpace/anaconda3/envs/biology_tools_py2</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">biology_tools_py2虚拟环境是python2.7的版本。</span></span><br><span class="line"></span><br><span class="line">conda env list</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">查看有哪些虚拟环境。</span></span><br><span class="line"></span><br><span class="line">pip -V # 查看pip到底用的是Mac的pip，还是虚拟环境中的pip。</span><br><span class="line">conda -V 	</span><br></pre></td></tr></table></figure>
+
+<h2 id="4、激活环境"><a href="#4、激活环境" class="headerlink" title="4、激活环境"></a>4、激活环境</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">conda activate biology_tools_py2 # 激活环境</span><br><span class="line">conda deactivate # 退出环境</span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="二、虚拟环境下安装python库"><a href="#二、虚拟环境下安装python库" class="headerlink" title="二、虚拟环境下安装python库"></a>二、虚拟环境下安装python库</h1><p>​		先激活虚拟环境，再通过pip或者conda安装需要的库，我平时的习惯是用pip。</p>
+<h2 id="0、通过pip安装"><a href="#0、通过pip安装" class="headerlink" title="0、通过pip安装"></a>0、通过pip安装</h2><p>​		用pip指定包到安装位置（这样的目的是以防多个pip的情况下，分不清下载进了哪个虚拟环境的site-packages中），pip在某个虚拟环境下载的包理论上会下载到那个虚拟环境下的 <code>lib/pythonXXX/site-packages</code>  之中，但是实际出现过错位，所以我建议指定好pip下载包的位置。pip也能用清华源加速，命令后加<code>-i 清华源</code> 即可。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install 【包名】 --target=/Volumes/newSpace/anaconda3/envs/biology_tools_py2/lib/python2.7/site-packages</span><br></pre></td></tr></table></figure>
+
+<h2 id="1、通过conda安装"><a href="#1、通过conda安装" class="headerlink" title="1、通过conda安装"></a>1、通过conda安装</h2><p>​		和pip一样，也是指定好安装位置。包存入我们移动硬盘中的虚拟环境中。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">conda install 【包名】</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">这样conda安装的包默认去了 /Volumes/newSpace/anaconda3/pkgs</span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">查看已安装好的虚拟环境下都安装了那些python库</span></span><br><span class="line">conda list </span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">虚拟环境对应的python版本的anaconda中的其他库一次性安装好，命令如下：</span></span><br><span class="line">conda install   anaconda </span><br></pre></td></tr></table></figure>
+
+<h2 id="2、改conda源为清华或者直接复原，打开终端的科学上网。"><a href="#2、改conda源为清华或者直接复原，打开终端的科学上网。" class="headerlink" title="2、改conda源为清华或者直接复原，打开终端的科学上网。"></a>2、改conda源为清华或者直接复原，打开终端的科学上网。</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">方案一：</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash"> 换回conda的默认源。</span></span><br><span class="line">conda config --remove-key channels</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash"> 再打开科学上网。</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">方案二：</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">添加清华或者阿里源(国内的源经常失效，要经常换。)</span></span><br><span class="line">vim ~/.condarc</span><br><span class="line"></span><br><span class="line">channels:</span><br><span class="line">  - defaults</span><br><span class="line">show_channel_urls: true</span><br><span class="line">default_channels:</span><br><span class="line">  - http://mirrors.aliyun.com/anaconda/pkgs/main</span><br><span class="line">  - http://mirrors.aliyun.com/anaconda/pkgs/r</span><br><span class="line">  - http://mirrors.aliyun.com/anaconda/pkgs/msys2</span><br><span class="line">custom_channels:</span><br><span class="line">  conda-forge: http://mirrors.aliyun.com/anaconda/cloud</span><br><span class="line">  msys2: http://mirrors.aliyun.com/anaconda/cloud</span><br><span class="line">  bioconda: http://mirrors.aliyun.com/anaconda/cloud</span><br><span class="line">  menpo: http://mirrors.aliyun.com/anaconda/cloud</span><br><span class="line">  pytorch: http://mirrors.aliyun.com/anaconda/cloud</span><br><span class="line">  simpleitk: http://mirrors.aliyun.com/anaconda/cloud</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">查看conda配置</span></span><br><span class="line">cat ~/.condarc </span><br></pre></td></tr></table></figure>
+
+<p>​		总的来说，用pip 会比conda 快很多，conda 在 <code>Solving environment:</code> 可能要等很久，用户体验不好。不是迫不得已我都首选用pip -i 配一个国内源。</p>
+<hr>
+<h1 id="三、补充：虚拟环境中可能遇到的问题"><a href="#三、补充：虚拟环境中可能遇到的问题" class="headerlink" title="三、补充：虚拟环境中可能遇到的问题"></a>三、补充：虚拟环境中可能遇到的问题</h1><h2 id="0、conda-Collecting-package-metadata-repodata-json-卡住或-failed问题"><a href="#0、conda-Collecting-package-metadata-repodata-json-卡住或-failed问题" class="headerlink" title="0、conda Collecting package metadata (repodata.json)卡住或 failed问题"></a>0、conda Collecting package metadata (repodata.json)卡住或 failed问题</h2><p>参考： <a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_40345954/article/details/114392892">https://blog.csdn.net/qq_40345954/article/details/114392892</a></p>
+<p><strong>先退出proxy代理</strong></p>
+<p><strong>操作一次conda换源:</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">conda config --add channels http://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free/</span><br><span class="line">conda config --add channels http://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/conda-forge </span><br><span class="line">conda config --add channels http://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/msys2/</span><br><span class="line">conda config --add channels http://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/pytorch/</span><br><span class="line">conda config --set show_channel_urls yes</span><br></pre></td></tr></table></figure>
+
+<p><strong>再conda清除国内源：</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">conda config --remove-key channels</span><br></pre></td></tr></table></figure>
+
+<p><strong>看看conda的配置</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat ~/.condarc </span><br></pre></td></tr></table></figure>
+
+<p><strong>新建虚拟环境或者其他操作</strong></p>
+<h2 id="1、shell版本的问题"><a href="#1、shell版本的问题" class="headerlink" title="1、shell版本的问题"></a>1、shell版本的问题</h2><p>​		无论shell是那个版本，~&#x2F;.condarc配置文件搞定了， shell版本不影响conda的使用，zsh还是bash都一样。</p>
+<h2 id="2、PackagesNotFoundError-The-following-packages-are-not-available-from-current-channels的解决办法"><a href="#2、PackagesNotFoundError-The-following-packages-are-not-available-from-current-channels的解决办法" class="headerlink" title="2、PackagesNotFoundError: The following packages are not available from current channels的解决办法"></a>2、PackagesNotFoundError: The following packages are not available from current channels的解决办法</h2><p><img src="/2022/12/03/%E7%94%9F%E7%89%A9%E4%BF%A1%E6%81%AF%E6%8A%80%E6%9C%AF%E5%85%A5%E9%97%A8/anaconda%E5%AE%89%E8%A3%85%E5%9C%A8%E7%A7%BB%E5%8A%A8%E7%A1%AC%E7%9B%98/%E6%88%AA%E5%B1%8F2022-11-30%2000.06.25.jpg" alt="截屏2022-11-30 00.06.25"></p>
+<p>​		解决方法就是 去 <code>https://anaconda.org/</code> 官网，搜索这个包，然后输入网址下方任意解决方案即可；</p>
+<p><img src="/2022/12/03/%E7%94%9F%E7%89%A9%E4%BF%A1%E6%81%AF%E6%8A%80%E6%9C%AF%E5%85%A5%E9%97%A8/anaconda%E5%AE%89%E8%A3%85%E5%9C%A8%E7%A7%BB%E5%8A%A8%E7%A1%AC%E7%9B%98/%E6%88%AA%E5%B1%8F2022-11-30%2000.08.32.jpg" alt="截屏2022-11-30 00.08.32"></p>
+<hr>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/conda/" rel="tag"># conda</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/11/28/leecode%E5%88%B7%E9%A2%98%E5%A4%8D%E4%B9%A0/322%E9%9B%B6%E9%92%B1%E5%85%91%E6%8D%A2/" rel="prev" title="322零钱兑换">
+                  <i class="fa fa-chevron-left"></i> 322零钱兑换
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2022/12/03/%E7%94%9F%E7%89%A9%E4%BF%A1%E6%81%AF%E6%8A%80%E6%9C%AF%E5%85%A5%E9%97%A8/%E9%98%BF%E9%87%8C%E4%BA%91oss%E8%87%AA%E5%8A%A8%E4%B8%8B%E8%BD%BD%E8%84%9A%E6%9C%AC/" rel="next" title="阿里云oss自动下载脚本">
+                  阿里云oss自动下载脚本 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">陈宇韶chenyushao</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

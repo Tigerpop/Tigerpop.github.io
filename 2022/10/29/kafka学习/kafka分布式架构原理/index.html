@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha256-AbA177XfpSnFEvgpYu1jMygiLabzPCJCRIBtR5jGc0k=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.13.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="kafka分布式架构原理">
+<meta property="og:url" content="http://example.com/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E5%88%86%E5%B8%83%E5%BC%8F%E6%9E%B6%E6%9E%84%E5%8E%9F%E7%90%86/index.html">
+<meta property="og:site_name" content="Tiger_pop&#39;s Blog">
+<meta property="og:description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E5%88%86%E5%B8%83%E5%BC%8F%E6%9E%B6%E6%9E%84%E5%8E%9F%E7%90%86/%E6%88%AA%E5%B1%8F2022-04-22%2015.24.34-7028888.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E5%88%86%E5%B8%83%E5%BC%8F%E6%9E%B6%E6%9E%84%E5%8E%9F%E7%90%86/%E6%88%AA%E5%B1%8F2022-04-22%2015.28.37.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E5%88%86%E5%B8%83%E5%BC%8F%E6%9E%B6%E6%9E%84%E5%8E%9F%E7%90%86/%E6%88%AA%E5%B1%8F2022-04-22%2015.46.04.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E5%88%86%E5%B8%83%E5%BC%8F%E6%9E%B6%E6%9E%84%E5%8E%9F%E7%90%86/%E6%88%AA%E5%B1%8F2022-04-22%2016.03.21.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E5%88%86%E5%B8%83%E5%BC%8F%E6%9E%B6%E6%9E%84%E5%8E%9F%E7%90%86/%E6%88%AA%E5%B1%8F2022-04-22%2016.32.08.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E5%88%86%E5%B8%83%E5%BC%8F%E6%9E%B6%E6%9E%84%E5%8E%9F%E7%90%86/%E6%88%AA%E5%B1%8F2022-04-22%2016.32.28.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E5%88%86%E5%B8%83%E5%BC%8F%E6%9E%B6%E6%9E%84%E5%8E%9F%E7%90%86/%E6%88%AA%E5%B1%8F2022-04-22%2016.32.39.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E5%88%86%E5%B8%83%E5%BC%8F%E6%9E%B6%E6%9E%84%E5%8E%9F%E7%90%86/%E6%88%AA%E5%B1%8F2022-04-22%2016.32.52.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E5%88%86%E5%B8%83%E5%BC%8F%E6%9E%B6%E6%9E%84%E5%8E%9F%E7%90%86/%E6%88%AA%E5%B1%8F2022-04-22%2016.33.06.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E5%88%86%E5%B8%83%E5%BC%8F%E6%9E%B6%E6%9E%84%E5%8E%9F%E7%90%86/%E6%88%AA%E5%B1%8F2022-04-22%2016.33.21.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E5%88%86%E5%B8%83%E5%BC%8F%E6%9E%B6%E6%9E%84%E5%8E%9F%E7%90%86/%E6%88%AA%E5%B1%8F2022-04-22%2016.37.28.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E5%88%86%E5%B8%83%E5%BC%8F%E6%9E%B6%E6%9E%84%E5%8E%9F%E7%90%86/%E6%88%AA%E5%B1%8F2022-04-22%2016.59.29.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E5%88%86%E5%B8%83%E5%BC%8F%E6%9E%B6%E6%9E%84%E5%8E%9F%E7%90%86/%E6%88%AA%E5%B1%8F2022-04-22%2017.38.11.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E5%88%86%E5%B8%83%E5%BC%8F%E6%9E%B6%E6%9E%84%E5%8E%9F%E7%90%86/%E6%88%AA%E5%B1%8F2022-04-22%2017.32.24.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E5%88%86%E5%B8%83%E5%BC%8F%E6%9E%B6%E6%9E%84%E5%8E%9F%E7%90%86/%E6%88%AA%E5%B1%8F2022-04-22%2017.21.56.jpg">
+<meta property="og:image" content="http://example.com/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E5%88%86%E5%B8%83%E5%BC%8F%E6%9E%B6%E6%9E%84%E5%8E%9F%E7%90%86/%E6%88%AA%E5%B1%8F2022-04-22%2017.41.37.jpg">
+<meta property="article:published_time" content="2022-10-29T07:40:33.000Z">
+<meta property="article:modified_time" content="2022-10-29T07:47:47.603Z">
+<meta property="article:author" content="陈宇韶chenyushao">
+<meta property="article:tag" content="kafka">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E5%88%86%E5%B8%83%E5%BC%8F%E6%9E%B6%E6%9E%84%E5%8E%9F%E7%90%86/%E6%88%AA%E5%B1%8F2022-04-22%2015.24.34-7028888.jpg">
+
+
+<link rel="canonical" href="http://example.com/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E5%88%86%E5%B8%83%E5%BC%8F%E6%9E%B6%E6%9E%84%E5%8E%9F%E7%90%86/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E5%88%86%E5%B8%83%E5%BC%8F%E6%9E%B6%E6%9E%84%E5%8E%9F%E7%90%86/","path":"2022/10/29/kafka学习/kafka分布式架构原理/","title":"kafka分布式架构原理"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>kafka分布式架构原理 | Tiger_pop's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="Tiger_pop's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Tiger_pop's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">tiger_pop 的博客</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%88%86%E5%B8%83%E5%BC%8F%E6%9E%B6%E6%9E%84%E5%8E%9F%E7%90%86"><span class="nav-number">1.</span> <span class="nav-text">分布式架构原理</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Flume"><span class="nav-number">2.</span> <span class="nav-text">Flume</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Flume%E5%AD%98%E5%9C%A8%E7%9A%84%E9%97%AE%E9%A2%98"><span class="nav-number">2.1.</span> <span class="nav-text">Flume存在的问题</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="陈宇韶chenyushao"
+      src="/images/my.jpg">
+  <p class="site-author-name" itemprop="name">陈宇韶chenyushao</p>
+  <div class="site-description" itemprop="description">爱学习、爱工作、爱生活;         微信号: Tiger_and_master;         手机号码:18515678348 </div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">427</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">201</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E5%88%86%E5%B8%83%E5%BC%8F%E6%9E%B6%E6%9E%84%E5%8E%9F%E7%90%86/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/my.jpg">
+      <meta itemprop="name" content="陈宇韶chenyushao">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tiger_pop's Blog">
+      <meta itemprop="description" content="爱学习、爱工作、爱生活;         微信号: Tiger_and_master;         手机号码:18515678348 ">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="kafka分布式架构原理 | Tiger_pop's Blog">
+      <meta itemprop="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          kafka分布式架构原理
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2022-10-29 15:40:33 / 修改时间：15:47:47" itemprop="dateCreated datePublished" datetime="2022-10-29T15:40:33+08:00">2022-10-29</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/kafka/" itemprop="url" rel="index"><span itemprop="name">kafka</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+            <div class="post-description">这是文章开头，显示在主页面，详情请点击此处。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>简介 <span id="more"></span></p>
+<h1 id="分布式架构原理"><a href="#分布式架构原理" class="headerlink" title="分布式架构原理"></a>分布式架构原理</h1><p>​		java 虚拟机中 栈负责运行，堆负责存储，方法区存的是class对应的东西。</p>
+<p>​		java 虚拟机 中 一个线程 就会有一个栈空间，一个请求会开一个线程，多个请求很容易 开太多的栈空间，内存不够用（“栈内存溢出”）这个“栈内存溢出”不同于递归死循环导致的“栈溢出”，栈溢出是栈产生的深度超出了，java虚拟机限制了 压栈的深度。为了解决“栈内存溢出” 引入了多个 服务器，又为了解决访问分配端口的问题，引入了 负载均衡器。		<img src="/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E5%88%86%E5%B8%83%E5%BC%8F%E6%9E%B6%E6%9E%84%E5%8E%9F%E7%90%86/%E6%88%AA%E5%B1%8F2022-04-22%2015.24.34-7028888.jpg" alt="截屏2022-04-22 15.24.34"></p>
+<p>​		上图的负载均衡器，在接收了用户请求之后，还要去调配用户访问哪个服务器，压力全部都在 负载均衡器上，也有可能崩溃。</p>
+<p>​		改进方法如下图所示，建立一个 “注册中心” 用户访问注册中心会得到集群内所有服务器的端口地址，由用户自己去选择访问哪一个服务器，由于负载均衡器要掉配而注册中心仅仅需要返回地址，所以压力大大缓解（压力放到了用户端）。spark学习中用到的zookeeper 就是一个注册中心。</p>
+<p><img src="/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E5%88%86%E5%B8%83%E5%BC%8F%E6%9E%B6%E6%9E%84%E5%8E%9F%E7%90%86/%E6%88%AA%E5%B1%8F2022-04-22%2015.28.37.jpg" alt="截屏2022-04-22 15.28.37"></p>
+<p>​		</p>
+<p>​		如果一个服务器内有多个功能，用户访问一些功能多一些功能少，会出现资源被过多占用影响部分功能，所以我们让一个服务器一个功能，但是这也是理论上，因为总体的io资源有限，访问一个服务器太多也会影响别的服务器。		如果出现 管理不同用途的服务器 之间直接交互，会产生耦合，违背了开发原则（可以新加入功能，但是不能修改旧有代码，比如新加一个财务服务器，订单服务器就要修改目的端口地址）。</p>
+<p>​		以下就是不良的耦合情况。</p>
+<p><img src="/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E5%88%86%E5%B8%83%E5%BC%8F%E6%9E%B6%E6%9E%84%E5%8E%9F%E7%90%86/%E6%88%AA%E5%B1%8F2022-04-22%2015.46.04.jpg" alt="截屏2022-04-22 15.46.04"></p>
+<p>​		为了避免服务器之间直接交互产生 “耦合”，我们引入“消息系统”；</p>
+<p>​		“消息系统”操作流程如下：</p>
+<p>​		订单服务器把新生成的订单信息 放入“消息系统”中，财务服务器和物流服务器定时来 “消息系统” 中取数据。每个系统只从消息系统中获取他们关心的数据。kafka 就是这样一个消息系统。</p>
+<p>​		<img src="/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E5%88%86%E5%B8%83%E5%BC%8F%E6%9E%B6%E6%9E%84%E5%8E%9F%E7%90%86/%E6%88%AA%E5%B1%8F2022-04-22%2016.03.21.jpg" alt="截屏2022-04-22 16.03.21"></p>
+<h1 id="Flume"><a href="#Flume" class="headerlink" title="Flume"></a>Flume</h1><p>​		Flume是Cloudera提供的一个高可用的，高可靠的，分布式的海量日志采集、聚合和传输的系统。Flume基于流式<a target="_blank" rel="noopener" href="https://so.csdn.net/so/search?q=%E6%9E%B6%E6%9E%84&spm=1001.2101.3001.7020">架构</a>，灵活简单，特点就是实时，有缓存，快速，相比较于普通的API上传到hdfs，flume会更快，所以，flume是非常好用的传输层系统。<img src="/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E5%88%86%E5%B8%83%E5%BC%8F%E6%9E%B6%E6%9E%84%E5%8E%9F%E7%90%86/%E6%88%AA%E5%B1%8F2022-04-22%2016.32.08.jpg" alt="截屏2022-04-22 16.32.08"></p>
+<p><img src="/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E5%88%86%E5%B8%83%E5%BC%8F%E6%9E%B6%E6%9E%84%E5%8E%9F%E7%90%86/%E6%88%AA%E5%B1%8F2022-04-22%2016.32.28.jpg" alt="截屏2022-04-22 16.32.28"></p>
+<p><img src="/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E5%88%86%E5%B8%83%E5%BC%8F%E6%9E%B6%E6%9E%84%E5%8E%9F%E7%90%86/%E6%88%AA%E5%B1%8F2022-04-22%2016.32.39.jpg" alt="截屏2022-04-22 16.32.39"></p>
+<p><img src="/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E5%88%86%E5%B8%83%E5%BC%8F%E6%9E%B6%E6%9E%84%E5%8E%9F%E7%90%86/%E6%88%AA%E5%B1%8F2022-04-22%2016.32.52.jpg" alt="截屏2022-04-22 16.32.52"></p>
+<p><img src="/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E5%88%86%E5%B8%83%E5%BC%8F%E6%9E%B6%E6%9E%84%E5%8E%9F%E7%90%86/%E6%88%AA%E5%B1%8F2022-04-22%2016.33.06.jpg" alt="截屏2022-04-22 16.33.06"></p>
+<p><img src="/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E5%88%86%E5%B8%83%E5%BC%8F%E6%9E%B6%E6%9E%84%E5%8E%9F%E7%90%86/%E6%88%AA%E5%B1%8F2022-04-22%2016.33.21.jpg" alt="截屏2022-04-22 16.33.21"></p>
+<h2 id="Flume存在的问题"><a href="#Flume存在的问题" class="headerlink" title="Flume存在的问题"></a>Flume存在的问题</h2><p>​		说到底flume 是一个 数据传输系统。</p>
+<p><img src="/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E5%88%86%E5%B8%83%E5%BC%8F%E6%9E%B6%E6%9E%84%E5%8E%9F%E7%90%86/%E6%88%AA%E5%B1%8F2022-04-22%2016.37.28.jpg" alt="截屏2022-04-22 16.37.28"></p>
+<p>​		新增一个c，要对agent 改动太多，或者又要加agent，违背了开发原则（新加不改旧）。</p>
+<p>​		改进一个新系统来实现 数据长时间存储。</p>
+<p>​		同时考虑到访问量可能很大，所以用分布式的多服务器集群 来实现。</p>
+<p><img src="/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E5%88%86%E5%B8%83%E5%BC%8F%E6%9E%B6%E6%9E%84%E5%8E%9F%E7%90%86/%E6%88%AA%E5%B1%8F2022-04-22%2016.59.29.jpg" alt="截屏2022-04-22 16.59.29">		</p>
+<p>如果一个服务器宕机了怎么办？于是我们把服务器1备份服务器2的数据，服务器2备份服务器1的数据，交叉备份，宕机一个也没事。这视为分区。</p>
+<p>​		如果此时有两条消息，发到分区1还是分区2呢？</p>
+<p>​		这里要用到hash算法，但是大数据中我们用到的hash算法源码一般不是取mod，而是进行二进制&amp;运算，2^4-1&#x3D;15, 0~15一共16个位置，满足16个字母的位置。<img src="/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E5%88%86%E5%B8%83%E5%BC%8F%E6%9E%B6%E6%9E%84%E5%8E%9F%E7%90%86/%E6%88%AA%E5%B1%8F2022-04-22%2017.38.11.jpg" alt="截屏2022-04-22 17.38.11"><img src="/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E5%88%86%E5%B8%83%E5%BC%8F%E6%9E%B6%E6%9E%84%E5%8E%9F%E7%90%86/%E6%88%AA%E5%B1%8F2022-04-22%2017.32.24.jpg" alt="截屏2022-04-22 17.32.24"></p>
+<p>​		 也只有 <code>2^n</code> 这样的  2倍关系的扩容才行（<code>length*2^n</code>），因为只有这样，二进制&amp;运算才能 得到 111…111这样能够覆盖住所有连续数字的区域，例如 00001001就不能覆盖住 2、3、4等数字，只有全1 ，才能全覆盖。</p>
+<p><img src="/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E5%88%86%E5%B8%83%E5%BC%8F%E6%9E%B6%E6%9E%84%E5%8E%9F%E7%90%86/%E6%88%AA%E5%B1%8F2022-04-22%2017.21.56.jpg" alt="截屏2022-04-22 17.21.56"></p>
+<p>​		在用hash散列解决完数据 进入哪个分区之后，还要解决 c客户端增加带来的 可能要改动集群的问题，怎么处理呢？ </p>
+<p>​		把数据主动从集群分发到每个c客户端，改为，由c客户端主动找集群要数据，c主动把每个服务器都访问一遍，这样，加多少个c，集群不用改变。</p>
+<p><img src="/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E5%88%86%E5%B8%83%E5%BC%8F%E6%9E%B6%E6%9E%84%E5%8E%9F%E7%90%86/%E6%88%AA%E5%B1%8F2022-04-22%2017.41.37.jpg" alt="截屏2022-04-22 17.41.37"></p>
+<p>​		卡夫卡就是按照这样的设计思路来的，当然集群内部不一样。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/kafka/" rel="tag"># kafka</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/%E5%AE%89%E8%A3%85flume%E6%B6%88%E6%81%AF%E4%BC%A0%E8%BE%93%E6%9E%B6%E6%9E%84/" rel="prev" title="安装flume消息传输架构">
+                  <i class="fa fa-chevron-left"></i> 安装flume消息传输架构
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2022/10/29/kafka%E5%AD%A6%E4%B9%A0/kafka%E5%AE%89%E8%A3%85%E5%8F%8A%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/" rel="next" title="kafka安装及常用命令">
+                  kafka安装及常用命令 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">陈宇韶chenyushao</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

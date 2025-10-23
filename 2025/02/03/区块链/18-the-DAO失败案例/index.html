@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha256-AbA177XfpSnFEvgpYu1jMygiLabzPCJCRIBtR5jGc0k=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.13.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="18-the-DAO失败案例">
+<meta property="og:url" content="http://example.com/2025/02/03/%E5%8C%BA%E5%9D%97%E9%93%BE/18-the-DAO%E5%A4%B1%E8%B4%A5%E6%A1%88%E4%BE%8B/index.html">
+<meta property="og:site_name" content="Tiger_pop&#39;s Blog">
+<meta property="og:description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2025/02/03/%E5%8C%BA%E5%9D%97%E9%93%BE/18-the-DAO%E5%A4%B1%E8%B4%A5%E6%A1%88%E4%BE%8B/Screenshot%202025-02-05%20at%209.58.27%E2%80%AFPM.png">
+<meta property="article:published_time" content="2025-02-03T14:17:12.000Z">
+<meta property="article:modified_time" content="2025-03-14T01:58:23.945Z">
+<meta property="article:author" content="陈宇韶chenyushao">
+<meta property="article:tag" content="eth">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2025/02/03/%E5%8C%BA%E5%9D%97%E9%93%BE/18-the-DAO%E5%A4%B1%E8%B4%A5%E6%A1%88%E4%BE%8B/Screenshot%202025-02-05%20at%209.58.27%E2%80%AFPM.png">
+
+
+<link rel="canonical" href="http://example.com/2025/02/03/%E5%8C%BA%E5%9D%97%E9%93%BE/18-the-DAO%E5%A4%B1%E8%B4%A5%E6%A1%88%E4%BE%8B/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2025/02/03/%E5%8C%BA%E5%9D%97%E9%93%BE/18-the-DAO%E5%A4%B1%E8%B4%A5%E6%A1%88%E4%BE%8B/","path":"2025/02/03/区块链/18-the-DAO失败案例/","title":"18-the-DAO失败案例"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>18-the-DAO失败案例 | Tiger_pop's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="Tiger_pop's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Tiger_pop's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">tiger_pop 的博客</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#DAO-%E7%9A%84%E6%A0%B8%E5%BF%83%E7%89%B9%E7%82%B9%EF%BC%9A"><span class="nav-number">1.</span> <span class="nav-text">DAO 的核心特点：</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#split"><span class="nav-number">2.</span> <span class="nav-text">split</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BE%8B%E5%AD%90%EF%BC%9A"><span class="nav-number">2.1.</span> <span class="nav-text">例子：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81"><span class="nav-number">2.2.</span> <span class="nav-text">代码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%85%E4%BA%8B%E5%90%8E%E7%BB%AD"><span class="nav-number">2.3.</span> <span class="nav-text">故事后续</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="陈宇韶chenyushao"
+      src="/images/my.jpg">
+  <p class="site-author-name" itemprop="name">陈宇韶chenyushao</p>
+  <div class="site-description" itemprop="description">爱学习、爱工作、爱生活;         微信号: Tiger_and_master;         手机号码:18515678348 </div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">427</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">201</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2025/02/03/%E5%8C%BA%E5%9D%97%E9%93%BE/18-the-DAO%E5%A4%B1%E8%B4%A5%E6%A1%88%E4%BE%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/my.jpg">
+      <meta itemprop="name" content="陈宇韶chenyushao">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tiger_pop's Blog">
+      <meta itemprop="description" content="爱学习、爱工作、爱生活;         微信号: Tiger_and_master;         手机号码:18515678348 ">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="18-the-DAO失败案例 | Tiger_pop's Blog">
+      <meta itemprop="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          18-the-DAO失败案例
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2025-02-03 22:17:12" itemprop="dateCreated datePublished" datetime="2025-02-03T22:17:12+08:00">2025-02-03</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-03-14 09:58:23" itemprop="dateModified" datetime="2025-03-14T09:58:23+08:00">2025-03-14</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%8C%BA%E5%9D%97%E9%93%BE/" itemprop="url" rel="index"><span itemprop="name">区块链</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+            <div class="post-description">这是文章开头，显示在主页面，详情请点击此处。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>简介 <span id="more"></span></p>
+<p>Decentralized Autonomous Organization</p>
+<p>去中心化自治组织</p>
+<h1 id="DAO-的核心特点："><a href="#DAO-的核心特点：" class="headerlink" title="DAO 的核心特点："></a><strong>DAO 的核心特点</strong>：</h1><ol>
+<li><strong>去中心化（Decentralized）</strong><ul>
+<li>没有传统公司的层级结构（如 CEO、董事会），决策权分散在组织的所有成员手中。</li>
+<li>成员通常通过持有代币（Token）或贡献资源获得投票权。</li>
+</ul>
+</li>
+<li><strong>自治（Autonomous）</strong><ul>
+<li>通过区块链上的 <strong>智能合约</strong>（Smart Contract）自动执行规则和决策。</li>
+<li>例如：资金分配、提案投票、奖励发放等流程完全由代码控制，无需人工干预。</li>
+</ul>
+</li>
+<li><strong>透明性</strong><ul>
+<li>所有规则、交易和决策记录在区块链上，公开可查，不可篡改。</li>
+</ul>
+</li>
+<li><strong>社区驱动</strong><ul>
+<li>成员通过提案和投票共同决定组织的发展方向，实现民主化治理。</li>
+</ul>
+</li>
+</ol>
+<h1 id="split"><a href="#split" class="headerlink" title="split"></a>split</h1><h2 id="例子："><a href="#例子：" class="headerlink" title="例子："></a>例子：</h2><p>一个人参与the dao，投入了一些eth 进去，然后拿回了一些 代币，这些代币可以投票决定某一些问题；</p>
+<p>如果此时这个人需要拿回钱了，就需要通过the dao 的拆分的办法来实现；split dao；</p>
+<p>拆分完 得到一个 child dao；子dao；</p>
+<p>拆分过程中手中的代币要被收回，相应代币会打到这个子dao child dao中；</p>
+<p>split dao 是投资人收回资金的唯一途径。</p>
+<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><p>split之前 有7天的辩论期（决定是否参加），split之后有28天的锁定期（补救）。</p>
+<p><img src="/2025/02/03/%E5%8C%BA%E5%9D%97%E9%93%BE/18-the-DAO%E5%A4%B1%E8%B4%A5%E6%A1%88%E4%BE%8B/Screenshot%202025-02-05%20at%209.58.27%E2%80%AFPM.png" alt="Screenshot 2025-02-05 at 9.58.27 PM"></p>
+<p>以上走钱的步骤是：</p>
+<p>1、把钱给人</p>
+<p>2、总资产减去相应值</p>
+<p>3、把人的资产清零</p>
+<p><strong>警惕：</strong> </p>
+<p>正确的做法是 先清零账户，再进行转帐。</p>
+<p>不然容易被hack  重入攻击。</p>
+<h2 id="故事后续"><a href="#故事后续" class="headerlink" title="故事后续"></a>故事后续</h2><p>支持dao的和不支持dao 的，在 eth 中出现了分歧，有一些人不认可一切和dao 相关的交易，导致了eth 的软分叉。</p>
+<p>软分叉之后 因为要退被hack搞走的钱，又设计了一次硬分叉，（软件升级把所有 dao 上的资金都转移到一个新的智能合约中去，新的智能合约只有一个功能就是退钱），旧矿工不会认可这样的做法，因为是强制的他们会觉得不是合法的交易。</p>
+<p>最后通过投票，大家同意了这次硬分叉 ，hack 没有吃到好处。</p>
+<p>硬分叉后 旧链 还是有一些在上面挖（不认可这次中心化投票导致的硬分叉），一些交易所上了这个旧的eth ，名字就叫 etc 以太坊经典，etc挖矿难度降低了因为一大批的人不挖它了。</p>
+<p>由于etc 链和 eth 链 的大部分内容都是一致的，导致了 经常出现<strong>重放攻击</strong>。 </p>
+<blockquote>
+<p>重放攻击（Replay Attack）是一种网络安全攻击手段，攻击者通过截获并重复发送合法的通信数据，欺骗系统执行非授权操作。其核心在于利用“有效数据的重复使用”，而非破解或篡改数据。</p>
+</blockquote>
+<p>智能合约出现这样致命的bug 经常会导致 这个智能合约作废，</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/eth/" rel="tag"># eth</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2025/02/03/%E5%8C%BA%E5%9D%97%E9%93%BE/17-eth%20%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6/" rel="prev" title="17-eth 智能合约">
+                  <i class="fa fa-chevron-left"></i> 17-eth 智能合约
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2025/02/06/%E5%8C%BA%E5%9D%97%E9%93%BE/19-eth%E5%8F%8D%E6%80%9D/" rel="next" title="19-eth反思">
+                  19-eth反思 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">陈宇韶chenyushao</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>
