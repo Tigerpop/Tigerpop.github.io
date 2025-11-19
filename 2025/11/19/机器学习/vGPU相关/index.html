@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha256-AbA177XfpSnFEvgpYu1jMygiLabzPCJCRIBtR5jGc0k=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.13.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="vGPU相关">
+<meta property="og:url" content="http://example.com/2025/11/19/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/vGPU%E7%9B%B8%E5%85%B3/index.html">
+<meta property="og:site_name" content="Tiger_pop&#39;s Blog">
+<meta property="og:description" content="这是文章开头，显示在主页面，详情请点击此处。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2025/11/19/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/vGPU%E7%9B%B8%E5%85%B3/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20251119152815_6415_17.png">
+<meta property="article:published_time" content="2025-11-19T07:53:22.000Z">
+<meta property="article:modified_time" content="2025-11-19T07:58:22.418Z">
+<meta property="article:author" content="陈宇韶chenyushao">
+<meta property="article:tag" content="vGPU">
+<meta property="article:tag" content="华三">
+<meta property="article:tag" content="Nvidia授权">
+<meta property="article:tag" content="DLS">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2025/11/19/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/vGPU%E7%9B%B8%E5%85%B3/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20251119152815_6415_17.png">
+
+
+<link rel="canonical" href="http://example.com/2025/11/19/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/vGPU%E7%9B%B8%E5%85%B3/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2025/11/19/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/vGPU%E7%9B%B8%E5%85%B3/","path":"2025/11/19/机器学习/vGPU相关/","title":"vGPU相关"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>vGPU相关 | Tiger_pop's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="Tiger_pop's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Tiger_pop's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">tiger_pop 的博客</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#vGPU%E5%9F%BA%E6%9C%AC%E9%80%BB%E8%BE%91%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.</span> <span class="nav-text">vGPU基本逻辑介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E8%A7%92%E8%89%B2"><span class="nav-number">1.1.</span> <span class="nav-text">核心角色</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#vGPU-%E6%89%BE%E5%AF%86%E7%A0%81"><span class="nav-number">2.</span> <span class="nav-text">vGPU 找密码</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%97%AE%E9%A2%98%EF%BC%9A"><span class="nav-number">2.1.</span> <span class="nav-text">问题：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95%EF%BC%9A"><span class="nav-number">2.2.</span> <span class="nav-text">解决方法：</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#License-Pools%E8%AE%B8%E5%8F%AF%E8%AF%81%E6%B1%A0%E6%9C%AA%E6%88%90%E5%8A%9F%E5%88%86%E9%85%8D"><span class="nav-number">3.</span> <span class="nav-text">License Pools许可证池未成功分配</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%97%AE%E9%A2%98%EF%BC%9A-1"><span class="nav-number">3.1.</span> <span class="nav-text">问题：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95%EF%BC%9A"><span class="nav-number">3.2.</span> <span class="nav-text">解决办法：</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%88%E6%89%BE%E5%87%BA%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%EF%BC%9A"><span class="nav-number">3.2.1.</span> <span class="nav-text">先找出问题的原因：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8E%AA%E6%96%BD%EF%BC%9A%E9%87%8D%E6%96%B0%E5%88%87%E5%88%86Q%E7%B1%BB%E6%8E%88%E6%9D%83"><span class="nav-number">3.2.2.</span> <span class="nav-text">措施：重新切分Q类授权</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="陈宇韶chenyushao"
+      src="/images/my.jpg">
+  <p class="site-author-name" itemprop="name">陈宇韶chenyushao</p>
+  <div class="site-description" itemprop="description">爱学习、爱工作、爱生活;         微信号: Tiger_and_master;         手机号码:18515678348 </div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">430</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">209</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2025/11/19/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/vGPU%E7%9B%B8%E5%85%B3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/my.jpg">
+      <meta itemprop="name" content="陈宇韶chenyushao">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tiger_pop's Blog">
+      <meta itemprop="description" content="爱学习、爱工作、爱生活;         微信号: Tiger_and_master;         手机号码:18515678348 ">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="vGPU相关 | Tiger_pop's Blog">
+      <meta itemprop="description" content="这是文章开头，显示在主页面，详情请点击此处。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          vGPU相关
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2025-11-19 15:53:22 / 修改时间：15:58:22" itemprop="dateCreated datePublished" datetime="2025-11-19T15:53:22+08:00">2025-11-19</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+            <div class="post-description">这是文章开头，显示在主页面，详情请点击此处。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="vGPU基本逻辑介绍"><a href="#vGPU基本逻辑介绍" class="headerlink" title="vGPU基本逻辑介绍"></a>vGPU基本逻辑介绍</h1><h2 id="核心角色"><a href="#核心角色" class="headerlink" title="核心角色"></a>核心角色</h2><ul>
+<li><strong>License（许可证）：</strong> 就是您<strong>购买的咖啡券</strong>。这张券规定了您可以制作多少杯（对应多少个vGPU）、什么口味的咖啡（对应什么等级的vGPU型号），以及有效期。</li>
+<li><strong>NVIDIA 官方授权中心：</strong> 就像<strong>咖啡券的总发行商</strong>（比如星巴克总部）。它不直接对顾客，而是向各个分店提供授权。</li>
+<li><strong>DLS (Demonstrated License Server) &#x2F; CLS (Container License Server)：</strong> 这是<strong>两种不同类型的分店</strong>。<strong>DLS（大型中心店）：</strong> 是一个功能完整、可以组建集群（高可用HA）的独立门店。它规模大、稳定，可以为整个区域（多个客户&#x2F;租户）提供服务。文中的“配置DLS服务实例”就是在搭建这样一家大型中心店。<strong>CLS（快捷迷你店）：</strong> 是一个轻量级的、嵌入在商场里的咖啡柜台。它更简单、部署快，但通常只为当前这个商场（单个客户&#x2F;租户）服务。文中的“配置CLS服务实例”就是设立这样一个迷你柜台。</li>
+<li><strong>License Server（许可证服务器）：</strong> 就是这家<strong>分店里的收银机和兑券系统</strong>。它是具体执行“验证咖啡券并出杯”的机器。您需要在DLS或CLS这家“店”里面，安装这台“收银机”。</li>
+<li><strong>服务实例令牌（DLS&#x2F;CLS Token）：</strong> 这是<strong>分店的营业执照和总部授权书</strong>。当您想开一家分店（DLS或CLS）时，需要向总部（NVIDIA授权中心）注册，总部会颁发给您这个“令牌”，证明这家店是合法的，可以连接总部并兑换咖啡券。</li>
+<li><strong>客户端配置令牌（Client Config Token）：</strong> 这是<strong>告诉顾客“去哪家分店兑券”的小纸条</strong>。当您的虚拟桌面（顾客）启动时，它需要知道应该去哪个License Server（哪家分店）验证许可证。您需要把这个“小纸条”（客户端配置令牌）提前放在虚拟桌面镜像里。</li>
+</ul>
+<h1 id="vGPU-找密码"><a href="#vGPU-找密码" class="headerlink" title="vGPU 找密码"></a>vGPU 找密码</h1><p>Nvidia 的 vGPU授权的虚拟机，管理web网页的密码不记得了，怎么办？</p>
+<h2 id="问题："><a href="#问题：" class="headerlink" title="问题："></a>问题：</h2><p>在<a target="_blank" rel="noopener" href="http://172.26.0.202:8083/">http://172.26.0.202:8083</a> 的云桌面管理界面，【数据中心】【虚拟化】先找出来 【VGPU_LICENSE_SERVER】是哪一个IP地址。</p>
+<p>然后在网页中打开 <code>172.26.0.204</code> 进入Nvidia的vGPU授权的管理页面。</p>
+<p>发现密码 记不住了，怎么办？</p>
+<h2 id="解决方法："><a href="#解决方法：" class="headerlink" title="解决方法："></a>解决方法：</h2><p>DLS管理员用户名默认为dls_admin；</p>
+<p><strong>借助</strong> <strong>NVIDIA</strong> <strong>企业门户下载的密钥重置</strong></p>
+<ol>
+<li><ol>
+<li>登录<a target="_blank" rel="noopener" href="https://nvid.nvidia.com/">NVIDIA 企业门户</a>并进入授权门户，点击左侧的<strong>SERVICE INSTANCES</strong>，找到该 DLS 对应的实例，点击实例右侧的<strong>Action</strong>按钮，选择<strong>Download Reset Secret</strong>下载重置密钥文件。</li>
+<li>在浏览器中输入 DLS 服务器的 IP 地址进入后台登录页面，点击页面中的<strong>Forgot password****？</strong> 选项。</li>
+<li>点击页面中的<strong>SELECT DLS LOCAL RESET SECRET</strong>，选中上一步下载的密钥文件，随后输入两次新密码，点击<strong>RESET PASSWORD</strong>就能完成密码重置。</li>
+</ol>
+</li>
+</ol>
+<p>注意： Nvidia的这个密码重置建议设置一个全角输入法的密码，这样在重置密码以后才能方便用全角间距的密码登录；（不支持半角密码输入，全角类似这样<code>ａｂｃｄｅｆｇ１２３４５６７８</code>）</p>
+<h1 id="License-Pools许可证池未成功分配"><a href="#License-Pools许可证池未成功分配" class="headerlink" title="License Pools许可证池未成功分配"></a>License Pools许可证池未成功分配</h1><h2 id="问题：-1"><a href="#问题：-1" class="headerlink" title="问题："></a>问题：</h2><p><code>172.26.0.204</code> 进入Nvidia的vGPU授权的DLS管理页面。</p>
+<p>进入 【dashboard 仪表盘】 的 【License Pools 许可证池】，打开下拉框，看见 【in use &#x2F; allocated 使用&#x2F;已经分配】下8个已分配 下面只有4个是in use。</p>
+<p>同时，我们进入每一个使用GPU的 虚拟机中，用 命令查询 <code>nvidia-smi -q | grep License</code> 可见没有成功授权</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(base) jlsf@admin:~$ nvidia-smi -q | grep -i <span class="string">&#x27;License Status&#x27;</span></span><br><span class="line">        License Status                    : Unlicensed</span><br></pre></td></tr></table></figure>
+
+<h2 id="解决办法："><a href="#解决办法：" class="headerlink" title="解决办法："></a>解决办法：</h2><h3 id="先找出问题的原因："><a href="#先找出问题的原因：" class="headerlink" title="先找出问题的原因："></a>先找出问题的原因：</h3><p>我们从<code>172.26.0.204</code> 进入Nvidia的vGPU授权的管理页面，进入 【dashboard 仪表盘】 的 【server features 服务器功能】，打开下拉框，看见 <code>NVIDIA RTX Virtual Workstation-5.0</code>,这说明，我们是买了一个 Nvidia的 <code>VWS 授权</code>，而 <code>VWS 授权</code> 只能对应 <code>Q/B</code> 授权；</p>
+<p>我们再从 <a target="_blank" rel="noopener" href="http://172.26.0.202:8083/">http://172.26.0.202:8083</a> 的云桌面管理界面，【数据中心】【虚拟化】【任意一台物理机】的 【GPU设备】可见</p>
+<figure class="highlight node-repl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">GPU设备</span><br><span class="line"><span class="meta prompt_">...</span></span><br><span class="line"></span><br><span class="line">vGPU</span><br><span class="line"><span class="meta prompt_">...</span> <span class="language-javascript"><span class="variable constant_">GRID</span> <span class="variable constant_">V100S</span>-16C ... </span></span><br></pre></td></tr></table></figure>
+
+<p>我们看见了 GRID V100S-16C 而不是 GRID V100S-16Q或者 GRID V100S-16B，不符合 <code>VWS 授权</code> 只能对应 <code>Q/B</code> 授权的 匹配性；</p>
+<h3 id="措施：重新切分Q类授权"><a href="#措施：重新切分Q类授权" class="headerlink" title="措施：重新切分Q类授权"></a>措施：重新切分Q类授权</h3><p>前期准备：</p>
+<p>看【H3C Workspace云桌面 vGPU配置指导(办公场景)-5W116-整本手册(1)】把配套的生成token和授权的文件这些 先准备好。</p>
+<p>然后（顺序可能有一些变化）：</p>
+<ol>
+<li><p>在每个使用 vGPU 的虚拟机ssh登录进去，检查有无 文件 <code>/etc/nvidia/ClientConfigToken/XXX.tok</code> 和 <code>/etc/nvidia/gridd.conf</code> 两个文件，改一下<code>/etc/nvidia/ClientConfigToken</code>权限，最好是按照【H3C Workspace云桌面 vGPU配置指导(办公场景)-5W116-整本手册(1)】文档搞一个新的 tok 下来；</p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="http://172.26.0.202:8083/">http://172.26.0.202:8083</a> 的云桌面管理界面，【数据中心】【虚拟化】【虚拟机】关机删除GPU；</p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="http://172.26.0.202:8083/">http://172.26.0.202:8083</a> 的云桌面管理界面，【数据中心】【虚拟化】【概览】【智能资源调度】删除vGPU；</p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="http://172.26.0.202:8083/">http://172.26.0.202:8083</a> 的云桌面管理界面，【数据中心】【虚拟化】【物理机】【GPU设备】回收vGPU；</p>
+</li>
+<li><p>重新启动  <a target="_blank" rel="noopener" href="http://172.26.0.202:8083/">http://172.26.0.202:8083</a> 的云桌面管理界面，【数据中心】【虚拟化】【两个授权的虚拟机】；</p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="http://172.26.0.202:8083/">http://172.26.0.202:8083</a> 的云桌面管理界面，【数据中心】【虚拟化】【概览】【智能资源调度】增加智能资源调度；</p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="http://172.26.0.202:8083/">http://172.26.0.202:8083</a> 的云桌面管理界面，【数据中心】【虚拟化】【物理机】【GPU设备】按照Q类切分GPU，【vGPU】可见切出来的vGPU资源，以Q结尾命名方便区分，类似<code>GRID V100S-16Q</code>；</p>
+</li>
+<li><p>切换平台到 <a target="_blank" rel="noopener" href="http://172.26.0.202:8803/">http://172.26.0.202:8803</a> 的云桌面配置界面，给每个虚拟机加上 vGPU 资源；</p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="http://172.26.0.202:8083/">http://172.26.0.202:8083</a> 的云桌面管理界面，【数据中心】【虚拟化】【虚拟机】开机，有的可能需要进入虚拟机看看Nvidia企业版驱动是不是要被重新安装；</p>
+</li>
+<li><p>进入 <a target="_blank" rel="noopener" href="https://172.26.0.204/">https://172.26.0.204/</a> 进入Nvidia的DLS的管理页面，<img src="/2025/11/19/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/vGPU%E7%9B%B8%E5%85%B3/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20251119152815_6415_17.png" alt="微信图片_20251119152815_6415_17"></p>
+<p>如果需要 手动释放(针对异常占用或批量释放场景)：</p>
+<p>当自动释放失效，或需主动回收特定 leases 时，可通过 DLS 服务器管理页面与 NVIDIA 许可门户操作，步骤如下:</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">1.登录本地 DLS 的“License Sever Details&quot;页面，找到右上角“ACTIONS&quot;下拉菜单，点击“Disable”禁用服务器，这是修改许可配置的前置操作。</span><br><span class="line">2.再次点击&quot;ACTIONS&quot;，选择&quot;Manage Features&quot;，在该页面中找到需要释放的许可类型，调整对应 leases的数量(比如将占用的许可数量下调至目标值)</span><br><span class="line">3.完成设置后，进入 DLS 页面的“MAINTENANCE”菜单，选择“Export feature returns”，下载用于还原许可的 BIN 文件。</span><br><span class="line">4.打开NVIDlA Licensing Portal (https://nvid.nvidia.com/dashboard/#/dashboard )找到对应的许可服务器，在其“ACTIONS&quot;选项中选择“Return Features”，上传刚才下载的 BIN 文件。</span><br><span class="line">5.最后返回本地 DLS 页面启用服务器，此时释放的 leases 会回归许可池，可在“Server Features” 中查看更新后的许可数量。</span><br></pre></td></tr></table></figure>
+
+<p><strong>但是我的实际操作是：</strong></p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">1.登录本地 DLS 的“License Sever Details&quot;页面，找到右上角“ACTIONS&quot;下拉菜单，点击“Disable”禁用服务器，这是修改许可配置的前置操作。</span><br><span class="line">2.登录本地 DLS 的“License Sever Details&quot;页面，找到 &quot;Lease&quot; 点击任意ID的Release即可；</span><br></pre></td></tr></table></figure>
+
+<p><strong>需要注意的是：</strong></p>
+<p>在虚拟机重启以后，要在这个 DLS 界面中 让它能够识别到新的授权虚拟机，按如下操作：</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">0.http://172.26.0.202:8083 的云桌面管理界面，【数据中心】【虚拟化】【概览】【智能资源调度】修改智能资源调度，可以在虚拟机都关机的情况下，删了重新建vGPU的智能资源调度；</span><br><span class="line">1.登录本地 DLS 的“License Sever Details&quot;页面，找到右上角“ACTIONS&quot;下拉菜单，点击“Enable”启用服务器，这是识别到新的授权虚拟机的前置操作。</span><br><span class="line">2.然后反复操作：</span><br><span class="line">（ 关闭要被授权的虚拟机；</span><br><span class="line">   在 http://172.26.0.202:8803 卸载这台虚拟机的vGPU；</span><br><span class="line">   开机要被授权的虚拟机；</span><br><span class="line">   关闭要被授权的虚拟机；</span><br><span class="line">   在 http://172.26.0.202:8803 添加这台虚拟机的vGPU；</span><br><span class="line">   开机要被授权的虚拟机；</span><br><span class="line"> ）</span><br></pre></td></tr></table></figure>
+
+<p>直到我们看见 Leases 下的虚拟机都关联上了，同时 License Pools 中 in use &#x2F; allocated 都成功了，就ok了。</p>
+</li>
+<li><p>在每个使用 vGPU 的虚拟机ssh登录进去，重启授权服务 <code>sudo service nvidia-gridd restart</code>；</p>
+</li>
+<li><p>检查好了没有 <code>nvidia-smi -q | grep License</code>；</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(base) jlsf@admin:/etc/nvidia$ nvidia-smi -q | grep License</span><br><span class="line">    vGPU Software Licensed Product</span><br><span class="line">        License Status                    : Licensed (Expiry: 2025-11-19 6:36:54 GMT)</span><br></pre></td></tr></table></figure>
+
+<p>这样显示就是 授权恢复了。</p>
+</li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/vGPU/" rel="tag"># vGPU</a>
+              <a href="/tags/%E5%8D%8E%E4%B8%89/" rel="tag"># 华三</a>
+              <a href="/tags/Nvidia%E6%8E%88%E6%9D%83/" rel="tag"># Nvidia授权</a>
+              <a href="/tags/DLS/" rel="tag"># DLS</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2025/11/02/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/Dify%E5%88%A9%E7%94%A8Cloudflare%E8%BF%9C%E7%A8%8B%E8%B0%83%E7%94%A8MinerU%20/" rel="prev" title="Dify利用Cloudflare远程调用MinerU">
+                  <i class="fa fa-chevron-left"></i> Dify利用Cloudflare远程调用MinerU
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">陈宇韶chenyushao</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

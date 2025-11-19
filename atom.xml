@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2025-11-02T05:50:50.150Z</updated>
+  <updated>2025-11-19T07:58:22.418Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,33 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>vGPU相关</title>
+    <link href="http://example.com/2025/11/19/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/vGPU%E7%9B%B8%E5%85%B3/"/>
+    <id>http://example.com/2025/11/19/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/vGPU%E7%9B%B8%E5%85%B3/</id>
+    <published>2025-11-19T07:53:22.000Z</published>
+    <updated>2025-11-19T07:58:22.418Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="vGPU基本逻辑介绍"><a href="#vGPU基本逻辑介绍" class="headerlink" title="vGPU基本逻辑介绍"></a>vGPU基本逻辑介绍</h1><h2 id="核心角色"><a href="#核心角色" class="headerlink" title="核心角色"></a>核心角色</h2><ul><li><strong>License（许可证）：</strong> 就是您<strong>购买的咖啡券</strong>。这张券规定了您可以制作多少杯（对应多少个vGPU）、什么口味的咖啡（对应什么等级的vGPU型号），以及有效期。</li><li><strong>NVIDIA 官方授权中心：</strong> 就像<strong>咖啡券的总发行商</strong>（比如星巴克总部）。它不直接对顾客，而是向各个分店提供授权。</li><li><strong>DLS (Demonstrated License Server) &#x2F; CLS (Container License Server)：</strong> 这是<strong>两种不同类型的分店</strong>。<strong>DLS（大型中心店）：</strong> 是一个功能完整、可以组建集群（高可用HA）的独立门店。它规模大、稳定，可以为整个区域（多个客户&#x2F;租户）提供服务。文中的“配置DLS服务实例”就是在搭建这样一家大型中心店。<strong>CLS（快捷迷你店）：</strong> 是一个轻量级的、嵌入在商场里的咖啡柜台。它更简单、部署快，但通常只为当前这个商场（单个客户&#x2F;租户）服务。文中的“配置CLS服务实例”就是设立这样一个迷你柜台。</li><li><strong>License Server（许可证服务器）：</strong> 就是这家<strong>分店里的收银机和兑券系统</strong>。它是具体执行“验证咖啡券并出杯”的机器。您需要在DLS或CLS这家“店”里面，安装这台“收银机”。</li><li><strong>服务实例令牌（DLS&#x2F;CLS Token）：</strong> 这是<strong>分店的营业执照和总部授权书</strong>。当您想开一家分店（DLS或CLS）时，需要向总部（NVIDIA授权中心）注册，总部会颁发给您这个“令牌”，证明这家店是合法的，可以连接总部并兑换咖啡券。</li><li><strong>客户端配置令牌（Client Config Token）：</strong> 这是<strong>告诉顾客“去哪家分店兑券”的小纸条</strong>。当您的虚拟桌面（顾客）启动时，它需要知道应该去哪个License Server（哪家分店）验证许可证。您需要把这个“小纸条”（客户端配置令牌）提前放在虚拟桌面镜像里。</li></ul><h1 id="vGPU-找密码"><a href="#vGPU-找密码" class="headerlink" title="vGPU 找密码"></a>vGPU 找密码</h1><p>Nvidia 的 vGPU授权的虚拟机，管理web网页的密码不记得了，怎么办？</p><h2 id="问题："><a href="#问题：" class="headerlink" title="问题："></a>问题：</h2><p>在<a href="http://172.26.0.202:8083/">http://172.26.0.202:8083</a> 的云桌面管理界面，【数据中心】【虚拟化】先找出来 【VGPU_LICENSE_SERVER】是哪一个IP地址。</p><p>然后在网页中打开 <code>172.26.0.204</code> 进入Nvidia的vGPU授权的管理页面。</p><p>发现密码 记不住了，怎么办？</p><h2 id="解决方法："><a href="#解决方法：" class="headerlink" title="解决方法："></a>解决方法：</h2><p>DLS管理员用户名默认为dls_admin；</p><p><strong>借助</strong> <strong>NVIDIA</strong> <strong>企业门户下载的密钥重置</strong></p><ol><li><ol><li>登录<a href="https://nvid.nvidia.com/">NVIDIA 企业门户</a>并进入授权门户，点击左侧的<strong>SERVICE INSTANCES</strong>，找到该 DLS 对应的实例，点击实例右侧的<strong>Action</strong>按钮，选择<strong>Download Reset Secret</strong>下载重置密钥文件。</li><li>在浏览器中输入 DLS 服务器的 IP 地址进入后台登录页面，点击页面中的<strong>Forgot password****？</strong> 选项。</li><li>点击页面中的<strong>SELECT DLS LOCAL RESET SECRET</strong>，选中上一步下载的密钥文件，随后输入两次新密码，点击<strong>RESET PASSWORD</strong>就能完成密码重置。</li></ol></li></ol><p>注意： Nvidia的这个密码重置建议设置一个全角输入法的密码，这样在重置密码以后才能方便用全角间距的密码登录；（不支持半角密码输入，全角类似这样<code>ａｂｃｄｅｆｇ１２３４５６７８</code>）</p><h1 id="License-Pools许可证池未成功分配"><a href="#License-Pools许可证池未成功分配" class="headerlink" title="License Pools许可证池未成功分配"></a>License Pools许可证池未成功分配</h1><h2 id="问题：-1"><a href="#问题：-1" class="headerlink" title="问题："></a>问题：</h2><p><code>172.26.0.204</code> 进入Nvidia的vGPU授权的DLS管理页面。</p><p>进入 【dashboard 仪表盘】 的 【License Pools 许可证池】，打开下拉框，看见 【in use &#x2F; allocated 使用&#x2F;已经分配】下8个已分配 下面只有4个是in use。</p><p>同时，我们进入每一个使用GPU的 虚拟机中，用 命令查询 <code>nvidia-smi -q | grep License</code> 可见没有成功授权</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(base) jlsf@admin:~$ nvidia-smi -q | grep -i <span class="string">&#x27;License Status&#x27;</span></span><br><span class="line">        License Status                    : Unlicensed</span><br></pre></td></tr></table></figure><h2 id="解决办法："><a href="#解决办法：" class="headerlink" title="解决办法："></a>解决办法：</h2><h3 id="先找出问题的原因："><a href="#先找出问题的原因：" class="headerlink" title="先找出问题的原因："></a>先找出问题的原因：</h3><p>我们从<code>172.26.0.204</code> 进入Nvidia的vGPU授权的管理页面，进入 【dashboard 仪表盘】 的 【server features 服务器功能】，打开下拉框，看见 <code>NVIDIA RTX Virtual Workstation-5.0</code>,这说明，我们是买了一个 Nvidia的 <code>VWS 授权</code>，而 <code>VWS 授权</code> 只能对应 <code>Q/B</code> 授权；</p><p>我们再从 <a href="http://172.26.0.202:8083/">http://172.26.0.202:8083</a> 的云桌面管理界面，【数据中心】【虚拟化】【任意一台物理机】的 【GPU设备】可见</p><figure class="highlight node-repl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">GPU设备</span><br><span class="line"><span class="meta prompt_">...</span></span><br><span class="line"></span><br><span class="line">vGPU</span><br><span class="line"><span class="meta prompt_">...</span> <span class="language-javascript"><span class="variable constant_">GRID</span> <span class="variable constant_">V100S</span>-16C ... </span></span><br></pre></td></tr></table></figure><p>我们看见了 GRID V100S-16C 而不是 GRID V100S-16Q或者 GRID V100S-16B，不符合 <code>VWS 授权</code> 只能对应 <code>Q/B</code> 授权的 匹配性；</p><h3 id="措施：重新切分Q类授权"><a href="#措施：重新切分Q类授权" class="headerlink" title="措施：重新切分Q类授权"></a>措施：重新切分Q类授权</h3><p>前期准备：</p><p>看【H3C Workspace云桌面 vGPU配置指导(办公场景)-5W116-整本手册(1)】把配套的生成token和授权的文件这些 先准备好。</p><p>然后（顺序可能有一些变化）：</p><ol><li><p>在每个使用 vGPU 的虚拟机ssh登录进去，检查有无 文件 <code>/etc/nvidia/ClientConfigToken/XXX.tok</code> 和 <code>/etc/nvidia/gridd.conf</code> 两个文件，改一下<code>/etc/nvidia/ClientConfigToken</code>权限，最好是按照【H3C Workspace云桌面 vGPU配置指导(办公场景)-5W116-整本手册(1)】文档搞一个新的 tok 下来；</p></li><li><p><a href="http://172.26.0.202:8083/">http://172.26.0.202:8083</a> 的云桌面管理界面，【数据中心】【虚拟化】【虚拟机】关机删除GPU；</p></li><li><p><a href="http://172.26.0.202:8083/">http://172.26.0.202:8083</a> 的云桌面管理界面，【数据中心】【虚拟化】【概览】【智能资源调度】删除vGPU；</p></li><li><p><a href="http://172.26.0.202:8083/">http://172.26.0.202:8083</a> 的云桌面管理界面，【数据中心】【虚拟化】【物理机】【GPU设备】回收vGPU；</p></li><li><p>重新启动  <a href="http://172.26.0.202:8083/">http://172.26.0.202:8083</a> 的云桌面管理界面，【数据中心】【虚拟化】【两个授权的虚拟机】；</p></li><li><p><a href="http://172.26.0.202:8083/">http://172.26.0.202:8083</a> 的云桌面管理界面，【数据中心】【虚拟化】【概览】【智能资源调度】增加智能资源调度；</p></li><li><p><a href="http://172.26.0.202:8083/">http://172.26.0.202:8083</a> 的云桌面管理界面，【数据中心】【虚拟化】【物理机】【GPU设备】按照Q类切分GPU，【vGPU】可见切出来的vGPU资源，以Q结尾命名方便区分，类似<code>GRID V100S-16Q</code>；</p></li><li><p>切换平台到 <a href="http://172.26.0.202:8803/">http://172.26.0.202:8803</a> 的云桌面配置界面，给每个虚拟机加上 vGPU 资源；</p></li><li><p><a href="http://172.26.0.202:8083/">http://172.26.0.202:8083</a> 的云桌面管理界面，【数据中心】【虚拟化】【虚拟机】开机，有的可能需要进入虚拟机看看Nvidia企业版驱动是不是要被重新安装；</p></li><li><p>进入 <a href="https://172.26.0.204/">https://172.26.0.204/</a> 进入Nvidia的DLS的管理页面，<img src="/2025/11/19/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/vGPU%E7%9B%B8%E5%85%B3/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20251119152815_6415_17.png" alt="微信图片_20251119152815_6415_17"></p><p>如果需要 手动释放(针对异常占用或批量释放场景)：</p><p>当自动释放失效，或需主动回收特定 leases 时，可通过 DLS 服务器管理页面与 NVIDIA 许可门户操作，步骤如下:</p><figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">1.登录本地 DLS 的“License Sever Details&quot;页面，找到右上角“ACTIONS&quot;下拉菜单，点击“Disable”禁用服务器，这是修改许可配置的前置操作。</span><br><span class="line">2.再次点击&quot;ACTIONS&quot;，选择&quot;Manage Features&quot;，在该页面中找到需要释放的许可类型，调整对应 leases的数量(比如将占用的许可数量下调至目标值)</span><br><span class="line">3.完成设置后，进入 DLS 页面的“MAINTENANCE”菜单，选择“Export feature returns”，下载用于还原许可的 BIN 文件。</span><br><span class="line">4.打开NVIDlA Licensing Portal (https://nvid.nvidia.com/dashboard/#/dashboard )找到对应的许可服务器，在其“ACTIONS&quot;选项中选择“Return Features”，上传刚才下载的 BIN 文件。</span><br><span class="line">5.最后返回本地 DLS 页面启用服务器，此时释放的 leases 会回归许可池，可在“Server Features” 中查看更新后的许可数量。</span><br></pre></td></tr></table></figure><p><strong>但是我的实际操作是：</strong></p><figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">1.登录本地 DLS 的“License Sever Details&quot;页面，找到右上角“ACTIONS&quot;下拉菜单，点击“Disable”禁用服务器，这是修改许可配置的前置操作。</span><br><span class="line">2.登录本地 DLS 的“License Sever Details&quot;页面，找到 &quot;Lease&quot; 点击任意ID的Release即可；</span><br></pre></td></tr></table></figure><p><strong>需要注意的是：</strong></p><p>在虚拟机重启以后，要在这个 DLS 界面中 让它能够识别到新的授权虚拟机，按如下操作：</p><figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">0.http://172.26.0.202:8083 的云桌面管理界面，【数据中心】【虚拟化】【概览】【智能资源调度】修改智能资源调度，可以在虚拟机都关机的情况下，删了重新建vGPU的智能资源调度；</span><br><span class="line">1.登录本地 DLS 的“License Sever Details&quot;页面，找到右上角“ACTIONS&quot;下拉菜单，点击“Enable”启用服务器，这是识别到新的授权虚拟机的前置操作。</span><br><span class="line">2.然后反复操作：</span><br><span class="line">（ 关闭要被授权的虚拟机；</span><br><span class="line">   在 http://172.26.0.202:8803 卸载这台虚拟机的vGPU；</span><br><span class="line">   开机要被授权的虚拟机；</span><br><span class="line">   关闭要被授权的虚拟机；</span><br><span class="line">   在 http://172.26.0.202:8803 添加这台虚拟机的vGPU；</span><br><span class="line">   开机要被授权的虚拟机；</span><br><span class="line"> ）</span><br></pre></td></tr></table></figure><p>直到我们看见 Leases 下的虚拟机都关联上了，同时 License Pools 中 in use &#x2F; allocated 都成功了，就ok了。</p></li><li><p>在每个使用 vGPU 的虚拟机ssh登录进去，重启授权服务 <code>sudo service nvidia-gridd restart</code>；</p></li><li><p>检查好了没有 <code>nvidia-smi -q | grep License</code>；</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(base) jlsf@admin:/etc/nvidia$ nvidia-smi -q | grep License</span><br><span class="line">    vGPU Software Licensed Product</span><br><span class="line">        License Status                    : Licensed (Expiry: 2025-11-19 6:36:54 GMT)</span><br></pre></td></tr></table></figure><p>这样显示就是 授权恢复了。</p></li></ol>]]></content>
+    
+    
+    <summary type="html">这是文章开头，显示在主页面，详情请点击此处。</summary>
+    
+    
+    
+    <category term="机器学习" scheme="http://example.com/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
+    
+    
+    <category term="vGPU" scheme="http://example.com/tags/vGPU/"/>
+    
+    <category term="华三" scheme="http://example.com/tags/%E5%8D%8E%E4%B8%89/"/>
+    
+    <category term="Nvidia授权" scheme="http://example.com/tags/Nvidia%E6%8E%88%E6%9D%83/"/>
+    
+    <category term="DLS" scheme="http://example.com/tags/DLS/"/>
+    
+  </entry>
   
   <entry>
     <title>Dify利用Cloudflare远程调用MinerU</title>
@@ -454,27 +481,6 @@
     <category term="dify" scheme="http://example.com/tags/dify/"/>
     
     <category term="MCP" scheme="http://example.com/tags/MCP/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>A2A学习</title>
-    <link href="http://example.com/2025/06/12/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/A2A%E5%AD%A6%E4%B9%A0/"/>
-    <id>http://example.com/2025/06/12/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/A2A%E5%AD%A6%E4%B9%A0/</id>
-    <published>2025-06-12T12:27:21.000Z</published>
-    <updated>2025-06-13T12:57:22.205Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="什么是Agent"><a href="#什么是Agent" class="headerlink" title="什么是Agent"></a>什么是Agent</h1><p>之前 学过的 在 vscode 中的 cline 可以视为一个专门写代码的 agent。</p><p>A2A 就是 在 这样类似的多个agent之间合作，它需要一个调度agent 来实现。</p><p><img src="/2025/06/12/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/A2A%E5%AD%A6%E4%B9%A0/%E6%88%AA%E5%B1%8F2025-06-10%2021.15.56.png" alt="截屏2025-06-10 21.15.56"></p><p><img src="/2025/06/12/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/A2A%E5%AD%A6%E4%B9%A0/%E6%88%AA%E5%B1%8F2025-06-10%2021.19.47.png" alt="截屏2025-06-10 21.19.47"></p><p><img src="/2025/06/12/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/A2A%E5%AD%A6%E4%B9%A0/%E6%88%AA%E5%B1%8F2025-06-10%2021.21.38.png" alt="截屏2025-06-10 21.21.38"></p><p>其实 这个 有点 像 MCP host  扮演 agent 来调度 协调 大模型和 MCP工具箱。</p><p>但是 MCP 在上面的图中 是被封装在 每一个Agent的内部的。</p><h1 id="单Agent例子"><a href="#单Agent例子" class="headerlink" title="单Agent例子"></a>单Agent例子</h1><p>这里以一个单独的agent调用为例子说明</p><p><img src="/2025/06/12/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/A2A%E5%AD%A6%E4%B9%A0/%E6%88%AA%E5%B1%8F2025-06-10%2021.26.40.png" alt="截屏2025-06-10 21.26.40"></p><p><img src="/2025/06/12/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/A2A%E5%AD%A6%E4%B9%A0/%E6%88%AA%E5%B1%8F2025-06-10%2021.57.48.png" alt="截屏2025-06-10 21.57.48"></p><p><img src="/2025/06/12/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/A2A%E5%AD%A6%E4%B9%A0/%E6%88%AA%E5%B1%8F2025-06-10%2021.58.23.png" alt="截屏2025-06-10 21.58.23"></p><p>红框部分用到了A2A协议。</p><p>但是遗憾的是 A2A 都是 谷歌 搞的 协议，需要注册 谷歌API 总是依赖 外部网络访问，</p><p>于是我直接放弃 使用 这个 东西 ，除非 可以完全开源在本地部署。 </p>]]></content>
-    
-    
-    <summary type="html">这是文章开头，显示在主页面，详情请点击此处。</summary>
-    
-    
-    
-    <category term="机器学习" scheme="http://example.com/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
-    
-    
-    <category term="A2A" scheme="http://example.com/tags/A2A/"/>
     
   </entry>
   
