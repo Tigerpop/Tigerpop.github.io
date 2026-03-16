@@ -27,7 +27,7 @@
 <meta property="og:description" content="这是文章开头，显示在主页面，详情请点击此处。">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2025-09-13T15:28:18.000Z">
-<meta property="article:modified_time" content="2025-09-28T10:33:08.518Z">
+<meta property="article:modified_time" content="2026-03-16T09:08:19.680Z">
 <meta property="article:author" content="陈宇韶chenyushao">
 <meta property="article:tag" content="centos">
 <meta property="article:tag" content="ubuntu">
@@ -221,7 +221,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-09-28 18:33:08" itemprop="dateModified" datetime="2025-09-28T18:33:08+08:00">2025-09-28</time>
+      <time title="修改时间：2026-03-16 17:08:19" itemprop="dateModified" datetime="2026-03-16T17:08:19+08:00">2026-03-16</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -257,13 +257,13 @@
 <tbody><tr>
 <td><strong>1. 进入 GRUB</strong></td>
 <td>Esc 按 <strong>e</strong> 编辑启动参数</td>
-<td>Esc 按 <strong>e</strong> 编辑启动参数</td>
+<td>Esc 按 <strong>e</strong> 编辑启动参数（如果是多系统，按esc可能要经历过一次bios退出，然后在显示ubuntu、advanced options for ubuntu 这个界面的那几秒中时间，把光标上下移动到ubuntu上，不要按回车，直接按e，才能进入 GRUB 界面。）</td>
 <td>打开启动菜单，进入内核参数编辑模式</td>
 </tr>
 <tr>
 <td><strong>2. 修改参数</strong></td>
 <td>在 <code>linux16</code> 行尾加 <code>rw init=/bin/bash</code></td>
-<td>在 <code>linux</code> 行尾替换 <code>quiet splash</code> 为 <code>rw init=/bin/bash</code></td>
+<td>在 <code>linux</code> 行尾替换 <code>quiet splash</code> 为 <code>rw init=/bin/bash</code>                             （注意：这里的显示不一定是完整的，可能只能看见 ro ，其实就是 ro quiet splash ，一样删除按照上面的改就好。改完按F10保存退出自己就会进入一个有编辑权限的命令界面。）</td>
 <td>让系统以 <strong>单用户模式 + 可写根目录</strong> 启动，进入 bash</td>
 </tr>
 <tr>
