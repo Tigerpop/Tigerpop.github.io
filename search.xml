@@ -16890,4 +16890,216 @@ elif (zscore_rightdev &lt; g.sell) and (len(context.portfolio.positions.keys()) 
         <tag>Ubuntu</tag>
       </tags>
   </entry>
+  <entry>
+    <title>重新理解GPU并行计算</title>
+    <url>/2026/05/08/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E9%87%8D%E6%96%B0%E7%90%86%E8%A7%A3GPU%E5%B9%B6%E8%A1%8C%E8%AE%A1%E7%AE%97/</url>
+    <content><![CDATA[<h1 id="显存带宽"><a href="#显存带宽" class="headerlink" title="显存带宽"></a>显存带宽</h1><p>我们先理解几个基本概念。</p>
+<p>1、<strong>显存位宽</strong></p>
+<p>是显卡硬件中的一个核心参数，简单来说，它指的是显存和显卡核心（GPU）之间每次交换数据的“通道宽度”。你可以把它想象成一条连接显存和GPU的高速公路：- 位宽越大，意味着高速公路越宽阔，同一时间内能双向通行的数据量就越大。- 位宽越小，道路变窄，能同时运输的数据就少。它的单位是 bit（位），常见的有 128-bit、192-bit、256-bit、384-bit 等。</p>
+<p>2、<strong>显存带宽</strong></p>
+<p><strong>显存带宽 &#x3D; 显存位宽 × 显存频率</strong></p>
+<p>这个显存带宽，可以理解为“高速公路的实际每小时通行能力”：</p>
+<p>假设有两款同样核心的显卡：</p>
+<ol>
+<li><strong>显卡A</strong>：位宽 256-bit，显存频率 1750 MHz</li>
+<li><strong>显卡B</strong>：位宽 128-bit，显存频率 1750 MHz</li>
+</ol>
+<p>那么显卡A的显存带宽是显卡B的整整 2倍。在处理高分辨率纹理、复杂3D场景时，显卡A的数据供应更充足，游戏帧数会明显更高、更稳定。</p>
+<h1 id="GPU并行工作模式"><a href="#GPU并行工作模式" class="headerlink" title="GPU并行工作模式"></a>GPU并行工作模式</h1><h2 id="流水线并行-Pipeline-Parallelism"><a href="#流水线并行-Pipeline-Parallelism" class="headerlink" title="流水线并行 (Pipeline Parallelism)"></a><strong>流水线并行 (Pipeline Parallelism)</strong></h2><p>理论上：</p>
+<p><strong>工厂装配流水线</strong>：每个工人（GPU）负责一个专门的工序（模型的一层），产品（数据批次）依次经过所有工人，最终完成加工。</p>
+<p>按 <strong>“层”</strong> 切分。GPU 0 负责第 1～10 层，GPU 1 负责第 11～20 层……像一个流水线，每个 GPU 依次处理不同的加工阶段。</p>
+<h2 id="数据并行-Data-Parallelism"><a href="#数据并行-Data-Parallelism" class="headerlink" title="数据并行 (Data Parallelism)"></a><strong>数据并行 (Data Parallelism)</strong></h2><p>理论上：</p>
+<p><strong>银行柜台窗口</strong>：每个柜员（GPU）都有全套业务能力（完整模型副本），可以独立、并行地处理不同的客户（多个请求）。</p>
+<p>按 <strong>“数据”</strong> 切分。每个 GPU 都有完整的模型，但大家处理不同的输入样本（你问你的，我问我的）。</p>
+<h2 id="张量并行-Tensor-Parallelism"><a href="#张量并行-Tensor-Parallelism" class="headerlink" title="张量并行 (Tensor Parallelism)"></a>张量并行 (Tensor Parallelism)</h2><p>理论上：</p>
+<p>按 <strong>“计算内部的参数”</strong> 切分。<strong>同一个</strong>矩阵乘法（比如一个全连接层里的一个大矩阵），被<strong>横向或纵向</strong>切割成几块，由多个 GPU <strong>同时、协作</strong>完成这个运算。</p>
+<h2 id="Ollama案例解释（流水线并行为主）"><a href="#Ollama案例解释（流水线并行为主）" class="headerlink" title="Ollama案例解释（流水线并行为主）"></a>Ollama案例解释（流水线并行为主）</h2><p>Ollama的流水线并行，其实结合了张量并行和数据并行。</p>
+<p>假设我们有 <strong>8 块 GPU</strong>，要跑一个 <strong>40 层</strong>的大模型，其中<strong>每单层的参数量大到需要 2 块 GPU 才能装下</strong>（单卡放不下一整层）。</p>
+<blockquote>
+<p>如果只用张量并行（不用流水线）：</p>
+<ul>
+<li>每层拆到 2 块 GPU 上协作计算。</li>
+<li>40 层就需要 40 × 2 &#x3D; 80 块 GPU —— 我们只有 8 块，显然不够。</li>
+<li>实际上，如果只用张量并行，你只能把 40 层<strong>全部</strong>塞进那 8 块 GPU 里（每层拆到 8 块上），但这会导致 GPU 间通信爆炸（每一层都要做跨 8 卡的 all-reduce），而且显存可能依然不够。</li>
+</ul>
+</blockquote>
+<p>实际使用混合并行（张量并行 + 流水线并行）：</p>
+<p><strong>步骤 1：先用张量并行解决“单层过大”</strong></p>
+<ul>
+<li>把每一层的参数矩阵切分成 2 份，分别放在 <strong>GPU 0</strong> 和 <strong>GPU 1</strong> 上。这两个 GPU 组成一个<strong>张量并行组</strong>，共同完成一层计算。</li>
+<li>同样的，GPU 2 和 GPU 3 组成第二个张量并行组，负责<strong>另一层</strong>；GPU 4+5 第三组；GPU 6+7 第四组。</li>
+</ul>
+<p><strong>步骤 2：再用流水线并行处理“层数过多”</strong></p>
+<ul>
+<li>现在我们有 4 个张量并行组（每个组内有 2 张卡）。这 4 个组<strong>串行排列</strong>：第一个组负责模型的第 1 层（或第 1~10 层，取决于怎么切流水线阶段），第二个组负责接下来的几层……</li>
+<li>数据流就是这样：<br><strong>输入 → 组1(两层GPU协作) → 组2(两层GPU协作) → 组3 → 组4 → 输出</strong></li>
+</ul>
+<h2 id="流水线并行处理闲置GPU问题的解决"><a href="#流水线并行处理闲置GPU问题的解决" class="headerlink" title="流水线并行处理闲置GPU问题的解决"></a>流水线并行处理闲置GPU问题的解决</h2><h3 id="微批次（Micro-batch）技巧"><a href="#微批次（Micro-batch）技巧" class="headerlink" title="微批次（Micro-batch）技巧"></a><strong>微批次（Micro-batch）</strong>技巧</h3><p>设定的场景：8张GPU，每2张通过张量并行组成一个流水线阶段。</p>
+<ul>
+<li><strong>阶段A</strong>：GPU 0-1（负责第1-10层）</li>
+<li><strong>阶段B</strong>：GPU 2-3（负责第11-20层）</li>
+<li><strong>阶段C</strong>：GPU 4-5（负责第21-30层）</li>
+<li><strong>阶段D</strong>：GPU 6-7（负责第31-40层）</li>
+</ul>
+<p>现在我们有一个大的批次数据（比如 64 条样本）。朴素的流水线会把这 64 条当成一个整体传下去。</p>
+<h4 id="🚫-朴素方式（造成发呆）"><a href="#🚫-朴素方式（造成发呆）" class="headerlink" title="🚫 朴素方式（造成发呆）"></a>🚫 朴素方式（造成发呆）</h4><ol>
+<li>阶段A 处理完整的 64 条样本（耗时很长）。</li>
+<li>阶段A 把结果全部传给阶段B，然后阶段A <strong>空闲</strong>。</li>
+<li>阶段B 处理 64 条样本（耗时很长），传给阶段C，阶段B <strong>空闲</strong>。</li>
+<li>……以此类推。<br><strong>结果</strong>：同一时刻只有 1 个阶段在工作，其他 3 个阶段（6 张GPU）在发呆。</li>
+</ol>
+<h4 id="✅-微批次方式（消除发呆）"><a href="#✅-微批次方式（消除发呆）" class="headerlink" title="✅ 微批次方式（消除发呆）"></a>✅ 微批次方式（消除发呆）</h4><p>我们把 64 条样本切分成更小的 <strong>微批次</strong>，比如每个微批次 4 条样本。</p>
+<ol>
+<li><strong>时刻 T1</strong>：阶段A 处理 <strong>微批次1</strong>（4条）。花费时间很短，比如 1 个单位时间。</li>
+<li><strong>时刻 T2</strong>：<ul>
+<li>阶段A 把微批次1 的输出传给阶段B。</li>
+<li>阶段A <strong>立刻开始</strong>处理 <strong>微批次2</strong>（不空闲）。</li>
+<li>阶段B 收到微批次1，开始处理。</li>
+</ul>
+</li>
+<li><strong>时刻 T3</strong>：<ul>
+<li>阶段A 处理微批次3。</li>
+<li>阶段B 处理微批次2。</li>
+<li>阶段C 收到微批次1，开始处理。</li>
+</ul>
+</li>
+<li><strong>时刻 T4</strong>：<ul>
+<li>阶段A 处理微批次4。</li>
+<li>阶段B 处理微批次3。</li>
+<li>阶段C 处理微批次2。</li>
+<li>阶段D 处理微批次1。<br>……</li>
+</ul>
+</li>
+</ol>
+<p>一旦流水线被“填满”（即所有阶段都开始工作后），<strong>所有阶段几乎都在同时处理不同的微批次</strong>，没有任何 GPU 在发呆。</p>
+<p>大家担心的“发呆等待”只发生在<strong>流水线启动（填满）和结束（排空）</strong>的短暂时刻。只要微批次的数量远大于阶段数量，这种空闲就可以忽略不计。</p>
+<h2 id="vLLM案例解释（张量并行为主）"><a href="#vLLM案例解释（张量并行为主）" class="headerlink" title="vLLM案例解释（张量并行为主）"></a>vLLM案例解释（张量并行为主）</h2><p>假设模型有40层，单层参数大，甚至单张GPU都放不下。我们为不同策略分配8块GPU：</p>
+<ul>
+<li><strong>Ollama（混合模式）</strong>：它采用混合并行。通常会把模型”纵向”切成4个阶段（Stage），每个阶段10层，分别交给一个由2块GPU组成的”小组”，让数据像流水线一样依次通过，这是<strong>流水线并行</strong>的思路。在这个小组内部，那2块GPU才会相互协作，分担矩阵计算，这又是<strong>张量并行</strong>的思路。</li>
+<li><strong>vLLM（张量并行模式）</strong>：vLLM的著名做法，就是<strong>纯张量并行（Pure Tensor Parallelism）</strong>。它会<strong>完全忽略模型的”层”结构</strong>，把所有GPU当做一个巨大的计算池。每一层里的每一个巨型矩阵，都被视为一个整体，然后<strong>拆分成8块</strong>，分散到8张GPU上同时处理。你描述的那种”一层计算就拆成8份”的并行方式，正是vLLM的核心所在。</li>
+</ul>
+<h3 id="⚙️-vLLM-纯张量并行的计算过程"><a href="#⚙️-vLLM-纯张量并行的计算过程" class="headerlink" title="⚙️ vLLM 纯张量并行的计算过程"></a>⚙️ vLLM 纯张量并行的计算过程</h3><p>vLLM那8块GPU并不是按照1-5层、6-10层这样”纵向”分配工作的。而是在<strong>每一层的计算中，所有8块GPU都参与进来，共同完成这一层的矩阵运算</strong>。每一层计算完，输入数据立刻进入下一层，这8块GPU再次一起处理。像这样，循环往复直到所有层计算完毕。</p>
+<p>具体到<strong>这40层的每一层</strong>，里面的核心矩阵运算就会被<strong>拆解</strong>。在vLLM的8卡配置 (<code>tensor_parallel_size=8</code>)下，整个过程是：</p>
+<ol>
+<li><strong>🚀 将权重大矩阵”分解”<strong>：在启动时，模型一个完整的大权重矩阵（比如4096x4096）就被横向或纵向切成8块，</strong>每块GPU只加载并保管其中的1&#x2F;8的权重</strong>。</li>
+<li><strong>💻 并行计算”部分结果”<strong>：当输入数据（一个请求）进入模型第一层时，它会被</strong>完整地、同时地</strong>发送给所有8块GPU。每块GPU都用自己保管的那1&#x2F;8权重和自己的那部分数据做乘法，得到1&#x2F;8的中间结果。</li>
+<li><strong>🔄 同步”全局结果”<strong>：计算完成后，8块GPU通过 <strong>All-Reduce</strong> 的高速通信操作，把各自手里的1&#x2F;8结果，快速地”拼”成一个完整的结果矩阵。这个</strong>每一层计算都要做的All-Reduce</strong>，是纯张量并行最显著的开销和特征。</li>
+<li><strong>➡️ 进入下一层</strong>：计算完成后，这个完整的结果进入下一层，然后<strong>重复</strong>上述2和3的步骤。</li>
+</ol>
+<p>GPU点对点的复杂通信有个算法库（集合通信），Nvidia的叫“NCCL”，华为自己搞的叫“HCCL”。</p>
+<h1 id="PCI-e-Switch"><a href="#PCI-e-Switch" class="headerlink" title="PCI-e  Switch"></a>PCI-e  Switch</h1><p>PCIe Switch 是一种用于扩展 PCIe 端口的设备，其内部结构可以理解为一个<strong>多端口、可路由的数据交换机</strong>。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">      [Root Complex (CPU)]</span><br><span class="line">              |</span><br><span class="line">           (上行端口)</span><br><span class="line">          PCIe Switch </span><br><span class="line">      ┌─────┼─────┬─────┐</span><br><span class="line">   下行端口  下行端口  下行端口  下行端口</span><br><span class="line">      |       |       |       |</span><br><span class="line">   Device1  Device2  Device3  Device4</span><br><span class="line">   </span><br><span class="line">   </span><br><span class="line"><span class="comment"># 在GPU分发中，Device 就是 GPU。</span></span><br></pre></td></tr></table></figure>
+
+<p>理论上可以通过一个很low 的主机，配合一个 高性能的PCIE拓展箱 来执行AI工作。 </p>
+<h2 id="性能会变弱吗？"><a href="#性能会变弱吗？" class="headerlink" title="性能会变弱吗？"></a>性能会变弱吗？</h2><p>把一个 pcie 通道 通过 pcie switch 分成4个通道，会不会导致性能变弱呢？</p>
+<p>这要看是什么应用场景：</p>
+<h3 id="1、CPU和GPU通信量大的场景。"><a href="#1、CPU和GPU通信量大的场景。" class="headerlink" title="1、CPU和GPU通信量大的场景。"></a>1、CPU和GPU通信量大的场景。</h3><p>典型就是游戏场景：</p>
+<p>(1) 带宽缩减</p>
+<ul>
+<li>直连时，GPU 独享整个 <strong>x16 通道</strong>（比如 PCIe 4.0 x16 ≈ 32 GB&#x2F;s）。</li>
+<li>经过 Switch 后，即使只有一个 GPU 接在其中一个 x4 端口上，它也<strong>只能使用 x4 的带宽</strong>（约 8 GB&#x2F;s）。<br>因为 Switch 内部的交叉开关并不会把其他端口的空闲带宽“借”给这一个 GPU —— 每个下行端口的宽度是硬件固定的，无法动态合并。</li>
+<li><strong>结果</strong>：GPU 的可用带宽变为原来的 1&#x2F;4，数据传输被卡在 x4 这个瓶颈上。</li>
+</ul>
+<p>(2) 额外延迟</p>
+<ul>
+<li>直连时，数据包从 CPU 到 GPU 只经过 Root Complex → 物理链路 → GPU 端点。</li>
+<li>经过 Switch 时，路径变为：<br>CPU → 上行端口物理层 → Switch 内部缓冲 → 路由查询 → 交叉开关 → 下行端口物理层 → GPU。<br>每一步都会增加几十纳秒到几百纳秒的延迟，累积起来在大量小包传输时（如游戏中的频繁状态更新）会明显增加往返时间。</li>
+</ul>
+<p>(3) 可能的拥塞与仲裁</p>
+<ul>
+<li>Switch 的上行端口只有一个，<strong>所有下行端口共享这一条上行链路</strong>。如果其他端口也有设备（比如网卡、SSD）同时传输数据，GPU 的数据就要排队等待。</li>
+<li>即使其他端口空闲，Switch 的内部仲裁逻辑也需要花费额外时钟周期决定是否转发，这些开销在直连时不存在。</li>
+</ul>
+<h3 id="2、纯GPU内部工作场景"><a href="#2、纯GPU内部工作场景" class="headerlink" title="2、纯GPU内部工作场景"></a>2、纯GPU内部工作场景</h3><p>典型的就是 AI 计算场景。</p>
+<figure class="highlight gherkin"><table><tr><td class="code"><pre><span class="line">         PCIe Switch</span><br><span class="line">   ┌─────┼─────┬─────┐</span><br><span class="line">   |<span class="string">     </span>|<span class="string">     </span>|<span class="string">     </span>|</span><br><span class="line">(x4)   (x4)   (x4)   (x4)</span><br><span class="line">   |<span class="string">     </span>|<span class="string">     </span>|<span class="string">     </span>|</span><br><span class="line"> [GPU0] [GPU1] [GPU2] [GPU3]</span><br></pre></td></tr></table></figure>
+
+<p>极少涉及到和CPU通信，反而更快。</p>
+<p>① CPU ↔ GPU 通信很少</p>
+<ul>
+<li>在 AI 训练&#x2F;推理中，<strong>模型参数、输入数据、梯度绝大部分时间都在 GPU 显存中</strong>。CPU 只负责：<ul>
+<li>启动 kernel（指令微小，几十字节）</li>
+<li>偶尔拷贝新数据（比如下一个 batch 的输入，但可以异步 overlap）</li>
+<li>很少量的监控和同步</li>
+</ul>
+</li>
+<li>因此，CPU 到 GPU 的带宽需求极低。一个 <strong>x16 的上行端口完全够用</strong>，甚至 x4 都绰绰有余。<br>➜ <strong>Switch 的上行带宽不再成为瓶颈</strong>。</li>
+</ul>
+<p>② GPU ↔ GPU 通信占主导（Peer-to-Peer 直通）</p>
+<ul>
+<li>AI 计算中，多 GPU 需要频繁交换梯度（All-Reduce）或激活值（张量并行）。这些通信发生在 <strong>GPU 之间</strong>，不经过 CPU。</li>
+<li><strong>PCIe Switch 支持 Peer-to-Peer 传输</strong>：<ul>
+<li>GPU0 发送数据给 GPU1，数据包从 GPU0 的下行端口进入 Switch，Switch 内部交叉开关<strong>直接</strong>转到 GPU1 的下行端口，<strong>无需上行到 CPU</strong>。</li>
+<li>路径：GPU0 → Switch → GPU1，延迟极短（几百纳秒）。</li>
+</ul>
+</li>
+<li>每个 GPU 的端口带宽是 x4，但 All-Reduce 通常采用<strong>环形</strong>或<strong>树形</strong>算法，利用所有链路并行，总吞吐可接近 Switch 背板带宽（如 x16 全双工）。</li>
+</ul>
+<p>③ 实际性能数据（示例）</p>
+<ul>
+<li>PCIe 5.0 x16 上行带宽 ≈ 64 GB&#x2F;s（单向）。对于多卡 All-Reduce，Switch 内部背板带宽通常等于所有下行端口带宽之和（如 4×x4 &#x3D; x16）。</li>
+<li>实测：在 4×A100 上做张量并行（TP&#x3D;4），使用 PCIe Switch 与直连 CPU 的 NVLink 相比，差距较小（10<del>20%），远小于游戏场景（可能差 3</del>4 倍）。</li>
+<li>而且，许多 AI 框架（如 Megatron-LM）会<strong>尽量将通信与计算重叠</strong>，利用 Switch 的低延迟实现高效并行。</li>
+</ul>
+<h2 id="算力与GPU数量"><a href="#算力与GPU数量" class="headerlink" title="算力与GPU数量"></a>算力与GPU数量</h2><figure class="highlight lasso"><table><tr><td class="code"><pre><span class="line">有效算力</span><br><span class="line">   ^</span><br><span class="line">   |                                                                  *  </span><br><span class="line">   |                                                       *  </span><br><span class="line">   |                                              *     </span><br><span class="line">   |                                      *        </span><br><span class="line">   |                               *           </span><br><span class="line">   |                         *              </span><br><span class="line">   |                    *                 </span><br><span class="line">   |                *                    </span><br><span class="line">   |            *                       </span><br><span class="line">   |         *                          </span><br><span class="line">   |      *                             </span><br><span class="line">   |   *                                </span><br><span class="line">   | *                                 </span><br><span class="line">   +----------------------------------------&gt; GPU数量</span><br><span class="line">   <span class="number">0</span>   <span class="number">1</span>   <span class="number">2</span>   <span class="number">4</span>   <span class="number">8</span>   <span class="number">16</span> <span class="params">...</span></span><br><span class="line">   </span><br><span class="line">   <span class="params">...</span><span class="params">...</span><span class="params">...</span><span class="params">...</span><span class="params">...</span><span class="params">...</span><span class="params">...</span>..  如上图：集合通信算法（环形算法）并非理想线性（虚线）</span><br><span class="line">   <span class="params">...</span><span class="params">...</span><span class="params">...</span><span class="params">...</span><span class="params">...</span><span class="params">...</span><span class="params">...</span>..  但是如果是：集合通信算法（全互联算法）则是理想线性（虚线）</span><br><span class="line">   理论是，全互联算法最优，但是实际上全互联拓扑topology很难实现（通常只能<span class="number">8</span>块GPU全互联）。</span><br></pre></td></tr></table></figure>
+
+<h3 id="拓扑Topology"><a href="#拓扑Topology" class="headerlink" title="拓扑Topology"></a>拓扑Topology</h3><p>拓扑指的是 <strong>多个 GPU 之间如何物理连接</strong>。不同拓扑会影响通信的路径、带宽和延迟。</p>
+<p>常见拓扑结构图</p>
+<ol>
+<li>环形（Ring）</li>
+</ol>
+<figure class="highlight gherkin"><table><tr><td class="code"><pre><span class="line">GPU0 —— GPU1</span><br><span class="line"> |<span class="string">        </span>|</span><br><span class="line">GPU3 —— GPU2</span><br></pre></td></tr></table></figure>
+
+<p>每个 GPU 只与左右两个邻居相连，形成一个闭环。</p>
+<ol start="2">
+<li>全互联（Fully Connected &#x2F; Mesh）</li>
+</ol>
+<figure class="highlight gherkin"><table><tr><td class="code"><pre><span class="line">GPU0 ——— GPU1</span><br><span class="line"> |<span class="string"> \    / </span>|</span><br><span class="line"> |<span class="string">  \  /  </span>|</span><br><span class="line"> |<span class="string">   \/   </span>|</span><br><span class="line"> |<span class="string">  /  \  </span>|</span><br><span class="line"> |<span class="string"> /    \ </span>|</span><br><span class="line">GPU3 ——— GPU2</span><br></pre></td></tr></table></figure>
+
+<p>每对 GPU 之间都有直接链路（现实中罕见，成本太高）。</p>
+<ol start="3">
+<li>交换机星型（Switch-based，如 PCIe Switch 或 NVSwitch）</li>
+</ol>
+<figure class="highlight 1c"><table><tr><td class="code"><pre><span class="line">      [Switch]</span><br><span class="line">   /    <span class="string">|    \</span></span><br><span class="line">GPU0  GPU1  GPU2  GPU3</span><br></pre></td></tr></table></figure>
+
+<p>所有 GPU 通过单一交换机互连，任意两者通信只需经过一跳。</p>
+<ol start="4">
+<li>层次化（例如 DGX 服务器中的 NVLink + NVSwitch</li>
+</ol>
+<figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">  [NVSwitch <span class="number">0</span>]        [NVSwitch <span class="number">1</span>]</span><br><span class="line">   <span class="regexp">/   |   \           /</span>   |   \</span><br><span class="line">GPU0 GPU1 GPU2       GPU3 GPU4 GPU5</span><br><span class="line">   \   |   <span class="regexp">/           \   |   /</span></span><br><span class="line">  [NVSwitch <span class="number">2</span>]        [NVSwitch <span class="number">3</span>]</span><br></pre></td></tr></table></figure>
+
+<p>这是更复杂的胖树拓扑，但底层仍然是多级交换机。</p>
+<p><strong>总结拓扑的作用：</strong> 决定了数据从 GPU A 到 GPU B 需要经过多少跳、每跳带宽多少。</p>
+<h3 id="集合通信算法"><a href="#集合通信算法" class="headerlink" title="集合通信算法"></a>集合通信算法</h3><p>集合通信是指 <strong>多个 GPU 共同参与的数据交换模式</strong>，</p>
+<p>可以理解为，在马路已经修好的前提下，怎么样让马路不堵车的算法。一大推数据的传输，就像小汽车一样，怕把路给堵了，一旦出现的等待卡死，所有GPU都停工了，损失很大。<br>例如 A机器有8块 GPU，B机器有 8块GPU，AB机器之间用一根网线通信，16块GPU 之间如果有不受控的相互收发信息，可能会导致马路不可控的阻塞。</p>
+<ul>
+<li>广播broadcast</li>
+<li>收集gather</li>
+<li>分发scatter</li>
+<li>规约reduce</li>
+</ul>
+<p>​		前文中【 vLLM 纯张量并行的计算过程】案例中就有（全规约Allreduce）解释，这里是规约不是全规约但是理解类似，把多个 GPU中 计算的结果重新拼接成一个完整的结果矩阵，（求加减乘除最大值最小值都有），这个计算都是在传输过程中完成的，少有到达root 节点再计算的场景。</p>
+<ul>
+<li><p>全规约Allreduce</p>
+<p>要求所有节点都拥有规约操作后的完整结果。</p>
+<p>例如：</p>
+<p>在数据并行训练中，要求每个节点计算出本地梯度后，然后要和所有节点计算出的梯度相加再平均，然后每个节点要根据这个平均后的梯度来更新本地的模型。这个过程就是 Allreduce。视觉上想象，一个环，大家“ <strong>旋转</strong> ”着传递自己计算出的梯度结果，知道这个传递经过了所有节点，就算是凑了一个完整的大家的结果，每一个节点都拿到了完整的梯度平均结果。</p>
+</li>
+<li><p>全收集Allgather</p>
+<p>每个节点都有一份不同的数据，大家 “ <strong>旋转</strong> ”着传递自己的数据，最后大家都有了全部的数据。</p>
+<p>在模型并行计算或者某些需要聚合所有节点信息的场景中会用到。</p>
+</li>
+</ul>
+<p>说了这么多 广播、收集、分发、规约、全规约等等，那他们和环形算法、全互联算法等 是个什么关系呢？广播、收集、分发、规约、全规约这些其实是上层建筑，如图：</p>
+<figure class="highlight mathematica"><table><tr><td class="code"><pre><span class="line">┌─────────────────────────────────────────────────────────────────┐</span><br><span class="line">│                     集合通信操作层（逻辑功能）                     │</span><br><span class="line">│  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌─────┐│</span><br><span class="line">│  │  广播    │  │  收集    │  │  分发    │  │  规约    │  │全规约││</span><br><span class="line">│  │ <span class="variable">Broadcast</span>│  │ <span class="built_in">Gather</span>   │  │ <span class="variable">Scatter</span>  │  │ <span class="built_in">Reduce</span>   │  │<span class="built_in">All</span><span class="operator">-</span> ││</span><br><span class="line">│  │          │  │          │  │          │  │          │  │<span class="variable">reduce</span>││</span><br><span class="line">│  └──────────┘  └──────────┘  └──────────┘  └──────────┘  └─────┘│</span><br><span class="line">└─────────────────────────────────────────────────────────────────┘</span><br><span class="line">                              │</span><br><span class="line">                              │ 每一种操作可以由多种算法实现</span><br><span class="line">                              ▼</span><br><span class="line">┌─────────────────────────────────────────────────────────────────┐</span><br><span class="line">│                      实现层（具体实现）                        │</span><br><span class="line">│  ┌─────────────────────┐        ┌─────────────────────────────┐ │</span><br><span class="line">│  │      环形算法        │        │       全互联算法              │ │</span><br><span class="line">│  │  <span class="punctuation">(</span><span class="variable">Ring</span> <span class="variable">Algorithm</span><span class="punctuation">)</span>   │        │   <span class="punctuation">(</span><span class="built_in">All</span><span class="operator">-</span><span class="variable">to</span><span class="operator">-</span><span class="built_in">All</span> <span class="operator">/</span> <span class="built_in">Full</span> <span class="built_in">Mesh</span><span class="punctuation">)</span>  │ │</span><br><span class="line">│  └─────────────────────┘        └─────────────────────────────┘ │</span><br><span class="line">│          ▲                                  ▲                    │</span><br><span class="line">│          │ 基于                             │ 基于               │</span><br><span class="line">│          └──────────────┬───────────────────┘                    │</span><br><span class="line">└─────────────────────────┼───────────────────────────────────────┘</span><br><span class="line">                          │</span><br><span class="line">                          ▼</span><br><span class="line">┌─────────────────────────────────────────────────────────────────┐</span><br><span class="line">│                      网络拓扑层（物理<span class="operator">/</span>逻辑结构）                   │</span><br><span class="line">│  ┌─────────────────────┐        ┌─────────────────────────────┐ │</span><br><span class="line">│  │     环形拓扑         │        │      全互联拓扑               │ │</span><br><span class="line">│  │   <span class="punctuation">(</span><span class="variable">Ring</span> <span class="variable">Topology</span><span class="punctuation">)</span>   │        │  <span class="punctuation">(</span><span class="variable">Fully</span> <span class="variable">Connected</span> <span class="variable">Topology</span><span class="punctuation">)</span> │ │</span><br><span class="line">│  └─────────────────────┘        └─────────────────────────────┘ │</span><br><span class="line">│                                                          │       │</span><br><span class="line">│  ┌─────────────────────┐        ┌─────────────────────────────┐ │</span><br><span class="line">│  │     树形拓扑         │        │       二维网格拓扑            │ │</span><br><span class="line">│  │   <span class="punctuation">(</span><span class="variable">Tree</span> <span class="variable">Topology</span><span class="punctuation">)</span>   │        │   <span class="punctuation">(</span><span class="number">2</span><span class="built_in">D</span> <span class="built_in">Mesh</span><span class="operator">/</span><span class="variable">Torus</span><span class="punctuation">)</span>           │ │</span><br><span class="line">│  └─────────────────────┘        └─────────────────────────────┘ │</span><br><span class="line">└─────────────────────────────────────────────────────────────────┘</span><br></pre></td></tr></table></figure>
+
+<p>我们用最常见的 <strong>All-Reduce</strong>（归约后广播）来举例，并画出它在不同拓扑上的实现结构。</p>
+]]></content>
+      <categories>
+        <category>机器学习</category>
+      </categories>
+      <tags>
+        <tag>GPU</tag>
+        <tag>并行计算</tag>
+      </tags>
+  </entry>
 </search>
